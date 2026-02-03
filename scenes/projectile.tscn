@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bnu4fvr1hbp1v"]
+
+[ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_q3m7n"]
+[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/projectile.gd" id="1_softn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6q2a6"]
+radius = 4.0
+
+[node name="Projectile" type="Area2D" unique_id=915918387]
+collision_layer = 8
+collision_mask = 5
+script = ExtResource("1_softn")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=506901445]
+texture = ExtResource("1_q3m7n")
+region_enabled = true
+region_rect = Rect2(0, 482, 31, 30)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=356633356]
+shape = SubResource("CircleShape2D_6q2a6")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dwfeqc2uk3ap0" path="res://assets/sprites/Brackeys Assets/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/projectile.tscn" id="2_qhqgy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
@@ -156,11 +157,14 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_4ni07"]
-radius = 5.0990195
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
+radius = 5.0
+height = 16.0
 
-[node name="Player" type="CharacterBody2D" unique_id=244036277]
+[node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
+collision_layer = 2
 script = ExtResource("1_g2els")
+projectile_scene = ExtResource("2_qhqgy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
 position = Vector2(0, -12)
@@ -169,5 +173,5 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1867633058]
-position = Vector2(0, -5)
-shape = SubResource("CircleShape2D_4ni07")
+position = Vector2(0, -8)
+shape = SubResource("CapsuleShape2D_g2els")

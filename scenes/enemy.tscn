@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://dbn6ammn3fpex"]
+
+[ext_resource type="Texture2D" uid="uid://6pkgvekwxkxh" path="res://assets/sprites/Brackeys Assets/slime_purple.png" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://doj8qk05uovxg" path="res://scripts/enemy.gd" id="1_md0e3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_md0e3"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ra3w"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5uy6h"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4w8v"]
+atlas = ExtResource("1_7p1mj")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xwavj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_md0e3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ra3w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5uy6h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c4w8v")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_md0e3"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4ra3w"]
+radius = 5.0
+
+[node name="Enemy" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
+collision_layer = 4
+script = ExtResource("1_md0e3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=148251673]
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_xwavj")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1470453078]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_md0e3")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=20286796]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=54394625]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_4ra3w")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
