@@ -36,3 +36,4 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		print("Player hit!")
 		# Knock the enemy back away from the player
 		apply_knockback(body.global_position, knockback_strength)
+		body.apply_knockback(global_position, 100)
