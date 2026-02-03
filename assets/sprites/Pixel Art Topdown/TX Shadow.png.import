@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6pkgvekwxkxh"
-path="res://.godot/imported/slime_purple.png-26dc5ddef235ce6a400e78e0d532b050.ctex"
+uid="uid://rp4wh7xnw51c"
+path="res://.godot/imported/TX Shadow.png-70974c40f50b36e47fa3a6356abdee36.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/slime_purple.png"
-dest_files=["res://.godot/imported/slime_purple.png-26dc5ddef235ce6a400e78e0d532b050.ctex"]
+source_file="res://assets/sprites/Pixel Art Topdown/TX Shadow.png"
+dest_files=["res://.godot/imported/TX Shadow.png-70974c40f50b36e47fa3a6356abdee36.ctex"]
 
 [params]
 
