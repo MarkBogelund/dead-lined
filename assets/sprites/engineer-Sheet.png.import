@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rp4wh7xnw51c"
-path="res://.godot/imported/TX Shadow.png-70974c40f50b36e47fa3a6356abdee36.ctex"
+uid="uid://ckdn041n3ipwk"
+path="res://.godot/imported/engineer-Sheet.png-357168ea3ae473e0ed58369b97a04c1a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/Pixel Art Topdown/TX Shadow.png"
-dest_files=["res://.godot/imported/TX Shadow.png-70974c40f50b36e47fa3a6356abdee36.ctex"]
+source_file="res://assets/sprites/engineer-Sheet.png"
+dest_files=["res://.godot/imported/engineer-Sheet.png-357168ea3ae473e0ed58369b97a04c1a.ctex"]
 
 [params]
 

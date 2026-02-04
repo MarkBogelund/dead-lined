@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://coapsynxrdkbw"
-path="res://.godot/imported/TX Props with Shadow.png-fa66bc39e8a029472f2e7f45c0d623b6.ctex"
+uid="uid://bt8ujo0g4w4bq"
+path="res://.godot/imported/engineer.png-9cd85c1c598b376d369602930dcce31e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/Pixel Art Topdown/Extra/TX Props with Shadow.png"
-dest_files=["res://.godot/imported/TX Props with Shadow.png-fa66bc39e8a029472f2e7f45c0d623b6.ctex"]
+source_file="res://assets/sprites/engineer.png"
+dest_files=["res://.godot/imported/engineer.png-9cd85c1c598b376d369602930dcce31e.ctex"]
 
 [params]
 
