@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://cjn5bnbk1raxk"]
 
-[ext_resource type="Script" uid="uid://cfvu8vi7cq1k" path="res://scenes/turret.gd" id="1_el7wl"]
+[ext_resource type="Script" uid="uid://cfvu8vi7cq1k" path="res://scripts/turret.gd" id="1_el7wl"]
 [ext_resource type="Texture2D" uid="uid://dm21ye3t8x06q" path="res://assets/sprites/turret.png" id="1_x3mc5"]
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/projectile.tscn" id="2_485p4"]
+[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/shoot.gd" id="4_pp6j5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
 radius = 7.0
@@ -29,3 +30,12 @@ region_rect = Rect2(34, 0, 22, 24)
 
 [node name="Muzzle" type="Marker2D" parent="Canon" unique_id=838233975]
 position = Vector2(0, -10)
+
+[node name="ShootComponent" type="Node" parent="." unique_id=316514408]
+script = ExtResource("4_pp6j5")
+projectile_scene = ExtResource("2_485p4")
+muzzle_distance = 0.0
+projectile_speed = 200.0
+projectile_collision_layers = Array[int]([1])
+projectile_collision_masks = Array[int]([1, 2, 3, 9])
+metadata/_custom_type_script = "uid://blmoutagnygip"

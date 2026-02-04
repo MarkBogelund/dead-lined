@@ -27,17 +27,20 @@ func _process(delta):
 		shoot.shoot(target.global_position, muzzle.global_position)
 
 func get_closest_enemy_in_range() -> CharacterBody2D:
-	var enemies := get_tree().get_nodes_in_group("enemies")
+	var targets: Array[Node] = []
+	targets.append_array(get_tree().get_nodes_in_group("enemies"))
+	targets.append_array(get_tree().get_nodes_in_group("player"))
+
 	var closest: CharacterBody2D = null
 	var closest_dist := detection_range * detection_range
 
-	for enemy in enemies:
-		if is_target_dead(enemy):
+	for target in targets:
+		if is_target_dead(target):
 			continue
-		var dist := global_position.distance_squared_to(enemy.global_position)
+		var dist := global_position.distance_squared_to(target.global_position)
 		if dist <= closest_dist:
 			closest_dist = dist
-			closest = enemy
+			closest = target
 
 	return closest
 

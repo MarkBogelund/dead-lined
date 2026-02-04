@@ -2,84 +2,112 @@
 
 [ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/projectile.tscn" id="2_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://ckdn041n3ipwk" path="res://assets/sprites/engineer-Sheet.png" id="3_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://dlrnady7rm2bb" path="res://assets/sprites/engineer-Sheet.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/knockback.gd" id="4_dqkch"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/health.gd" id="5_qlg0r"]
+[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/shoot.gd" id="5_tuyoq"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
-atlas = ExtResource("3_qhqgy")
+[sub_resource type="AtlasTexture" id="AtlasTexture_a8ls1"]
+atlas = ExtResource("2_tuyoq")
 region = Rect2(0, 0, 24, 24)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qlg0r"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(24, 0, 24, 24)
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfm1y"]
+atlas = ExtResource("2_tuyoq")
+region = Rect2(0, 72, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fulsm"]
+atlas = ExtResource("2_tuyoq")
+region = Rect2(24, 72, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4r5pv"]
+atlas = ExtResource("2_tuyoq")
+region = Rect2(48, 72, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(48, 0, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(0, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(72, 0, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(24, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_smehm"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(0, 24, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(48, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ur7pv"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(24, 24, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(72, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y4r1p"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(48, 24, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(0, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d2wvv"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(72, 24, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(24, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3v2ag"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(0, 48, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(48, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jej6c"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(24, 48, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(72, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1ej7"]
-atlas = ExtResource("3_qhqgy")
-region = Rect2(48, 48, 24, 24)
+atlas = ExtResource("2_tuyoq")
+region = Rect2(0, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oprun"]
-atlas = ExtResource("3_qhqgy")
+atlas = ExtResource("2_tuyoq")
+region = Rect2(24, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_60mlk"]
+atlas = ExtResource("2_tuyoq")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
+atlas = ExtResource("2_tuyoq")
 region = Rect2(72, 48, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_a38lo"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dqkch")
+"texture": SubResource("AtlasTexture_a8ls1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qlg0r")
+"texture": SubResource("AtlasTexture_qfm1y")
 }, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fulsm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4r5pv")
+}],
+"loop": false,
+"name": &"die",
+"speed": 10.0
+}, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_tuyoq")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fjrip")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_smehm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ur7pv")
 }],
 "loop": true,
 "name": &"idle",
 "speed": 10.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_smehm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ur7pv")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_y4r1p")
 }, {
@@ -97,6 +125,12 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_oprun")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_60mlk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i4ail")
 }],
 "loop": true,
 "name": &"move",
@@ -148,13 +182,14 @@ _data = {
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_g2els")
-projectile_scene = ExtResource("2_qhqgy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_a38lo")
-animation = &"idle"
+animation = &"die"
 autoplay = "idle"
+frame = 3
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1867633058]
 position = Vector2(0, -11)
@@ -166,8 +201,15 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=2137359976]
 script = ExtResource("5_qlg0r")
-max_health = 100
+max_health = 5
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
+
+[node name="ShootComponent" type="Node" parent="." unique_id=904350876]
+script = ExtResource("5_tuyoq")
+projectile_scene = ExtResource("2_qhqgy")
+projectile_collision_layers = Array[int]([1])
+projectile_collision_masks = Array[int]([1, 3, 9])
+metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=371344470]
 libraries/ = SubResource("AnimationLibrary_fjrip")

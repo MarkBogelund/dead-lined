@@ -2,6 +2,8 @@ extends Node
 class_name ShootComponent
 
 @export var projectile_scene: PackedScene
+@export var projectile_damage := 10
+@export var projectile_knockback := 200
 @export var muzzle_distance := 20.0
 @export var shoot_cooldown := 0.5
 @export var projectile_speed := 300.0
@@ -33,19 +35,20 @@ func shoot(target_pos: Vector2, shooter_pos: Vector2 = Vector2.ZERO):
 	if !projectile.has_method("set_collision_layers"):
 		push_error("Projectile does not have set_collision_layers")
 		return
+		
+	if !projectile.has_method("set_parameters"):
+		push_error("Projectile does not have set_parameters")
+		return
 	
 	var dir = (target_pos - shooter_pos).normalized()
 	
 	projectile.set_collision_layers(projectile_collision_layers, projectile_collision_masks)
-	print(projectile_collision_masks)
 
-	projectile.set_orientation(
-		shooter_pos + dir * muzzle_distance,
-		dir.angle(),
-		dir,
-		projectile_speed
-	)
+	projectile.set_orientation(shooter_pos + dir * muzzle_distance, dir.angle(), dir,)
+	
+	projectile.set_parameters(projectile_speed, projectile_damage, projectile_knockback)
 
 	get_tree().current_scene.add_child(projectile)
 
 	_shoot_timer = shoot_cooldown
+	

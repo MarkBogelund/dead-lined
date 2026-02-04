@@ -27,7 +27,7 @@ func _physics_process(delta: float) -> void:
 	# --- Movement ---
 	if knockback.is_active():
 		velocity = knockback.velocity
-	elif health.is_dead:
+	elif health.is_dead or player.health.is_dead:
 		velocity = Vector2.ZERO
 	else:
 		velocity = chase_and_separate()
