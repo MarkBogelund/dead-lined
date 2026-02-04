@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 # Movement
 const SPEED := 150.0
@@ -54,6 +55,7 @@ func apply_knockback(from_position: Vector2, strength: float = 300.0):
 	
 func take_damage(amount: int):
 	health.take_damage(amount)
+	check_and_play_anim("take_damage")
 
 func shoot():
 	if projectile_scene == null:
@@ -73,3 +75,9 @@ func _on_died():
 	velocity = Vector2.ZERO
 	set_physics_process(false)
 	set_process(false)
+
+func check_and_play_anim(anim_name: String):
+	if animation_player.has_animation(anim_name):
+		animation_player.play(anim_name)
+	else:
+		push_warning("Animation \"" + anim_name + "\" does not exist")

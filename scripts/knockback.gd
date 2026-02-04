@@ -9,11 +9,11 @@ func is_active() -> bool:
 	return velocity.length() > 1.0
 
 func apply(from_position: Vector2, strength: float) -> void:
-	var owner := get_parent() as Node2D
-	if owner == null:
+	var parent := get_parent() as Node2D
+	if parent == null:
 		return
 
-	var dir = (owner.global_position - from_position).normalized()
+	var dir = (parent.global_position - from_position).normalized()
 	velocity = dir * strength
 
 func process(delta: float) -> void:

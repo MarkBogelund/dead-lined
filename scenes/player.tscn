@@ -107,6 +107,44 @@ animations = [{
 radius = 3.0
 height = 22.0
 
+[sub_resource type="Animation" id="Animation_qlg0r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "take_damage"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.100000024),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(0.46169233, 0, 0.08135905, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fjrip"]
+_data = {
+&"RESET": SubResource("Animation_qlg0r"),
+&"take_damage": SubResource("Animation_tuyoq")
+}
+
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_g2els")
@@ -130,3 +168,6 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 script = ExtResource("5_qlg0r")
 max_health = 100
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=371344470]
+libraries/ = SubResource("AnimationLibrary_fjrip")

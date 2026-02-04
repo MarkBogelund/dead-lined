@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 const DAMAGE := 20
 
 const SPEED := 50.0
@@ -8,7 +10,8 @@ const PLAYER_KNOCKBACK := 100.0
 
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
-@onready var hitbox: Area2D = $Hitbox
+@onready var hitbox_collision_shape: CollisionShape2D = $Hitbox/CollisionShape2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 var player: Node2D
 var dead: bool = false
@@ -16,6 +19,7 @@ var dead: bool = false
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
 	health.connect("died", Callable(self, "_on_died"))
+	health.connect("damaged", Callable(self, "_on_damaged"))
 
 func _physics_process(delta: float) -> void:
 	if player == null:
@@ -51,11 +55,17 @@ func apply_knockback(from_position: Vector2, strength: float = 300.0):
 	
 func take_damage(amount: int):
 	health.take_damage(amount)
+	if not dead:
+		check_and_play_anim("take_damage")
 			
 func _on_died():
-	# Stop chasing but allow knockback
 	dead = true
-
-	# Disable hitbox so it cannot hit the player anymore
-	hitbox.set_deferred("monitorable", false)
-	hitbox.set_deferred("monitoring", false)
+	collision_shape.set_deferred("disabled", true)
+	hitbox_collision_shape.set_deferred("disabled", true)
+	check_and_play_anim("die")
+	
+func check_and_play_anim(anim_name: String):
+	if animation_player.has_animation(anim_name):
+		animation_player.play(anim_name)
+	else:
+		push_warning("Animation \"" + anim_name + "\" does not exist")
