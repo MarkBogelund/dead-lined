@@ -186,10 +186,8 @@ script = ExtResource("1_g2els")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_a38lo")
-animation = &"die"
+animation = &"idle"
 autoplay = "idle"
-frame = 3
-frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1867633058]
 position = Vector2(0, -11)
@@ -201,7 +199,7 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=2137359976]
 script = ExtResource("5_qlg0r")
-max_health = 5
+max_health = 50
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="ShootComponent" type="Node" parent="." unique_id=904350876]

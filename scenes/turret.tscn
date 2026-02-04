@@ -34,7 +34,7 @@ position = Vector2(0, -10)
 [node name="ShootComponent" type="Node" parent="." unique_id=316514408]
 script = ExtResource("4_pp6j5")
 projectile_scene = ExtResource("2_485p4")
-muzzle_distance = 0.0
+muzzle_distance = 5.0
 projectile_speed = 200.0
 projectile_collision_layers = Array[int]([1])
 projectile_collision_masks = Array[int]([1, 2, 3, 9])
