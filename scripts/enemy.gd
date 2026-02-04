@@ -30,23 +30,46 @@ func _physics_process(delta: float) -> void:
 	if knockback.is_active():
 		velocity = knockback.velocity
 	elif health.is_dead:
-		velocity = knockback.velocity if knockback.is_active() else Vector2.ZERO
+		velocity = Vector2.ZERO
 	else:
-		var chase_dir := (player.global_position - global_position).normalized()
-		var separation_dir := get_separation_vector()
-
-		var separation := get_separation_vector() * SEPARATION_FORCE
-		var desired_velocity := chase_dir * SPEED + separation
-
-		# Clamp to max speed
-		if desired_velocity.length() > SPEED:
-			desired_velocity = desired_velocity.normalized() * SPEED
-
-		velocity = desired_velocity
-
+		velocity = chase_and_separate()
 
 	knockback.process(delta)
+	
 	move_and_slide()
+
+func chase_and_separate() -> Vector2:
+	var desired_velocity := get_chase_velocity() + get_separation_velocity()
+
+	# Clamp to max speed
+	if desired_velocity.length() > SPEED:
+		desired_velocity = desired_velocity.normalized() * SPEED
+	
+	return desired_velocity
+
+func get_chase_velocity() -> Vector2:
+	var dir := (player.global_position - global_position).normalized()
+	return dir * SPEED
+	
+func get_separation_velocity() -> Vector2:
+	var push := Vector2.ZERO
+	var enemies := get_tree().get_nodes_in_group("enemies")
+
+	for enemy in enemies:
+		if enemy == self:
+			continue
+		if enemy.health.is_dead:
+			continue
+
+		var offset: Vector2 = global_position - enemy.global_position
+		var dist := offset.length()
+
+		if dist > 0.0 and dist < SEPARATION_RADIUS:
+			# Weight by proximity (closer = stronger)
+			var strength := (SEPARATION_RADIUS - dist) / SEPARATION_RADIUS
+			push += offset.normalized() * strength
+
+	return push * SEPARATION_FORCE
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if health.is_dead:
@@ -79,23 +102,3 @@ func check_and_play_anim(anim_name: String):
 		animation_player.play(anim_name)
 	else:
 		push_warning("Animation \"" + anim_name + "\" does not exist")
-
-func get_separation_vector() -> Vector2:
-	var push := Vector2.ZERO
-	var enemies := get_tree().get_nodes_in_group("enemies")
-
-	for enemy in enemies:
-		if enemy == self:
-			continue
-		if enemy.health.is_dead:
-			continue
-
-		var offset: Vector2 = global_position - enemy.global_position
-		var dist := offset.length()
-
-		if dist > 0.0 and dist < SEPARATION_RADIUS:
-			# Weight by proximity (closer = stronger)
-			var strength := (SEPARATION_RADIUS - dist) / SEPARATION_RADIUS
-			push += offset.normalized() * strength
-
-	return push
