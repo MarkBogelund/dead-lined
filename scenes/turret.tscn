@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cjn5bnbk1raxk"]
+
+[ext_resource type="Script" uid="uid://cfvu8vi7cq1k" path="res://scenes/turret.gd" id="1_el7wl"]
+[ext_resource type="Texture2D" uid="uid://dm21ye3t8x06q" path="res://assets/sprites/turret.png" id="1_x3mc5"]
+[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/projectile.tscn" id="2_485p4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
+radius = 7.0
+
+[node name="Turret" type="StaticBody2D" unique_id=909576845]
+script = ExtResource("1_el7wl")
+projectile_scene = ExtResource("2_485p4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=978640667]
+texture = ExtResource("1_x3mc5")
+region_enabled = true
+region_rect = Rect2(0, 0, 20, 24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=464062235]
+visible = false
+shape = SubResource("CircleShape2D_el7wl")
+
+[node name="Canon" type="Sprite2D" parent="." unique_id=1726308093]
+position = Vector2(0, -4)
+texture = ExtResource("1_x3mc5")
+offset = Vector2(0, -5)
+region_enabled = true
+region_rect = Rect2(34, 0, 22, 24)
+
+[node name="Muzzle" type="Marker2D" parent="Canon" unique_id=838233975]
+position = Vector2(0, -10)

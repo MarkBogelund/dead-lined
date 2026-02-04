@@ -4,6 +4,7 @@ class_name HealthComponent
 # Health
 @export var max_health: int
 var current_health: int
+var is_dead = false
 
 # Signals
 signal died
@@ -29,5 +30,6 @@ func take_damage(amount: int) -> void:
 # Call this when health reaches zero
 func die() -> void:
 	current_health = 0
+	is_dead = true
 	emit_signal("died")
 	print(get_parent().name + " died")

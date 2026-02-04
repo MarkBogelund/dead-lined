@@ -14,7 +14,6 @@ const PLAYER_KNOCKBACK := 100.0
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 var player: Node2D
-var dead: bool = false
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
@@ -28,7 +27,7 @@ func _physics_process(delta: float) -> void:
 	# --- Movement ---
 	if knockback.is_active():
 		velocity = knockback.velocity
-	elif dead:
+	elif health.is_dead:
 		velocity = knockback.velocity if knockback.is_active() else Vector2.ZERO
 	else:
 		var dir = (player.global_position - global_position).normalized()
@@ -38,7 +37,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
-	if dead:
+	if health.is_dead:
 		return
 
 	if body.is_in_group("player"):
@@ -55,11 +54,10 @@ func apply_knockback(from_position: Vector2, strength: float = 300.0):
 	
 func take_damage(amount: int):
 	health.take_damage(amount)
-	if not dead:
+	if not health.is_dead:
 		check_and_play_anim("take_damage")
 			
 func _on_died():
-	dead = true
 	collision_shape.set_deferred("disabled", true)
 	hitbox_collision_shape.set_deferred("disabled", true)
 	check_and_play_anim("die")

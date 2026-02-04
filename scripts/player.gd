@@ -17,7 +17,6 @@ var shoot_timer := 0.0
 func _ready():
 	health.connect("died", Callable(self, "_on_died"))
 
-
 func _physics_process(delta):
 	if health.current_health <= 0:
 		health.die()

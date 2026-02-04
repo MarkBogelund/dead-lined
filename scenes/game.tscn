@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c1up8f3hcb17m" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://chwp4u8wx4qxs" path="res://assets/sprites/Pixel Art Topdown/TX Tileset Grass.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://dbn6ammn3fpex" path="res://scenes/enemy.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/turret.tscn" id="4_lbhrr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -374,3 +375,6 @@ position = Vector2(-56, 94)
 
 [node name="Enemy5" parent="." unique_id=573431358 instance=ExtResource("3_lnu2h")]
 position = Vector2(-143, 42)
+
+[node name="Turret" parent="." unique_id=909576845 instance=ExtResource("4_lbhrr")]
+position = Vector2(33, 50)
