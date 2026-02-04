@@ -7,11 +7,9 @@ extends CharacterBody2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 const DAMAGE := 20
-
-const SPEED := 50.0
+const SPEED := 30.0
 const ENEMY_KNOCKBACK := 200.0
 const PLAYER_KNOCKBACK := 100.0
-
 const SEPARATION_RADIUS := 40.0      # how close enemies can get
 const SEPARATION_FORCE := 120.0      # how strongly they push apart
 

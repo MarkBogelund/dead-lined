@@ -4,15 +4,11 @@ extends CharacterBody2D
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var shoot: ShootComponent = $ShootComponent
+
 
 # Movement
 const SPEED := 150.0
-
-# Shooting
-@export var projectile_scene: PackedScene
-const muzzle_distance := 20.0
-const shoot_cooldown := 0.5
-var shoot_timer := 0.0
 
 func _ready():
 	health.connect("died", Callable(self, "_on_died"))
@@ -33,10 +29,8 @@ func _physics_process(delta):
 	knockback.process(delta)
 
 	# --- Shooting ---
-	shoot_timer -= delta
-	if Input.is_action_pressed("interact") and shoot_timer <= 0.0:
-		shoot()
-		shoot_timer = shoot_cooldown
+	if Input.is_action_pressed("interact") and shoot.can_shoot():
+		shoot.shoot(get_global_mouse_position(), global_position)
 
 	# --- Animation ---
 	if input_dir.x != 0:
@@ -55,19 +49,6 @@ func apply_knockback(from_position: Vector2, strength: float = 300.0):
 func take_damage(amount: int):
 	health.take_damage(amount)
 	check_and_play_anim("take_damage")
-
-func shoot():
-	if projectile_scene == null:
-		return
-
-	var dir = (get_global_mouse_position() - global_position).normalized()
-
-	var projectile = projectile_scene.instantiate()
-	projectile.global_position = global_position + dir * muzzle_distance
-	projectile.direction = dir
-	projectile.rotation = dir.angle()
-
-	get_tree().current_scene.add_child(projectile)
 
 func _on_died():
 	# Stop movement and shooting
