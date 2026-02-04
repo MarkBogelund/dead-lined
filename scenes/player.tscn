@@ -1,115 +1,79 @@
 [gd_scene format=3 uid="uid://c1up8f3hcb17m"]
 
-[ext_resource type="Texture2D" uid="uid://dwfeqc2uk3ap0" path="res://assets/sprites/Brackeys Assets/knight.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/projectile.tscn" id="2_qhqgy"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(32, 0, 32, 32)
+[ext_resource type="Texture2D" uid="uid://ckdn041n3ipwk" path="res://assets/sprites/engineer-Sheet.png" id="3_qhqgy"]
+[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/knockback.gd" id="4_dqkch"]
+[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/health.gd" id="5_qlg0r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(64, 0, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(0, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qlg0r"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(96, 0, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(24, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(0, 64, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(48, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(32, 64, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(72, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_smehm"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(64, 64, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(0, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ur7pv"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(96, 64, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(24, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y4r1p"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(128, 64, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(48, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d2wvv"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(160, 64, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(72, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3v2ag"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(192, 64, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(0, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jej6c"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(224, 64, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(24, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1ej7"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(0, 96, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(48, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oprun"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(32, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_a8ls1"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(64, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qfm1y"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(96, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fulsm"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(128, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4r5pv"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(160, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_60mlk"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(192, 96, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
-atlas = ExtResource("1_3vyb7")
-region = Rect2(224, 96, 32, 32)
+atlas = ExtResource("3_qhqgy")
+region = Rect2(72, 48, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_a38lo"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_g2els")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qhqgy")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_dqkch")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qlg0r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tuyoq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fjrip")
 }],
 "loop": true,
 "name": &"idle",
 "speed": 10.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tuyoq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fjrip")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_smehm")
 }, {
@@ -133,24 +97,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_oprun")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_a8ls1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qfm1y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fulsm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4r5pv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_60mlk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_i4ail")
 }],
 "loop": true,
 "name": &"move",
@@ -158,8 +104,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
-radius = 5.0
-height = 16.0
+radius = 3.0
+height = 22.0
 
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 collision_layer = 2
@@ -173,5 +119,14 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1867633058]
-position = Vector2(0, -8)
+position = Vector2(0, -11)
 shape = SubResource("CapsuleShape2D_g2els")
+
+[node name="KnockbackComponent" type="Node" parent="." unique_id=948374991]
+script = ExtResource("4_dqkch")
+metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
+
+[node name="HealthComponent" type="Node" parent="." unique_id=2137359976]
+script = ExtResource("5_qlg0r")
+max_health = 100
+metadata/_custom_type_script = "uid://b21esqh8u7q8e"

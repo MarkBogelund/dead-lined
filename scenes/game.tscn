@@ -361,4 +361,13 @@ limit_bottom = 144
 position_smoothing_enabled = true
 
 [node name="Enemy" parent="." unique_id=1145312353 instance=ExtResource("3_lnu2h")]
-position = Vector2(-60, -47)
+position = Vector2(-54, -44)
+
+[node name="Enemy2" parent="." unique_id=1886245881 instance=ExtResource("3_lnu2h")]
+position = Vector2(95, -67)
+
+[node name="Enemy3" parent="." unique_id=773610775 instance=ExtResource("3_lnu2h")]
+position = Vector2(117, 79)
+
+[node name="Enemy4" parent="." unique_id=1361891681 instance=ExtResource("3_lnu2h")]
+position = Vector2(-56, 94)

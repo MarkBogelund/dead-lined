@@ -1,57 +1,65 @@
 extends CharacterBody2D
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var knockback: KnockbackComponent = $KnockbackComponent
+@onready var health: HealthComponent = $HealthComponent
 
 # Movement
 const SPEED := 150.0
 
 # Shooting
 @export var projectile_scene: PackedScene
-const muzzle_distance := 20.0  # Offset from player to spawn projectile
+const muzzle_distance := 20.0
+const shoot_cooldown := 0.5
+var shoot_timer := 0.0
 
-# Knockback
-var knockback_velocity := Vector2.ZERO
-const knockback_friction := 1200.0
+func _ready():
+	health.connect("died", Callable(self, "_on_died"))
 
-func _physics_process(_delta):
+
+func _physics_process(delta):
+	if health.current_health <= 0:
+		health.die()
+		return
+	
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 
-	# If player is being knocked back, override movement
-	if knockback_velocity.length() > 1.0:
-		velocity = knockback_velocity
-		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_friction * _delta)
+	# --- Movement ---
+	if knockback.is_active():
+		velocity = knockback.velocity
 	else:
 		velocity = input_dir * SPEED
 
-	# Flip sprite horizontally only when moving horizontally
+	knockback.process(delta)
+
+	# --- Shooting ---
+	shoot_timer -= delta
+	if Input.is_action_pressed("interact") and shoot_timer <= 0.0:
+		shoot()
+		shoot_timer = shoot_cooldown
+
+	# --- Animation ---
 	if input_dir.x != 0:
 		animated_sprite.flip_h = input_dir.x < 0
 
-	# Play animations
 	if input_dir != Vector2.ZERO:
 		animated_sprite.play("move")
 	else:
 		animated_sprite.play("idle")
-		
-	# Shoot using the interact input action
-	if Input.is_action_just_pressed("interact"):
-		shoot()
 
 	move_and_slide()
-	
 
-# Public function to apply knockback from any source
 func apply_knockback(from_position: Vector2, strength: float = 300.0):
-	var dir = (global_position - from_position).normalized()
-	knockback_velocity = dir * strength
+	knockback.apply(from_position, strength)
+	
+func take_damage(amount: int):
+	health.take_damage(amount)
 
 func shoot():
 	if projectile_scene == null:
-		push_error("Projectile scene not assigned!")
 		return
 
-	var mouse_pos = get_global_mouse_position()
-	var dir = (mouse_pos - global_position).normalized()
+	var dir = (get_global_mouse_position() - global_position).normalized()
 
 	var projectile = projectile_scene.instantiate()
 	projectile.global_position = global_position + dir * muzzle_distance
@@ -59,3 +67,9 @@ func shoot():
 	projectile.rotation = dir.angle()
 
 	get_tree().current_scene.add_child(projectile)
+
+func _on_died():
+	# Stop movement and shooting
+	velocity = Vector2.ZERO
+	set_physics_process(false)
+	set_process(false)
