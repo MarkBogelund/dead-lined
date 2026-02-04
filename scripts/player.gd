@@ -38,6 +38,7 @@ func _physics_process(_delta):
 		shoot()
 
 	move_and_slide()
+	
 
 # Public function to apply knockback from any source
 func apply_knockback(from_position: Vector2, strength: float = 300.0):
