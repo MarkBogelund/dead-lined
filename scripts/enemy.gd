@@ -1,6 +1,10 @@
 extends CharacterBody2D
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var knockback: KnockbackComponent = $KnockbackComponent
+@onready var health: HealthComponent = $HealthComponent
+@onready var hitbox_collision_shape: CollisionShape2D = $Hitbox/CollisionShape2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 const DAMAGE := 20
 
@@ -8,10 +12,8 @@ const SPEED := 50.0
 const ENEMY_KNOCKBACK := 200.0
 const PLAYER_KNOCKBACK := 100.0
 
-@onready var knockback: KnockbackComponent = $KnockbackComponent
-@onready var health: HealthComponent = $HealthComponent
-@onready var hitbox_collision_shape: CollisionShape2D = $Hitbox/CollisionShape2D
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+const SEPARATION_RADIUS := 40.0      # how close enemies can get
+const SEPARATION_FORCE := 120.0      # how strongly they push apart
 
 var player: Node2D
 
@@ -30,8 +32,18 @@ func _physics_process(delta: float) -> void:
 	elif health.is_dead:
 		velocity = knockback.velocity if knockback.is_active() else Vector2.ZERO
 	else:
-		var dir = (player.global_position - global_position).normalized()
-		velocity = dir * SPEED
+		var chase_dir := (player.global_position - global_position).normalized()
+		var separation_dir := get_separation_vector()
+
+		var separation := get_separation_vector() * SEPARATION_FORCE
+		var desired_velocity := chase_dir * SPEED + separation
+
+		# Clamp to max speed
+		if desired_velocity.length() > SPEED:
+			desired_velocity = desired_velocity.normalized() * SPEED
+
+		velocity = desired_velocity
+
 
 	knockback.process(delta)
 	move_and_slide()
@@ -67,3 +79,23 @@ func check_and_play_anim(anim_name: String):
 		animation_player.play(anim_name)
 	else:
 		push_warning("Animation \"" + anim_name + "\" does not exist")
+
+func get_separation_vector() -> Vector2:
+	var push := Vector2.ZERO
+	var enemies := get_tree().get_nodes_in_group("enemies")
+
+	for enemy in enemies:
+		if enemy == self:
+			continue
+		if enemy.health.is_dead:
+			continue
+
+		var offset: Vector2 = global_position - enemy.global_position
+		var dist := offset.length()
+
+		if dist > 0.0 and dist < SEPARATION_RADIUS:
+			# Weight by proximity (closer = stronger)
+			var strength := (SEPARATION_RADIUS - dist) / SEPARATION_RADIUS
+			push += offset.normalized() * strength
+
+	return push
