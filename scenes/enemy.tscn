@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dbn6ammn3fpex"]
 
+[ext_resource type="Script" uid="uid://bikpdlna0o7so" path="res://scripts/charger.gd" id="1_5uy6h"]
 [ext_resource type="Texture2D" uid="uid://6pkgvekwxkxh" path="res://assets/sprites/Brackeys Assets/slime_purple.png" id="1_7p1mj"]
-[ext_resource type="Script" uid="uid://doj8qk05uovxg" path="res://scripts/enemy.gd" id="1_md0e3"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/knockback.gd" id="3_4ra3w"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/health.gd" id="4_5uy6h"]
 
@@ -211,7 +211,7 @@ _data = {
 [node name="Enemy" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
 collision_layer = 4
 collision_mask = 257
-script = ExtResource("1_md0e3")
+script = ExtResource("1_5uy6h")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=148251673]
 position = Vector2(0, -12)

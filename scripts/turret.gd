@@ -35,7 +35,7 @@ func get_closest_enemy_in_range() -> CharacterBody2D:
 	var closest_dist := detection_range * detection_range
 
 	for target in targets:
-		if is_target_dead(target):
+		if target.is_dead():
 			continue
 		var dist := global_position.distance_squared_to(target.global_position)
 		if dist <= closest_dist:
@@ -43,12 +43,6 @@ func get_closest_enemy_in_range() -> CharacterBody2D:
 			closest = target
 
 	return closest
-
-func is_target_dead(target: CharacterBody2D) -> bool:
-	var health := target.get_node_or_null("HealthComponent")
-	if health == null:
-		return true # assume alive if no health component
-	return health.is_dead
 
 func rotate_towards(target_pos: Vector2, delta: float):
 	var dir := target_pos - canon.global_position

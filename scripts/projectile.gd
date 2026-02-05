@@ -10,8 +10,11 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	if body.is_in_group("enemies") or body.is_in_group("player"):
-		body.apply_knockback(global_position, projectile_knockback)
-		body.take_damage(projectile_damage)
+		if body.has_method("take_damage"):
+			body.take_damage(projectile_damage)
+
+		if body.has_method("apply_knockback"):
+			body.apply_knockback(global_position, projectile_knockback)
 
 	queue_free()
 

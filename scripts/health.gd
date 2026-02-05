@@ -24,12 +24,10 @@ func take_damage(amount: int) -> void:
 		die()
 		return
 	
-	emit_signal("damaged", amount)
-	print(get_parent().name + " took damage")
+	emit_signal("damaged")
 
 # Call this when health reaches zero
 func die() -> void:
 	current_health = 0
 	is_dead = true
 	emit_signal("died")
-	print(get_parent().name + " died")

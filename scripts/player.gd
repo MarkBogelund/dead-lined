@@ -12,6 +12,7 @@ const SPEED := 150.0
 
 func _ready():
 	health.connect("died", Callable(self, "_on_died"))
+	health.connect("damaged", Callable(self, "_on_damaged"))
 
 func _physics_process(delta):
 	
@@ -43,19 +44,24 @@ func play_run_anim(input_dir):
 	else:
 		animated_sprite.play("idle")
 
-func apply_knockback(from_position: Vector2, strength: float = 300.0):
-	knockback.apply(from_position, strength)
-	
-func take_damage(amount: int):
-	health.take_damage(amount)
-	check_and_play_anim("take_damage")
-
 func _on_died():
 	collision_shape.set_deferred("disabled", true)
 	animated_sprite.play("die")
+	
+func _on_damaged():
+	play_anim("take_damage")
 
-func check_and_play_anim(anim_name: String):
+func play_anim(anim_name: String):
 	if animation_player.has_animation(anim_name):
 		animation_player.play(anim_name)
 	else:
 		push_warning("Animation \"" + anim_name + "\" does not exist")
+
+func take_damage(amount: int):
+	health.take_damage(amount)
+
+func apply_knockback(from_position: Vector2, strength: float):
+	knockback.apply(from_position, strength)
+
+func is_dead():
+	return health.is_dead
