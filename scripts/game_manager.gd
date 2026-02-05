@@ -1,25 +1,52 @@
 extends Node
-class_name WaveManager
+class_name GameManager
 
-@export var time_between_waves := 5.0
+signal build_phase_started
+signal combat_phase_started(wave_index: int)
+signal build_phase_tick(time_left: float)
 
-var _wave_timer := 0.0
+@export var time_between_waves := 10
+
+var _current_phase: Phase = Phase.BUILD
+var _phase_timer := 0.0
 var _wave_index := 0
 
+enum Phase {
+	BUILD,
+	COMBAT
+}
+
 func _ready() -> void:
-	_wave_timer = time_between_waves
+	add_to_group("game_managers")
+	call_deferred("_enter_build_phase")
 
 func _process(delta: float) -> void:
-	_wave_timer -= delta
+	if _current_phase == Phase.BUILD:
+		_process_build_phase(delta)
 
-	if _wave_timer <= 0.0:
-		_start_next_wave()
-		_wave_timer = time_between_waves
+func _enter_build_phase() -> void:
+	_current_phase = Phase.BUILD
+	_phase_timer = time_between_waves
 
-func _start_next_wave() -> void:
+	print("BUILD PHASE")
+	emit_signal("build_phase_started")
+
+func _process_build_phase(delta: float) -> void:
+	_phase_timer -= delta
+	emit_signal("build_phase_tick", _phase_timer)
+
+	if _phase_timer <= 0.0:
+		_enter_combat_phase()
+
+func _enter_combat_phase() -> void:
+	_current_phase = Phase.COMBAT
 	_wave_index += 1
-	print("Starting wave", _wave_index)
 
-	var spawners: Array[Node] = get_tree().get_nodes_in_group("enemy_spawners")
-	for spawner in spawners:
-		spawner.spawn_wave()
+	print("COMBAT PHASE — Wave", _wave_index)
+	emit_signal("combat_phase_started", _wave_index)
+
+func check_for_wave_clear() -> void:
+	if _current_phase != Phase.COMBAT:
+		return
+	if get_tree().get_nodes_in_group("enemies").is_empty():
+		_enter_build_phase()

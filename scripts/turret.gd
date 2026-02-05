@@ -10,11 +10,33 @@ extends StaticBody2D
 @export var rotation_speed := 6.0			# radians per second
 @export var fire_rate := 0.5				# seconds per shot
 
+var game_manager: Node
+
 const UP_FACING_OFFSET := PI / 2
 
 var fire_timer := 0.0
+var build_phase := true
+
+func _ready():
+	game_manager = get_tree().get_first_node_in_group("game_managers")
+	if not game_manager:
+		push_error("GameManager not found in group game_managers")
+		return
+
+	game_manager.connect(
+		"build_phase_started",
+		Callable(self, "_on_build_phase_started")
+	)
+
+	game_manager.connect(
+		"combat_phase_started",
+		Callable(self, "_on_combat_phase_started")
+	)
 
 func _process(delta):
+	if build_phase:
+		return
+	
 	fire_timer -= delta
 
 	var target := get_closest_enemy_in_range()
@@ -25,6 +47,12 @@ func _process(delta):
 
 	if can_fire_at(target):
 		shoot.shoot(target.global_position, muzzle.global_position)
+
+func _on_build_phase_started() -> void:
+	build_phase = true
+
+func _on_combat_phase_started(_wave_index: int) -> void:
+	build_phase = false
 
 func get_closest_enemy_in_range() -> CharacterBody2D:
 	var targets: Array[Node] = []

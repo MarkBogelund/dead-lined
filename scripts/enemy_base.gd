@@ -12,9 +12,14 @@ class_name EnemyBase
 @export var player_knockback := 100.0
 
 var player: Node2D
+var game_manager: Node
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
+	game_manager = get_tree().get_first_node_in_group("game_managers")
+	if not game_manager:
+		push_error("GameManager not found in group game_managers")
+		return
 
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
@@ -59,11 +64,20 @@ func play_anim(anim_name: String) -> void:
 	else:
 		push_warning("Animation \"%s\" does not exist" % anim_name)
 
+func buff_health(multiplier):
+	health.max_health *= multiplier
+	health.current_health = health.max_health
+
+func buff_damage(multiplier) -> void:
+	damage *= multiplier
+	
 func _on_damaged() -> void:
 	if not health.is_dead:
 		play_anim("take_damage")
 	
 func _on_died() -> void:
+	remove_from_group("enemies")
+	game_manager.call_deferred("check_for_wave_clear")
 	collision_shape.set_deferred("disabled", true)
 	hitbox_collision_shape.set_deferred("disabled", true)
 	play_anim("die")

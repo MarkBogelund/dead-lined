@@ -7,12 +7,31 @@ extends CharacterBody2D
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
+var game_manager: Node
+
 # Movement
 const SPEED := 150.0
+var build_phase := false
+var can_buy_turrets := false
 
 func _ready():
 	health.connect("died", Callable(self, "_on_died"))
 	health.connect("damaged", Callable(self, "_on_damaged"))
+	
+	game_manager = get_tree().get_first_node_in_group("game_managers")
+	if not game_manager:
+		push_error("GameManager not found in group game_managers")
+		return
+
+	game_manager.connect(
+		"build_phase_started",
+		Callable(self, "_on_build_phase_started")
+	)
+
+	game_manager.connect(
+		"combat_phase_started",
+		Callable(self, "_on_combat_phase_started")
+	)
 
 func _physics_process(delta):
 	
@@ -44,6 +63,12 @@ func play_run_anim(input_dir):
 	else:
 		animated_sprite.play("idle")
 
+func play_anim(anim_name: String):
+	if animation_player.has_animation(anim_name):
+		animation_player.play(anim_name)
+	else:
+		push_warning("Animation \"" + anim_name + "\" does not exist")
+
 func _on_died():
 	collision_shape.set_deferred("disabled", true)
 	animated_sprite.play("die")
@@ -51,12 +76,12 @@ func _on_died():
 func _on_damaged():
 	play_anim("take_damage")
 
-func play_anim(anim_name: String):
-	if animation_player.has_animation(anim_name):
-		animation_player.play(anim_name)
-	else:
-		push_warning("Animation \"" + anim_name + "\" does not exist")
+func _on_build_phase_started() -> void:
+	build_phase = true
 
+func _on_combat_phase_started(_wave_index: int) -> void:
+	build_phase = false
+	
 func take_damage(amount: int):
 	health.take_damage(amount)
 
