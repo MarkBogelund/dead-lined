@@ -18,7 +18,7 @@ var fire_timer := 0.0
 var build_phase := true
 
 func _ready():
-	game_manager = get_tree().get_first_node_in_group("game_managers")
+	game_manager = get_tree().get_first_node_in_group("game_manager")
 	if not game_manager:
 		push_error("GameManager not found in group game_managers")
 		return

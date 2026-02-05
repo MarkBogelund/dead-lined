@@ -15,9 +15,9 @@ var _current_wave := 0
 var _is_spawning := false
 
 func _ready() -> void:
-	var game_manager := get_tree().get_first_node_in_group("game_managers")
+	var game_manager := get_tree().get_first_node_in_group("game_manager")
 	if game_manager == null:
-		push_error("EnemySpawner: GameManager not found in 'game_managers' group")
+		push_error("EnemySpawner: GameManager not found in 'game_manager' group")
 		return
 
 	game_manager.connect(

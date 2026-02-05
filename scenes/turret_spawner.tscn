@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bcryhnwbbjcle"]
+
+[ext_resource type="Script" uid="uid://ul47vckjydgn" path="res://scripts/turret_spawner.gd" id="1_noi0g"]
+[ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_qslmp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_noi0g"]
+size = Vector2(30, 29)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mexib"]
+radius = 53.502335
+
+[node name="TurretSpawner" type="StaticBody2D" unique_id=1270538854]
+script = ExtResource("1_noi0g")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=786510499]
+position = Vector2(-0.5, -7.5)
+texture = ExtResource("1_qslmp")
+region_enabled = true
+region_rect = Rect2(83, 6, 57, 65)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1488811291]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_noi0g")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1904561096]
+position = Vector2(-0.5, 0.5)
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=826939621]
+shape = SubResource("CircleShape2D_mexib")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

@@ -18,9 +18,9 @@ func _ready():
 	health.connect("died", Callable(self, "_on_died"))
 	health.connect("damaged", Callable(self, "_on_damaged"))
 	
-	game_manager = get_tree().get_first_node_in_group("game_managers")
+	game_manager = get_tree().get_first_node_in_group("game_manager")
 	if not game_manager:
-		push_error("GameManager not found in group game_managers")
+		push_error("GameManager not found in group game_manager")
 		return
 
 	game_manager.connect(

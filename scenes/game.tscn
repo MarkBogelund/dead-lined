@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://s8g2np38nwj7" path="res://scenes/enemy_spawner.tscn" id="3_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://qmo1fotunlhy" path="res://scenes/game_manager.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/turret.tscn" id="5_iywne"]
+[ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/turret_spawner.tscn" id="6_p57ef"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -370,3 +371,5 @@ health_growth = 0.0
 
 [node name="Turret" parent="." unique_id=909576845 instance=ExtResource("5_iywne")]
 position = Vector2(-93, -46)
+
+[node name="TurretSpawner" parent="." unique_id=1270538854 instance=ExtResource("6_p57ef")]

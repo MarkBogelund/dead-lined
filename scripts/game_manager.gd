@@ -17,7 +17,6 @@ enum Phase {
 }
 
 func _ready() -> void:
-	add_to_group("game_managers")
 	call_deferred("_enter_build_phase")
 
 func _process(delta: float) -> void:

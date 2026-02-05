@@ -16,9 +16,9 @@ var game_manager: Node
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
-	game_manager = get_tree().get_first_node_in_group("game_managers")
+	game_manager = get_tree().get_first_node_in_group("game_manager")
 	if not game_manager:
-		push_error("GameManager not found in group game_managers")
+		push_error("GameManager not found in group game_manager")
 		return
 
 	health.died.connect(_on_died)
