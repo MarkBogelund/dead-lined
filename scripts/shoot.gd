@@ -9,6 +9,7 @@ class_name ShootComponent
 @export var projectile_speed := 300.0
 @export var projectile_collision_layers: Array[int] = []
 @export var projectile_collision_masks: Array[int] = []
+@export var explosion_vfx_scene: PackedScene
 
 var _shoot_timer := 0.0
 
@@ -44,11 +45,17 @@ func shoot(target_pos: Vector2, shooter_pos: Vector2 = Vector2.ZERO):
 	
 	projectile.set_collision_layers(projectile_collision_layers, projectile_collision_masks)
 
-	projectile.set_orientation(shooter_pos + dir * muzzle_distance, dir.angle(), dir,)
+	projectile.set_orientation(shooter_pos + dir * muzzle_distance, dir.angle(), dir)
 	
 	projectile.set_parameters(projectile_speed, projectile_damage, projectile_knockback)
 
 	get_tree().current_scene.add_child(projectile)
 
 	_shoot_timer = shoot_cooldown
+	
+	if explosion_vfx_scene != null:
+		var explosion = explosion_vfx_scene.instantiate()
+		explosion.position = shooter_pos
+		get_tree().current_scene.add_child(explosion)
+
 	

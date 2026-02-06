@@ -1,42 +1,34 @@
 extends StaticBody2D
 
-@onready var canon: Sprite2D = $Canon
-@onready var muzzle: Marker2D = $Canon/Muzzle
+@onready var canon: Node2D = $Canon
+@onready var muzzle: Marker2D = $Canon/Graphics/Muzzle
 @onready var shoot: ShootComponent = $ShootComponent
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-@export var projectile_scene: PackedScene
-@export var detection_range := 500.0		# in pixels
-@export var detection_angle := 0.2
-@export var rotation_speed := 6.0			# radians per second
-@export var fire_rate := 0.5				# seconds per shot
+@export var detection_range := 500.0        # pixels
+@export var detection_angle := 0.2           # radians
+@export var rotation_speed := 6.0            # radians per second
+@export var fire_rate := 0.5                 # seconds per shot
 
 var game_manager: Node
-
-const UP_FACING_OFFSET := PI / 2
-
 var fire_timer := 0.0
 var build_phase := true
+
+const UP_FACING_OFFSET := -PI / 2
 
 func _ready():
 	game_manager = get_tree().get_first_node_in_group("game_manager")
 	if not game_manager:
-		push_error("GameManager not found in group game_managers")
+		push_error("GameManager not found in group game_manager")
 		return
 
-	game_manager.connect(
-		"build_phase_started",
-		Callable(self, "_on_build_phase_started")
-	)
-
-	game_manager.connect(
-		"combat_phase_started",
-		Callable(self, "_on_combat_phase_started")
-	)
+	game_manager.build_phase_started.connect(_on_build_phase_started)
+	game_manager.combat_phase_started.connect(_on_combat_phase_started)
 
 func _process(delta):
 	if build_phase:
 		return
-	
+
 	fire_timer -= delta
 
 	var target := get_closest_enemy_in_range()
@@ -46,7 +38,9 @@ func _process(delta):
 	rotate_towards(target.global_position, delta)
 
 	if can_fire_at(target):
+		animation_player.play("recoil")
 		shoot.shoot(target.global_position, muzzle.global_position)
+		fire_timer = fire_rate
 
 func _on_build_phase_started() -> void:
 	build_phase = true
@@ -65,6 +59,7 @@ func get_closest_enemy_in_range() -> CharacterBody2D:
 	for target in targets:
 		if target.is_dead():
 			continue
+
 		var dist := global_position.distance_squared_to(target.global_position)
 		if dist <= closest_dist:
 			closest_dist = dist

@@ -368,6 +368,7 @@ position = Vector2(0, -74)
 health_growth = 0.0
 
 [node name="GameManager" parent="." unique_id=1482491151 instance=ExtResource("4_lbhrr")]
+time_between_waves = 5
 
 [node name="Turret" parent="." unique_id=909576845 instance=ExtResource("5_iywne")]
 position = Vector2(-93, -46)

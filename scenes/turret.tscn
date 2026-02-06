@@ -1,35 +1,63 @@
 [gd_scene format=3 uid="uid://cjn5bnbk1raxk"]
 
 [ext_resource type="Script" uid="uid://cfvu8vi7cq1k" path="res://scripts/turret.gd" id="1_el7wl"]
-[ext_resource type="Texture2D" uid="uid://dm21ye3t8x06q" path="res://assets/sprites/turret.png" id="1_x3mc5"]
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/projectile.tscn" id="2_485p4"]
+[ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/seeker.png" id="3_pp6j5"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/shoot.gd" id="4_pp6j5"]
+[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/explosion_vfx.tscn" id="5_6fjxm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
 radius = 7.0
 
+[sub_resource type="Animation" id="Animation_6fjxm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Canon/Graphics:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dirdf"]
+resource_name = "recoil"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Canon/Graphics:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -2), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mqfwu"]
+_data = {
+&"RESET": SubResource("Animation_6fjxm"),
+&"recoil": SubResource("Animation_dirdf")
+}
+
 [node name="Turret" type="StaticBody2D" unique_id=909576845]
 script = ExtResource("1_el7wl")
-projectile_scene = ExtResource("2_485p4")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=978640667]
-texture = ExtResource("1_x3mc5")
+texture = ExtResource("3_pp6j5")
 region_enabled = true
-region_rect = Rect2(0, 0, 20, 24)
+region_rect = Rect2(35, 14, 28, 25)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=464062235]
 visible = false
 shape = SubResource("CircleShape2D_el7wl")
-
-[node name="Canon" type="Sprite2D" parent="." unique_id=1726308093]
-position = Vector2(0, -4)
-texture = ExtResource("1_x3mc5")
-offset = Vector2(0, -5)
-region_enabled = true
-region_rect = Rect2(34, 0, 22, 24)
-
-[node name="Muzzle" type="Marker2D" parent="Canon" unique_id=838233975]
-position = Vector2(0, -10)
 
 [node name="ShootComponent" type="Node" parent="." unique_id=316514408]
 script = ExtResource("4_pp6j5")
@@ -38,4 +66,20 @@ muzzle_distance = 5.0
 projectile_speed = 200.0
 projectile_collision_layers = Array[int]([1])
 projectile_collision_masks = Array[int]([1, 2, 3, 9])
+explosion_vfx_scene = ExtResource("5_6fjxm")
 metadata/_custom_type_script = "uid://blmoutagnygip"
+
+[node name="Canon" type="Node2D" parent="." unique_id=850792081]
+position = Vector2(0, -4)
+
+[node name="Graphics" type="Sprite2D" parent="Canon" unique_id=1726308093]
+texture = ExtResource("3_pp6j5")
+offset = Vector2(0, 5)
+region_enabled = true
+region_rect = Rect2(7, 14, 22, 28)
+
+[node name="Muzzle" type="Marker2D" parent="Canon/Graphics" unique_id=838233975]
+position = Vector2(0, 15)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114519724]
+libraries/ = SubResource("AnimationLibrary_mqfwu")
