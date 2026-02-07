@@ -1,6 +1,7 @@
 extends CharacterBody2D
 class_name EnemyBase
 
+@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
@@ -12,14 +13,9 @@ class_name EnemyBase
 @export var player_knockback := 100.0
 
 var player: Node2D
-var game_manager: Node
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
-	game_manager = get_tree().get_first_node_in_group("game_manager")
-	if not game_manager:
-		push_error("GameManager not found in group game_manager")
-		return
 
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
@@ -77,7 +73,7 @@ func _on_damaged() -> void:
 	
 func _on_died() -> void:
 	remove_from_group("enemies")
-	game_manager.call_deferred("check_for_wave_clear")
+	wave_manager.call_deferred("check_for_wave_clear")
 	collision_shape.set_deferred("disabled", true)
 	hitbox_collision_shape.set_deferred("disabled", true)
 	play_anim("die")

@@ -1,5 +1,5 @@
 extends Node
-class_name GameManager
+class_name WaveManager
 
 signal build_phase_started
 signal combat_phase_started(wave_index: int)

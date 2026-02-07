@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cjn5bnbk1raxk"]
 
-[ext_resource type="Script" uid="uid://cfvu8vi7cq1k" path="res://scripts/turret.gd" id="1_el7wl"]
-[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/projectile.tscn" id="2_485p4"]
+[ext_resource type="Script" uid="uid://ci6t3dum71ion" path="res://scripts/entities/turret/seeker.gd" id="1_6fjxm"]
+[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/entities/projectile.tscn" id="2_485p4"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/seeker.png" id="3_pp6j5"]
-[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/shoot.gd" id="4_pp6j5"]
-[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/explosion_vfx.tscn" id="5_6fjxm"]
+[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/entities/shoot.gd" id="4_pp6j5"]
+[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/vfx/explosion_vfx.tscn" id="5_6fjxm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
 radius = 7.0
@@ -47,8 +47,8 @@ _data = {
 &"recoil": SubResource("Animation_dirdf")
 }
 
-[node name="Turret" type="StaticBody2D" unique_id=909576845]
-script = ExtResource("1_el7wl")
+[node name="Seeker" type="StaticBody2D" unique_id=909576845]
+script = ExtResource("1_6fjxm")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=978640667]
 texture = ExtResource("3_pp6j5")

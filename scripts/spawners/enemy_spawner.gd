@@ -1,7 +1,9 @@
 extends Marker2D
 class_name EnemySpawner
 
-@export var spawn_entries: Array[EnemySpawnEntry] = []
+@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
+
+@export var spawn_entries: Array[EnemySpawnData] = []
 @export var spawn_radius := 24.0
 
 @export var base_spawn_delay := 0.6
@@ -15,15 +17,7 @@ var _current_wave := 0
 var _is_spawning := false
 
 func _ready() -> void:
-	var game_manager := get_tree().get_first_node_in_group("game_manager")
-	if game_manager == null:
-		push_error("EnemySpawner: GameManager not found in 'game_manager' group")
-		return
-
-	game_manager.connect(
-		"combat_phase_started",
-		Callable(self, "_on_combat_phase_started")
-	)
+	wave_manager.connect("combat_phase_started", Callable(self, "_on_combat_phase_started"))
 
 func _on_combat_phase_started(wave_index: int) -> void:
 	start_wave_spawn(wave_index)

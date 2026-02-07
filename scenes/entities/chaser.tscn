@@ -1,48 +1,48 @@
 [gd_scene format=3 uid="uid://dbn6ammn3fpex"]
 
-[ext_resource type="Script" uid="uid://bikpdlna0o7so" path="res://scripts/charger.gd" id="1_5uy6h"]
-[ext_resource type="Texture2D" uid="uid://6pkgvekwxkxh" path="res://assets/sprites/Brackeys Assets/slime_purple.png" id="1_7p1mj"]
-[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/knockback.gd" id="3_4ra3w"]
-[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/health.gd" id="4_5uy6h"]
+[ext_resource type="Script" uid="uid://bikpdlna0o7so" path="res://scripts/entities/enemy/charger.gd" id="1_v6182"]
+[ext_resource type="Texture2D" uid="uid://6pkgvekwxkxh" path="res://assets/sprites/Brackeys Assets/slime_purple.png" id="2_03bqu"]
+[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/entities/knockback.gd" id="3_fffhc"]
+[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/entities/health.gd" id="4_qurf7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xwavj"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(0, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nenq2"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(24, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_md484"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(48, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ipns3"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(72, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8qclf"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(48, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w8i8w"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(72, 48, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_md0e3"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(0, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ra3w"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(24, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5uy6h"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(48, 24, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c4w8v"]
-atlas = ExtResource("1_7p1mj")
+atlas = ExtResource("2_03bqu")
 region = Rect2(72, 24, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xwavj"]
@@ -208,10 +208,10 @@ _data = {
 &"take_damage": SubResource("Animation_5uy6h")
 }
 
-[node name="Enemy" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
+[node name="Chaser" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
 collision_layer = 4
 collision_mask = 257
-script = ExtResource("1_5uy6h")
+script = ExtResource("1_v6182")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=148251673]
 position = Vector2(0, -12)
@@ -232,11 +232,11 @@ collision_mask = 10
 shape = SubResource("CircleShape2D_4ra3w")
 
 [node name="KnockbackComponent" type="Node" parent="." unique_id=2006050385]
-script = ExtResource("3_4ra3w")
+script = ExtResource("3_fffhc")
 metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=2089421128]
-script = ExtResource("4_5uy6h")
+script = ExtResource("4_qurf7")
 max_health = 20
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 

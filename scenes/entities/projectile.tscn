@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bnu4fvr1hbp1v"]
 
 [ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_q3m7n"]
-[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/projectile.gd" id="1_softn"]
+[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/entities/projectile.gd" id="1_softn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6q2a6"]
 radius = 4.0

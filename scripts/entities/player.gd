@@ -1,13 +1,12 @@
 extends CharacterBody2D
 
+@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-
-var game_manager: Node
 
 # Movement
 const SPEED := 150.0
@@ -17,27 +16,15 @@ var can_buy_turrets := false
 func _ready():
 	health.connect("died", Callable(self, "_on_died"))
 	health.connect("damaged", Callable(self, "_on_damaged"))
-	
-	game_manager = get_tree().get_first_node_in_group("game_manager")
-	if not game_manager:
-		push_error("GameManager not found in group game_manager")
-		return
 
-	game_manager.connect(
-		"build_phase_started",
-		Callable(self, "_on_build_phase_started")
-	)
+	wave_manager.connect("build_phase_started", Callable(self, "_on_build_phase_started"))
+	wave_manager.connect("combat_phase_started", Callable(self, "_on_combat_phase_started"))
 
-	game_manager.connect(
-		"combat_phase_started",
-		Callable(self, "_on_combat_phase_started")
-	)
 
 func _physics_process(delta):
 	
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 
-	# --- Movement ---
 	if knockback.is_active():
 		velocity = knockback.velocity
 	elif health.is_dead:
@@ -50,8 +37,8 @@ func _physics_process(delta):
 	knockback.process(delta)
 	move_and_slide()
 
-	# --- Shooting ---
-	if Input.is_action_pressed("interact") and shoot.can_shoot():
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact") and shoot.can_shoot():
 		shoot.shoot(get_global_mouse_position(), global_position)
 
 func play_run_anim(input_dir):

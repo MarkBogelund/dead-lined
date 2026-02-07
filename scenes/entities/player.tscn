@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://c1up8f3hcb17m"]
 
-[ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/player.gd" id="1_g2els"]
-[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/projectile.tscn" id="2_qhqgy"]
+[ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/entities/player.gd" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/entities/projectile.tscn" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://dlrnady7rm2bb" path="res://assets/sprites/engineer-Sheet.png" id="2_tuyoq"]
-[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/knockback.gd" id="4_dqkch"]
-[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/health.gd" id="5_qlg0r"]
-[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/shoot.gd" id="5_tuyoq"]
+[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/entities/knockback.gd" id="4_dqkch"]
+[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/entities/health.gd" id="5_qlg0r"]
+[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/entities/shoot.gd" id="5_tuyoq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a8ls1"]
 atlas = ExtResource("2_tuyoq")

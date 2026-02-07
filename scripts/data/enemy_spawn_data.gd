@@ -1,5 +1,5 @@
 extends Resource
-class_name EnemySpawnEntry
+class_name EnemySpawnData
 
 @export var enemy_scene: PackedScene
 

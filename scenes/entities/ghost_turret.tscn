@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://ch3rd301p0tmx"]
+
+[ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/seeker-icon.png" id="1_0e5db"]
+[ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/entities/turret/ghost_turret.gd" id="1_exqsx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exqsx"]
+atlas = ExtResource("1_0e5db")
+region = Rect2(0, 0, 22, 26)
+
+[node name="GhostTurret" type="Node2D" unique_id=1787389694]
+script = ExtResource("1_exqsx")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=770917120]
+position = Vector2(0, 3)
+texture = SubResource("AtlasTexture_exqsx")

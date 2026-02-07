@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bcryhnwbbjcle"]
 
-[ext_resource type="Script" uid="uid://ul47vckjydgn" path="res://scripts/turret_spawner.gd" id="1_noi0g"]
+[ext_resource type="Script" uid="uid://ul47vckjydgn" path="res://scripts/spawners/turret_spawner.gd" id="1_noi0g"]
 [ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_qslmp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_noi0g"]

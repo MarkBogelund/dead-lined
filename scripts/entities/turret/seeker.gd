@@ -1,29 +1,16 @@
-extends StaticBody2D
+extends TurretBase
 
 @onready var canon: Node2D = $Canon
 @onready var muzzle: Marker2D = $Canon/Graphics/Muzzle
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-@export var detection_range := 500.0        # pixels
 @export var detection_angle := 0.2           # radians
 @export var rotation_speed := 6.0            # radians per second
 @export var fire_rate := 0.5                 # seconds per shot
-
-var game_manager: Node
 var fire_timer := 0.0
-var build_phase := true
 
 const UP_FACING_OFFSET := -PI / 2
-
-func _ready():
-	game_manager = get_tree().get_first_node_in_group("game_manager")
-	if not game_manager:
-		push_error("GameManager not found in group game_manager")
-		return
-
-	game_manager.build_phase_started.connect(_on_build_phase_started)
-	game_manager.combat_phase_started.connect(_on_combat_phase_started)
 
 func _process(delta):
 	if build_phase:
@@ -41,31 +28,6 @@ func _process(delta):
 		animation_player.play("recoil")
 		shoot.shoot(target.global_position, muzzle.global_position)
 		fire_timer = fire_rate
-
-func _on_build_phase_started() -> void:
-	build_phase = true
-
-func _on_combat_phase_started(_wave_index: int) -> void:
-	build_phase = false
-
-func get_closest_enemy_in_range() -> CharacterBody2D:
-	var targets: Array[Node] = []
-	targets.append_array(get_tree().get_nodes_in_group("enemies"))
-	targets.append_array(get_tree().get_nodes_in_group("player"))
-
-	var closest: CharacterBody2D = null
-	var closest_dist := detection_range * detection_range
-
-	for target in targets:
-		if target.is_dead():
-			continue
-
-		var dist := global_position.distance_squared_to(target.global_position)
-		if dist <= closest_dist:
-			closest_dist = dist
-			closest = target
-
-	return closest
 
 func rotate_towards(target_pos: Vector2, delta: float):
 	var dir := target_pos - canon.global_position

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="TurretData" format=3 uid="uid://bbi5f87py8cnr"]
+
+[ext_resource type="PackedScene" uid="uid://ch3rd301p0tmx" path="res://scenes/entities/ghost_turret.tscn" id="1_3hrap"]
+[ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/seeker-icon.png" id="2_2hyx4"]
+[ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_data.gd" id="3_sfh23"]
+[ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/entities/seeker.tscn" id="4_q04sb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m4va3"]
+atlas = ExtResource("2_2hyx4")
+region = Rect2(1, 1, 20, 24)
+
+[resource]
+script = ExtResource("3_sfh23")
+name = "Seeker"
+icon = SubResource("AtlasTexture_m4va3")
+turret_scene = ExtResource("4_q04sb")
+ghost_scene = ExtResource("1_3hrap")
+metadata/_custom_type_script = "uid://q2sxkhmik7ny"
