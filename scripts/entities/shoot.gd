@@ -12,13 +12,14 @@ class_name ShootComponent
 @export var explosion_vfx_scene: PackedScene
 
 var _shoot_timer := 0.0
+var shooting_activated := true
 
 func _process(delta: float):
 	if _shoot_timer > 0.0:
 		_shoot_timer -= delta
 
 func can_shoot():
-	return _shoot_timer <= 0.0
+	return _shoot_timer <= 0.0 and shooting_activated == true
 
 func shoot(target_pos: Vector2, shooter_pos: Vector2 = Vector2.ZERO):
 	if not can_shoot():

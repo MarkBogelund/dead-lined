@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://chwp4u8wx4qxs" path="res://assets/sprites/Pixel Art Topdown/TX Tileset Grass.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://s8g2np38nwj7" path="res://scenes/spawners/enemy_spawner.tscn" id="3_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://qmo1fotunlhy" path="res://scenes/managers/game_manager.tscn" id="4_lbhrr"]
-[ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/entities/seeker.tscn" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/spawners/turret_spawner.tscn" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://gs5xs8mijm57" path="res://scripts/managers/turret_shop_manager.gd" id="7_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://c8hgm346otpwr" path="res://scenes/ui/turret_shop_ui.tscn" id="8_gee14"]
+[ext_resource type="Resource" uid="uid://bbi5f87py8cnr" path="res://resources/seeker.tres" id="8_vtaks"]
 [ext_resource type="Script" uid="uid://p83ejh6jnrsu" path="res://scripts/managers/turret_placement_manager.gd" id="9_0tnpc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
@@ -371,7 +371,7 @@ position = Vector2(0, -74)
 health_growth = 0.0
 
 [node name="WaveManager" parent="." unique_id=1482491151 groups=["wave_manager"] instance=ExtResource("4_lbhrr")]
-time_between_waves = 4
+time_between_waves = 5
 
 [node name="TurretSpawner" parent="." unique_id=1270538854 groups=["turret_spawners"] instance=ExtResource("6_p57ef")]
 visible = false
@@ -386,10 +386,8 @@ offset_left = -370.75
 offset_top = -207.0
 offset_right = -269.25
 offset_bottom = -153.0
+turret_entry = ExtResource("8_vtaks")
 
 [node name="TurretPlacementManager" type="Node2D" parent="TurretShopManager" unique_id=1557336051]
 script = ExtResource("9_0tnpc")
 metadata/_custom_type_script = "uid://p83ejh6jnrsu"
-
-[node name="Seeker" parent="." unique_id=909576845 instance=ExtResource("5_iywne")]
-position = Vector2(-96, -55)

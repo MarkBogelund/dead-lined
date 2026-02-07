@@ -1,37 +1,47 @@
 extends Node
 class_name TurretShopManager
 
+@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var turret_shop_ui: TurretShopUI = $TurretShopUI
 @onready var turret_placement_manager: TurretPlacementManager = $TurretPlacementManager
-@onready var player: CharacterBody2D = $"../Player"
-
-var active_spawner: Node = null
+@onready var turret_spawner: TurretSpawner = $"../TurretSpawner"
 
 func _ready() -> void:
 	turret_shop_ui.visible = false
+	
+	turret_spawner.shop_opened.connect(_on_shop_opened)
+	turret_spawner.shop_closed.connect(_on_shop_closed)
+	
 	turret_shop_ui.turret_selected.connect(_on_turret_selected)
+	
+	turret_placement_manager.turret_placed.connect(_on_turret_placed)
+	
+	turret_placement_manager.turret_placement_cancelled.connect(_on_turret_cancelled)
+	
+	wave_manager.build_phase_started.connect(_on_build_phase_started)
+	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 
-	var spawners := get_tree().get_nodes_in_group("turret_spawners")
-	for spawner in spawners:
-		spawner.shop_opened.connect(_on_shop_opened.bind(spawner))
-		spawner.shop_closed.connect(_on_shop_closed.bind(spawner))
+func _on_shop_opened():
+	turret_shop_ui.open()
 
-func _on_shop_opened(spawner: Node) -> void:
-	active_spawner = spawner
-	turret_shop_ui.visible = true
+func _on_shop_closed():
+	turret_shop_ui.close()
 
-func _on_shop_closed(spawner: Node) -> void:
-	if spawner != active_spawner:
-		return
+func _on_turret_selected(turret_entry: TurretEntry):
+	turret_placement_manager.start_placement(turret_entry)
+	turret_shop_ui.close()
+	turret_spawner.close_shop()
 
-	active_spawner = null
-	turret_shop_ui.visible = false
+func _on_turret_placed(turret_entry: TurretEntry):
+	print("Turret purchased: " + turret_entry.name)
+	
+func _on_turret_cancelled():
+	print("Turret cancelled")
+	
+func _on_build_phase_started() -> void:
+	turret_spawner.build_phase_started()
 
-func _on_turret_selected(turret_scene: PackedScene) -> void:
-	turret_placement_manager.start_placement(turret_scene, player.position)
-
-	print("Turret selected")
-
-	turret_shop_ui.visible = false
-	if active_spawner:
-		active_spawner.close_menu()
+func _on_combat_phase_started(_wave: int) -> void:
+	turret_spawner.combat_phase_started()
+	turret_placement_manager.cancel()
+	turret_shop_ui.close()

@@ -75,5 +75,8 @@ func take_damage(amount: int):
 func apply_knockback(from_position: Vector2, strength: float):
 	knockback.apply(from_position, strength)
 
+func shooting_activated(activated: bool):
+	shoot.shooting_activated = activated
+
 func is_dead():
 	return health.is_dead

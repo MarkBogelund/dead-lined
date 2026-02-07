@@ -51,6 +51,7 @@ _data = {
 script = ExtResource("1_6fjxm")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=978640667]
+z_index = 5
 texture = ExtResource("3_pp6j5")
 region_enabled = true
 region_rect = Rect2(35, 14, 28, 25)
@@ -73,6 +74,7 @@ metadata/_custom_type_script = "uid://blmoutagnygip"
 position = Vector2(0, -4)
 
 [node name="Graphics" type="Sprite2D" parent="Canon" unique_id=1726308093]
+z_index = 5
 texture = ExtResource("3_pp6j5")
 offset = Vector2(0, 5)
 region_enabled = true

@@ -3,7 +3,7 @@ class_name EnemySpawner
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 
-@export var spawn_entries: Array[EnemySpawnData] = []
+@export var spawn_entries: Array[EnemySpawnEntry] = []
 @export var spawn_radius := 24.0
 
 @export var base_spawn_delay := 0.6

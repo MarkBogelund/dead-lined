@@ -1,5 +1,5 @@
 extends Resource
-class_name TurretData
+class_name TurretEntry
 
 @export var name: String
 @export var icon: Texture2D

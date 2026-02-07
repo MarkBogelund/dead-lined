@@ -5,23 +5,21 @@ signal shop_opened
 signal shop_closed
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var interaction_area: Area2D = $InteractionArea
 
-var menu_open := false
+var shop_open := false
 enum State {
 	DISABLED,
 	IDLE,
 	PLAYER_IN_RANGE
 }
 
+#@export var turret_entries: Array[TurretEntry]
+
 var current_state: State = State.DISABLED
 
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var interaction_area: Area2D = $InteractionArea
-
 func _ready() -> void:
-	wave_manager.build_phase_started.connect(_on_build_phase_started)
-	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
-
 	_set_state(State.DISABLED)
 	add_to_group("turret_spawners")
 
@@ -30,10 +28,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("open"):
-		if menu_open:
-			close_menu()
+		if shop_open:
+			close_shop()
 		else:
-			open_menu()
+			open_shop()
 
 func _set_state(new_state: State) -> void:
 	if current_state == new_state:
@@ -43,11 +41,11 @@ func _set_state(new_state: State) -> void:
 
 	match current_state:
 		State.DISABLED:
-			close_menu()
+			close_shop()
 			_disable()
 
 		State.IDLE:
-			close_menu()
+			close_shop()
 			_enable()
 
 		State.PLAYER_IN_RANGE:
@@ -65,24 +63,24 @@ func _disable() -> void:
 	interaction_area.set_deferred("monitoring", false)
 	interaction_area.set_deferred("monitorable", false)
 
-func open_menu() -> void:
-	if menu_open:
+func open_shop() -> void:
+	if shop_open:
 		return
-
-	menu_open = true
+		
+	shop_open = true
 	emit_signal("shop_opened")
 
-func close_menu() -> void:
-	if not menu_open:
+func close_shop() -> void:
+	if not shop_open:
 		return
 
-	menu_open = false
+	shop_open = false
 	emit_signal("shop_closed")
 
-func _on_build_phase_started() -> void:
+func build_phase_started():
 	_set_state(State.IDLE)
-
-func _on_combat_phase_started(_wave: int) -> void:
+	
+func combat_phase_started():
 	_set_state(State.DISABLED)
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
