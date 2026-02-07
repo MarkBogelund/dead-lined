@@ -12,6 +12,10 @@ class_name EnemyBase
 @export var enemy_knockback := 200.0
 @export var player_knockback := 100.0
 
+@export var scrap_drop_amount := 1
+@export var scrap_drop_radius := 0.0
+@export var scrap_scene: PackedScene
+
 var player: Node2D
 
 func _ready() -> void:
@@ -77,6 +81,12 @@ func _on_died() -> void:
 	collision_shape.set_deferred("disabled", true)
 	hitbox_collision_shape.set_deferred("disabled", true)
 	play_anim("die")
+
+func drop_scrap():
+	for i in scrap_drop_amount:
+		var scrap = scrap_scene.instantiate()
+		scrap.set_explosion(global_position, scrap_drop_radius)
+		get_tree().current_scene.add_child(scrap)
 
 func _is_player_dead() -> bool:
 	return player.health.is_dead

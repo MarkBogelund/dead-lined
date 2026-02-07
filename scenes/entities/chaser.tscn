@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bikpdlna0o7so" path="res://scripts/entities/enemy/charger.gd" id="1_v6182"]
 [ext_resource type="Texture2D" uid="uid://6pkgvekwxkxh" path="res://assets/sprites/Brackeys Assets/slime_purple.png" id="2_03bqu"]
+[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/entities/scrap.tscn" id="2_fffhc"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/entities/knockback.gd" id="3_fffhc"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/entities/health.gd" id="4_qurf7"]
 
@@ -177,9 +178,12 @@ tracks/2/path = NodePath(".")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.85714287, 1),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
+"args": [],
+"method": &"drop_scrap"
+}, {
 "args": [],
 "method": &"queue_free"
 }]
@@ -212,6 +216,9 @@ _data = {
 collision_layer = 4
 collision_mask = 257
 script = ExtResource("1_v6182")
+scrap_drop_amount = 3
+scrap_drop_radius = 15.0
+scrap_scene = ExtResource("2_fffhc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=148251673]
 position = Vector2(0, -12)

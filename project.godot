@@ -81,6 +81,7 @@ cancel={
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Projectile"
 2d_physics/layer_9="Turrets"
+2d_physics/layer_10="Scrap"
 
 [physics]
 

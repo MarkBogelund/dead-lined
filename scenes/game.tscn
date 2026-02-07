@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://qmo1fotunlhy" path="res://scenes/managers/game_manager.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/spawners/turret_spawner.tscn" id="6_p57ef"]
 [ext_resource type="PackedScene" uid="uid://ddlawija32flj" path="res://scenes/managers/turret_shop_manager.tscn" id="6_u5sy4"]
+[ext_resource type="Script" uid="uid://ioxvj1ihixrt" path="res://scripts/managers/resource_manager.gd" id="7_u5sy4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -374,3 +375,7 @@ time_between_waves = 5
 
 [node name="TurretSpawner" parent="." unique_id=1270538854 groups=["turret_spawners"] instance=ExtResource("6_p57ef")]
 visible = false
+
+[node name="ResourceManager" type="Node" parent="." unique_id=674344671 groups=["resource_manager"]]
+script = ExtResource("7_u5sy4")
+metadata/_custom_type_script = "uid://ioxvj1ihixrt"
