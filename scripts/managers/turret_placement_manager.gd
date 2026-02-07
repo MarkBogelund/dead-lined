@@ -60,12 +60,11 @@ func clear_ghost_turret() -> void:
 		ghost_turret = null
 	active = false
 
-func place():
-	player.shooting_activated(true)
-	
+func place():	
 	var placed_turret := current_turret_entry.turret_scene.instantiate()
 	placed_turret.position = ghost_turret.position
 	get_tree().current_scene.add_child(placed_turret)
 	
 	clear_ghost_turret()
+	player.shooting_activated(true)
 	emit_signal("turret_placed", current_turret_entry)

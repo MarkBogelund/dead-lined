@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://ddlawija32flj"]
+
+[ext_resource type="Script" uid="uid://gs5xs8mijm57" path="res://scripts/managers/turret_shop_manager.gd" id="1_p101j"]
+[ext_resource type="PackedScene" uid="uid://c8hgm346otpwr" path="res://scenes/ui/turret_shop_ui.tscn" id="2_k6r1c"]
+[ext_resource type="Resource" uid="uid://bbi5f87py8cnr" path="res://resources/seeker.tres" id="3_is7ft"]
+[ext_resource type="Script" uid="uid://p83ejh6jnrsu" path="res://scripts/managers/turret_placement_manager.gd" id="4_0me7m"]
+
+[node name="TurretShopManager" type="Node" unique_id=905987479 groups=["turret_shop_controller"]]
+script = ExtResource("1_p101j")
+metadata/_custom_type_script = "uid://gs5xs8mijm57"
+
+[node name="TurretShopUI" parent="." unique_id=507885227 instance=ExtResource("2_k6r1c")]
+visible = false
+offset_left = -370.75
+offset_top = -207.0
+offset_right = -269.25
+offset_bottom = -153.0
+turret_entry = ExtResource("3_is7ft")
+
+[node name="TurretPlacementManager" type="Node2D" parent="." unique_id=1979259540]
+script = ExtResource("4_0me7m")
+metadata/_custom_type_script = "uid://p83ejh6jnrsu"
