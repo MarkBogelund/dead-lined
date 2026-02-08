@@ -2,7 +2,7 @@ extends Area2D
 
 var resource_manager: ResourceManager
 
-@export var value := 10
+@export var value := 1
 @export var move_duration := 0.25
 @export var speed := 200.0
 
@@ -45,5 +45,5 @@ func _on_body_entered(body: Node2D):
 		return
 
 	if body.is_in_group("player"):
-		resource_manager.add_scrap_amount(value)
+		resource_manager.scrap_amount += value
 		queue_free()

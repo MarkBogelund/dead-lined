@@ -1,7 +1,9 @@
 extends Node
 class_name ResourceManager
 
-@export var scrap_amount := 0
-
-func add_scrap_amount(amount: int):
-	scrap_amount += amount
+# public property with getter and setter
+@export var scrap_amount: int:
+	get:
+		return scrap_amount
+	set(value):
+		scrap_amount = max(0, value)

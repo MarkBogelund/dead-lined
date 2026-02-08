@@ -3,6 +3,8 @@ class_name TurretShopUI
 
 signal turret_selected(turret_entry: TurretEntry)
 
+@onready var price: Label = $NinePatchRect/Price
+
 @export var turret_entry: TurretEntry
 
 func _ready() -> void:
@@ -13,6 +15,9 @@ func open() -> void:
 
 func close() -> void:
 	visible = false
+	
+func set_price(amount):
+	price.text = String(amount)
 
 func _on_select_button_pressed() -> void:
 	if turret_entry == null:

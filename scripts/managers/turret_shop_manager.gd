@@ -5,6 +5,7 @@ class_name TurretShopManager
 @onready var turret_shop_ui: TurretShopUI = $TurretShopUI
 @onready var turret_placement_manager: TurretPlacementManager = $TurretPlacementManager
 @onready var turret_spawner: TurretSpawner = $"../TurretSpawner"
+@onready var resource_manager: ResourceManager = $"../ResourceManager"
 
 func _ready() -> void:
 	turret_shop_ui.visible = false
@@ -28,12 +29,17 @@ func _on_shop_closed():
 	turret_shop_ui.close()
 
 func _on_turret_selected(turret_entry: TurretEntry):
+	if resource_manager.scrap_amount < turret_entry.price:
+		print("No enough scrap")
+		return
+	
 	turret_placement_manager.start_placement(turret_entry)
 	turret_shop_ui.close()
 	turret_spawner.close_shop()
 
 func _on_turret_placed(turret_entry: TurretEntry):
 	print("Turret purchased: " + turret_entry.name)
+	resource_manager.scrap_amount -= turret_entry.price
 	
 func _on_turret_cancelled():
 	print("Turret cancelled")

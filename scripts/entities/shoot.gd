@@ -7,23 +7,34 @@ class_name ShootComponent
 @export var muzzle_distance := 20.0
 @export var shoot_cooldown := 0.5
 @export var projectile_speed := 300.0
+@export var scrap_value := 1
 @export var projectile_collision_layers: Array[int] = []
 @export var projectile_collision_masks: Array[int] = []
 @export var explosion_vfx_scene: PackedScene
 
 var _shoot_timer := 0.0
 var shooting_activated := true
+var resource_manager: ResourceManager
+
+func _ready():
+	resource_manager = get_tree().get_first_node_in_group("resource_manager")
 
 func _process(delta: float):
 	if _shoot_timer > 0.0:
 		_shoot_timer -= delta
 
+func activate_shooting(activated):
+	shooting_activated = activated
+
 func can_shoot():
-	return _shoot_timer <= 0.0 and shooting_activated == true
+	return _shoot_timer <= 0.0 and shooting_activated == true and resource_manager.scrap_amount >= scrap_value
 
 func shoot(target_pos: Vector2, shooter_pos: Vector2 = Vector2.ZERO):
 	if not can_shoot():
 		return
+	
+	resource_manager.scrap_amount -= scrap_value
+	print(resource_manager.scrap_amount)
 
 	if projectile_scene == null:
 		push_error("No projectile scene assigned to ShootComponent")
@@ -58,5 +69,3 @@ func shoot(target_pos: Vector2, shooter_pos: Vector2 = Vector2.ZERO):
 		var explosion = explosion_vfx_scene.instantiate()
 		explosion.position = shooter_pos
 		get_tree().current_scene.add_child(explosion)
-
-	

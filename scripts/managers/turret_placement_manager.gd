@@ -51,7 +51,7 @@ func update_position(mouse_world_pos: Vector2) -> void:
 
 func cancel():
 	clear_ghost_turret()
-	player.shooting_activated(true)
+	player.activate_shooting(true)
 	emit_signal("turret_placement_cancelled")
 
 func clear_ghost_turret() -> void:
@@ -66,5 +66,5 @@ func place():
 	get_tree().current_scene.add_child(placed_turret)
 	
 	clear_ghost_turret()
-	player.shooting_activated(true)
+	player.activate_shooting(true)
 	emit_signal("turret_placed", current_turret_entry)

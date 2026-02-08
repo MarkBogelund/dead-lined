@@ -2,6 +2,7 @@ extends Node2D
 class_name Slash
 
 var player
+@export var slashing_activated := true
 
 # --- Weapon ---
 @onready var weapon: Sprite2D = $Weapon
@@ -70,12 +71,12 @@ func _reset_smear():
 	trail_shader.set_shader_parameter("elapsed", 0.0)
 	trail_shader.set_shader_parameter("shrink_speed", shrink_speed)
 
-# ---------------------
-# Slash API
-# ---------------------
+func activate_slashing(activated):
+	slashing_activated = activated
+
 func start_slash(mouse_global_pos: Vector2) -> void:
 	# Only allow slash if cooldown has passed
-	if _cooldown_timer > 0.0:
+	if _cooldown_timer > 0.0 or !slashing_activated:
 		return
 
 	_cooldown_timer = slash_cooldown

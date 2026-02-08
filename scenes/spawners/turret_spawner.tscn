@@ -7,7 +7,7 @@
 size = Vector2(30, 29)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mexib"]
-radius = 53.502335
+radius = 37.529987
 
 [node name="TurretSpawner" type="StaticBody2D" unique_id=1270538854]
 script = ExtResource("1_noi0g")

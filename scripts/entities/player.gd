@@ -21,7 +21,6 @@ func _ready():
 	wave_manager.connect("build_phase_started", Callable(self, "_on_build_phase_started"))
 	wave_manager.connect("combat_phase_started", Callable(self, "_on_combat_phase_started"))
 
-
 func _physics_process(delta):
 	
 	var input_dir = Input.get_vector("left", "right", "up", "down")
@@ -61,6 +60,8 @@ func play_anim(anim_name: String):
 
 func _on_died():
 	collision_shape.set_deferred("disabled", true)
+	activate_shooting(false)
+	activate_slashing(false)
 	animated_sprite.play("die")
 	
 func _on_damaged():
@@ -78,8 +79,11 @@ func take_damage(amount: int):
 func apply_knockback(from_position: Vector2, strength: float):
 	knockback.apply(from_position, strength)
 
-func shooting_activated(activated: bool):
-	shoot.shooting_activated = activated
+func activate_shooting(activated: bool):
+	shoot.activate_shooting(activated)
+
+func activate_slashing(activated: bool):
+	slash.activate_slashing(activated)
 
 func is_dead():
 	return health.is_dead

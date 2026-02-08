@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://c8hgm346otpwr"]
 
 [ext_resource type="Script" uid="uid://royrukh18w15" path="res://scripts/ui/turret_shop_ui.gd" id="1_b4k3f"]
-[ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/entities/seeker.tscn" id="2_0h6o1"]
 [ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/seeker-icon.png" id="2_jfm2m"]
 [ext_resource type="Texture2D" uid="uid://dgx2akh6lc25s" path="res://assets/sprites/ui-box.png" id="2_oi8iw"]
 [ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="3_1mobc"]
+[ext_resource type="Texture2D" uid="uid://bxeopanmjairf" path="res://assets/sprites/Brackeys Assets/coin.png" id="5_7arnk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oi8iw"]
 atlas = ExtResource("2_jfm2m")
@@ -15,6 +15,10 @@ margin = Rect2(0.165, 0, 0, 0)
 atlas = ExtResource("2_jfm2m")
 region = Rect2(23, 1, 20, 24)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4wts"]
+atlas = ExtResource("5_7arnk")
+region = Rect2(3, 3, 10, 10)
+
 [node name="TurretShopUI" type="MarginContainer" unique_id=507885227]
 z_index = 10
 anchors_preset = 8
@@ -22,10 +26,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -50.75
-offset_top = -27.0
-offset_right = 50.75
-offset_bottom = 27.0
+offset_left = -69.546295
+offset_top = -37.0
+offset_right = 69.546326
+offset_bottom = 37.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
@@ -33,10 +37,9 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 0
 script = ExtResource("1_b4k3f")
-turret_scene = ExtResource("2_0h6o1")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=2130820617]
-custom_minimum_size = Vector2(10, 10)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("2_oi8iw")
 region_rect = Rect2(4, 4, 16, 16)
@@ -53,10 +56,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -11.0
-offset_top = -17.0
-offset_right = 11.0
-offset_bottom = 9.0
+offset_left = -10.203705
+offset_top = -23.0
+offset_right = 11.796295
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
@@ -72,10 +75,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -21.75
-offset_top = 8.0
-offset_right = 20.25
-offset_bottom = 20.0
+offset_left = -20.953705
+offset_top = 2.0
+offset_right = 21.046295
+offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_1mobc")
@@ -83,5 +86,40 @@ theme_override_font_sizes/font_size = 8
 text = "Seeker"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Price" type="Label" parent="NinePatchRect" unique_id=1512618863]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.15741
+offset_top = 12.0
+offset_right = 21.84259
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_1mobc")
+theme_override_font_sizes/font_size = 8
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrapImage" type="TextureRect" parent="NinePatchRect" unique_id=280029440]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -14.15741
+offset_top = 14.0
+offset_right = -7.1574097
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_h4wts")
+expand_mode = 1
 
 [connection signal="pressed" from="NinePatchRect/SelectButton" to="." method="_on_select_button_pressed"]
