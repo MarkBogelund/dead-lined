@@ -10,7 +10,9 @@ extends CharacterBody2D
 @onready var slash: Slash = $Slash
 
 # Movement
-@export var speed := 150.0
+@export var speed := 170.0
+@export var acceleration := 3000.0
+@export var friction := 4500.0
 
 var build_phase := false
 var can_buy_turrets := false
@@ -23,19 +25,42 @@ func _ready():
 	wave_manager.connect("combat_phase_started", Callable(self, "_on_combat_phase_started"))
 
 func _physics_process(delta):
-	
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 
+	# Dead player = no movement
+	if health.is_dead:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
+	# Knockback overrides control
 	if knockback.is_active():
 		velocity = knockback.velocity
-	elif health.is_dead:
-		velocity = Vector2.ZERO
-		return
 	else:
-		velocity = input_dir * speed
-		play_run_anim(input_dir)
+		var target_velocity = input_dir * speed
 
+		if input_dir != Vector2.ZERO:
+			# Extremely fast direction response
+			velocity = velocity.move_toward(
+				target_velocity,
+				acceleration * delta
+			)
+		else:
+			# Very fast stop (critical for dodging)
+			velocity = velocity.move_toward(
+				Vector2.ZERO,
+				friction * delta
+			)
+
+	# Update knockback
 	knockback.process(delta)
+
+	# Animations based on real movement
+	if velocity.length() > 10:
+		play_run_anim(velocity.normalized())
+	else:
+		animated_sprite.play("idle")
+
 	move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:

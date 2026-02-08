@@ -3,6 +3,7 @@ class_name Slash
 
 @onready var vfx_component: VFXComponent = $"../VFXComponent"
 @export var hit_vfx: PackedScene
+@onready var animated_sprite: AnimatedSprite2D = $"../AnimatedSprite2D"
 
 var player
 @export var slashing_activated := true

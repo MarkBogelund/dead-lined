@@ -375,7 +375,7 @@ position = Vector2(-128, 88)
 health_growth = 0.0
 
 [node name="WaveManager" parent="." unique_id=1482491151 groups=["wave_manager"] instance=ExtResource("4_lbhrr")]
-time_between_waves = 5
+time_between_waves = 30
 
 [node name="TurretSpawner" parent="." unique_id=1270538854 groups=["turret_spawners"] instance=ExtResource("6_p57ef")]
 visible = false
