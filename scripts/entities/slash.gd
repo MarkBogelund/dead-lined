@@ -89,9 +89,11 @@ func start_slash(mouse_global_pos: Vector2) -> void:
 	_enable_weapon()
 	trail.visible = true
 
-	# Apply knockback on player immediately
-	if player != null and player.has_method("apply_knockback"):
-		player.apply_knockback(mouse_global_pos, player_knockback)
+	if player:
+		if player.has_method("apply_knockback"):
+			player.apply_knockback(mouse_global_pos, player_knockback)
+		
+		player.on_slash_started(mouse_global_pos)
 
 func _process(delta: float) -> void:
 	# Cooldown timer always counts down

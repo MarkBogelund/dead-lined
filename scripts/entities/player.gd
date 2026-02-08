@@ -1,13 +1,13 @@
 extends CharacterBody2D
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var slash: Slash = $Slash
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # Movement
 @export var speed := 170.0
@@ -16,6 +16,8 @@ extends CharacterBody2D
 
 var build_phase := false
 var can_buy_turrets := false
+
+var is_slashing := false
 
 func _ready():
 	health.connect("died", Callable(self, "_on_died"))
@@ -55,11 +57,13 @@ func _physics_process(delta):
 	# Update knockback
 	knockback.process(delta)
 
-	# Animations based on real movement
-	if velocity.length() > 10:
-		play_run_anim(velocity.normalized())
-	else:
-		animated_sprite.play("idle")
+	# Animations based on real movement (unless slashing)
+	if not is_slashing:
+		if velocity.length() > 10:
+			play_run_anim(velocity.normalized())
+		else:
+			animation_player.play("idle")
+
 
 	move_and_slide()
 
@@ -68,21 +72,35 @@ func _unhandled_input(event: InputEvent) -> void:
 		shoot.shoot(get_global_mouse_position(), global_position)
 	if event.is_action_pressed("slash"):
 		slash.start_slash(get_global_mouse_position())
+		
 
 func play_run_anim(input_dir):
+	if is_slashing:
+		return
+
 	if input_dir.x != 0:
 		animated_sprite.flip_h = input_dir.x < 0
 
-	if input_dir != Vector2.ZERO:
-		animated_sprite.play("move")
-	else:
-		animated_sprite.play("idle")
+	animated_sprite.play("move")
 
 func play_anim(anim_name: String):
 	if animation_player.has_animation(anim_name):
 		animation_player.play(anim_name)
 	else:
 		push_warning("Animation \"" + anim_name + "\" does not exist")
+
+func on_slash_started(mouse_global_pos: Vector2):
+	is_slashing = true
+
+	# Face toward slash direction
+	var dir_x = mouse_global_pos.x - global_position.x
+	if dir_x != 0:
+		animated_sprite.flip_h = dir_x < 0
+
+	play_anim("slash")
+
+func on_slash_finished():
+	is_slashing = false
 
 func _on_died():
 	collision_shape.set_deferred("disabled", true)
