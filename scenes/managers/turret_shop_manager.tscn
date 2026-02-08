@@ -10,6 +10,7 @@ script = ExtResource("1_p101j")
 metadata/_custom_type_script = "uid://gs5xs8mijm57"
 
 [node name="TurretShopUI" parent="." unique_id=507885227 instance=ExtResource("2_k6r1c")]
+visible = false
 offset_left = -370.75
 offset_top = -207.0
 offset_right = -269.25

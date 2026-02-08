@@ -1,6 +1,9 @@
 extends Node2D
 class_name Slash
 
+@onready var vfx_component: VFXComponent = $"../VFXComponent"
+@export var hit_vfx: PackedScene
+
 var player
 @export var slashing_activated := true
 
@@ -35,20 +38,12 @@ var _direction := 1
 var _elapsed := 0.0
 var _retracting := false
 
-@export var hit_vfx: PackedScene
-
-# ---------------------
-# Ready
-# ---------------------
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
 	_reset_weapon()
 	_reset_smear()
 	set_process(true)  # ensure cooldown always ticks
 
-# ---------------------
-# Weapon enabling/disabling
-# ---------------------
 func _disable_weapon():
 	weapon.visible = false
 	hitbox.monitorable = false
@@ -97,9 +92,6 @@ func start_slash(mouse_global_pos: Vector2) -> void:
 	if player != null and player.has_method("apply_knockback"):
 		player.apply_knockback(mouse_global_pos, player_knockback)
 
-# ---------------------
-# Process
-# ---------------------
 func _process(delta: float) -> void:
 	# Cooldown timer always counts down
 	if _cooldown_timer > 0.0:
@@ -110,9 +102,6 @@ func _process(delta: float) -> void:
 	elif trail.visible:
 		_update_smear(delta)
 
-# ---------------------
-# Weapon animation
-# ---------------------
 func _update_weapon(delta: float) -> void:
 	_time += delta
 	var t := _time / slash_duration
@@ -127,9 +116,6 @@ func _update_weapon(delta: float) -> void:
 
 	_add_tip_to_trail()
 
-# ---------------------
-# Trail logic
-# ---------------------
 func _add_tip_to_trail() -> void:
 	# Offset along the weapon axis (tip/center)
 	var along_vector = Vector2(trail_offset, 0).rotated(weapon.rotation - PI / 2)
@@ -154,9 +140,6 @@ func _update_smear(delta: float) -> void:
 		trail.clear_points()
 		_retracting = false
 
-# ---------------------
-# Hitbox logic
-# ---------------------
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
 		if body.has_method("take_damage"):
@@ -165,13 +148,4 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		if body.has_method("apply_knockback"):
 			body.apply_knockback(weapon.global_position, target_knockback)
 			
-	_add_hit_vfx(body.global_position)
-
-func _add_hit_vfx(hit_position: Vector2):
-	if hit_vfx == null:
-		push_error("No hit vfx scene attached")
-		return
-	
-	var hit = hit_vfx.instantiate()
-	hit.position = hit_position
-	get_tree().current_scene.add_child(hit)
+	vfx_component.instantiate_vfx(hit_vfx, body.global_position)

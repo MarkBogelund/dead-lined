@@ -6,7 +6,9 @@
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/entities/knockback.gd" id="4_dqkch"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/entities/health.gd" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/entities/shoot.gd" id="5_tuyoq"]
+[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/vfx/explosion_vfx.tscn" id="6_c5rqy"]
 [ext_resource type="PackedScene" uid="uid://c0e3wgqqbxjeb" path="res://scenes/entities/slash.tscn" id="7_ss7kx"]
+[ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/vfx/vfx.gd" id="8_dnykm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a8ls1"]
 atlas = ExtResource("2_tuyoq")
@@ -183,6 +185,7 @@ _data = {
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_g2els")
+speed = 200.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
 position = Vector2(0, -12)
@@ -205,7 +208,9 @@ metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="ShootComponent" type="Node" parent="." unique_id=904350876]
 script = ExtResource("5_tuyoq")
+explosion_vfx_scene = ExtResource("6_c5rqy")
 projectile_scene = ExtResource("2_qhqgy")
+projectile_damage = 20
 projectile_collision_layers = Array[int]([1])
 projectile_collision_masks = Array[int]([1, 3, 9])
 metadata/_custom_type_script = "uid://blmoutagnygip"
@@ -215,3 +220,9 @@ libraries/ = SubResource("AnimationLibrary_fjrip")
 
 [node name="Slash" parent="." unique_id=716983905 instance=ExtResource("7_ss7kx")]
 position = Vector2(0, -11)
+slash_duration = 0.15
+slash_cooldown = 0.3
+
+[node name="VFXComponent" type="Node" parent="." unique_id=1075206016]
+script = ExtResource("8_dnykm")
+metadata/_custom_type_script = "uid://buxf487a3gb6p"

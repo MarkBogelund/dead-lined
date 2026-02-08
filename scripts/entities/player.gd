@@ -10,7 +10,8 @@ extends CharacterBody2D
 @onready var slash: Slash = $Slash
 
 # Movement
-const SPEED := 150.0
+@export var speed := 150.0
+
 var build_phase := false
 var can_buy_turrets := false
 
@@ -31,7 +32,7 @@ func _physics_process(delta):
 		velocity = Vector2.ZERO
 		return
 	else:
-		velocity = input_dir * SPEED
+		velocity = input_dir * speed
 		play_run_anim(input_dir)
 
 	knockback.process(delta)

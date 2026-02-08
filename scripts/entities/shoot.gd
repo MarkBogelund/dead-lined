@@ -1,6 +1,9 @@
 extends Node
 class_name ShootComponent
 
+@onready var vfx_component: VFXComponent = $"../VFXComponent"
+@export var explosion_vfx_scene: PackedScene
+
 @export var projectile_scene: PackedScene
 @export var projectile_damage := 10
 @export var projectile_knockback := 200
@@ -10,7 +13,6 @@ class_name ShootComponent
 @export var scrap_value := 1
 @export var projectile_collision_layers: Array[int] = []
 @export var projectile_collision_masks: Array[int] = []
-@export var explosion_vfx_scene: PackedScene
 
 var _shoot_timer := 0.0
 var shooting_activated := true
@@ -64,8 +66,3 @@ func shoot(target_pos: Vector2, shooter_pos: Vector2 = Vector2.ZERO):
 	get_tree().current_scene.add_child(projectile)
 
 	_shoot_timer = shoot_cooldown
-	
-	if explosion_vfx_scene != null:
-		var explosion = explosion_vfx_scene.instantiate()
-		explosion.position = shooter_pos
-		get_tree().current_scene.add_child(explosion)

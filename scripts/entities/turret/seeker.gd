@@ -1,5 +1,8 @@
 extends TurretBase
 
+@onready var vfx_component: VFXComponent = $VFXComponent
+@export var vfx_scene: PackedScene
+
 @onready var canon: Node2D = $Canon
 @onready var muzzle: Marker2D = $Canon/Graphics/Muzzle
 @onready var shoot: ShootComponent = $ShootComponent
@@ -27,6 +30,7 @@ func _process(delta):
 	if can_fire_at(target):
 		animation_player.play("recoil")
 		shoot.shoot(target.global_position, muzzle.global_position)
+		vfx_component.instantiate_vfx(vfx_scene, muzzle.global_position)
 		fire_timer = fire_rate
 
 func rotate_towards(target_pos: Vector2, delta: float):

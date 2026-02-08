@@ -37,7 +37,7 @@ hit_vfx = ExtResource("2_b08v8")
 
 [node name="Trail" type="Line2D" parent="." unique_id=794802585]
 material = SubResource("ShaderMaterial_ues5y")
-width = 20.0
+width = 30.0
 width_curve = SubResource("Curve_a3j18")
 gradient = SubResource("Gradient_ues5y")
 texture_mode = 2

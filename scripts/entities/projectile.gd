@@ -1,5 +1,7 @@
 extends Area2D
 
+@onready var vfx_component: VFXComponent = $VFXComponent
+
 var projectile_speed: float
 var projectile_damage: float
 var projectile_knockback: float
@@ -18,7 +20,7 @@ func _on_body_entered(body):
 		if body.has_method("apply_knockback"):
 			body.apply_knockback(global_position, projectile_knockback)
 			
-	add_hit_vfx(position)
+	vfx_component.instantiate_vfx(hit_vfx, position)
 	queue_free()
 
 func set_orientation(pos, rot, dir):
@@ -39,12 +41,3 @@ func set_collision_layers(layers: Array, masks: Array) -> void:
 		collision_layer |= 1 << int(l - 1)  # convert to int
 	for m in masks:
 		collision_mask |= 1 << int(m - 1)
-
-func add_hit_vfx(hit_position: Vector2):
-	if hit_vfx == null:
-		push_error("No hit vfx scene attached")
-		return
-	
-	var hit = hit_vfx.instantiate()
-	hit.position = hit_position
-	get_tree().current_scene.add_child(hit)
