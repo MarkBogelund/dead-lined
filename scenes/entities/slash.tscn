@@ -28,6 +28,7 @@ target_knockback = 300
 player_knockback = 100.0
 slash_radius = 20.0
 slash_duration = 0.2
+slash_cooldown = 0.4
 shrink_speed = 8.0
 trail_offset = 7.675
 trail_behind = 5.0

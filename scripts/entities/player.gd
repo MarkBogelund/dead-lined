@@ -39,7 +39,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact") and shoot.can_shoot():
+	if event.is_action_pressed("shoot") and shoot.can_shoot():
 		shoot.shoot(get_global_mouse_position(), global_position)
 	if event.is_action_pressed("slash"):
 		slash.start_slash(get_global_mouse_position())
