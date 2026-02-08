@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://c0e3wgqqbxjeb"]
+
+[ext_resource type="Script" uid="uid://gr1whsrd046d" path="res://scripts/entities/slash.gd" id="1_a3j18"]
+[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/vfx/explosion_vfx.tscn" id="2_b08v8"]
+[ext_resource type="Texture2D" uid="uid://bnr14l7147w74" path="res://assets/sprites/wrench.png" id="3_b08v8"]
+[ext_resource type="Shader" uid="uid://cbs1pir8bvnp6" path="res://shaders/slash.gdshader" id="3_ues5y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ues5y"]
+shader = ExtResource("3_ues5y")
+shader_parameter/elapsed = 0.0
+shader_parameter/shrink_speed = 2.0
+
+[sub_resource type="Curve" id="Curve_a3j18"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.6110373), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_ues5y"]
+offsets = PackedFloat32Array(0, 0.7504836)
+colors = PackedColorArray(0, 1, 1, 0.11764706, 1, 1, 1, 1)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ues5y"]
+radius = 4.0
+height = 20.0
+
+[node name="Slash" type="Node2D" unique_id=716983905]
+script = ExtResource("1_a3j18")
+target_knockback = 300
+player_knockback = 100.0
+slash_radius = 20.0
+slash_duration = 0.2
+shrink_speed = 8.0
+trail_offset = 7.675
+trail_behind = 5.0
+trail_length = 25
+hit_vfx = ExtResource("2_b08v8")
+
+[node name="Trail" type="Line2D" parent="." unique_id=794802585]
+material = SubResource("ShaderMaterial_ues5y")
+width = 20.0
+width_curve = SubResource("Curve_a3j18")
+gradient = SubResource("Gradient_ues5y")
+texture_mode = 2
+joint_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="Weapon" type="Sprite2D" parent="." unique_id=1289261744]
+z_index = 1
+rotation = 1.5707964
+texture = ExtResource("3_b08v8")
+region_enabled = true
+region_rect = Rect2(7, 0, 10, 24)
+
+[node name="Hitbox" type="Area2D" parent="Weapon" unique_id=1740119940]
+collision_layer = 8
+collision_mask = 12
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Weapon/Hitbox" unique_id=761940926]
+position = Vector2(-1.3113416e-07, -3)
+shape = SubResource("CapsuleShape2D_ues5y")
+
+[connection signal="body_entered" from="Weapon/Hitbox" to="." method="_on_hitbox_body_entered"]

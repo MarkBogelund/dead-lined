@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/entities/knockback.gd" id="4_dqkch"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/entities/health.gd" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/entities/shoot.gd" id="5_tuyoq"]
+[ext_resource type="PackedScene" uid="uid://c0e3wgqqbxjeb" path="res://scenes/entities/slash.tscn" id="7_ss7kx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a8ls1"]
 atlas = ExtResource("2_tuyoq")
@@ -211,3 +212,6 @@ metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=371344470]
 libraries/ = SubResource("AnimationLibrary_fjrip")
+
+[node name="Slash" parent="." unique_id=716983905 instance=ExtResource("7_ss7kx")]
+position = Vector2(0, -11)

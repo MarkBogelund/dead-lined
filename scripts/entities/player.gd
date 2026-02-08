@@ -7,6 +7,7 @@ extends CharacterBody2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var slash: Slash = $Slash
 
 # Movement
 const SPEED := 150.0
@@ -40,6 +41,8 @@ func _physics_process(delta):
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and shoot.can_shoot():
 		shoot.shoot(get_global_mouse_position(), global_position)
+	if event.is_action_pressed("slash"):
+		slash.start_slash(get_global_mouse_position())
 
 func play_run_anim(input_dir):
 	if input_dir.x != 0:

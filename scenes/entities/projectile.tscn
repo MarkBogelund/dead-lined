@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_q3m7n"]
 [ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/entities/projectile.gd" id="1_softn"]
+[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/vfx/explosion_vfx.tscn" id="2_8ngof"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6q2a6"]
 radius = 4.0
@@ -10,6 +11,7 @@ radius = 4.0
 collision_layer = 8
 collision_mask = 263
 script = ExtResource("1_softn")
+hit_vfx = ExtResource("2_8ngof")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=506901445]
 texture = ExtResource("1_q3m7n")
