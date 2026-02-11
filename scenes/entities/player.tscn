@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/vfx/explosion_vfx.tscn" id="6_c5rqy"]
 [ext_resource type="PackedScene" uid="uid://c0e3wgqqbxjeb" path="res://scenes/entities/slash.tscn" id="7_ss7kx"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/vfx/vfx.gd" id="8_dnykm"]
+[ext_resource type="Script" uid="uid://cdc3yx122ruc6" path="res://scripts/entities/movement.gd" id="10_b6tgf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
 atlas = ExtResource("2_tuyoq")
@@ -223,6 +224,35 @@ tracks/2/keys = {
 "values": [0]
 }
 
+[sub_resource type="Animation" id="Animation_n5sgd"]
+resource_name = "die"
+length = 0.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"die"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
 [sub_resource type="Animation" id="Animation_b6tgf"]
 resource_name = "idle"
 length = 0.4
@@ -328,7 +358,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_tuyoq"]
 resource_name = "take_damage"
-length = 0.1
+length = 0.2
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -346,6 +376,7 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fjrip"]
 _data = {
 &"RESET": SubResource("Animation_qlg0r"),
+&"die": SubResource("Animation_n5sgd"),
 &"idle": SubResource("Animation_b6tgf"),
 &"move": SubResource("Animation_73kkf"),
 &"slash": SubResource("Animation_c5rqy"),
@@ -390,12 +421,20 @@ metadata/_custom_type_script = "uid://blmoutagnygip"
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=371344470]
 libraries/ = SubResource("AnimationLibrary_fjrip")
 
-[node name="Slash" parent="." unique_id=716983905 instance=ExtResource("7_ss7kx")]
+[node name="SlashComponent" parent="." unique_id=716983905 instance=ExtResource("7_ss7kx")]
 position = Vector2(0, -11)
+hit_vfx = ExtResource("6_c5rqy")
+slashing_activated = true
+damage = 10
 player_knockback = 0.0
+arc_angle = 3.141592653589793
 slash_duration = 0.15
 slash_cooldown = 0.3
 
 [node name="VFXComponent" type="Node" parent="." unique_id=1075206016]
 script = ExtResource("8_dnykm")
 metadata/_custom_type_script = "uid://buxf487a3gb6p"
+
+[node name="MovementComponent" type="Node" parent="." unique_id=1380084559]
+script = ExtResource("10_b6tgf")
+metadata/_custom_type_script = "uid://cdc3yx122ruc6"

@@ -1,11 +1,11 @@
 extends Node2D
-class_name Slash
+class_name SlashComponent
 
 @onready var vfx_component: VFXComponent = $"../VFXComponent"
 @export var hit_vfx: PackedScene
 @onready var animated_sprite: AnimatedSprite2D = $"../AnimatedSprite2D"
 
-var player
+var player: Player
 @export var slashing_activated := true
 
 # --- Weapon ---
@@ -71,7 +71,6 @@ func activate_slashing(activated):
 	slashing_activated = activated
 
 func start_slash(mouse_global_pos: Vector2) -> void:
-	# Only allow slash if cooldown has passed
 	if _cooldown_timer > 0.0 or !slashing_activated:
 		return
 
@@ -89,11 +88,8 @@ func start_slash(mouse_global_pos: Vector2) -> void:
 	_enable_weapon()
 	trail.visible = true
 
-	if player:
-		if player.has_method("apply_knockback"):
-			player.apply_knockback(mouse_global_pos, player_knockback)
-		
-		player.on_slash_started(mouse_global_pos)
+	player.apply_knockback(mouse_global_pos, player_knockback)
+	player.on_slash_started()
 
 func _process(delta: float) -> void:
 	# Cooldown timer always counts down

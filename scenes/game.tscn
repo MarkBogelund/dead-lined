@@ -355,6 +355,8 @@ metadata/_edit_lock_ = true
 [node name="Player" parent="." unique_id=244036277 instance=ExtResource("1_uwrxv")]
 z_index = 5
 position = Vector2(1, -30)
+acceleration = 3000.0
+friction = 4500.0
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=410582709]
 position = Vector2(-1, 0)
@@ -375,11 +377,12 @@ position = Vector2(-128, 88)
 health_growth = 0.0
 
 [node name="WaveManager" parent="." unique_id=1482491151 groups=["wave_manager"] instance=ExtResource("4_lbhrr")]
-time_between_waves = 30
+time_between_waves = 5
 
 [node name="TurretSpawner" parent="." unique_id=1270538854 groups=["turret_spawners"] instance=ExtResource("6_p57ef")]
 visible = false
 
 [node name="ResourceManager" type="Node" parent="." unique_id=674344671 groups=["resource_manager"]]
 script = ExtResource("7_u5sy4")
+scrap_amount = 20
 metadata/_custom_type_script = "uid://ioxvj1ihixrt"

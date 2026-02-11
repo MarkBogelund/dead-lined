@@ -16,10 +16,6 @@ class_name ShootComponent
 
 var _shoot_timer := 0.0
 var shooting_activated := true
-var resource_manager: ResourceManager
-
-func _ready():
-	resource_manager = get_tree().get_first_node_in_group("resource_manager")
 
 func _process(delta: float):
 	if _shoot_timer > 0.0:
@@ -29,14 +25,11 @@ func activate_shooting(activated):
 	shooting_activated = activated
 
 func can_shoot():
-	return _shoot_timer <= 0.0 and shooting_activated == true and resource_manager.scrap_amount >= scrap_value
+	return _shoot_timer <= 0.0 and shooting_activated == true
 
 func shoot(target_pos: Vector2, shooter_pos: Vector2 = Vector2.ZERO):
 	if not can_shoot():
 		return
-	
-	resource_manager.scrap_amount -= scrap_value
-	print(resource_manager.scrap_amount)
 
 	if projectile_scene == null:
 		push_error("No projectile scene assigned to ShootComponent")
