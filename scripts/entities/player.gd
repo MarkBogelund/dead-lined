@@ -9,19 +9,13 @@ class_name Player
 @onready var slash: SlashComponent = $SlashComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
+@onready var animation: AnimationComponent = $AnimationComponent
 
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-# Movement
-@export var speed := 170.0
-@export var acceleration := 3000.0
-@export var friction := 4500.0
-
 var build_phase := false
 var can_move := true
-var is_slashing := false
 
 func _ready():
 	health.died.connect(_on_died)
@@ -31,19 +25,18 @@ func _ready():
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 
 func _physics_process(delta):
+
 	var input_dir = Input.get_vector("left", "right", "up", "down")
-
-	if health.is_dead:
-		velocity = Vector2.ZERO
-	else:
-		_process_movement(input_dir, delta)
-
+		
+	_process_movement(input_dir, delta)
 	knockback.process(delta)
 	move_and_slide()
 
-	update_movement_animation()
+	_update_animation()
+	_update_flip()
 
 func _process_movement(input_dir: Vector2, delta: float) -> void:
+
 	if knockback.is_active():
 		velocity = knockback.velocity
 	elif can_move:
@@ -52,49 +45,46 @@ func _process_movement(input_dir: Vector2, delta: float) -> void:
 			input_dir,
 			delta
 		)
+	else:
+		velocity = Vector2.ZERO
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("shoot") and shoot.can_shoot() and resource_manager.scrap_amount >= shoot.scrap_value:
+func _update_animation() -> void:
+
+	if health.is_dead:
+		animation.set_state(AnimationComponent.State.DIE)
+		return
+
+	# Only set base states here
+	if velocity.length() > 10.0:
+		animation.set_state(AnimationComponent.State.MOVE)
+	else:
+		animation.set_state(AnimationComponent.State.IDLE)
+
+func _update_flip():
+
+	# Do not override slash direction while slashing
+	if animation.current_state == AnimationComponent.State.SLASH:
+		return
+
+	if velocity.x != 0:
+		animated_sprite.flip_h = velocity.x < 0
+
+func _unhandled_input(event: InputEvent):
+
+	if event.is_action_pressed("shoot") \
+	and shoot.can_shoot() \
+	and resource_manager.scrap_amount >= shoot.scrap_value:
+
 		resource_manager.scrap_amount -= shoot.scrap_value
 		shoot.shoot(get_global_mouse_position(), global_position)
 
 	if event.is_action_pressed("slash"):
 		slash.start_slash(get_global_mouse_position())
 
-func update_movement_animation() -> void:
-	if health.is_dead or is_slashing:
-		return
-
-	if velocity.length() > 10.0:
-		play_move()
-	else:
-		play_idle()
-
-func play_move() -> void:
-	if velocity.x != 0:
-		animated_sprite.flip_h = velocity.x < 0
-
-	animated_sprite.play("move")
-
-func play_idle() -> void:
-	animated_sprite.play("idle")
-
-func play_slash() -> void:
-	animation_player.play("slash")
-
-func play_damage() -> void:
-	animation_player.play("take_damage")
-
-func play_die() -> void:
-	animation_player.play("die")
-
 func on_slash_started() -> void:
-	is_slashing = true
-	_face_towards(get_global_mouse_position())
-	play_slash()
 
-func on_slash_finished() -> void:
-	is_slashing = false
+	_face_towards(get_global_mouse_position())
+	animation.set_state(AnimationComponent.State.SLASH)
 
 func _face_towards(world_pos: Vector2) -> void:
 	var dir_x = world_pos.x - global_position.x
@@ -106,17 +96,17 @@ func _on_died():
 	can_move = false
 	activate_shooting(false)
 	activate_slashing(false)
-	play_die()
+	animation.set_state(AnimationComponent.State.DIE)
 
 func _on_damaged():
-	play_damage()
+	animation.set_state(AnimationComponent.State.DAMAGE)
 
 func _on_build_phase_started():
 	build_phase = true
 
 func _on_combat_phase_started(_wave_index: int):
 	build_phase = false
-	
+
 func take_damage(amount: int):
 	health.take_damage(amount)
 
