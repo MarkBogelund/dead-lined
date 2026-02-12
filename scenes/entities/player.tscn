@@ -184,7 +184,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
 radius = 3.0
-height = 22.0
+height = 16.0
 
 [sub_resource type="Animation" id="Animation_qlg0r"]
 length = 0.001
@@ -381,7 +381,17 @@ _data = {
 &"take_damage": SubResource("Animation_tuyoq")
 }
 
+[sub_resource type="Gradient" id="Gradient_73kkf"]
+offsets = PackedFloat32Array(0, 0.69056606)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_n5sgd"]
+gradient = SubResource("Gradient_73kkf")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
+z_index = 2
 collision_layer = 2
 script = ExtResource("1_g2els")
 
@@ -392,7 +402,7 @@ animation = &"slash"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1867633058]
-position = Vector2(0, -11)
+position = Vector2(0, -8)
 shape = SubResource("CapsuleShape2D_g2els")
 
 [node name="KnockbackComponent" type="Node" parent="." unique_id=948374991]
@@ -437,3 +447,7 @@ metadata/_custom_type_script = "uid://cdc3yx122ruc6"
 [node name="AnimationComponent" type="Node" parent="." unique_id=1794401183]
 script = ExtResource("11_73kkf")
 metadata/_custom_type_script = "uid://dwbus28tan8rh"
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1454825118]
+color = Color(1, 0.49803922, 0, 0.12941177)
+texture = SubResource("GradientTexture2D_n5sgd")

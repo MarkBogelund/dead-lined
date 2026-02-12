@@ -15,6 +15,7 @@ script = ExtResource("1_softn")
 hit_vfx = ExtResource("2_8ngof")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=506901445]
+z_index = 5
 texture = ExtResource("1_q3m7n")
 region_enabled = true
 region_rect = Rect2(0, 482, 31, 30)
