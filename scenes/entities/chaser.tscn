@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/entities/knockback.gd" id="3_fffhc"]
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/chaser.png" id="4_fffhc"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/entities/health.gd" id="4_qurf7"]
+[ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="6_fffhc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_03bqu"]
 atlas = ExtResource("4_fffhc")
@@ -244,6 +245,11 @@ player_knockback = 150.0
 scrap_drop_amount = 3
 scrap_drop_radius = 15.0
 scrap_scene = ExtResource("2_fffhc")
+
+[node name="Shadow" type="Sprite2D" parent="." unique_id=322407822]
+modulate = Color(1, 1, 1, 0.25490198)
+position = Vector2(0, -3)
+texture = ExtResource("6_fffhc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=148251673]
 z_index = 6
