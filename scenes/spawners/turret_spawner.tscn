@@ -13,6 +13,7 @@ radius = 37.529987
 script = ExtResource("1_noi0g")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=786510499]
+z_index = 2
 position = Vector2(-0.5, -7.5)
 texture = ExtResource("1_qslmp")
 region_enabled = true

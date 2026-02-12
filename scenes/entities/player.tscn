@@ -442,6 +442,8 @@ metadata/_custom_type_script = "uid://buxf487a3gb6p"
 
 [node name="MovementComponent" type="Node" parent="." unique_id=1380084559]
 script = ExtResource("10_b6tgf")
+speed = 160.0
+friction = 2000.0
 metadata/_custom_type_script = "uid://cdc3yx122ruc6"
 
 [node name="AnimationComponent" type="Node" parent="." unique_id=1794401183]
@@ -449,5 +451,7 @@ script = ExtResource("11_73kkf")
 metadata/_custom_type_script = "uid://dwbus28tan8rh"
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1454825118]
-color = Color(1, 0.49803922, 0, 0.12941177)
+position = Vector2(0, -10)
+scale = Vector2(0.8125, 0.8125)
+color = Color(1, 0.49803922, 0, 0.10980392)
 texture = SubResource("GradientTexture2D_n5sgd")

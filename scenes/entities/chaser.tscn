@@ -217,7 +217,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.06666667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Color(0.6636509, 0, 0.07844808, 1), Color(1, 1, 1, 1)]
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_j0cyh"]
@@ -240,6 +240,7 @@ fill_from = Vector2(0.5, 0.5)
 collision_layer = 4
 collision_mask = 257
 script = ExtResource("1_v6182")
+player_knockback = 150.0
 scrap_drop_amount = 3
 scrap_drop_radius = 15.0
 scrap_scene = ExtResource("2_fffhc")
@@ -277,6 +278,7 @@ metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 libraries/ = SubResource("AnimationLibrary_j0cyh")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=2020380487]
+position = Vector2(0, -9)
 color = Color(0.94509804, 0.18431373, 0.34901962, 0.30588236)
 texture = SubResource("GradientTexture2D_fffhc")
 
