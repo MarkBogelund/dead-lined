@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://d1rku6qra3q8x"]
 
+[ext_resource type="PackedScene" uid="uid://liexy7765b7k" path="res://scenes/ui/hud.tscn" id="1_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://c1up8f3hcb17m" path="res://scenes/entities/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://cislfhx7gb77a" path="res://assets/sprites/environment.png" id="2_gee14"]
 [ext_resource type="Texture2D" uid="uid://chwp4u8wx4qxs" path="res://assets/sprites/Pixel Art Topdown/TX Tileset Grass.png" id="2_yqjtg"]
@@ -597,3 +598,8 @@ visible = false
 
 [node name="Seeker" parent="." unique_id=909576845 instance=ExtResource("5_0tnpc")]
 position = Vector2(-89, -57)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1148117081]
+
+[node name="HUD" parent="CanvasLayer" unique_id=1136343478 instance=ExtResource("1_kvpfn")]
+mouse_filter = 2

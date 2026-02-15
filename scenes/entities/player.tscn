@@ -396,6 +396,7 @@ collision_layer = 2
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
+z_index = 5
 position = Vector2(0, -12)
 sprite_frames = SubResource("SpriteFrames_a38lo")
 animation = &"slash"
@@ -431,9 +432,7 @@ position = Vector2(0, -11)
 hit_vfx = ExtResource("6_c5rqy")
 slashing_activated = true
 damage = 10
-player_knockback = 0.0
 arc_angle = 3.141592653589793
-slash_duration = 0.15
 slash_cooldown = 0.3
 
 [node name="VFXComponent" type="Node" parent="." unique_id=1075206016]
@@ -443,7 +442,7 @@ metadata/_custom_type_script = "uid://buxf487a3gb6p"
 [node name="MovementComponent" type="Node" parent="." unique_id=1380084559]
 script = ExtResource("10_b6tgf")
 speed = 160.0
-friction = 2000.0
+friction = 2500.0
 metadata/_custom_type_script = "uid://cdc3yx122ruc6"
 
 [node name="AnimationComponent" type="Node" parent="." unique_id=1794401183]

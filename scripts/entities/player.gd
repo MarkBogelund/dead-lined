@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Player
 
+signal damaged(curret_health)
+
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var resource_manager: ResourceManager = get_tree().get_first_node_in_group("resource_manager")
 
@@ -19,7 +21,6 @@ var can_move := true
 
 func _ready():
 	health.died.connect(_on_died)
-	health.damaged.connect(_on_damaged)
 
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -98,9 +99,6 @@ func _on_died():
 	activate_slashing(false)
 	animation.set_state(AnimationComponent.State.DIE)
 
-func _on_damaged():
-	animation.set_state(AnimationComponent.State.DAMAGE)
-
 func _on_build_phase_started():
 	build_phase = true
 
@@ -108,7 +106,9 @@ func _on_combat_phase_started(_wave_index: int):
 	build_phase = false
 
 func take_damage(amount: int):
+	animation.set_state(AnimationComponent.State.DAMAGE)
 	health.take_damage(amount)
+	emit_signal("damaged", get_health())
 
 func apply_knockback(from_position: Vector2, strength: float):
 	knockback.apply(from_position, strength)
@@ -121,3 +121,6 @@ func activate_slashing(activated: bool):
 
 func is_dead():
 	return health.is_dead
+
+func get_health():
+	return health.current_health

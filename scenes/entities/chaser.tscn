@@ -241,6 +241,7 @@ fill_from = Vector2(0.5, 0.5)
 collision_layer = 4
 collision_mask = 257
 script = ExtResource("1_v6182")
+damage = 10
 player_knockback = 150.0
 scrap_drop_amount = 3
 scrap_drop_radius = 15.0

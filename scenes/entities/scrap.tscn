@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dy43sa0c47hp2" path="res://scripts/entities/scrap.gd" id="1_sd2yw"]
 [ext_resource type="Texture2D" uid="uid://bxeopanmjairf" path="res://assets/sprites/Brackeys Assets/coin.png" id="2_17eia"]
+[ext_resource type="Texture2D" uid="uid://dypmbj6k7c5qt" path="res://assets/sprites/hud_ui.png" id="3_17eia"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qtcbg"]
 atlas = ExtResource("2_17eia")
@@ -95,8 +96,21 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7fmk8"]
+atlas = ExtResource("3_17eia")
+region = Rect2(34, 2, 13, 12)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_sd2yw"]
-radius = 5.0
+radius = 9.0
+
+[sub_resource type="Gradient" id="Gradient_17eia"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qtcbg"]
+gradient = SubResource("Gradient_17eia")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.82051283, 0.14957266)
 
 [node name="Scrap" type="Area2D" unique_id=1098587513]
 collision_layer = 512
@@ -104,10 +118,20 @@ collision_mask = 2
 script = ExtResource("1_sd2yw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=643554632]
+visible = false
 z_index = 4
 sprite_frames = SubResource("SpriteFrames_7fmk8")
 animation = &"idle"
 autoplay = "idle"
 
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=188524499]
+z_index = 2
+texture = SubResource("AtlasTexture_7fmk8")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=13068341]
 shape = SubResource("CircleShape2D_sd2yw")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1780779071]
+color = Color(0.7490196, 1, 0.9882353, 1)
+energy = 0.1
+texture = SubResource("GradientTexture2D_qtcbg")
