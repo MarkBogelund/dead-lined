@@ -1,11 +1,12 @@
 extends Node2D
 class_name SlashComponent
 
+signal slash_started(target_position: Vector2)
+
 @onready var vfx_component: VFXComponent = $"../VFXComponent"
 @export var hit_vfx: PackedScene
 @onready var animated_sprite: AnimatedSprite2D = $"../AnimatedSprite2D"
 
-var player: Player
 @export var slashing_activated := true
 
 # --- Weapon ---
@@ -40,10 +41,9 @@ var _elapsed := 0.0
 var _retracting := false
 
 func _ready():
-	player = get_tree().get_first_node_in_group("player")
 	_reset_weapon()
 	_reset_smear()
-	set_process(true)  # ensure cooldown always ticks
+	set_process(true)
 
 func _disable_weapon():
 	weapon.visible = false
@@ -67,11 +67,11 @@ func _reset_smear():
 	trail_shader.set_shader_parameter("elapsed", 0.0)
 	trail_shader.set_shader_parameter("shrink_speed", shrink_speed)
 
-func activate_slashing(activated):
-	slashing_activated = activated
+func set_enabled(enabled: bool):
+	slashing_activated = enabled
 
-func start_slash(mouse_global_pos: Vector2) -> void:
-	if _cooldown_timer > 0.0 or !slashing_activated:
+func try_slash(mouse_global_pos: Vector2) -> void:
+	if _cooldown_timer > 0.0 or not slashing_activated:
 		return
 
 	_cooldown_timer = slash_cooldown
@@ -88,8 +88,7 @@ func start_slash(mouse_global_pos: Vector2) -> void:
 	_enable_weapon()
 	trail.visible = true
 
-	player.apply_knockback(mouse_global_pos, player_knockback)
-	player.on_slash_started()
+	emit_signal("slash_started", mouse_global_pos)
 
 func _process(delta: float) -> void:
 	# Cooldown timer always counts down

@@ -28,10 +28,10 @@ func _process(delta):
 	rotate_towards(target.global_position, delta)
 
 	if can_fire_at(target):
-		animation_player.play("recoil")
-		shoot.shoot(target.global_position, muzzle.global_position)
-		vfx_component.instantiate_vfx(vfx_scene, muzzle.global_position)
-		fire_timer = fire_rate
+		if shoot.try_shoot(target.global_position, muzzle.global_position):
+			animation_player.play("recoil")
+			vfx_component.instantiate_vfx(vfx_scene, muzzle.global_position)
+			fire_timer = fire_rate
 
 func rotate_towards(target_pos: Vector2, delta: float):
 	var dir := target_pos - canon.global_position

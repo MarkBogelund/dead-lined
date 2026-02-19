@@ -12,7 +12,7 @@ var current_turret_entry: TurretEntry
 var ghost_turret: Node2D
 var active := false
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if active:
 		update_position(get_global_mouse_position())
 #
@@ -29,8 +29,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func start_placement(turret_entry: TurretEntry):
 	clear_ghost_turret()
 	
-	player.activate_shooting(false)
-	player.activate_slashing(false)
+	player.set_shooting_enabled(false)
+	player.set_slashing_enabled(false)
 	current_turret_entry = turret_entry
 	
 	ghost_turret = current_turret_entry.ghost_scene.instantiate()
@@ -52,8 +52,8 @@ func update_position(mouse_world_pos: Vector2) -> void:
 
 func cancel():
 	clear_ghost_turret()
-	player.activate_shooting(true)
-	player.activate_slashing(true)
+	player.set_shooting_enabled(true)
+	player.set_slashing_enabled(true)
 	emit_signal("turret_placement_cancelled")
 
 func clear_ghost_turret() -> void:
@@ -68,6 +68,6 @@ func place():
 	get_tree().current_scene.add_child(placed_turret)
 	
 	clear_ghost_turret()
-	player.activate_shooting(true)
-	player.activate_slashing(true)
+	player.set_shooting_enabled(true)
+	player.set_slashing_enabled(true)
 	emit_signal("turret_placed", current_turret_entry)

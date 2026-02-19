@@ -602,4 +602,3 @@ position = Vector2(-89, -57)
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1148117081]
 
 [node name="HUD" parent="CanvasLayer" unique_id=1136343478 instance=ExtResource("1_kvpfn")]
-mouse_filter = 2

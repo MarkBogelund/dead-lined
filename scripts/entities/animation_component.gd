@@ -1,6 +1,8 @@
 extends Node
 class_name AnimationComponent
 
+signal animation_finished(anim_name: String)
+
 enum State {
 	IDLE,
 	MOVE,
@@ -62,6 +64,8 @@ func _play_animation_for_state(state: State):
 			locked = true
 			animation_player.play("die")
 
-func _on_animation_finished(anim_name: String):
+func _on_animation_finished(_anim_name: String):
 	if current_state == State.SLASH or current_state == State.DAMAGE:
 		locked = false
+	
+	emit_signal("animation_finished", _anim_name)

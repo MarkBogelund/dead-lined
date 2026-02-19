@@ -1,30 +1,29 @@
 extends Node
 class_name HealthComponent
 
-# Health
 @export var max_health: int
 var current_health: int
 var is_dead = false
 
-# Signals
 signal died
-signal damaged(amount)
+signal damaged(current_health: int)
 
 func _ready():
 	current_health = max_health
-
 	if current_health <= 0:
 		die()
 
-# Call this to deal damage
 func take_damage(amount: int) -> void:
+	if is_dead:
+		return
+	
 	current_health -= amount
 	
 	if current_health <= 0:
 		die()
 		return
 	
-	emit_signal("damaged")
+	emit_signal("damaged", current_health)
 
 # Call this when health reaches zero
 func die() -> void:

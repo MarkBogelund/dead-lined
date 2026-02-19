@@ -10,7 +10,6 @@ class_name ShootComponent
 @export var muzzle_distance := 20.0
 @export var shoot_cooldown := 0.5
 @export var projectile_speed := 300.0
-@export var scrap_value := 1
 @export var projectile_collision_layers: Array[int] = []
 @export var projectile_collision_masks: Array[int] = []
 
@@ -21,41 +20,37 @@ func _process(delta: float):
 	if _shoot_timer > 0.0:
 		_shoot_timer -= delta
 
-func activate_shooting(activated):
-	shooting_activated = activated
+func set_enabled(enabled: bool):
+	shooting_activated = enabled
 
-func can_shoot():
-	return _shoot_timer <= 0.0 and shooting_activated == true
-
-func shoot(target_pos: Vector2, shooter_pos: Vector2 = Vector2.ZERO):
-	if not can_shoot():
-		return
+func try_shoot(target_pos: Vector2, shooter_pos: Vector2) -> bool:
+	if _shoot_timer > 0.0 or not shooting_activated:
+		return false
 
 	if projectile_scene == null:
 		push_error("No projectile scene assigned to ShootComponent")
-		return
+		return false
 
 	var projectile := projectile_scene.instantiate()
 	if not projectile.has_method("set_orientation"):
 		push_error("Projectile does not have set_orientation()")
-		return
+		return false
 
-	if !projectile.has_method("set_collision_layers"):
+	if not projectile.has_method("set_collision_layers"):
 		push_error("Projectile does not have set_collision_layers")
-		return
+		return false
 		
-	if !projectile.has_method("set_parameters"):
+	if not projectile.has_method("set_parameters"):
 		push_error("Projectile does not have set_parameters")
-		return
+		return false
 	
 	var dir = (target_pos - shooter_pos).normalized()
 	
 	projectile.set_collision_layers(projectile_collision_layers, projectile_collision_masks)
-
 	projectile.set_orientation(shooter_pos + dir * muzzle_distance, dir.angle(), dir)
-	
 	projectile.set_parameters(projectile_speed, projectile_damage, projectile_knockback)
 
 	get_tree().current_scene.add_child(projectile)
-
 	_shoot_timer = shoot_cooldown
+	
+	return true
