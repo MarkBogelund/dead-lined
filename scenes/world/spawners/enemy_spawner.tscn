@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://s8g2np38nwj7"]
 
-[ext_resource type="Script" uid="uid://c1bkq85cl4uv4" path="res://scripts/spawners/enemy_spawner.gd" id="1_ks1gq"]
+[ext_resource type="Script" uid="uid://c1bkq85cl4uv4" path="res://scripts/world/spawners/enemy_spawner.gd" id="1_ks1gq"]
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="2_xl0gr"]
 [ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/chaser.tres" id="3_ih16b"]
 

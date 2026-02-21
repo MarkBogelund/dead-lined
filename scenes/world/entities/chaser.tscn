@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dbn6ammn3fpex"]
 
-[ext_resource type="Script" uid="uid://bikpdlna0o7so" path="res://scripts/entities/enemy/charger.gd" id="1_v6182"]
-[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/entities/scrap.tscn" id="2_fffhc"]
-[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/entities/knockback.gd" id="3_fffhc"]
+[ext_resource type="Script" uid="uid://bikpdlna0o7so" path="res://scripts/world/entities/enemy/charger.gd" id="1_v6182"]
+[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_fffhc"]
+[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/knockback.gd" id="3_fffhc"]
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/chaser.png" id="4_fffhc"]
-[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/entities/health.gd" id="4_qurf7"]
+[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/health.gd" id="4_qurf7"]
 [ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="6_fffhc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_03bqu"]

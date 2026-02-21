@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://liexy7765b7k"]
 
-[ext_resource type="Script" uid="uid://bsky3ukt45pyt" path="res://scenes/ui/hud.gd" id="1_bo48s"]
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_bo48s"]
 [ext_resource type="Texture2D" uid="uid://dypmbj6k7c5qt" path="res://assets/sprites/hud_ui.png" id="1_hqnrr"]
 [ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="2_bo48s"]
 

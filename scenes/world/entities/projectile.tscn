@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bnu4fvr1hbp1v"]
 
 [ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_q3m7n"]
-[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/entities/projectile.gd" id="1_softn"]
-[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/vfx/explosion_vfx.tscn" id="2_8ngof"]
-[ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/vfx/vfx.gd" id="4_ykqt4"]
+[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/world/entities/projectile.gd" id="1_softn"]
+[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="2_8ngof"]
+[ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="4_ykqt4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6q2a6"]
 radius = 4.0

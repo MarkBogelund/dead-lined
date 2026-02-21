@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dfdoke3xag1rp"]
 
-[ext_resource type="Script" uid="uid://dy43sa0c47hp2" path="res://scripts/entities/scrap.gd" id="1_sd2yw"]
+[ext_resource type="Script" uid="uid://dy43sa0c47hp2" path="res://scripts/world/entities/scrap.gd" id="1_sd2yw"]
 [ext_resource type="Texture2D" uid="uid://bxeopanmjairf" path="res://assets/sprites/Brackeys Assets/coin.png" id="2_17eia"]
 [ext_resource type="Texture2D" uid="uid://dypmbj6k7c5qt" path="res://assets/sprites/hud_ui.png" id="3_17eia"]
 

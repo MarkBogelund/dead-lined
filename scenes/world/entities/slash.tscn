@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c0e3wgqqbxjeb"]
 
-[ext_resource type="Script" uid="uid://gr1whsrd046d" path="res://scripts/entities/slash.gd" id="1_a3j18"]
+[ext_resource type="Script" uid="uid://gr1whsrd046d" path="res://scripts/world/entities/player/slash.gd" id="1_a3j18"]
 [ext_resource type="Texture2D" uid="uid://bnr14l7147w74" path="res://assets/sprites/wrench.png" id="3_b08v8"]
 [ext_resource type="Shader" uid="uid://cbs1pir8bvnp6" path="res://shaders/slash.gdshader" id="3_ues5y"]
 
