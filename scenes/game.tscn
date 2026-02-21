@@ -507,6 +507,7 @@ metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 script = ExtResource("2_kvuet")
+time_between_waves = 2
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="ResourceManager" type="Node" parent="Systems" unique_id=674344671 groups=["resource_manager"]]

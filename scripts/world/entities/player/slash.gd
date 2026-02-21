@@ -20,8 +20,14 @@ signal slash_started(target_position: Vector2)
 @export var arc_angle := PI
 @export var slash_duration := 0.15
 
-@export var slash_cooldown := 0.3  # seconds between slashes
+@export var slash_cooldown := 0.3
 var _cooldown_timer := 0.0
+
+func get_damage() -> int:
+	return damage
+
+func get_knockback() -> float:
+	return target_knockback
 
 var _time := 0.0
 var _start_angle := 0.0
@@ -139,11 +145,4 @@ func _update_smear(delta: float) -> void:
 		_retracting = false
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemies"):
-		if body.has_method("take_damage"):
-			body.take_damage(damage)
-
-		if body.has_method("apply_knockback"):
-			body.apply_knockback(weapon.global_position, target_knockback)
-			
 	vfx_component.instantiate_vfx(hit_vfx, body.global_position)

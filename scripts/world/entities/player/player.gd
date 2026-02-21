@@ -8,6 +8,7 @@ signal damaged(current_health: int)
 
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
+@onready var hurtbox: HurtboxComponent = $HurtboxComponent
 @onready var slash: SlashComponent = $SlashComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
@@ -16,15 +17,20 @@ signal damaged(current_health: int)
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+@export var player_knockback := 100.0
+
 var can_move := true
 
 const SHOOT_COST := 1
-const SLASH_SELF_KNOCKBACK := 200.0
+const SLASH_SELF_KNOCKBACK := 50.0
 const MIN_MOVE_SPEED := 10.0
 
 func _ready():
+	add_to_group("player")
+	
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
+	hurtbox.hit.connect(_on_hurtbox_hit)
 	slash.slash_started.connect(_on_slash_started)
 	turret_placer.placement_started.connect(_on_turret_placement_started)
 	turret_placer.placement_ended.connect(_on_turret_placement_ended)
@@ -74,6 +80,13 @@ func _on_slash_started(target_pos: Vector2):
 	knockback.apply(target_pos, SLASH_SELF_KNOCKBACK)
 	animation.set_state(AnimationComponent.State.SLASH)
 
+func _on_hurtbox_hit(attacker: Node) -> void:
+	if health.is_dead:
+		return
+	
+	health.take_damage(attacker.get_damage())
+	knockback.apply(attacker.global_position, attacker.get_knockback())
+
 func _on_died():
 	collision_shape.set_deferred("disabled", true)
 	can_move = false
@@ -83,12 +96,6 @@ func _on_died():
 func _on_damaged(current_health: int):
 	animation.set_state(AnimationComponent.State.DAMAGE)
 	emit_signal("damaged", current_health)
-
-func take_damage(amount: int):
-	health.take_damage(amount)
-
-func apply_knockback(from_position: Vector2, strength: float):
-	knockback.apply(from_position, strength)
 
 func is_dead():
 	return health.is_dead

@@ -9,17 +9,16 @@ var direction := Vector2.ZERO
 
 @export var hit_vfx: PackedScene
 
+func get_damage() -> float:
+	return projectile_damage
+
+func get_knockback() -> float:
+	return projectile_knockback
+
 func _physics_process(delta):
 	position += direction * projectile_speed * delta
 
-func _on_body_entered(body):
-	if body.is_in_group("enemies") or body.is_in_group("player"):
-		if body.has_method("take_damage"):
-			body.take_damage(projectile_damage)
-
-		if body.has_method("apply_knockback"):
-			body.apply_knockback(global_position, projectile_knockback)
-			
+func _on_body_entered(_body: Node) -> void:
 	vfx_component.instantiate_vfx(hit_vfx, position)
 	queue_free()
 

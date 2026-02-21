@@ -26,7 +26,6 @@ script = ExtResource("1_a3j18")
 slashing_activated = null
 damage = null
 target_knockback = 300
-player_knockback = 100.0
 slash_radius = 20.0
 arc_angle = null
 slash_duration = 0.2
@@ -53,12 +52,13 @@ texture = ExtResource("3_b08v8")
 region_enabled = true
 region_rect = Rect2(7, 0, 10, 24)
 
-[node name="Hitbox" type="Area2D" parent="Weapon" unique_id=1740119940]
-collision_layer = 8
-collision_mask = 12
+[node name="Hitbox" type="Area2D" parent="." unique_id=1740119940]
+rotation = 1.5707964
+collision_layer = 4
+collision_mask = 72
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Weapon/Hitbox" unique_id=761940926]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=761940926]
 position = Vector2(-1.3113416e-07, -3)
 shape = SubResource("CapsuleShape2D_ues5y")
 
-[connection signal="body_entered" from="Weapon/Hitbox" to="." method="_on_hitbox_body_entered"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
