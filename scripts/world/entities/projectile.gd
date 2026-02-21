@@ -9,6 +9,10 @@ var direction := Vector2.ZERO
 
 @export var hit_vfx: PackedScene
 
+func _ready() -> void:
+	body_entered.connect(_on_body_entered)
+	area_entered.connect(_on_area_entered)
+
 func get_damage() -> float:
 	return projectile_damage
 
@@ -19,6 +23,12 @@ func _physics_process(delta):
 	position += direction * projectile_speed * delta
 
 func _on_body_entered(_body: Node) -> void:
+	_destroy()
+
+func _on_area_entered(_area: Node) -> void:
+	_destroy()
+
+func _destroy() -> void:
 	vfx_component.instantiate_vfx(hit_vfx, position)
 	queue_free()
 

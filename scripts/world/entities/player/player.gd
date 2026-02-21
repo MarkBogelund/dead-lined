@@ -9,10 +9,11 @@ signal damaged(current_health: int)
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var hurtbox: HurtboxComponent = $HurtboxComponent
-@onready var slash: SlashComponent = $SlashComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
 @onready var animation: AnimationComponent = $AnimationComponent
+
+@onready var melee_weapon: MeleeWeapon = $MeleeWeapon
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -31,7 +32,9 @@ func _ready():
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
 	hurtbox.hit.connect(_on_hurtbox_hit)
-	slash.slash_started.connect(_on_slash_started)
+
+	melee_weapon.slash_started.connect(_on_slash_started)
+
 	turret_placer.placement_started.connect(_on_turret_placement_started)
 	turret_placer.placement_ended.connect(_on_turret_placement_ended)
 
@@ -59,7 +62,7 @@ func _unhandled_input(event: InputEvent):
 			resource_manager.scrap_amount -= SHOOT_COST
 	
 	if event.is_action_pressed("slash"):
-		slash.try_slash(get_global_mouse_position())
+		melee_weapon.try_slash(get_global_mouse_position())
 
 func _update_animation():
 	if health.is_dead:
@@ -91,7 +94,7 @@ func _on_died():
 	collision_shape.set_deferred("disabled", true)
 	can_move = false
 	shoot.set_enabled(false)
-	slash.set_enabled(false)
+	melee_weapon.set_enabled(false)
 
 func _on_damaged(current_health: int):
 	animation.set_state(AnimationComponent.State.DAMAGE)
@@ -107,12 +110,12 @@ func set_shooting_enabled(enabled: bool):
 	shoot.set_enabled(enabled)
 
 func set_slashing_enabled(enabled: bool):
-	slash.set_enabled(enabled)
+	melee_weapon.set_enabled(enabled)
 
 func _on_turret_placement_started():
 	shoot.set_enabled(false)
-	slash.set_enabled(false)
+	melee_weapon.set_enabled(false)
 
 func _on_turret_placement_ended():
 	shoot.set_enabled(true)
-	slash.set_enabled(true)
+	melee_weapon.set_enabled(true)

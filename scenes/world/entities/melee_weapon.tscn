@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dpq66p1vi27sr"]
+
+[ext_resource type="Script" uid="uid://da0fvy8p6hv7l" path="res://scripts/world/entities/player/melee_weapon.gd" id="1_jkq8f"]
+[ext_resource type="Texture2D" uid="uid://bnr14l7147w74" path="res://assets/sprites/wrench.png" id="2_smgu6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2sq7"]
+atlas = ExtResource("2_smgu6")
+region = Rect2(7, 0, 10, 24)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sabep"]
+radius = 6.0
+height = 20.0
+
+[node name="MeleeWeapon" type="Area2D" unique_id=1644048502]
+collision_layer = 8
+collision_mask = 32
+script = ExtResource("1_jkq8f")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=321923372]
+texture = SubResource("AtlasTexture_g2sq7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1953014388]
+position = Vector2(0, -4)
+shape = SubResource("CapsuleShape2D_sabep")

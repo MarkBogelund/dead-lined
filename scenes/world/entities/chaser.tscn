@@ -238,7 +238,8 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [node name="Chaser" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
-collision_layer = 8
+collision_layer = 80
+collision_mask = 133
 script = ExtResource("1_dxuae")
 
 [node name="ChaseComponent" type="Node" parent="." unique_id=840197303]
@@ -248,8 +249,8 @@ metadata/_custom_type_script = "uid://uftvlfyofqyv"
 [node name="HurtboxComponent" type="Area2D" parent="." unique_id=361837505]
 visibility_layer = 0
 position = Vector2(0, -11)
-collision_layer = 8
-collision_mask = 68
+collision_layer = 32
+collision_mask = 266
 script = ExtResource("3_8c6uj")
 metadata/_custom_type_script = "uid://dh41ifj5v2kot"
 

@@ -8,6 +8,6 @@ func _ready() -> void:
 	area_entered.connect(_on_collision)
 
 func _on_collision(collider: Node) -> void:
-	if not collider.has_method("get_damage") and collider.has_method("get_knockback"):
+	if not collider.has_method("get_damage") or not collider.has_method("get_knockback"):
 		return
 	emit_signal("hit", collider)

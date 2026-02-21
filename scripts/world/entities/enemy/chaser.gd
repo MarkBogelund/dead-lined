@@ -15,8 +15,6 @@ class_name Chaser
 @export var player_knockback := 200.0
 
 func _ready() -> void:
-	add_to_group("enemies")
-	
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
 	hurtbox.hit.connect(_on_hurtbox_hit)
