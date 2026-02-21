@@ -14,8 +14,8 @@ signal slash_started(target_position: Vector2)
 @onready var hitbox: Area2D = $Weapon/Hitbox
 
 @export var damage := 10
-@export var target_knockback := 100
-@export var player_knockback := 200.0
+@export var target_knockback := 200
+@export var player_knockback := 100.0
 @export var slash_radius := 48.0
 @export var arc_angle := PI
 @export var slash_duration := 0.15

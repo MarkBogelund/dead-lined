@@ -4,6 +4,7 @@ class_name Player
 signal damaged(current_health: int)
 
 @onready var resource_manager: ResourceManager = get_tree().get_first_node_in_group("resource_manager")
+@onready var turret_placer: TurretPlacer = get_tree().get_first_node_in_group("turret_placer")
 
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
@@ -25,6 +26,8 @@ func _ready():
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
 	slash.slash_started.connect(_on_slash_started)
+	turret_placer.placement_started.connect(_on_turret_placement_started)
+	turret_placer.placement_ended.connect(_on_turret_placement_ended)
 
 func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
@@ -98,3 +101,11 @@ func set_shooting_enabled(enabled: bool):
 
 func set_slashing_enabled(enabled: bool):
 	slash.set_enabled(enabled)
+
+func _on_turret_placement_started():
+	shoot.set_enabled(false)
+	slash.set_enabled(false)
+
+func _on_turret_placement_ended():
+	shoot.set_enabled(true)
+	slash.set_enabled(true)

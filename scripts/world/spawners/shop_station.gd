@@ -1,89 +1,47 @@
 extends StaticBody2D
 class_name ShopStation
 
-signal shop_opened
-signal shop_closed
+signal station_opened
+signal station_closed
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var interaction_area: Area2D = $InteractionArea
+@onready var shop_manager: ShopManager = $"/root/Game/Systems/ShopManager"
 
-var shop_open := false
-enum State {
-	DISABLED,
-	IDLE,
-	PLAYER_IN_RANGE
-}
-
-var current_state: State = State.DISABLED
+var _enabled := false
+var _player_in_range := false
 
 func _ready() -> void:
-	_set_state(State.DISABLED)
-	add_to_group("shop_stations") 	
+	shop_manager.shop_system_enabled.connect(_on_shop_system_enabled)
+	shop_manager.shop_system_disabled.connect(_on_shop_system_disabled)
+	
+	interaction_area.body_entered.connect(_on_interaction_area_body_entered)
+	interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if current_state != State.PLAYER_IN_RANGE:
+	if not _enabled or not _player_in_range:
 		return
-
+	
 	if event.is_action_pressed("open"):
-		if shop_open:
-			close_shop()
-		else:
-			open_shop()
+		emit_signal("station_opened")
 
-func _set_state(new_state: State) -> void:
-	if current_state == new_state:
-		return
-
-	current_state = new_state
-
-	match current_state:
-		State.DISABLED:
-			close_shop()
-			_disable()
-
-		State.IDLE:
-			close_shop()
-			_enable()
-
-		State.PLAYER_IN_RANGE:
-			_enable()
-
-func _enable() -> void:
+func _on_shop_system_enabled() -> void:
+	_enabled = true
 	visible = true
 	collision_shape.set_deferred("disabled", false)
 	interaction_area.set_deferred("monitoring", true)
-	interaction_area.set_deferred("monitorable", true)
 
-func _disable() -> void:
+func _on_shop_system_disabled() -> void:
+	_enabled = false
 	visible = false
 	collision_shape.set_deferred("disabled", true)
 	interaction_area.set_deferred("monitoring", false)
-	interaction_area.set_deferred("monitorable", false)
-
-func open_shop() -> void:
-	if shop_open:
-		return
-		
-	shop_open = true
-	emit_signal("shop_opened")
-
-func close_shop() -> void:
-	if not shop_open:
-		return
-
-	shop_open = false
-	emit_signal("shop_closed")
-
-func enable():
-	_set_state(State.IDLE)
-	
-func disable():
-	_set_state(State.DISABLED)
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player") and current_state != State.DISABLED:
-		_set_state(State.PLAYER_IN_RANGE)
+	if body.is_in_group("player"):
+		_player_in_range = true
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
-	if body.is_in_group("player") and current_state != State.DISABLED:
-		_set_state(State.IDLE)
+	if body.is_in_group("player"):
+		_player_in_range = false
+		emit_signal("station_closed")

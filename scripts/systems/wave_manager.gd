@@ -17,31 +17,27 @@ enum Phase {
 }
 
 func _ready() -> void:
-	call_deferred("_enter_build_phase")
+	await get_tree().process_frame
+	_enter_build_phase()
 
 func _process(delta: float) -> void:
-	if _current_phase == Phase.BUILD:
-		_process_build_phase(delta)
+	if _current_phase != Phase.BUILD:
+		return
+	
+	_phase_timer -= delta
+	emit_signal("build_phase_tick", _phase_timer)
+	
+	if _phase_timer <= 0.0:
+		_enter_combat_phase()
 
 func _enter_build_phase() -> void:
 	_current_phase = Phase.BUILD
 	_phase_timer = time_between_waves
-
-	print("BUILD PHASE")
 	emit_signal("build_phase_started")
-
-func _process_build_phase(delta: float) -> void:
-	_phase_timer -= delta
-	emit_signal("build_phase_tick", _phase_timer)
-
-	if _phase_timer <= 0.0:
-		_enter_combat_phase()
 
 func _enter_combat_phase() -> void:
 	_current_phase = Phase.COMBAT
 	_wave_index += 1
-
-	print("COMBAT PHASE — Wave", _wave_index)
 	emit_signal("combat_phase_started", _wave_index)
 
 func check_for_wave_clear() -> void:

@@ -501,8 +501,9 @@ fill_to = Vector2(0.7777778, 0.14529915)
 script = ExtResource("1_ir15t")
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
-[node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]
+[node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 node_paths=PackedStringArray("player") groups=["turret_placer"]]
 script = ExtResource("4_ca42v")
+player = NodePath("../../../World/Player")
 metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
@@ -610,8 +611,9 @@ health_growth = 0.0
 [node name="Seeker" parent="World" unique_id=909576845 instance=ExtResource("5_0tnpc")]
 position = Vector2(-89, -57)
 
-[node name="ShopStation" parent="World" unique_id=1270538854 groups=["shop_stations"] instance=ExtResource("6_p57ef")]
+[node name="ShopStation" parent="World" unique_id=1270538854 node_paths=PackedStringArray("_shop_manager") groups=["shop_stations"] instance=ExtResource("6_p57ef")]
 position = Vector2(0, -1)
+_shop_manager = NodePath("../../Systems/ShopManager")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
 
