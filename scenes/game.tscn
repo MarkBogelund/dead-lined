@@ -1,16 +1,18 @@
 [gd_scene format=4 uid="uid://d1rku6qra3q8x"]
 
+[ext_resource type="Script" uid="uid://k5bmk2isolyq" path="res://scripts/managers/shop_system.gd" id="1_ir15t"]
 [ext_resource type="PackedScene" uid="uid://liexy7765b7k" path="res://scenes/ui/hud.tscn" id="1_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://c1up8f3hcb17m" path="res://scenes/entities/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://cislfhx7gb77a" path="res://assets/sprites/environment.png" id="2_gee14"]
+[ext_resource type="Script" uid="uid://bmidkhfa5not2" path="res://scripts/managers/wave_manager.gd" id="2_kvuet"]
 [ext_resource type="Texture2D" uid="uid://chwp4u8wx4qxs" path="res://assets/sprites/Pixel Art Topdown/TX Tileset Grass.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://s8g2np38nwj7" path="res://scenes/spawners/enemy_spawner.tscn" id="3_lnu2h"]
-[ext_resource type="PackedScene" uid="uid://qmo1fotunlhy" path="res://scenes/managers/game_manager.tscn" id="4_lbhrr"]
+[ext_resource type="Script" uid="uid://bkervm4vmc0wh" path="res://scripts/managers/turret_placer.gd" id="4_ca42v"]
 [ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/entities/seeker.tscn" id="5_0tnpc"]
-[ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/spawners/turret_spawner.tscn" id="6_p57ef"]
-[ext_resource type="PackedScene" uid="uid://ddlawija32flj" path="res://scenes/managers/turret_shop_manager.tscn" id="6_u5sy4"]
+[ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/spawners/shop_station.tscn" id="6_p57ef"]
 [ext_resource type="Texture2D" uid="uid://dr1jaw3sxgsvp" path="res://assets/sprites/props.png" id="6_vtaks"]
 [ext_resource type="Script" uid="uid://ioxvj1ihixrt" path="res://scripts/managers/resource_manager.gd" id="7_u5sy4"]
+[ext_resource type="PackedScene" uid="uid://h0m8s5cfwoo8" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vtaks"]
 texture = ExtResource("6_vtaks")
@@ -492,10 +494,18 @@ fill_to = Vector2(0.7777778, 0.14529915)
 
 [node name="Game" type="Node2D" unique_id=1548580988]
 
-[node name="TurretShopManager" parent="." unique_id=905987479 instance=ExtResource("6_u5sy4")]
+[node name="ShopSystem" type="Node" parent="." unique_id=1529519176]
+script = ExtResource("1_ir15t")
+metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
-[node name="WaveManager" parent="." unique_id=1482491151 groups=["wave_manager"] instance=ExtResource("4_lbhrr")]
-time_between_waves = 5
+[node name="WaveManager" type="Node" parent="." unique_id=2042714425 groups=["wave_manager"]]
+script = ExtResource("2_kvuet")
+metadata/_custom_type_script = "uid://bmidkhfa5not2"
+
+[node name="TurretPlacer" type="Node2D" parent="." unique_id=1768255298 node_paths=PackedStringArray("player")]
+script = ExtResource("4_ca42v")
+player = NodePath("../Player")
+metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 
 [node name="ResourceManager" type="Node" parent="." unique_id=674344671 groups=["resource_manager"]]
 script = ExtResource("7_u5sy4")
@@ -593,12 +603,14 @@ health_growth = 0.0
 position = Vector2(-109, 35)
 health_growth = 0.0
 
-[node name="TurretSpawner" parent="." unique_id=1270538854 groups=["turret_spawners"] instance=ExtResource("6_p57ef")]
-visible = false
-
 [node name="Seeker" parent="." unique_id=909576845 instance=ExtResource("5_0tnpc")]
 position = Vector2(-89, -57)
+
+[node name="ShopPanel" parent="." unique_id=507885227 instance=ExtResource("11_kvuet")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1148117081]
 
 [node name="HUD" parent="CanvasLayer" unique_id=1136343478 instance=ExtResource("1_kvpfn")]
+
+[node name="ShopStation" parent="." unique_id=1270538854 instance=ExtResource("6_p57ef")]
+position = Vector2(0, -1)

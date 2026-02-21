@@ -1,5 +1,5 @@
 extends Control
-class_name TurretShopUI
+class_name ShopPanel
 
 signal turret_selected(turret_entry: TurretEntry)
 
@@ -9,6 +9,7 @@ signal turret_selected(turret_entry: TurretEntry)
 
 func _ready() -> void:
 	visible = false
+	add_to_group("shop_panel")
 
 func open() -> void:
 	visible = true
@@ -21,7 +22,7 @@ func set_price(amount):
 
 func _on_select_button_pressed() -> void:
 	if turret_entry == null:
-		push_error("TurretShopUI: turret_entry not assigned")
+		push_error("ShopPanel: turret_entry not assigned")
 		return
 
 	emit_signal("turret_selected", turret_entry)

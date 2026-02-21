@@ -1,10 +1,9 @@
 extends StaticBody2D
-class_name TurretSpawner
+class_name ShopStation
 
 signal shop_opened
 signal shop_closed
 
-@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var interaction_area: Area2D = $InteractionArea
 
@@ -15,13 +14,11 @@ enum State {
 	PLAYER_IN_RANGE
 }
 
-#@export var turret_entries: Array[TurretEntry]
-
 var current_state: State = State.DISABLED
 
 func _ready() -> void:
 	_set_state(State.DISABLED)
-	add_to_group("turret_spawners")
+	add_to_group("shop_stations") 	
 
 func _unhandled_input(event: InputEvent) -> void:
 	if current_state != State.PLAYER_IN_RANGE:
@@ -77,10 +74,10 @@ func close_shop() -> void:
 	shop_open = false
 	emit_signal("shop_closed")
 
-func build_phase_started():
+func enable():
 	_set_state(State.IDLE)
 	
-func combat_phase_started():
+func disable():
 	_set_state(State.DISABLED)
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bcryhnwbbjcle"]
 
-[ext_resource type="Script" uid="uid://ul47vckjydgn" path="res://scripts/spawners/turret_spawner.gd" id="1_noi0g"]
+[ext_resource type="Script" uid="uid://s0r02kaxei7e" path="res://scripts/spawners/shop_station.gd" id="1_noi0g"]
 [ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_qslmp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_noi0g"]
@@ -9,7 +9,7 @@ size = Vector2(30, 29)
 [sub_resource type="CircleShape2D" id="CircleShape2D_mexib"]
 radius = 37.529987
 
-[node name="TurretSpawner" type="StaticBody2D" unique_id=1270538854]
+[node name="ShopStation" type="StaticBody2D" unique_id=1270538854]
 script = ExtResource("1_noi0g")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=786510499]

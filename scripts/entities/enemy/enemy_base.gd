@@ -71,7 +71,7 @@ func buff_health(multiplier):
 func buff_damage(multiplier) -> void:
 	damage *= multiplier
 	
-func _on_damaged() -> void:
+func _on_damaged(amount) -> void:
 	if not health.is_dead:
 		play_anim("take_damage")
 	

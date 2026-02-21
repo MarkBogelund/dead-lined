@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://c8hgm346otpwr"]
+[gd_scene format=3 uid="uid://h0m8s5cfwoo8"]
 
-[ext_resource type="Script" uid="uid://royrukh18w15" path="res://scripts/ui/turret_shop_ui.gd" id="1_b4k3f"]
+[ext_resource type="Script" uid="uid://bmt7oj7501i4i" path="res://scripts/ui/shop_panel.gd" id="1_j21la"]
 [ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/seeker-icon.png" id="2_jfm2m"]
 [ext_resource type="Texture2D" uid="uid://dgx2akh6lc25s" path="res://assets/sprites/ui-box.png" id="2_oi8iw"]
 [ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="3_1mobc"]
@@ -19,7 +19,7 @@ region = Rect2(23, 1, 20, 24)
 atlas = ExtResource("5_7arnk")
 region = Rect2(3, 3, 10, 10)
 
-[node name="TurretShopUI" type="MarginContainer" unique_id=507885227]
+[node name="ShopPanel" type="MarginContainer" unique_id=507885227]
 z_index = 10
 anchors_preset = 8
 anchor_left = 0.5
@@ -36,7 +36,7 @@ pivot_offset_ratio = Vector2(0.5, 0.5)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 0
-script = ExtResource("1_b4k3f")
+script = ExtResource("1_j21la")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=2130820617]
 custom_minimum_size = Vector2(20, 20)
