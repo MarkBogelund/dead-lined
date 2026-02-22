@@ -12,8 +12,8 @@ signal damaged(current_health: int)
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
 @onready var animation: AnimationComponent = $AnimationComponent
-
 @onready var melee_weapon: MeleeWeapon = $MeleeWeapon
+@onready var hit_particles: GPUParticles2D = $HitParticles
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -85,6 +85,9 @@ func _on_hurtbox_hit(attacker: Node) -> void:
 	
 	health.take_damage(attacker.get_damage())
 	knockback.apply(attacker.global_position, attacker.get_knockback())
+
+	if hit_particles:
+		hit_particles.restart()
 
 func _on_died():
 	collision_shape.set_deferred("disabled", true)

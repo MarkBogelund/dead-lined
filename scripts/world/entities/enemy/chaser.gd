@@ -56,6 +56,13 @@ func _on_hurtbox_hit(attacker: Node) -> void:
 	elif attacker.is_in_group("player"):
 		knockback.apply(attacker.global_position, attacker.get_knockback())
 
+	elif attacker.is_in_group("projectiles"):
+		health.take_damage(attacker.get_damage())
+		knockback.apply(attacker.global_position, attacker.get_knockback())
+		
+		if hit_particles:
+			hit_particles.restart()
+
 func _on_damaged(_amount: int) -> void:
 	if not is_dead():
 		_play_anim("take_damage")

@@ -105,21 +105,21 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_hit_angle"]
+[sub_resource type="CurveTexture" id="CurveTexture_2463s"]
 curve = SubResource("Curve_hit_angle")
 
 [sub_resource type="Gradient" id="Gradient_hit"]
 offsets = PackedFloat32Array(0.40481928, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.6901961, 0, 0.39607844, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_hit"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_uqckg"]
 gradient = SubResource("Gradient_hit")
 
 [sub_resource type="Curve" id="Curve_hit_scale"]
 _data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_hit_scale"]
+[sub_resource type="CurveTexture" id="CurveTexture_ck52e"]
 curve = SubResource("Curve_hit_scale")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hit"]
@@ -129,16 +129,16 @@ emission_shape = 1
 emission_sphere_radius = 8.0
 angle_min = 1.0728835e-05
 angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_hit_angle")
+angle_curve = SubResource("CurveTexture_2463s")
 direction = Vector3(0, 0, 0)
 spread = 180.0
 initial_velocity_min = 50.0
 initial_velocity_max = 100.0
 gravity = Vector3(0, 0, 0)
-scale_min = 0.4
-scale_max = 0.8
-scale_curve = SubResource("CurveTexture_hit_scale")
-color_ramp = SubResource("GradientTexture1D_hit")
+scale_min = 0.19999999
+scale_max = 0.39999998
+scale_curve = SubResource("CurveTexture_ck52e")
+color_ramp = SubResource("GradientTexture1D_uqckg")
 
 [sub_resource type="Animation" id="Animation_otmr2"]
 length = 0.001
@@ -283,6 +283,7 @@ fill_from = Vector2(0.5, 0.5)
 collision_layer = 16
 collision_mask = 133
 script = ExtResource("1_dxuae")
+player_knockback = 150.0
 
 [node name="ChaseComponent" type="Node" parent="." unique_id=840197303]
 script = ExtResource("3_1no88")
@@ -320,7 +321,7 @@ shape = SubResource("CircleShape2D_md0e3")
 z_index = 10
 position = Vector2(0, -11)
 emitting = false
-amount = 20
+amount = 10
 texture = ExtResource("3_hitdot")
 lifetime = 0.3
 one_shot = true
@@ -349,4 +350,3 @@ script = ExtResource("8_jg6m2")
 scrap_drop_amount = 3
 scrap_drop_radius = 10.0
 scrap_scene = ExtResource("2_fffhc")
-world_bounds = Rect2(0, -30, 383, 272)

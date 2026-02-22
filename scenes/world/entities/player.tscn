@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://dwbus28tan8rh" path="res://scripts/world/entities/player/animation_component.gd" id="11_73kkf"]
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]
 [ext_resource type="Script" uid="uid://dh41ifj5v2kot" path="res://scripts/world/entities/shared/hurtbox_component.gd" id="12_vlshd"]
+[ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
 atlas = ExtResource("2_tuyoq")
@@ -395,6 +396,46 @@ fill_from = Vector2(0.5, 0.5)
 radius = 4.0
 height = 22.0
 
+[sub_resource type="Curve" id="Curve_4enbs"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yfgcb"]
+curve = SubResource("Curve_4enbs")
+
+[sub_resource type="Gradient" id="Gradient_74ekq"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.5853834, 0.2893987, 9.62615e-08, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6qf0x"]
+gradient = SubResource("Gradient_74ekq")
+
+[sub_resource type="Curve" id="Curve_1vgk0"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2454e"]
+curve = SubResource("Curve_1vgk0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1esm0"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_yfgcb")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.39999998
+scale_curve = SubResource("CurveTexture_2454e")
+color_ramp = SubResource("GradientTexture1D_6qf0x")
+
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 z_index = 2
 collision_layer = 2
@@ -465,3 +506,14 @@ shape = SubResource("CapsuleShape2D_ghcoa")
 
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
 position = Vector2(0, -12)
+
+[node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1941997998]
+z_index = 15
+position = Vector2(0, -11)
+emitting = false
+amount = 10
+texture = ExtResource("13_ghcoa")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_1esm0")

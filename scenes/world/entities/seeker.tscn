@@ -61,10 +61,10 @@ _data = {
 z_index = 1
 collision_layer = 33
 script = ExtResource("1_6fjxm")
-vfx_scene = ExtResource("5_6fjxm")
 detection_angle = 0.1
 rotation_speed = 4.0
 fire_rate = 1.0
+vfx_scene = ExtResource("5_6fjxm")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=436762941]
 show_behind_parent = true
