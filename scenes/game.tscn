@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://dr1jaw3sxgsvp" path="res://assets/sprites/props.png" id="6_vtaks"]
 [ext_resource type="Script" uid="uid://ioxvj1ihixrt" path="res://scripts/systems/resource_manager.gd" id="7_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://h0m8s5cfwoo8" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
+[ext_resource type="PackedScene" uid="uid://dbn6ammn3fpex" path="res://scenes/world/entities/chaser.tscn" id="12_ir15t"]
 [ext_resource type="Resource" uid="uid://bbi5f87py8cnr" path="res://resources/seeker.tres" id="14_trtic"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vtaks"]
@@ -613,6 +614,9 @@ position = Vector2(-89, -57)
 
 [node name="ShopStation" parent="World" unique_id=1270538854 groups=["shop_stations"] instance=ExtResource("6_p57ef")]
 position = Vector2(0, -1)
+
+[node name="Chaser" parent="World" unique_id=1145312353 instance=ExtResource("12_ir15t")]
+position = Vector2(54, -71)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
 

@@ -349,3 +349,4 @@ script = ExtResource("8_jg6m2")
 scrap_drop_amount = 3
 scrap_drop_radius = 10.0
 scrap_scene = ExtResource("2_fffhc")
+world_bounds = Rect2(0, -30, 383, 272)
