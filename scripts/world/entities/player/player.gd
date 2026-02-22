@@ -18,7 +18,8 @@ signal damaged(current_health: int)
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-@export var player_knockback := 100.0
+@export var player_knockback := 200.0
+@export var player_body_damage := 5
 
 var can_move := true
 
@@ -80,7 +81,6 @@ func _set_sprite_direction(dir_x: float):
 
 func _on_slash_started(target_pos: Vector2):
 	_set_sprite_direction(target_pos.x - global_position.x)
-	knockback.apply(target_pos, SLASH_SELF_KNOCKBACK)
 	animation.set_state(AnimationComponent.State.SLASH)
 
 func _on_hurtbox_hit(attacker: Node) -> void:
@@ -102,6 +102,12 @@ func _on_damaged(current_health: int):
 
 func is_dead():
 	return health.is_dead
+
+func get_damage() -> int:
+	return player_body_damage
+
+func get_knockback() -> float:
+	return player_knockback
 
 func get_health():
 	return health.current_health

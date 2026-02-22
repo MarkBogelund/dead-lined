@@ -30,12 +30,14 @@ func _on_shop_system_enabled() -> void:
 	visible = true
 	collision_shape.set_deferred("disabled", false)
 	interaction_zone.set_deferred("monitoring", true)
+	interaction_zone.set_deferred("monitorable", true)
 
 func _on_shop_system_disabled() -> void:
 	_enabled = false
 	visible = false
 	collision_shape.set_deferred("disabled", true)
 	interaction_zone.set_deferred("monitoring", false)
+	interaction_zone.set_deferred("monitorable", false)
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

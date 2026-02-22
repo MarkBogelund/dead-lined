@@ -9,10 +9,11 @@ class_name Chaser
 @onready var drop_scrap: DropScrapComponent = $DropScrapComponent
 @onready var chase: ChaseComponent = $ChaseComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var hit_particles: GPUParticles2D = $HitParticles
 
 @export var damage := 20
 @export var enemy_knockback := 200.0
-@export var player_knockback := 200.0
+@export var player_knockback := 100.0
 
 func _ready() -> void:
 	health.died.connect(_on_died)
@@ -50,9 +51,19 @@ func get_knockback() -> float:
 func _on_hurtbox_hit(attacker: Node) -> void:
 	if is_dead():
 		return
-	
-	health.take_damage(attacker.get_damage())
-	knockback.apply(attacker.global_position, attacker.get_knockback())
+
+	# Distinguish between weapon attacks and body collisions
+	if attacker.is_in_group("player_attacks"):
+		# Weapon attack: take damage + knockback
+		health.take_damage(attacker.get_damage())
+		knockback.apply(attacker.global_position, attacker.get_knockback())
+		
+		# Trigger hit particles (if they exist)
+		if hit_particles:
+			hit_particles.restart()
+	elif attacker.is_in_group("player"):
+		# Body collision: knockback only, no damage
+		knockback.apply(attacker.global_position, attacker.get_knockback())
 
 func _on_damaged(_amount: int) -> void:
 	if not is_dead():

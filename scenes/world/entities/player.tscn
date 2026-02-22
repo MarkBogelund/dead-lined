@@ -366,10 +366,10 @@ tracks/0/path = NodePath("AnimatedSprite2D:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.100000024),
+"times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Color(0.46169233, 0, 0.08135905, 1), Color(1, 1, 1, 1)]
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fjrip"]
@@ -456,7 +456,7 @@ texture = SubResource("GradientTexture2D_n5sgd")
 [node name="HurtboxComponent" type="Area2D" parent="." unique_id=46501425]
 position = Vector2(0, -11)
 collision_layer = 4
-collision_mask = 320
+collision_mask = 336
 script = ExtResource("12_vlshd")
 metadata/_custom_type_script = "uid://dh41ifj5v2kot"
 
@@ -464,5 +464,4 @@ metadata/_custom_type_script = "uid://dh41ifj5v2kot"
 shape = SubResource("CapsuleShape2D_ghcoa")
 
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
-position = Vector2(0, -11)
-collision_mask = 40
+position = Vector2(0, -12)

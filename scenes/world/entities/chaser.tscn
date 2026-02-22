@@ -5,13 +5,14 @@
 [ext_resource type="Script" uid="uid://uftvlfyofqyv" path="res://scripts/world/entities/components/chase_component.gd" id="3_1no88"]
 [ext_resource type="Script" uid="uid://dh41ifj5v2kot" path="res://scripts/world/entities/components/hurtbox_component.gd" id="3_8c6uj"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/knockback.gd" id="3_fffhc"]
+[ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="3_hitdot"]
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/chaser.png" id="4_fffhc"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/health.gd" id="4_qurf7"]
 [ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="6_fffhc"]
 [ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/components/drop_scrap_component.gd" id="8_jg6m2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1no88"]
-radius = 9.0
+radius = 7.071068
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_03bqu"]
 atlas = ExtResource("4_fffhc")
@@ -99,6 +100,46 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_md0e3"]
 radius = 7.0
 
+[sub_resource type="Curve" id="Curve_hit_angle"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hit_angle"]
+curve = SubResource("Curve_hit_angle")
+
+[sub_resource type="Gradient" id="Gradient_hit"]
+offsets = PackedFloat32Array(0.40481928, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.6901961, 0, 0.39607844, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hit"]
+gradient = SubResource("Gradient_hit")
+
+[sub_resource type="Curve" id="Curve_hit_scale"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hit_scale"]
+curve = SubResource("Curve_hit_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hit"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_hit_angle")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.4
+scale_max = 0.8
+scale_curve = SubResource("CurveTexture_hit_scale")
+color_ramp = SubResource("GradientTexture1D_hit")
+
 [sub_resource type="Animation" id="Animation_otmr2"]
 length = 0.001
 tracks/0/type = "value"
@@ -111,7 +152,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [&"die"]
+"values": [&"idle"]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -207,7 +248,8 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_5uy6h"]
 resource_name = "take_damage"
-length = 0.06666667
+length = 0.2
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -215,10 +257,10 @@ tracks/0/path = NodePath("AnimatedSprite2D:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.06666667),
+"times": PackedFloat32Array(0, 0.19999999),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
+"values": [Color(340.22443, 340.22443, 340.22443, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_j0cyh"]
@@ -238,7 +280,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [node name="Chaser" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
-collision_layer = 80
+collision_layer = 16
 collision_mask = 133
 script = ExtResource("1_dxuae")
 
@@ -267,12 +309,23 @@ z_index = 6
 position = Vector2(0, -12)
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_xwavj")
-animation = &"die"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1470453078]
 position = Vector2(0, -11)
 shape = SubResource("CircleShape2D_md0e3")
+
+[node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1389921789]
+z_index = 10
+position = Vector2(0, -11)
+emitting = false
+amount = 20
+texture = ExtResource("3_hitdot")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_hit")
 
 [node name="KnockbackComponent" type="Node" parent="." unique_id=2006050385]
 script = ExtResource("3_fffhc")

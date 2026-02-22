@@ -5,7 +5,8 @@ signal slash_started(target_position: Vector2)
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var trail: GPUParticles2D = $TrailParticles
+@onready var trail: Line2D = $Trail
+@onready var glimmer_particles: GPUParticles2D = $GlimmerParticles
 
 @export var damage := 10
 @export var target_knockback := 200.0
@@ -13,11 +14,10 @@ signal slash_started(target_position: Vector2)
 @export var arc_angle := PI
 @export var slash_duration := 0.25
 @export var slash_cooldown := 0.3
-@export var hit_vfx: PackedScene
 
-## Visual juice settings
-@export var ease_power := 2 # Higher = snappier acceleration
-@export var flash_intensity := 0.9 # How bright the glow gets (0-1)
+## Visual settings
+@export var ease_power := 3
+@export var flash_intensity := 1.0
 
 var _enabled := true
 var _cooldown_timer := 0.0
@@ -28,7 +28,6 @@ var _slashing := false
 
 func _ready() -> void:
 	_reset()
-	body_entered.connect(_on_body_entered)
 
 func _reset() -> void:
 	_time = 0.0
@@ -37,7 +36,9 @@ func _reset() -> void:
 	monitoring = false
 	monitorable = false
 	if trail:
-		trail.emitting = false
+		trail.stop_tracking()
+	if glimmer_particles:
+		glimmer_particles.emitting = false
 
 func get_damage() -> int:
 	return damage
@@ -67,9 +68,13 @@ func try_slash(target_pos: Vector2) -> void:
 	_slashing = true
 	sprite.visible = true
 	monitoring = true
-	if trail:
-		trail.emitting = true
 	monitorable = true
+	
+	# Start trail and glimmer particles
+	if trail:
+		trail.start_tracking()
+	if glimmer_particles:
+		glimmer_particles.emitting = true
 	
 	emit_signal("slash_started", target_pos)
 
@@ -85,8 +90,10 @@ func _update_slash(delta: float) -> void:
 	var t := _time / slash_duration
 	
 	if t >= 1.0:
+		if trail:
+			trail.stop_tracking()
 		_reset()
-		sprite.modulate = Color.WHITE # Reset color
+		sprite.modulate = Color.WHITE
 		return
 	
 	# Apply ease-out curve for snappier motion
@@ -100,9 +107,3 @@ func _update_slash(delta: float) -> void:
 	var flash := sin(t * PI) * flash_intensity
 	sprite.modulate = Color(1.0 + flash, 1.0 + flash, 1.0 + flash, 1.0)
 	position = Vector2.RIGHT.rotated(angle) * slash_radius
-
-func _on_body_entered(body: Node2D) -> void:
-	if hit_vfx:
-		var vfx := hit_vfx.instantiate()
-		get_tree().root.add_child(vfx)
-		vfx.global_position = body.global_position
