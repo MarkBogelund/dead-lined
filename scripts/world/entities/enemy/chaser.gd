@@ -36,33 +36,24 @@ func _play_anim(anim_name: String) -> void:
 		animation_player.play(anim_name)
 
 func buff_health(multiplier: float) -> void:
-	health.max_health *= multiplier
+	health.max_health = int(health.max_health * multiplier)
 	health.current_health = health.max_health
 
 func buff_damage(multiplier: float) -> void:
-	damage *= multiplier
-
-func get_damage() -> int:
-	return damage
-
-func get_knockback() -> float:
-	return player_knockback
+	damage = int(damage * multiplier)
 
 func _on_hurtbox_hit(attacker: Node) -> void:
 	if is_dead():
 		return
 
-	# Distinguish between weapon attacks and body collisions
 	if attacker.is_in_group("player_attacks"):
-		# Weapon attack: take damage + knockback
 		health.take_damage(attacker.get_damage())
 		knockback.apply(attacker.global_position, attacker.get_knockback())
 		
-		# Trigger hit particles (if they exist)
 		if hit_particles:
 			hit_particles.restart()
+
 	elif attacker.is_in_group("player"):
-		# Body collision: knockback only, no damage
 		knockback.apply(attacker.global_position, attacker.get_knockback())
 
 func _on_damaged(_amount: int) -> void:
@@ -81,3 +72,9 @@ func despawn() -> void:
 
 func is_dead() -> bool:
 	return health.is_dead
+
+func get_damage() -> int:
+	return damage
+
+func get_knockback() -> float:
+	return player_knockback

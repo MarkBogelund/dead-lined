@@ -22,12 +22,8 @@ func _connect_signals() -> void:
 	resource_manager.scrap_amount_changed.connect(set_scrap)
 	wave_manager.combat_phase_started.connect(set_wave)
 
-# --- Signal Handlers ---
-
 func _on_player_damaged(current_health: int) -> void:
 	set_health(current_health)
-
-# --- UI Update Methods ---
 
 func set_health(amount: int) -> void:
 	health_label.text = str(amount)

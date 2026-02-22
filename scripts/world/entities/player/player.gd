@@ -28,14 +28,10 @@ const SLASH_SELF_KNOCKBACK := 50.0
 const MIN_MOVE_SPEED := 10.0
 
 func _ready():
-	add_to_group("player")
-	
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
 	hurtbox.hit.connect(_on_hurtbox_hit)
-
 	melee_weapon.slash_started.connect(_on_slash_started)
-
 	turret_placer.placement_started.connect(_on_turret_placement_started)
 	turret_placer.placement_ended.connect(_on_turret_placement_ended)
 
@@ -58,9 +54,9 @@ func _physics_process(delta):
 		_set_sprite_direction(velocity.x)
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("shoot") and resource_manager.scrap_amount >= SHOOT_COST:
+	if event.is_action_pressed("shoot") and resource_manager.can_buy(SHOOT_COST):
 		if shoot.try_shoot(get_global_mouse_position(), global_position):
-			resource_manager.scrap_amount -= SHOOT_COST
+			resource_manager.subtract_scrap(SHOOT_COST)
 	
 	if event.is_action_pressed("slash"):
 		melee_weapon.try_slash(get_global_mouse_position())
