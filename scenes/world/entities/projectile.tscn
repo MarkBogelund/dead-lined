@@ -26,5 +26,3 @@ shape = SubResource("CircleShape2D_6q2a6")
 [node name="VFXComponent" type="Node" parent="." unique_id=84486533]
 script = ExtResource("4_ykqt4")
 metadata/_custom_type_script = "uid://buxf487a3gb6p"
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]

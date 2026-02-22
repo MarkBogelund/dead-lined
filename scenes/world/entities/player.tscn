@@ -464,4 +464,5 @@ metadata/_custom_type_script = "uid://dh41ifj5v2kot"
 shape = SubResource("CapsuleShape2D_ghcoa")
 
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
+position = Vector2(0, -11)
 collision_mask = 40

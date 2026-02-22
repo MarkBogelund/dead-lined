@@ -22,7 +22,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
 		velocity = knockback.velocity
-	elif health.is_dead or (chase.target and chase.target.is_dead()):
+	elif is_dead() or (chase.target and chase.target.is_dead()):
 		velocity = Vector2.ZERO
 	else:
 		velocity = chase.get_velocity()
@@ -48,14 +48,14 @@ func get_knockback() -> float:
 	return player_knockback
 
 func _on_hurtbox_hit(attacker: Node) -> void:
-	if health.is_dead:
+	if is_dead():
 		return
 	
 	health.take_damage(attacker.get_damage())
 	knockback.apply(attacker.global_position, attacker.get_knockback())
 
 func _on_damaged(_amount: int) -> void:
-	if not health.is_dead:
+	if not is_dead():
 		_play_anim("take_damage")
 
 func _on_died() -> void:

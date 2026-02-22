@@ -5,14 +5,19 @@ signal slash_started(target_position: Vector2)
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var trail: GPUParticles2D = $TrailParticles
 
 @export var damage := 10
 @export var target_knockback := 200.0
-@export var slash_radius := 48.0
+@export var slash_radius := 24.0
 @export var arc_angle := PI
-@export var slash_duration := 0.15
+@export var slash_duration := 0.25
 @export var slash_cooldown := 0.3
 @export var hit_vfx: PackedScene
+
+## Visual juice settings
+@export var ease_power := 2 # Higher = snappier acceleration
+@export var flash_intensity := 0.9 # How bright the glow gets (0-1)
 
 var _enabled := true
 var _cooldown_timer := 0.0
@@ -31,6 +36,8 @@ func _reset() -> void:
 	sprite.visible = false
 	monitoring = false
 	monitorable = false
+	if trail:
+		trail.emitting = false
 
 func get_damage() -> int:
 	return damage
@@ -60,6 +67,8 @@ func try_slash(target_pos: Vector2) -> void:
 	_slashing = true
 	sprite.visible = true
 	monitoring = true
+	if trail:
+		trail.emitting = true
 	monitorable = true
 	
 	emit_signal("slash_started", target_pos)
@@ -77,11 +86,19 @@ func _update_slash(delta: float) -> void:
 	
 	if t >= 1.0:
 		_reset()
+		sprite.modulate = Color.WHITE # Reset color
 		return
 	
-	# Arc animation
-	var angle := _start_angle + (_direction * arc_angle * t)
+	# Apply ease-out curve for snappier motion
+	var t_eased := 1.0 - pow(1.0 - t, ease_power)
+	
+	# Arc animation with easing
+	var angle := _start_angle + (_direction * arc_angle * t_eased)
 	rotation = angle + PI / 2
+	
+	# Flash/glow effect (pulses during swing)
+	var flash := sin(t * PI) * flash_intensity
+	sprite.modulate = Color(1.0 + flash, 1.0 + flash, 1.0 + flash, 1.0)
 	position = Vector2.RIGHT.rotated(angle) * slash_radius
 
 func _on_body_entered(body: Node2D) -> void:
