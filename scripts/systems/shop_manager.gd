@@ -10,6 +10,7 @@ signal shop_system_disabled
 
 var shop_station: ShopStation
 var resource_manager: ResourceManager
+var turrets_placed := 0
 
 func _ready() -> void:
 	shop_station = get_tree().get_first_node_in_group("shop_stations")
@@ -24,6 +25,11 @@ func _ready() -> void:
 	
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
+	
+	GameOverManager.game_over.connect(_on_game_over)
+
+func _on_game_over() -> void:
+	StatsManager.set_turrets(turrets_placed)
 
 func _on_station_interacted():
 	shop_panel.open()
@@ -40,6 +46,7 @@ func _on_turret_selected(turret_entry: TurretEntry):
 
 func _on_turret_placed(turret_entry: TurretEntry):
 	resource_manager.subtract_scrap(turret_entry.price)
+	turrets_placed += 1
 
 func _on_build_phase_started() -> void:
 	emit_signal("shop_system_enabled")

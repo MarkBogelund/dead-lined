@@ -94,6 +94,7 @@ func _on_died():
 	can_move = false
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
+	GameOverManager.player_died()
 
 func _on_damaged(current_health: int):
 	animation.set_state(AnimationComponent.State.DAMAGE)

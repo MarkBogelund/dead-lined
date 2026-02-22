@@ -20,6 +20,9 @@ func _ready() -> void:
 	target = get_tree().get_first_node_in_group(target_group)
 
 func get_velocity() -> Vector2:
+	if GameOverManager.is_game_over:
+		return Vector2.ZERO
+	
 	if not target or not entity:
 		return Vector2.ZERO
 	

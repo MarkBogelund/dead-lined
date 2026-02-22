@@ -21,15 +21,22 @@ const UP_FACING_OFFSET := -PI / 2
 
 var _fire_timer := 0.0
 var _active := false
+var enabled := true
 
 func _ready() -> void:
 	var wave_manager := get_tree().get_first_node_in_group("wave_manager") as WaveManager
 	if wave_manager:
 		wave_manager.combat_phase_started.connect(func(_i): _active = true)
 		wave_manager.build_phase_started.connect(func(): _active = false)
+	
+	GameOverManager.game_over.connect(_on_game_over)
+
+func _on_game_over() -> void:
+	_active = false
+	enabled = false
 
 func _process(delta: float) -> void:
-	if not _active:
+	if not _active or not enabled:
 		return
 	
 	_fire_timer -= delta

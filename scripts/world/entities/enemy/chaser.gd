@@ -69,6 +69,9 @@ func _on_damaged(_amount: int) -> void:
 
 func _on_died() -> void:
 	remove_from_group("enemies")
+	
+	GameOverManager.enemy_died()
+	
 	wave_manager.call_deferred("check_for_wave_clear")
 	collision_shape.set_deferred("disabled", true)
 	_play_anim("die")

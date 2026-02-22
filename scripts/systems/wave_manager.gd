@@ -16,9 +16,16 @@ enum Phase {
 	COMBAT
 }
 
+var current_wave: int:
+	get: return _wave_index
+
 func _ready() -> void:
+	GameOverManager.game_over.connect(_on_game_over)
 	await get_tree().process_frame
 	_enter_build_phase()
+
+func _on_game_over() -> void:
+	StatsManager.set_waves(_wave_index)
 
 func _process(delta: float) -> void:
 	if _current_phase != Phase.BUILD:
@@ -38,6 +45,7 @@ func _enter_build_phase() -> void:
 func _enter_combat_phase() -> void:
 	_current_phase = Phase.COMBAT
 	_wave_index += 1
+	StatsManager.start_time_tracking()
 	emit_signal("combat_phase_started", _wave_index)
 
 func check_for_wave_clear() -> void:

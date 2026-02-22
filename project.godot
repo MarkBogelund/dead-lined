@@ -15,6 +15,11 @@ run/main_scene="uid://d1rku6qra3q8x"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+StatsManager="*res://scripts/systems/stats_manager.gd"
+GameOverManager="*res://scripts/systems/game_over_manager.gd"
+
 [display]
 
 window/size/viewport_width=640

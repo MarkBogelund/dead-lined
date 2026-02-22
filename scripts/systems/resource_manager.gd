@@ -3,6 +3,12 @@ class_name ResourceManager
 
 signal scrap_amount_changed(amount)
 
+func _ready() -> void:
+	GameOverManager.game_over.connect(_on_game_over)
+
+func _on_game_over() -> void:
+	StatsManager.set_scrap(scrap_amount)
+
 # public property with getter and setter
 @export var scrap_amount: int:
 	get:
