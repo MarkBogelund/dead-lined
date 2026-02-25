@@ -7,15 +7,11 @@ signal placement_started
 signal placement_ended
 
 @export var max_place_distance := 50
+@onready var player: CharacterBody2D = %Player
 
 var current_turret_entry: TurretEntry
 var ghost_turret: Node2D
 var active := false
-var player: CharacterBody2D
-
-func _ready() -> void:
-	add_to_group("turret_placer")
-	player = get_tree().get_first_node_in_group("player")
 
 func _process(_delta: float) -> void:
 	if active and ghost_turret and player:

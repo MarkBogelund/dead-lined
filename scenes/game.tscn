@@ -11,10 +11,10 @@
 [ext_resource type="Script" uid="uid://bkervm4vmc0wh" path="res://scripts/systems/turret_placer.gd" id="4_ca42v"]
 [ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/world/entities/seeker.tscn" id="5_0tnpc"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/world/spawners/shop_station.tscn" id="6_p57ef"]
+[ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
 [ext_resource type="Texture2D" uid="uid://dr1jaw3sxgsvp" path="res://assets/sprites/props.png" id="6_vtaks"]
 [ext_resource type="Script" uid="uid://ioxvj1ihixrt" path="res://scripts/systems/resource_manager.gd" id="7_u5sy4"]
 [ext_resource type="PackedScene" uid="uid://h0m8s5cfwoo8" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
-[ext_resource type="PackedScene" uid="uid://dbn6ammn3fpex" path="res://scenes/world/entities/chaser.tscn" id="12_ir15t"]
 [ext_resource type="Resource" uid="uid://bbi5f87py8cnr" path="res://resources/seeker.tres" id="14_trtic"]
 [ext_resource type="PackedScene" uid="uid://da6ouw6b58hpr" path="res://scenes/ui/game_over_ui.tscn" id="16_ca42v"]
 
@@ -501,8 +501,11 @@ script = ExtResource("1_rysoc")
 
 [node name="Systems" type="Node" parent="." unique_id=618035649]
 
-[node name="ShopManager" type="Node" parent="Systems" unique_id=1221676986 groups=["shop_manager"]]
+[node name="ShopManager" type="Node" parent="Systems" unique_id=1221676986 node_paths=PackedStringArray("shop_panel", "shop_station") groups=["shop_manager"]]
+unique_name_in_owner = true
 script = ExtResource("1_ir15t")
+shop_panel = NodePath("../../UI/ShopPanel")
+shop_station = NodePath("../../World/ShopStation")
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]
@@ -510,14 +513,22 @@ script = ExtResource("4_ca42v")
 metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
+unique_name_in_owner = true
 script = ExtResource("2_kvuet")
-time_between_waves = 2
+time_between_waves = 5
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="ResourceManager" type="Node" parent="Systems" unique_id=674344671 groups=["resource_manager"]]
+unique_name_in_owner = true
 script = ExtResource("7_u5sy4")
 scrap_amount = 20
 metadata/_custom_type_script = "uid://ioxvj1ihixrt"
+
+[node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]
+unique_name_in_owner = true
+script = ExtResource("6_ssvqc")
+game_over_ui = NodePath("../../UI/GameOverUI")
+metadata/_custom_type_script = "uid://oouh8yqjltum"
 
 [node name="World" type="Node" parent="." unique_id=792632933]
 
@@ -590,6 +601,7 @@ color = Color(0, 0.34117648, 0.6392157, 0.3254902)
 texture = SubResource("GradientTexture2D_kvpfn")
 
 [node name="Player" parent="World" unique_id=244036277 instance=ExtResource("1_uwrxv")]
+unique_name_in_owner = true
 z_index = 5
 position = Vector2(0, -30)
 
@@ -617,9 +629,6 @@ position = Vector2(-89, -57)
 
 [node name="ShopStation" parent="World" unique_id=1270538854 groups=["shop_stations"] instance=ExtResource("6_p57ef")]
 position = Vector2(0, -1)
-
-[node name="Chaser" parent="World" unique_id=1145312353 instance=ExtResource("12_ir15t")]
-position = Vector2(54, -71)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
 

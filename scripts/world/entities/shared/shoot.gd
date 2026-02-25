@@ -32,18 +32,6 @@ func try_shoot(target_pos: Vector2, shooter_pos: Vector2) -> bool:
 		return false
 
 	var projectile := projectile_scene.instantiate()
-	if not projectile.has_method("set_orientation"):
-		push_error("Projectile does not have set_orientation()")
-		return false
-
-	if not projectile.has_method("set_collision_layers"):
-		push_error("Projectile does not have set_collision_layers")
-		return false
-		
-	if not projectile.has_method("set_parameters"):
-		push_error("Projectile does not have set_parameters")
-		return false
-	
 	var dir = (target_pos - shooter_pos).normalized()
 	
 	projectile.set_collision_layers(projectile_collision_layers, projectile_collision_masks)

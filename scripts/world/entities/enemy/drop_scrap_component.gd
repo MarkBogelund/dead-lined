@@ -43,5 +43,4 @@ func drop() -> void:
 		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 		
 		# Enable collection immediately
-		if scrap.has_method("enable_collection"):
-			scrap.enable_collection()
+		scrap.enable_collection()

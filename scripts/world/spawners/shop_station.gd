@@ -4,9 +4,9 @@ class_name ShopStation
 signal station_opened
 signal station_closed
 
+@onready var shop_manager: ShopManager = %ShopManager
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var interaction_zone: Area2D = $InteractionZone
-@onready var shop_manager: ShopManager = $"/root/Game/Systems/ShopManager"
 
 var _enabled := false
 var _player_in_range := false

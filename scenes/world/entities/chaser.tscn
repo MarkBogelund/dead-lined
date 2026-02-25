@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://73dnhyc0uhym" path="res://scripts/world/entities/enemy/chaser.gd" id="1_dxuae"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_fffhc"]
 [ext_resource type="Script" uid="uid://uftvlfyofqyv" path="res://scripts/world/entities/enemy/chase_component.gd" id="3_1no88"]
-[ext_resource type="Script" uid="uid://dh41ifj5v2kot" path="res://scripts/world/entities/shared/hurtbox_component.gd" id="3_8c6uj"]
+[ext_resource type="Script" uid="uid://dh41ifj5v2kot" path="res://scripts/world/entities/shared/hurtbox.gd" id="3_8c6uj"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="3_fffhc"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="3_hitdot"]
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/chaser.png" id="4_fffhc"]

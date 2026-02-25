@@ -3,8 +3,10 @@ class_name ResourceManager
 
 signal scrap_amount_changed(amount)
 
+@onready var game_over_manager: GameOverManager = %GameOverManager
+
 func _ready() -> void:
-	GameOverManager.game_over.connect(_on_game_over)
+	game_over_manager.game_over.connect(_on_game_over)
 
 func _on_game_over() -> void:
 	StatsManager.set_scrap(scrap_amount)

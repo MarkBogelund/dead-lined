@@ -18,7 +18,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 StatsManager="*res://scripts/systems/stats_manager.gd"
-GameOverManager="*res://scripts/systems/game_over_manager.gd"
 
 [display]
 

@@ -1,7 +1,8 @@
 extends Marker2D
 class_name EnemySpawner
 
-@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
+@onready var wave_manager: WaveManager = %WaveManager
+@onready var game_over_manager: GameOverManager = %GameOverManager
 
 @export var spawn_entries: Array[EnemySpawnEntry] = []
 @export var spawn_radius := 24.0
@@ -17,7 +18,7 @@ var _current_wave := 0
 var _is_spawning := false
 
 func _ready() -> void:
-	wave_manager.connect("combat_phase_started", Callable(self, "_on_combat_phase_started"))
+	wave_manager.connect("combat_phase_started", Callable(self , "_on_combat_phase_started"))
 
 func _on_combat_phase_started(wave_index: int) -> void:
 	start_wave_spawn(wave_index)
@@ -46,6 +47,9 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	enemy.global_position = global_position + _get_random_spawn_offset()
 	get_tree().current_scene.add_child(enemy)
 	_apply_wave_scaling(enemy)
+	
+	enemy.died.connect(game_over_manager._on_enemy_died)
+	enemy.died.connect(wave_manager._on_enemy_died)
 
 func _build_spawn_queue_for_wave(wave_index: int) -> Array[PackedScene]:
 	var queue: Array[PackedScene] = []

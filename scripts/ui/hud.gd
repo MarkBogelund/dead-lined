@@ -1,12 +1,12 @@
 extends Control
 
+@onready var wave_manager: WaveManager = %WaveManager
+@onready var resource_manager: ResourceManager = %ResourceManager
+@onready var player: Player = %Player
+
 @onready var health_label: Label = $HealthTexture/HealthLabel
 @onready var scrap_label: Label = $ScrapTexture/ScrapLabel
 @onready var wave_label: Label = $WaveTexture/WaveLabel
-
-@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
-@onready var resource_manager: ResourceManager = get_tree().get_first_node_in_group("resource_manager")
-@onready var player: Player = get_tree().get_first_node_in_group("player")
 
 func _ready() -> void:
 	_initialize_values()
@@ -15,7 +15,7 @@ func _ready() -> void:
 func _initialize_values() -> void:
 	set_health(player.get_health())
 	set_scrap(resource_manager.scrap_amount)
-	set_wave(wave_manager._wave_index)
+	set_wave(wave_manager.get_current_wave())
 
 func _connect_signals() -> void:
 	player.damaged.connect(_on_player_damaged)

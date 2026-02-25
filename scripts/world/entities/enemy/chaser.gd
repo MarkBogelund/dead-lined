@@ -1,7 +1,8 @@
 extends CharacterBody2D
 class_name Chaser
 
-@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
+signal died
+
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
@@ -15,6 +16,8 @@ class_name Chaser
 @export var enemy_knockback := 200.0
 @export var player_knockback := 100.0
 
+@onready var player: Node2D = get_tree().get_first_node_in_group("player")
+
 func _ready() -> void:
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
@@ -23,10 +26,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
 		velocity = knockback.velocity
-	elif is_dead() or (chase.target and chase.target.is_dead()):
+	elif is_dead() or (player and player.is_dead()):
 		velocity = Vector2.ZERO
 	else:
-		velocity = chase.get_velocity()
+		velocity = chase.chase(player)
 	
 	knockback.process(delta)
 	move_and_slide()
@@ -36,8 +39,7 @@ func _play_anim(anim_name: String) -> void:
 		animation_player.play(anim_name)
 
 func buff_health(multiplier: float) -> void:
-	health.max_health = int(health.max_health * multiplier)
-	health.current_health = health.max_health
+	health.buff_max_health(multiplier)
 
 func buff_damage(multiplier: float) -> void:
 	damage = int(damage * multiplier)
@@ -69,10 +71,8 @@ func _on_damaged(_amount: int) -> void:
 
 func _on_died() -> void:
 	remove_from_group("enemies")
+	died.emit()
 	
-	GameOverManager.enemy_died()
-	
-	wave_manager.call_deferred("check_for_wave_clear")
 	collision_shape.set_deferred("disabled", true)
 	_play_anim("die")
 
@@ -81,7 +81,7 @@ func despawn() -> void:
 	queue_free()
 
 func is_dead() -> bool:
-	return health.is_dead
+	return health.is_dead()
 
 func get_damage() -> int:
 	return damage

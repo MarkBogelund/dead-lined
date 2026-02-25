@@ -3,8 +3,9 @@ class_name Player
 
 signal damaged(current_health: int)
 
-@onready var resource_manager: ResourceManager = get_tree().get_first_node_in_group("resource_manager")
-@onready var turret_placer: TurretPlacer = get_tree().get_first_node_in_group("turret_placer")
+@onready var resource_manager: ResourceManager = %ResourceManager
+@onready var shop_manager: ShopManager = %ShopManager
+@onready var game_over_manager: GameOverManager = %GameOverManager
 
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
@@ -32,8 +33,8 @@ func _ready():
 	health.damaged.connect(_on_damaged)
 	hurtbox.hit.connect(_on_hurtbox_hit)
 	melee_weapon.slash_started.connect(_on_slash_started)
-	turret_placer.placement_started.connect(_on_turret_placement_started)
-	turret_placer.placement_ended.connect(_on_turret_placement_ended)
+	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
+	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
 
 func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
@@ -62,7 +63,7 @@ func _unhandled_input(event: InputEvent):
 		melee_weapon.try_slash(get_global_mouse_position())
 
 func _update_animation():
-	if health.is_dead:
+	if is_dead():
 		animation.set_state(AnimationComponent.State.DIE)
 		return
 	
@@ -80,7 +81,7 @@ func _on_slash_started(target_pos: Vector2):
 	animation.set_state(AnimationComponent.State.SLASH)
 
 func _on_hurtbox_hit(attacker: Node) -> void:
-	if health.is_dead:
+	if is_dead():
 		return
 	
 	health.take_damage(attacker.get_damage())
@@ -94,14 +95,14 @@ func _on_died():
 	can_move = false
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
-	GameOverManager.player_died()
+	game_over_manager.player_died()
 
 func _on_damaged(current_health: int):
 	animation.set_state(AnimationComponent.State.DAMAGE)
 	emit_signal("damaged", current_health)
 
 func is_dead():
-	return health.is_dead
+	return health.is_dead()
 
 func get_damage() -> int:
 	return player_body_damage
@@ -110,7 +111,10 @@ func get_knockback() -> float:
 	return player_knockback
 
 func get_health():
-	return health.current_health
+	return health.get_current_health()
+
+func collect_scrap(amount: int) -> void:
+	resource_manager.add_scrap(amount)
 
 func set_shooting_enabled(enabled: bool):
 	shoot.set_enabled(enabled)

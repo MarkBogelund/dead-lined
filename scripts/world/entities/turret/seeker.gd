@@ -23,13 +23,14 @@ var _fire_timer := 0.0
 var _active := false
 var enabled := true
 
+@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
+@onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
+
 func _ready() -> void:
-	var wave_manager := get_tree().get_first_node_in_group("wave_manager") as WaveManager
-	if wave_manager:
-		wave_manager.combat_phase_started.connect(func(_i): _active = true)
-		wave_manager.build_phase_started.connect(func(): _active = false)
+	wave_manager.combat_phase_started.connect(func(_i): _active = true)
+	wave_manager.build_phase_started.connect(func(): _active = false)
 	
-	GameOverManager.game_over.connect(_on_game_over)
+	game_over_manager.game_over.connect(_on_game_over)
 
 func _on_game_over() -> void:
 	_active = false
@@ -56,7 +57,7 @@ func _find_closest_target() -> Node2D:
 	
 	for group in ["enemies", "player"]:
 		for node in get_tree().get_nodes_in_group(group):
-			if node.has_method("is_dead") and node.is_dead():
+			if node.is_dead():
 				continue
 			
 			var dist_sq := global_position.distance_squared_to(node.global_position)

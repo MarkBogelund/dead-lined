@@ -1,4 +1,6 @@
 extends Node
 
+@onready var game_over_manager: GameOverManager = %GameOverManager
+
 func _ready() -> void:
-	GameOverManager.reset()
+	game_over_manager.reset()

@@ -1,14 +1,14 @@
 extends Node
-
-## Manages game over flow and state
-## Stats tracking delegated to StatsManager
+class_name GameOverManager
 
 signal game_over
+
+@export var game_over_ui: Control
 
 var is_game_over := false
 
 ## Called by enemies when they die
-func enemy_died() -> void:
+func _on_enemy_died() -> void:
 	StatsManager.record_enemy_death()
 
 ## Called by player when they die
@@ -20,9 +20,8 @@ func player_died() -> void:
 	# Give managers time to push their stats
 	await get_tree().process_frame
 	
-	# Get UI and show stats
-	var game_over_ui := get_tree().get_first_node_in_group("game_over_ui")
-	if game_over_ui and game_over_ui.has_method("show_stats"):
+	# Show stats on UI
+	if game_over_ui:
 		game_over_ui.show_stats(StatsManager.current_run.to_dict())
 
 ## Resets game over state

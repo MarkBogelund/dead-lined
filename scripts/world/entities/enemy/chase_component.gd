@@ -4,10 +4,8 @@ class_name ChaseComponent
 @export var speed := 30.0
 @export var separation_radius := 40.0
 @export var separation_force := 120.0
-@export var target_group := "player"
 
 var entity: CharacterBody2D
-var target: Node2D
 
 func _ready() -> void:
 	var parent = get_parent()
@@ -15,18 +13,12 @@ func _ready() -> void:
 		entity = parent
 	else:
 		push_error("ChaseComponent must be a child of a CharacterBody2D")
-	
-	await get_tree().process_frame
-	target = get_tree().get_first_node_in_group(target_group)
 
-func get_velocity() -> Vector2:
-	if GameOverManager.is_game_over:
-		return Vector2.ZERO
-	
+func chase(target: Node2D) -> Vector2:
 	if not target or not entity:
 		return Vector2.ZERO
 	
-	var chase_velocity := _get_chase_velocity()
+	var chase_velocity := _get_chase_velocity(target)
 	var separation_velocity := _get_separation_velocity()
 	var desired_velocity := chase_velocity + separation_velocity
 	
@@ -35,7 +27,7 @@ func get_velocity() -> Vector2:
 	
 	return desired_velocity
 
-func _get_chase_velocity() -> Vector2:
+func _get_chase_velocity(target: Node2D) -> Vector2:
 	var direction := (target.global_position - entity.global_position).normalized()
 	return direction * speed
 
@@ -46,7 +38,7 @@ func _get_separation_velocity() -> Vector2:
 	for enemy in enemies:
 		if enemy == entity:
 			continue
-		if enemy.health.is_dead:
+		if enemy.is_dead():
 			continue
 		
 		var offset: Vector2 = entity.global_position - enemy.global_position

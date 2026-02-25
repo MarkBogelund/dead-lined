@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://cdc3yx122ruc6" path="res://scripts/world/entities/player/movement.gd" id="10_b6tgf"]
 [ext_resource type="Script" uid="uid://dwbus28tan8rh" path="res://scripts/world/entities/player/animation_component.gd" id="11_73kkf"]
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]
-[ext_resource type="Script" uid="uid://dh41ifj5v2kot" path="res://scripts/world/entities/shared/hurtbox_component.gd" id="12_vlshd"]
+[ext_resource type="Script" uid="uid://dh41ifj5v2kot" path="res://scripts/world/entities/shared/hurtbox.gd" id="12_vlshd"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
