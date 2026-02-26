@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dcf5jkmnj1w5k"
-path="res://.godot/imported/PixelOperator8.ttf-6f9f01766aff16f52046b880ffb8d367.fontdata"
+uid="uid://d3txfcgnwpq7b"
+path="res://.godot/imported/ByteBounce.ttf-a21898d48b43b4e74178b034355eb9b6.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/PixelOperator8.ttf"
-dest_files=["res://.godot/imported/PixelOperator8.ttf-6f9f01766aff16f52046b880ffb8d367.fontdata"]
+source_file="res://assets/fonts/ByteBounce.ttf"
+dest_files=["res://.godot/imported/ByteBounce.ttf-a21898d48b43b4e74178b034355eb9b6.fontdata"]
 
 [params]
 
@@ -30,12 +30,7 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "New Configuration",
-"size": Vector2i(16, 0)
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

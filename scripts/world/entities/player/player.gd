@@ -91,6 +91,7 @@ func _on_hurtbox_hit(attacker: Node) -> void:
 		hit_particles.restart()
 
 func _on_died():
+	emit_signal("damaged", 0)
 	collision_shape.set_deferred("disabled", true)
 	can_move = false
 	shoot.set_enabled(false)
