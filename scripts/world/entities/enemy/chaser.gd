@@ -79,7 +79,7 @@ func _on_died() -> void:
 	remove_from_group("enemies")
 	died.emit()
 	
-	collision_shape.set_deferred("disabled", true)
+	#collision_shape.set_deferred("disabled", true)
 	_play_anim("die")
 
 func despawn() -> void:

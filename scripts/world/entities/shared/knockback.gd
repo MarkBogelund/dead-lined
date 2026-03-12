@@ -2,6 +2,7 @@ extends Node
 class_name KnockbackComponent
 
 @export var friction := 1200.0
+@export var max_velocity := 400.0  ## Maximum knockback speed to prevent tunneling through walls
 
 var velocity: Vector2 = Vector2.ZERO
 
@@ -15,6 +16,10 @@ func apply(from_position: Vector2, strength: float) -> void:
 
 	var dir = (parent.global_position - from_position).normalized()
 	velocity = dir * strength
+	
+	# Clamp to max velocity to prevent tunneling
+	if velocity.length() > max_velocity:
+		velocity = velocity.normalized() * max_velocity
 
 func process(delta: float) -> void:
 	if is_active():
