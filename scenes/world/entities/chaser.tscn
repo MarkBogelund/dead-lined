@@ -355,8 +355,11 @@ texture = SubResource("GradientTexture2D_fffhc")
 [node name="DropScrapComponent" type="Node" parent="." unique_id=478857233]
 script = ExtResource("8_jg6m2")
 scrap_drop_amount = 3
-scrap_drop_radius = 10.0
 scrap_scene = ExtResource("2_fffhc")
+impulse_min = 30.0
+impulse_max = 60.0
+linear_damp = 8.0
+freeze_delay = 0.2
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1098384666]
 path_desired_distance = 8.0

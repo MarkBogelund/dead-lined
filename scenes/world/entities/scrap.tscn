@@ -101,7 +101,7 @@ atlas = ExtResource("3_17eia")
 region = Rect2(34, 2, 13, 12)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sd2yw"]
-radius = 9.0
+radius = 7.0
 
 [sub_resource type="Gradient" id="Gradient_17eia"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -112,9 +112,11 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.82051283, 0.14957266)
 
-[node name="Scrap" type="Area2D" unique_id=1098587513]
+[sub_resource type="CircleShape2D" id="CircleShape2D_m4e56"]
+radius = 9.0
+
+[node name="Scrap" type="RigidBody2D" unique_id=1809465642]
 collision_layer = 512
-collision_mask = 2
 script = ExtResource("1_sd2yw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=643554632]
@@ -135,3 +137,10 @@ shape = SubResource("CircleShape2D_sd2yw")
 color = Color(0.7490196, 1, 0.9882353, 1)
 energy = 0.1
 texture = SubResource("GradientTexture2D_qtcbg")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=612364774]
+collision_layer = 512
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=45020708]
+shape = SubResource("CircleShape2D_m4e56")

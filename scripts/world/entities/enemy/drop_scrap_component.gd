@@ -2,9 +2,11 @@ extends Node
 class_name DropScrapComponent
 
 @export var scrap_drop_amount := 1
-@export var scrap_drop_radius := 48.0
 @export var scrap_scene: PackedScene
-@export var scatter_duration := 0.2
+@export var impulse_min := 100.0
+@export var impulse_max := 300.0
+@export var linear_damp := 3.0  ## How quickly scrap slows down (higher = stops faster)
+@export var freeze_delay := 0.3  ## Seconds until scrap stops moving completely
 
 var parent: Node2D
 
@@ -24,23 +26,25 @@ func drop() -> void:
 		var scrap = scrap_scene.instantiate()
 		get_tree().current_scene.add_child(scrap)
 		
-		# Set initial position at drop point
 		scrap.global_position = drop_position
 		
-		# Calculate random scatter position
+		# Setup physics properties
+		scrap.gravity_scale = 0.0
+		scrap.lock_rotation = true
+		scrap.linear_damp = linear_damp
+		
+		# Apply random impulse in random direction
 		var angle := randf() * TAU
 		var dir := Vector2(cos(angle), sin(angle))
-		var distance := randf() * scrap_drop_radius
-		var target_pos := drop_position + dir * distance
+		var strength := randf_range(impulse_min, impulse_max)
+		scrap.apply_impulse(dir * strength)
 		
-		# Animate scrap to scatter position (bind tween to scrap node)
-		var tween := scrap.create_tween()
-		tween.tween_property(
-			scrap,
-			"global_position",
-			target_pos,
-			scatter_duration
-		).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-		
-		# Enable collection immediately
 		scrap.enable_collection()
+		
+		# Freeze after delay
+		_freeze_scrap_after_delay(scrap, freeze_delay)
+
+func _freeze_scrap_after_delay(scrap: RigidBody2D, delay: float) -> void:
+	await get_tree().create_timer(delay).timeout
+	if is_instance_valid(scrap):
+		scrap.freeze = true

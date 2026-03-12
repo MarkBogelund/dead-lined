@@ -1,11 +1,14 @@
-extends Area2D
+extends RigidBody2D
 
 @export var value := 1
 
 var can_collect := false
+@onready var detection_area: Area2D = $DetectionArea
 
 func _ready():
-	connect("body_entered", _on_body_entered)
+	# Connect to detection area
+	if detection_area:
+		detection_area.body_entered.connect(_on_body_entered)
 
 func enable_collection() -> void:
 	can_collect = true

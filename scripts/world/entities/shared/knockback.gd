@@ -2,7 +2,7 @@ extends Node
 class_name KnockbackComponent
 
 @export var friction := 1200.0
-@export var max_velocity := 400.0  ## Maximum knockback speed to prevent tunneling through walls
+@export var max_velocity := 400.0 ## Maximum knockback speed to prevent tunneling through walls
 
 var velocity: Vector2 = Vector2.ZERO
 
