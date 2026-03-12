@@ -291,6 +291,9 @@ player_knockback = 150.0
 
 [node name="ChaseComponent" type="Node" parent="." unique_id=840197303]
 script = ExtResource("3_1no88")
+speed = 40.0
+separation_radius = 30.0
+separation_force = 130.0
 metadata/_custom_type_script = "uid://uftvlfyofqyv"
 
 [node name="HurtboxComponent" type="Area2D" parent="." unique_id=361837505]
@@ -356,8 +359,10 @@ scrap_drop_radius = 10.0
 scrap_scene = ExtResource("2_fffhc")
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1098384666]
+path_desired_distance = 8.0
+target_desired_distance = 4.0
 path_postprocessing = 1
-debug_enabled = true
+avoidance_enabled = true
 debug_use_custom = true
 script = ExtResource("11_uqckg")
 metadata/_custom_type_script = "uid://bfdfe71wkym8b"

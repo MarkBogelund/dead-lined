@@ -31,8 +31,8 @@ func _physics_process(delta: float) -> void:
 	elif is_dead() or (player and player.is_dead()):
 		velocity = Vector2.ZERO
 	else:
-		var target_velocity := navigation.get_velocity_to(player.global_position, speed)
-		velocity = velocity.lerp(target_velocity, 0.1)
+		var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
+		velocity = chase.move_towards(direction)
 	
 	knockback.process(delta)
 	move_and_slide()

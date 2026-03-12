@@ -6,27 +6,30 @@ class_name ChaseComponent
 @export var speed := 30.0
 @export var separation_radius := 40.0
 @export var separation_force := 120.0
+@export_range(0.0, 1.0) var smoothing := 0.1 ## Lower = more momentum, Higher = more responsive
 
 var entity: CharacterBody2D
+var current_velocity := Vector2.ZERO
 
 func _ready() -> void:
 	entity = get_parent() as CharacterBody2D
 	if not entity:
 		push_error("ChaseComponent must be a child of a CharacterBody2D")
 
-## Returns velocity with movement direction + separation applied
+## Returns velocity with movement direction + separation applied, with smoothing
 func move_towards(direction: Vector2) -> Vector2:
 	if not entity:
 		return Vector2.ZERO
 	
 	var move_velocity := direction * speed
 	var separation_velocity := _get_separation()
-	var final_velocity := move_velocity + separation_velocity
+	var target_velocity := move_velocity + separation_velocity
 	
-	if final_velocity.length() > speed:
-		final_velocity = final_velocity.normalized() * speed
+	if target_velocity.length() > speed:
+		target_velocity = target_velocity.normalized() * speed
 	
-	return final_velocity
+	current_velocity = current_velocity.lerp(target_velocity, smoothing)
+	return current_velocity
 
 func _get_separation() -> Vector2:
 	var push := Vector2.ZERO
