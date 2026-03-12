@@ -350,3 +350,6 @@ script = ExtResource("8_jg6m2")
 scrap_drop_amount = 3
 scrap_drop_radius = 10.0
 scrap_scene = ExtResource("2_fffhc")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1832239285]
+debug_enabled = true
