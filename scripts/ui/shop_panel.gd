@@ -3,7 +3,7 @@ class_name ShopPanel
 
 signal turret_selected(turret_entry: TurretEntry)
 
-@onready var price: Label = $NinePatchRect/Price
+@onready var price: Label = $Background/PriceLabel
 
 @export var turret_entry: TurretEntry
 

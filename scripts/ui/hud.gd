@@ -48,7 +48,7 @@ func _on_build_phase_started() -> void:
 	build_phase_texture.visible = true
 	combat_phase_texture.visible = false
 
-func _on_combat_phase_started(wave_index: int) -> void:
+func _on_combat_phase_started(_wave_index: int) -> void:
 	build_phase_timer.visible = false
 	build_phase_texture.visible = false
 	combat_phase_texture.visible = true

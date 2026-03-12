@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="4_qurf7"]
 [ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="6_fffhc"]
 [ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/drop_scrap_component.gd" id="8_jg6m2"]
+[ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation_component.gd" id="11_uqckg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1no88"]
 radius = 7.071068
@@ -282,6 +283,9 @@ fill_from = Vector2(0.5, 0.5)
 [node name="Chaser" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
 collision_layer = 16
 collision_mask = 133
+motion_mode = 1
+wall_min_slide_angle = 0.0
+floor_block_on_wall = false
 script = ExtResource("1_dxuae")
 player_knockback = 150.0
 
@@ -351,5 +355,9 @@ scrap_drop_amount = 3
 scrap_drop_radius = 10.0
 scrap_scene = ExtResource("2_fffhc")
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1832239285]
+[node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1098384666]
+path_postprocessing = 1
 debug_enabled = true
+debug_use_custom = true
+script = ExtResource("11_uqckg")
+metadata/_custom_type_script = "uid://bfdfe71wkym8b"

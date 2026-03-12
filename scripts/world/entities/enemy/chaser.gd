@@ -11,8 +11,10 @@ signal died
 @onready var chase: ChaseComponent = $ChaseComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var hit_particles: GPUParticles2D = $HitParticles
+@onready var navigation: NavigationComponent = $NavigationComponent
 
 @export var damage := 20
+@export var speed := 30.0
 @export var enemy_knockback := 200.0
 @export var player_knockback := 100.0
 
@@ -29,10 +31,14 @@ func _physics_process(delta: float) -> void:
 	elif is_dead() or (player and player.is_dead()):
 		velocity = Vector2.ZERO
 	else:
-		velocity = chase.chase(player)
+		var target_velocity := navigation.get_velocity_to(player.global_position, speed)
+		velocity = velocity.lerp(target_velocity, 0.1)
 	
 	knockback.process(delta)
 	move_and_slide()
+
+func _get_direction_to_player() -> Vector2:
+	return navigation.get_velocity_to(player.global_position, speed).normalized()
 
 func _play_anim(anim_name: String) -> void:
 	if animation_player.has_animation(anim_name):
