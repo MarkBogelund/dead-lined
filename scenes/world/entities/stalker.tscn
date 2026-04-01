@@ -225,7 +225,6 @@ collision_layer = 8
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_stalker")
-engagement_range = 100.0
 
 [node name="ChaseComponent" type="Node" parent="." unique_id=1597870677]
 script = ExtResource("3_chase")
@@ -282,7 +281,6 @@ path_desired_distance = 8.0
 target_desired_distance = 4.0
 path_postprocessing = 1
 avoidance_enabled = true
-debug_enabled = true
 script = ExtResource("10_nav")
 
 [node name="CircleMovementComponent" type="Node" parent="." unique_id=738101987]

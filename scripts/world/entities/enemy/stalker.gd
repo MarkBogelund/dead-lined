@@ -17,7 +17,8 @@ signal died
 
 @export var damage := 15
 @export var speed := 25.0
-@export var engagement_range := 150.0
+@export var min_range := 120.0
+@export var max_range := 180.0
 @export var shoot_cooldown := 1.5
 
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
@@ -41,17 +42,18 @@ func _physics_process(delta: float) -> void:
 		if not has_line_of_sight:
 			var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
 			velocity = chase.move_towards(direction)
-		elif distance > 180.0:
+		elif distance > max_range:
 			var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
 			velocity = chase.move_towards(direction)
-		elif distance < 120.0:
+		elif distance < min_range:
 			var retreat_direction := (global_position - player.global_position).normalized()
-			var retreat_target := global_position + retreat_direction * 100.0
-			var direction := navigation.get_velocity_to(retreat_target, speed).normalized()
-			velocity = chase.move_towards(direction)
+			velocity = chase.move_towards(retreat_direction)
 		else:
-			var hover_direction := circle_movement.get_hover_direction(player.global_position)
+			var hover_direction := circle_movement.get_hover_direction(player.global_position, min_range, max_range)
 			velocity = chase.move_towards(hover_direction * circle_movement.drift_speed_multiplier)
+		
+		if has_line_of_sight and distance <= max_range:
+			shoot.try_shoot(player.global_position, global_position)
 	
 	knockback.process(delta)
 	move_and_slide()
