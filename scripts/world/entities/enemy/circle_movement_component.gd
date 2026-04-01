@@ -2,11 +2,12 @@ extends Node
 class_name CircleMovementComponent
 
 @export var orbit_distance := 150.0
-@export var orbit_tolerance := 20.0
-@export var orbit_angle_step := 45.0
+@export var drift_speed_multiplier := 0.15
 
 var entity: Node2D
-var circle_direction: int = 1
+var drift_direction: Vector2 = Vector2.ZERO
+var drift_change_timer := 0.0
+var drift_change_interval := 1.5
 
 func _ready() -> void:
 	entity = get_parent() as Node2D
@@ -14,28 +15,34 @@ func _ready() -> void:
 		push_error("CircleMovementComponent must be a child of a Node2D")
 		return
 	
-	circle_direction = 1 if randf() > 0.5 else -1
+	_randomize_drift()
 
-func get_orbit_target_position(player_position: Vector2) -> Vector2:
+func _process(delta: float) -> void:
+	drift_change_timer += delta
+	
+	if drift_change_timer >= drift_change_interval:
+		drift_change_timer = 0.0
+		_randomize_drift()
+
+func _randomize_drift() -> void:
+	var angle := randf() * TAU
+	drift_direction = Vector2(cos(angle), sin(angle))
+
+func get_hover_direction(player_position: Vector2) -> Vector2:
 	if not entity:
-		return player_position
+		return Vector2.ZERO
 	
 	var to_target := player_position - entity.global_position
 	var distance := to_target.length()
 	
 	if distance < 0.1:
-		return player_position + Vector2.RIGHT * orbit_distance
+		return drift_direction
 	
-	var direction_to_target := to_target.normalized()
-	var angle_to_target := direction_to_target.angle()
-	var orbit_angle := angle_to_target + deg_to_rad(orbit_angle_step * circle_direction)
-	var orbit_offset := Vector2(cos(orbit_angle), sin(orbit_angle)) * orbit_distance
+	var distance_error := distance - orbit_distance
+	var radial_component := to_target.normalized() if distance_error < 0 else -to_target.normalized()
+	var radial_strength: float = clamp(abs(distance_error) / 30.0, 0.0, 1.0)
 	
-	return player_position + orbit_offset
+	return (drift_direction * (1.0 - radial_strength) + radial_component * radial_strength).normalized()
 
-func should_circle(distance: float) -> bool:
-	return distance <= orbit_distance + orbit_tolerance and distance >= orbit_distance - orbit_tolerance
-
-
-func randomize_direction() -> void:
-	circle_direction = 1 if randf() > 0.5 else -1
+func is_in_range(distance: float) -> bool:
+	return distance >= 120.0 and distance <= 180.0

@@ -37,20 +37,21 @@ func _physics_process(delta: float) -> void:
 	else:
 		var distance := global_position.distance_to(player.global_position)
 		var has_line_of_sight := line_of_sight.can_see(player.global_position)
-		var direction := Vector2.ZERO
 		
 		if not has_line_of_sight:
-			direction = navigation.get_velocity_to(player.global_position, speed).normalized()
-		elif distance < circle_movement.orbit_distance - circle_movement.orbit_tolerance:
-			var retreat_target := global_position + (global_position - player.global_position).normalized() * 50.0
-			direction = navigation.get_velocity_to(retreat_target, speed).normalized()
-		elif circle_movement.should_circle(distance):
-			var orbit_target := circle_movement.get_orbit_target_position(player.global_position)
-			direction = navigation.get_velocity_to(orbit_target, speed).normalized()
+			var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
+			velocity = chase.move_towards(direction)
+		elif distance > 180.0:
+			var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
+			velocity = chase.move_towards(direction)
+		elif distance < 120.0:
+			var retreat_direction := (global_position - player.global_position).normalized()
+			var retreat_target := global_position + retreat_direction * 100.0
+			var direction := navigation.get_velocity_to(retreat_target, speed).normalized()
+			velocity = chase.move_towards(direction)
 		else:
-			direction = navigation.get_velocity_to(player.global_position, speed).normalized()
-		
-		velocity = chase.move_towards(direction)
+			var hover_direction := circle_movement.get_hover_direction(player.global_position)
+			velocity = chase.move_towards(hover_direction * circle_movement.drift_speed_multiplier)
 	
 	knockback.process(delta)
 	move_and_slide()
