@@ -7,6 +7,7 @@ signal damaged(current_health: int)
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
 @onready var camera_shake_manager = %CameraShakeManager
+@onready var freeze_frame_manager = %FreezeFrameManager
 
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
@@ -17,17 +18,18 @@ signal damaged(current_health: int)
 @onready var dash: DashComponent = $DashComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var dash_particles: GPUParticles2D = $DashParticles
-
+@onready var flash_vfx: FlashVfx = $FlashVFX
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 @export var player_knockback := 200.0
 @export var player_body_damage := 5
-@export var death_knockback_multiplier := 1.5  ## Multiply knockback force on death
+@export var death_knockback_force := 400.0 ## Exact knockback force on killing blow
+@export var freeze_on_damage := true ## Freeze frame when taking damage
+@export var damage_freeze_duration := 0.04 ## Freeze duration on normal damage
+@export var death_freeze_duration := 0.08 ## Freeze duration on killing blow
 
 var can_move := true
-var _death_damage_source: Vector2  ## Store killing blow position
-var _death_knockback_force: float  ## Store killing blow force
 
 const SHOOT_COST := 1
 const SLASH_SELF_KNOCKBACK := 50.0
@@ -127,38 +129,41 @@ func take_damage(amount: int, knockback_force: float, from_position: Vector2) ->
 	if is_dead() or dash.is_invincible():
 		return
 	
+	# Apply damage first
 	health.take_damage(amount)
 	
-	# If damage killed us, store info for death knockback
-	if is_dead():
-		_death_damage_source = from_position
-		_death_knockback_force = knockback_force
-		return
+	# Check if this was the killing blow
+	var is_killing_blow = is_dead()
 	
-	knockback.apply(from_position, knockback_force)
+	# Apply knockback (use death force if killed)
+	var kb_force = death_knockback_force if is_killing_blow else knockback_force
+	knockback.apply(from_position, kb_force)
 	
-	# Heavy screen shake when taking damage
-	camera_shake_manager.shake_screen(0.2, 0.3)
-	
+	# Hit particles (always)
 	if hit_particles:
 		hit_particles.restart()
+	
+	# Screen shake (skip on death - sequence handles it)
+	if not is_killing_blow:
+		camera_shake_manager.shake_screen(0.2, 0.3)
+	
+	# Freeze frames
+	if freeze_on_damage and freeze_frame_manager:
+		var freeze_time = death_freeze_duration if is_killing_blow else damage_freeze_duration
+		freeze_frame_manager.freeze(freeze_time)
 
 func _on_died():
 	emit_signal("damaged", 0)
 	
-	# Player handles its own death state
+	# Disable player controls and collision
 	can_move = false
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
 	collision_shape.set_deferred("disabled", true)
 	
-	# Trigger death hit effects
-	if hit_particles:
-		hit_particles.restart()
-	
-	# Apply death knockback with multiplier
-	var death_force = _death_knockback_force * death_knockback_multiplier
-	knockback.apply(_death_damage_source, death_force)
+	# Death flash VFX
+	if flash_vfx:
+		flash_vfx.start()
 	
 	# Play death animation
 	animation.set_state(AnimationComponent.State.DIE)

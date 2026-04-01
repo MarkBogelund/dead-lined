@@ -286,7 +286,8 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 floor_block_on_wall = false
 script = ExtResource("1_dxuae")
-player_knockback = 300.0
+enemy_knockback = 150.0
+player_knockback = 150.0
 
 [node name="ChaseComponent" type="Node" parent="." unique_id=840197303]
 script = ExtResource("3_1no88")

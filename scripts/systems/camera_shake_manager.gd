@@ -12,7 +12,7 @@ var trauma := 0.0 ## Current shake intensity (0.0 to 1.0)
 
 func _ready() -> void:
 	add_to_group("camera_shake_manager")
-	process_mode = Node.PROCESS_MODE_ALWAYS  # Work during freeze frames
+	process_mode = Node.PROCESS_MODE_ALWAYS # Work during freeze frames
 
 func _process(delta: float) -> void:
 	if trauma > 0.0:

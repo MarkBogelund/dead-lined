@@ -10,7 +10,7 @@ class_name DeathSequenceController
 @export var camera_shake_manager: CameraShakeManager
 
 @export_group("Freeze Frame Timing")
-@export var freeze_duration := 0.08 ## Celeste-style hitstop
+@export var freeze_duration := 0.08 ## DEPRECATED - freeze now handled by Player
 
 @export_group("Event Delays (after freeze ends)")
 @export var shake_delay := 0.0 ## Delay before screen shake starts
@@ -48,16 +48,11 @@ func _on_player_died() -> void:
 	start_death_sequence()
 
 func start_death_sequence() -> void:
-	# Start camera zoom (will pause during freeze, then continue)
+	# Start camera zoom immediately
 	_zoom_camera_in()
 	
-	# === FREEZE FRAME (everything stops) ===
-	Engine.time_scale = 0.0
-	await get_tree().create_timer(freeze_duration, true, false, true).timeout
-	Engine.time_scale = 1.0
-	
-	# === POST-FREEZE (Player handles its own death effects) ===
-	# Player._on_died() triggers: particles, flash, knockback, death animation
+	# === Player handles freeze frame + death effects ===
+	# Player.take_damage() triggers: freeze, knockback, particles, death anim
 	
 	# Screen shake
 	if shake_delay > 0:
