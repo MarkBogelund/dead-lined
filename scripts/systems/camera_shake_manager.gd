@@ -43,6 +43,6 @@ func _process(delta: float) -> void:
 ## intensity: How strong (0.0 to 1.0+, values > 1.0 will be very intense)
 ## duration: Ignored - decay rate controls duration (kept for API compatibility)
 func shake_screen(intensity: float, _duration: float = 0.0) -> void:
-	# Add trauma (clamped to 1.0 max)
+	# Take the maximum trauma (don't stack multiple hits)
 	# The trauma_decay rate will naturally control how long it lasts
-	trauma = min(trauma + intensity, 1.0)
+	trauma = max(trauma, min(intensity, 1.0))

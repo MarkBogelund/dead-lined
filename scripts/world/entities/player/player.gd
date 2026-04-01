@@ -22,7 +22,7 @@ signal damaged(current_health: int)
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-@export var damage_freeze_duration := 0.04
+@export var damage_freeze_duration := 0.08
 
 var can_move := true
 
@@ -129,8 +129,9 @@ func take_damage(amount: int, knockback_force: float, from_position: Vector2) ->
 	if hit_particles:
 		hit_particles.restart()
 	
-	if freeze_frame_manager:
-		freeze_frame_manager.freeze(damage_freeze_duration)
+	
+	freeze_frame_manager.freeze(damage_freeze_duration)
+	print(damage_freeze_duration, " second freeze on damage")
 	
 	camera_shake_manager.shake_screen(0.2, 0.3)
 	

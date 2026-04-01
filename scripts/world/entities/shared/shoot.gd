@@ -1,7 +1,7 @@
 extends Node
 class_name ShootComponent
 
-@onready var vfx_component: VFXComponent = $"../VFXComponent"
+@onready var vfx_component: VFXComponent = get_node_or_null("../VFXComponent")
 @export var explosion_vfx_scene: PackedScene
 
 @export var projectile_scene: PackedScene

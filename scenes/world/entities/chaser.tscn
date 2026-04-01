@@ -350,11 +350,11 @@ linear_damp = 8.0
 freeze_delay = 0.2
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1098384666]
-path_desired_distance = 25.0
-target_desired_distance = 12.0
+path_desired_distance = 4.0
+target_desired_distance = 2.0
 path_postprocessing = 1
 avoidance_enabled = true
-radius = 20.0
+radius = 8.0
 neighbor_distance = 50.0
 max_neighbors = 5
 script = ExtResource("11_uqckg")

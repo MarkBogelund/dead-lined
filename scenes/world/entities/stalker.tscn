@@ -225,6 +225,7 @@ collision_layer = 8
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_stalker")
+aim_accuracy_angle = 0.85
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=125532968]
 shape = SubResource("CircleShape2D_collision")
@@ -283,7 +284,6 @@ script = ExtResource("11_circle")
 
 [node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
 script = ExtResource("12_los")
-debug_draw = true
 
 [node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
 script = ExtResource("13_shoot")

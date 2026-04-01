@@ -499,7 +499,7 @@ color_ramp = SubResource("GradientTexture1D_particle")
 z_index = 2
 collision_layer = 2
 script = ExtResource("1_g2els")
-damage_freeze_duration = 0.08
+damage_freeze_duration = 0.1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
 z_index = 5

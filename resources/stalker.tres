@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemySpawnEntry" format=3 uid="uid://cq5r8y2nwx7ih"]
+
+[ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="1_185mx"]
+[ext_resource type="PackedScene" uid="uid://bvk8hf7vr3pqi" path="res://scenes/world/entities/stalker.tscn" id="2_stalker"]
+
+[resource]
+script = ExtResource("1_185mx")
+enemy_scene = ExtResource("2_stalker")
+count_growth = 1.0
+spawn_every_n_waves = 2
+metadata/_custom_type_script = "uid://du0rvecuvnlry"
