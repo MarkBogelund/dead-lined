@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
 [ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash_component.gd" id="14_dash"]
 [ext_resource type="Script" uid="uid://boq80sifs5ms8" path="res://scripts/world/entities/player/dash_trail.gd" id="15_trail"]
+[ext_resource type="PackedScene" uid="uid://cimnnxqovkgd5" path="res://scenes/world/entities/dash_flash.tscn" id="16_flash"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
 atlas = ExtResource("2_tuyoq")
@@ -561,3 +562,6 @@ amount = 45
 texture = ExtResource("13_ghcoa")
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_dash")
+
+[node name="DashFlash" parent="." unique_id=1836410514 instance=ExtResource("16_flash")]
+position = Vector2(0, -12)
