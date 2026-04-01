@@ -20,6 +20,10 @@ signal died
 @export var min_range := 120.0
 @export var max_range := 180.0
 @export var shoot_cooldown := 1.5
+@export var aim_rotation_speed := 4.0
+@export var aim_accuracy_angle := 0.25
+
+var current_aim_angle := 0.0
 
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
@@ -39,6 +43,9 @@ func _physics_process(delta: float) -> void:
 		var distance := global_position.distance_to(player.global_position)
 		var has_line_of_sight := line_of_sight.can_see(player.global_position)
 		
+		var target_angle := (player.global_position - global_position).angle()
+		current_aim_angle = lerp_angle(current_aim_angle, target_angle, aim_rotation_speed * delta)
+		
 		if not has_line_of_sight:
 			var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
 			velocity = chase.move_towards(direction)
@@ -53,7 +60,9 @@ func _physics_process(delta: float) -> void:
 			velocity = chase.move_towards(hover_direction * circle_movement.drift_speed_multiplier)
 		
 		if has_line_of_sight and distance <= max_range:
-			shoot.try_shoot(player.global_position, global_position)
+			var angle_diff: float = abs(angle_difference(current_aim_angle, target_angle))
+			if angle_diff < aim_accuracy_angle:
+				shoot.try_shoot(player.global_position, global_position)
 	
 	knockback.process(delta)
 	move_and_slide()

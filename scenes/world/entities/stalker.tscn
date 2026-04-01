@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://51nldjhbr0qs" path="res://scripts/world/entities/enemy/circle_movement_component.gd" id="11_circle"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight_component.gd" id="12_los"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="13_shoot"]
+[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="14_6oldd"]
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="14_projectile"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
@@ -288,10 +289,11 @@ script = ExtResource("11_circle")
 
 [node name="LineOfSightComponent" type="Node" parent="." unique_id=992499215]
 script = ExtResource("12_los")
-sight_margin = 15.0
+sight_margin = 35.0
 
 [node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
 script = ExtResource("13_shoot")
+explosion_vfx_scene = ExtResource("14_6oldd")
 projectile_scene = ExtResource("14_projectile")
 projectile_damage = 15
 projectile_knockback = 150
