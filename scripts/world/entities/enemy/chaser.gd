@@ -7,7 +7,6 @@ signal died
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var drop_scrap: DropScrapComponent = $DropScrapComponent
-@onready var chase: ChaseComponent = $ChaseComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var navigation: NavigationComponent = $NavigationComponent
@@ -33,14 +32,13 @@ func _physics_process(delta: float) -> void:
 	elif is_dead() or (player and player.is_dead()):
 		velocity = Vector2.ZERO
 	else:
-		var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
-		velocity = chase.move_towards(direction)
+		velocity = navigation.get_safe_velocity(player.global_position, speed)
 	
 	knockback.process(delta)
 	move_and_slide()
 
 func _get_direction_to_player() -> Vector2:
-	return navigation.get_velocity_to(player.global_position, speed).normalized()
+	return (player.global_position - global_position).normalized()
 
 func _play_anim(anim_name: String) -> void:
 	if animation_player.has_animation(anim_name):

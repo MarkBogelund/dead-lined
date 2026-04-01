@@ -199,7 +199,7 @@ metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
-time_between_waves = 30
+time_between_waves = 3
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="ResourceManager" type="Node" parent="Systems" unique_id=674344671 groups=["resource_manager"]]
@@ -321,11 +321,6 @@ position = Vector2(0, -1)
 
 [node name="Stalker" parent="World" unique_id=1639555138 instance=ExtResource("10_264po")]
 position = Vector2(-112, -64)
-engagement_range = 100.0
-
-[node name="Stalker2" parent="World" unique_id=942424531 instance=ExtResource("10_264po")]
-position = Vector2(-72, -64)
-engagement_range = 100.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
 

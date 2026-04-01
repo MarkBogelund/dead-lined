@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://73dnhyc0uhym" path="res://scripts/world/entities/enemy/chaser.gd" id="1_dxuae"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_fffhc"]
-[ext_resource type="Script" uid="uid://uftvlfyofqyv" path="res://scripts/world/entities/enemy/chase_component.gd" id="3_1no88"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="3_fffhc"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="3_hitdot"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_ck52e"]
@@ -288,13 +287,6 @@ floor_block_on_wall = false
 script = ExtResource("1_dxuae")
 self_knockback = 250.0
 
-[node name="ChaseComponent" type="Node" parent="." unique_id=840197303]
-script = ExtResource("3_1no88")
-speed = 40.0
-separation_radius = 30.0
-separation_force = 130.0
-metadata/_custom_type_script = "uid://uftvlfyofqyv"
-
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=338084793]
 collision_layer = 16
 collision_mask = 2
@@ -303,29 +295,26 @@ knockback = 200.0
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=637520732]
-position = Vector2(0, -11)
 shape = SubResource("CircleShape2D_1no88")
 
 [node name="Shadow" type="Sprite2D" parent="." unique_id=322407822]
 modulate = Color(1, 1, 1, 0.25490198)
-position = Vector2(0, -3)
+position = Vector2(0, 8)
 texture = ExtResource("6_fffhc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=148251673]
 z_index = 6
-position = Vector2(0, -12)
+position = Vector2(0, -9.536743e-07)
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_xwavj")
 animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1470453078]
-position = Vector2(0, -11)
 shape = SubResource("CircleShape2D_md0e3")
 
 [node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1389921789]
 z_index = 10
-position = Vector2(0, -11)
 emitting = false
 amount = 10
 texture = ExtResource("3_hitdot")
@@ -361,10 +350,13 @@ linear_damp = 8.0
 freeze_delay = 0.2
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1098384666]
-path_desired_distance = 8.0
-target_desired_distance = 4.0
+path_desired_distance = 25.0
+target_desired_distance = 12.0
 path_postprocessing = 1
 avoidance_enabled = true
-debug_use_custom = true
+radius = 20.0
+neighbor_distance = 50.0
+max_neighbors = 5
+debug_enabled = true
 script = ExtResource("11_uqckg")
 metadata/_custom_type_script = "uid://bfdfe71wkym8b"

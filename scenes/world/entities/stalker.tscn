@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="1_stalker"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_scrap"]
-[ext_resource type="Script" uid="uid://uftvlfyofqyv" path="res://scripts/world/entities/enemy/chase_component.gd" id="3_chase"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="5_dot"]
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/chaser.png" id="6_sprite"]
@@ -227,25 +226,18 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_stalker")
 
-[node name="ChaseComponent" type="Node" parent="." unique_id=1597870677]
-script = ExtResource("3_chase")
-speed = 25.0
-separation_radius = 35.0
-smoothing = 0.3
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=125532968]
-position = Vector2(0, -11)
 shape = SubResource("CircleShape2D_collision")
 
 [node name="Shadow" type="Sprite2D" parent="." unique_id=107332224]
 modulate = Color(1, 1, 1, 0.25)
-position = Vector2(0, -3)
+position = Vector2(0, 8)
 texture = ExtResource("8_shadow")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=89554983]
 modulate = Color(0.5, 0.8, 1, 1)
 z_index = 6
-position = Vector2(0, -12)
+position = Vector2(0, -9.536743e-07)
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_stalker")
 animation = &"idle"
@@ -253,7 +245,6 @@ autoplay = "idle"
 
 [node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1106374826]
 z_index = 10
-position = Vector2(0, -11)
 emitting = false
 amount = 10
 texture = ExtResource("5_dot")
@@ -278,11 +269,11 @@ scrap_drop_amount = 5
 scrap_scene = ExtResource("2_scrap")
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1238538286]
-path_desired_distance = 8.0
-target_desired_distance = 4.0
+path_desired_distance = 25.0
+target_desired_distance = 12.0
 path_postprocessing = 1
 avoidance_enabled = true
-radius = 12.0
+radius = 20.0
 neighbor_distance = 50.0
 max_neighbors = 5
 debug_enabled = true
