@@ -4,11 +4,11 @@ class_name CameraShakeManager
 ## Manages camera shake effects for game events
 
 @export var camera: Camera2D
-@export var trauma_decay := 1.5  ## How fast shake recovers (higher = faster)
-@export var max_offset := 50.0  ## Maximum pixel offset for shake
-@export var max_rotation := 5.0  ## Maximum rotation in degrees (set to 0 to disable)
+@export var trauma_decay := 1.5 ## How fast shake recovers (higher = faster)
+@export var max_offset := 50.0 ## Maximum pixel offset for shake
+@export var max_rotation := 5.0 ## Maximum rotation in degrees (set to 0 to disable)
 
-var trauma := 0.0  ## Current shake intensity (0.0 to 1.0)
+var trauma := 0.0 ## Current shake intensity (0.0 to 1.0)
 
 func _ready() -> void:
 	add_to_group("camera_shake_manager")

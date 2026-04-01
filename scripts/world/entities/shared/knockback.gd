@@ -1,13 +1,13 @@
 extends Node
 class_name KnockbackComponent
 
-@export var friction := 1200.0
+@export var friction := 800.0  ## Lower friction = knockback lasts longer
 @export var max_velocity := 400.0 ## Maximum knockback speed to prevent tunneling through walls
 
 var velocity: Vector2 = Vector2.ZERO
 
 func is_active() -> bool:
-	return velocity.length() > 1.0
+	return velocity.length() > 50.0  ## Higher threshold prevents premature cutoff
 
 func apply(from_position: Vector2, strength: float) -> void:
 	var parent := get_parent() as Node2D
