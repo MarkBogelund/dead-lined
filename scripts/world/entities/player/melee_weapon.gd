@@ -1,12 +1,12 @@
-extends Area2D
+extends Node2D
 class_name MeleeWeapon
 
 signal slash_started(target_position: Vector2)
 
 @onready var sprite: Sprite2D = $Sprite2D
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var trail: Line2D = $Trail
 @onready var glimmer_particles: GPUParticles2D = $GlimmerParticles
+@onready var hitbox: HitboxComponent = $HitboxComponent
 
 @export var damage := 10
 @export var target_knockback := 200.0
@@ -33,18 +33,11 @@ func _reset() -> void:
 	_time = 0.0
 	_slashing = false
 	sprite.visible = false
-	monitoring = false
-	monitorable = false
+	hitbox.disable()
 	if trail:
 		trail.stop_tracking()
 	if glimmer_particles:
 		glimmer_particles.emitting = false
-
-func get_damage() -> int:
-	return damage
-
-func get_knockback() -> float:
-	return target_knockback
 
 func set_enabled(enabled: bool) -> void:
 	_enabled = enabled
@@ -67,8 +60,7 @@ func try_slash(target_pos: Vector2) -> void:
 	# Activate weapon
 	_slashing = true
 	sprite.visible = true
-	monitoring = true
-	monitorable = true
+	hitbox.enable()
 	
 	# Start trail and glimmer particles
 	if trail:

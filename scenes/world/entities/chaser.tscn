@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://73dnhyc0uhym" path="res://scripts/world/entities/enemy/chaser.gd" id="1_dxuae"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_fffhc"]
 [ext_resource type="Script" uid="uid://uftvlfyofqyv" path="res://scripts/world/entities/enemy/chase_component.gd" id="3_1no88"]
-[ext_resource type="Script" uid="uid://dh41ifj5v2kot" path="res://scripts/world/entities/shared/hurtbox.gd" id="3_8c6uj"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="3_fffhc"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="3_hitdot"]
+[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_ck52e"]
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/chaser.png" id="4_fffhc"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="4_qurf7"]
 [ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="6_fffhc"]
@@ -281,8 +281,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [node name="Chaser" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
-collision_layer = 16
-collision_mask = 133
+collision_layer = 8
 motion_mode = 1
 wall_min_slide_angle = 0.0
 floor_block_on_wall = false
@@ -296,15 +295,14 @@ separation_radius = 30.0
 separation_force = 130.0
 metadata/_custom_type_script = "uid://uftvlfyofqyv"
 
-[node name="HurtboxComponent" type="Area2D" parent="." unique_id=361837505]
-visibility_layer = 0
-position = Vector2(0, -11)
-collision_layer = 32
-collision_mask = 266
-script = ExtResource("3_8c6uj")
-metadata/_custom_type_script = "uid://dh41ifj5v2kot"
+[node name="HitboxComponent" type="Area2D" parent="." unique_id=338084793]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("4_ck52e")
+metadata/_custom_type_script = "uid://de8v0knxsnhob"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=519030179]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=637520732]
+position = Vector2(0, -11)
 shape = SubResource("CircleShape2D_1no88")
 
 [node name="Shadow" type="Sprite2D" parent="." unique_id=322407822]

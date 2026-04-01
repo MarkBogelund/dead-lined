@@ -11,7 +11,7 @@ signal slash_started(target_position: Vector2)
 
 # --- Weapon ---
 @onready var weapon: Sprite2D = $Weapon
-@onready var hitbox: Area2D = $Weapon/Hitbox
+@onready var hitbox: HitboxComponent = $Weapon/Hitbox
 
 @export var damage := 10
 @export var target_knockback := 200
@@ -39,9 +39,9 @@ var _direction := 1
 @export var shrink_speed := 2.0
 
 # --- Trail emission configuration ---
-@export var trail_offset := 0.0     # along the weapon axis (0=center, +forward, -back)
-@export var trail_behind := -10.0   # perpendicular offset from weapon
-@export var trail_length := 12      # Number of points in the trail
+@export var trail_offset := 0.0 # along the weapon axis (0=center, +forward, -back)
+@export var trail_behind := -10.0 # perpendicular offset from weapon
+@export var trail_length := 12 # Number of points in the trail
 
 var _elapsed := 0.0
 var _retracting := false

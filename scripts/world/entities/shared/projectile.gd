@@ -1,31 +1,21 @@
-extends Area2D
+extends Node2D
 
 @onready var vfx_component: VFXComponent = $VFXComponent
 
 var projectile_speed: float
-var projectile_damage: float
-var projectile_knockback: float
-var direction := Vector2.ZERO 
+var direction := Vector2.ZERO
 
 @export var hit_vfx: PackedScene
 
 func _ready() -> void:
-	body_entered.connect(_on_body_entered)
-	area_entered.connect(_on_area_entered)
-
-func get_damage() -> float:
-	return projectile_damage
-
-func get_knockback() -> float:
-	return projectile_knockback
+	var hitbox: HitboxComponent = $HitboxComponent
+	if hitbox:
+		hitbox.hit_target.connect(_on_hit_target)
 
 func _physics_process(delta):
 	position += direction * projectile_speed * delta
 
-func _on_body_entered(_body: Node) -> void:
-	_destroy()
-
-func _on_area_entered(_area: Node) -> void:
+func _on_hit_target(_target: Node) -> void:
 	_destroy()
 
 func _destroy() -> void:
@@ -39,14 +29,7 @@ func set_orientation(pos, rot, dir):
 	
 func set_parameters(speed, damage, knockback):
 	projectile_speed = speed
-	projectile_damage = damage
-	projectile_knockback = knockback
-
-func set_collision_layers(layers: Array, masks: Array) -> void:
-	collision_layer = 0
-	collision_mask = 0
-
-	for l in layers:
-		collision_layer |= 1 << int(l - 1)  # convert to int
-	for m in masks:
-		collision_mask |= 1 << int(m - 1)
+	var hitbox: HitboxComponent = $HitboxComponent
+	if hitbox:
+		hitbox.damage = damage
+		hitbox.knockback = knockback

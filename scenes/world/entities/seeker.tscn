@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cjn5bnbk1raxk"]
 
 [ext_resource type="Script" uid="uid://ci6t3dum71ion" path="res://scripts/world/entities/turret/seeker.gd" id="1_6fjxm"]
-[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/world/entities/projectile.tscn" id="2_485p4"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/seeker.png" id="3_pp6j5"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_pp6j5"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="5_6fjxm"]
+[ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_e28e4"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="5_oxiec"]
 
 [sub_resource type="Gradient" id="Gradient_elrtf"]
@@ -59,7 +59,6 @@ _data = {
 
 [node name="Seeker" type="StaticBody2D" unique_id=909576845]
 z_index = 1
-collision_layer = 33
 script = ExtResource("1_6fjxm")
 detection_angle = 0.1
 rotation_speed = 4.0
@@ -86,11 +85,9 @@ shape = SubResource("CircleShape2D_el7wl")
 
 [node name="ShootComponent" type="Node" parent="." unique_id=316514408]
 script = ExtResource("4_pp6j5")
-projectile_scene = ExtResource("2_485p4")
+projectile_scene = ExtResource("5_e28e4")
 muzzle_distance = 5.0
 projectile_speed = 200.0
-projectile_collision_layers = Array[int]([9])
-projectile_collision_masks = Array[int]([1, 3, 6])
 metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="Canon" type="Node2D" parent="." unique_id=850792081]

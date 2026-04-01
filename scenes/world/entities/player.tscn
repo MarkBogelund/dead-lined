@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c1up8f3hcb17m"]
 
 [ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/world/entities/player/player.gd" id="1_g2els"]
-[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/world/entities/projectile.tscn" id="2_qhqgy"]
+[ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/world/entities/player_projectile.tscn" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://dlrnady7rm2bb" path="res://assets/sprites/engineer-Sheet.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_dqkch"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="5_qlg0r"]
@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://cdc3yx122ruc6" path="res://scripts/world/entities/player/movement.gd" id="10_b6tgf"]
 [ext_resource type="Script" uid="uid://dwbus28tan8rh" path="res://scripts/world/entities/player/animation_component.gd" id="11_73kkf"]
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]
-[ext_resource type="Script" uid="uid://dh41ifj5v2kot" path="res://scripts/world/entities/shared/hurtbox.gd" id="12_vlshd"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
@@ -392,10 +391,6 @@ gradient = SubResource("Gradient_73kkf")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ghcoa"]
-radius = 4.0
-height = 22.0
-
 [sub_resource type="Curve" id="Curve_4enbs"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
@@ -439,7 +434,6 @@ color_ramp = SubResource("GradientTexture1D_6qf0x")
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 z_index = 2
 collision_layer = 2
-collision_mask = 161
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
@@ -467,8 +461,6 @@ script = ExtResource("5_tuyoq")
 explosion_vfx_scene = ExtResource("6_c5rqy")
 projectile_scene = ExtResource("2_qhqgy")
 projectile_damage = 20
-projectile_collision_layers = Array[int]([4])
-projectile_collision_masks = Array[int]([1, 6, 8])
 metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=371344470]
@@ -493,16 +485,6 @@ position = Vector2(0, -10)
 scale = Vector2(0.8125, 0.8125)
 color = Color(1, 0.49803922, 0, 0.10980392)
 texture = SubResource("GradientTexture2D_n5sgd")
-
-[node name="HurtboxComponent" type="Area2D" parent="." unique_id=46501425]
-position = Vector2(0, -11)
-collision_layer = 4
-collision_mask = 336
-script = ExtResource("12_vlshd")
-metadata/_custom_type_script = "uid://dh41ifj5v2kot"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent" unique_id=1185846997]
-shape = SubResource("CapsuleShape2D_ghcoa")
 
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
 position = Vector2(0, -12)

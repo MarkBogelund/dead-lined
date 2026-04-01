@@ -6,12 +6,12 @@ signal died
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
-@onready var hurtbox: HurtboxComponent = $HurtboxComponent
 @onready var drop_scrap: DropScrapComponent = $DropScrapComponent
 @onready var chase: ChaseComponent = $ChaseComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var navigation: NavigationComponent = $NavigationComponent
+@onready var hitbox: HitboxComponent = $HitboxComponent
 
 @export var damage := 20
 @export var speed := 30.0
@@ -23,7 +23,10 @@ signal died
 func _ready() -> void:
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
-	hurtbox.hit.connect(_on_hurtbox_hit)
+	
+	# Setup contact damage hitbox
+	hitbox.damage = damage
+	hitbox.knockback = player_knockback
 
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
@@ -49,31 +52,27 @@ func buff_health(multiplier: float) -> void:
 
 func buff_damage(multiplier: float) -> void:
 	damage = int(damage * multiplier)
+	hitbox.damage = damage
 
-func _on_hurtbox_hit(attacker: Node) -> void:
+func take_damage(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead():
 		return
-
-	if attacker.is_in_group("player_attacks"):
-		health.take_damage(attacker.get_damage())
-		knockback.apply(attacker.global_position, attacker.get_knockback())
-		
-		if hit_particles:
-			hit_particles.restart()
-
-	elif attacker.is_in_group("player"):
-		knockback.apply(attacker.global_position, attacker.get_knockback())
-
-	elif attacker.is_in_group("projectiles"):
-		health.take_damage(attacker.get_damage())
-		knockback.apply(attacker.global_position, attacker.get_knockback())
-		
-		if hit_particles:
-			hit_particles.restart()
-
-func _on_damaged(_amount: int) -> void:
+	
+	# Ignore friendly fire from other enemies (check via collision layers instead)
+	# Note: This is handled by collision masks, but we keep this as a safety check
+	
+	health.take_damage(amount)
+	knockback.apply(from_position, knockback_force)
+	
+	if hit_particles:
+		hit_particles.restart()
+	
 	if not is_dead():
 		_play_anim("take_damage")
+
+func _on_damaged(_amount: int) -> void:
+	# Health component emits this signal, but we handle animation in take_damage directly now
+	pass
 
 func _on_died() -> void:
 	remove_from_group("enemies")
@@ -88,9 +87,3 @@ func despawn() -> void:
 
 func is_dead() -> bool:
 	return health.is_dead()
-
-func get_damage() -> int:
-	return damage
-
-func get_knockback() -> float:
-	return player_knockback

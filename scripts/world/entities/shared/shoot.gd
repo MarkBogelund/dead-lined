@@ -10,8 +10,6 @@ class_name ShootComponent
 @export var muzzle_distance := 20.0
 @export var shoot_cooldown := 0.5
 @export var projectile_speed := 300.0
-@export var projectile_collision_layers: Array[int] = []
-@export var projectile_collision_masks: Array[int] = []
 
 var _shoot_timer := 0.0
 var shooting_activated := true
@@ -34,7 +32,6 @@ func try_shoot(target_pos: Vector2, shooter_pos: Vector2) -> bool:
 	var projectile := projectile_scene.instantiate()
 	var dir = (target_pos - shooter_pos).normalized()
 	
-	projectile.set_collision_layers(projectile_collision_layers, projectile_collision_masks)
 	projectile.set_orientation(shooter_pos + dir * muzzle_distance, dir.angle(), dir)
 	projectile.set_parameters(projectile_speed, projectile_damage, projectile_knockback)
 

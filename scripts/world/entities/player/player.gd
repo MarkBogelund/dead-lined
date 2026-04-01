@@ -9,7 +9,6 @@ signal damaged(current_health: int)
 
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
-@onready var hurtbox: HurtboxComponent = $HurtboxComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
 @onready var animation: AnimationComponent = $AnimationComponent
@@ -31,7 +30,6 @@ const MIN_MOVE_SPEED := 10.0
 func _ready():
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
-	hurtbox.hit.connect(_on_hurtbox_hit)
 	melee_weapon.slash_started.connect(_on_slash_started)
 	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
@@ -80,13 +78,13 @@ func _on_slash_started(target_pos: Vector2):
 	_set_sprite_direction(target_pos.x - global_position.x)
 	animation.set_state(AnimationComponent.State.SLASH)
 
-func _on_hurtbox_hit(attacker: Node) -> void:
+func take_damage(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead():
 		return
 	
-	health.take_damage(attacker.get_damage())
-	knockback.apply(attacker.global_position, attacker.get_knockback())
-
+	health.take_damage(amount)
+	knockback.apply(from_position, knockback_force)
+	
 	if hit_particles:
 		hit_particles.restart()
 
@@ -104,12 +102,6 @@ func _on_damaged(current_health: int):
 
 func is_dead():
 	return health.is_dead()
-
-func get_damage() -> int:
-	return player_body_damage
-
-func get_knockback() -> float:
-	return player_knockback
 
 func get_health():
 	return health.get_current_health()
