@@ -1,29 +1,17 @@
 extends Node
 class_name DeathSequenceController
 
-## Orchestrates the player death sequence with timing control
-
 @export_group("References")
 @export var player: Player
 @export var camera: Camera2D
 @export var game_over_manager: GameOverManager
-@export var camera_shake_manager: CameraShakeManager
 
-@export_group("Freeze Frame Timing")
-@export var freeze_duration := 0.08 ## DEPRECATED - freeze now handled by Player
-
-@export_group("Event Delays (after freeze ends)")
-@export var shake_delay := 0.0 ## Delay before screen shake starts
-@export var zoom_delay := 0.1 ## DEPRECATED - zoom now starts with freeze frame
-@export var ui_delay := 2.0 ## Delay before UI fades in
+@export_group("Timing")
+@export var ui_delay := 2.0
 
 @export_group("Camera Zoom")
-@export var zoom_duration := 0.8 ## How long to zoom in
-@export var zoom_target := 3.0 ## Target zoom level (2.0 default → 3.0)
-
-@export_group("Screen Shake")
-@export var shake_intensity := 0.8 ## Heavy shake on death
-@export var shake_duration := 0.4 ## How long shake lasts
+@export var zoom_duration := 0.8
+@export var zoom_target := 3.0
 
 var _initial_camera_zoom: Vector2
 var _sequence_running := false
@@ -34,7 +22,6 @@ func _ready() -> void:
 	if camera:
 		_initial_camera_zoom = camera.zoom
 	
-	# Wait for player and its components to be fully ready
 	if player:
 		await player.ready
 		if player.health:
@@ -48,19 +35,8 @@ func _on_player_died() -> void:
 	start_death_sequence()
 
 func start_death_sequence() -> void:
-	# Start camera zoom immediately
 	_zoom_camera_in()
 	
-	# === Player handles freeze frame + death effects ===
-	# Player.take_damage() triggers: freeze, knockback, particles, death anim
-	
-	# Screen shake
-	if shake_delay > 0:
-		await get_tree().create_timer(shake_delay).timeout
-	if camera_shake_manager:
-		camera_shake_manager.shake_screen(shake_intensity, shake_duration)
-	
-	# UI fade in
 	if ui_delay > 0:
 		await get_tree().create_timer(ui_delay).timeout
 	_show_game_over()

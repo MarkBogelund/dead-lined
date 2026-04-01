@@ -18,16 +18,11 @@ signal damaged(current_health: int)
 @onready var dash: DashComponent = $DashComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var dash_particles: GPUParticles2D = $DashParticles
-@onready var flash_vfx: FlashVfx = $FlashVFX
+@onready var flash_vfx: FlashVfx = $FlashVfx
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-@export var player_knockback := 200.0
-@export var player_body_damage := 5
-@export var death_knockback_force := 400.0 ## Exact knockback force on killing blow
-@export var freeze_on_damage := true ## Freeze frame when taking damage
-@export var damage_freeze_duration := 0.04 ## Freeze duration on normal damage
-@export var death_freeze_duration := 0.08 ## Freeze duration on killing blow
+@export var damage_freeze_duration := 0.04
 
 var can_move := true
 
@@ -129,43 +124,27 @@ func take_damage(amount: int, knockback_force: float, from_position: Vector2) ->
 	if is_dead() or dash.is_invincible():
 		return
 	
-	# Apply damage first
-	health.take_damage(amount)
+	knockback.apply(from_position, knockback_force)
 	
-	# Check if this was the killing blow
-	var is_killing_blow = is_dead()
-	
-	# Apply knockback (use death force if killed)
-	var kb_force = death_knockback_force if is_killing_blow else knockback_force
-	knockback.apply(from_position, kb_force)
-	
-	# Hit particles (always)
 	if hit_particles:
 		hit_particles.restart()
 	
-	# Screen shake (skip on death - sequence handles it)
-	if not is_killing_blow:
-		camera_shake_manager.shake_screen(0.2, 0.3)
+	if freeze_frame_manager:
+		freeze_frame_manager.freeze(damage_freeze_duration)
 	
-	# Freeze frames
-	if freeze_on_damage and freeze_frame_manager:
-		var freeze_time = death_freeze_duration if is_killing_blow else damage_freeze_duration
-		freeze_frame_manager.freeze(freeze_time)
+	camera_shake_manager.shake_screen(0.2, 0.3)
+	
+	health.take_damage(amount)
 
 func _on_died():
 	emit_signal("damaged", 0)
-	
-	# Disable player controls and collision
 	can_move = false
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
-	collision_shape.set_deferred("disabled", true)
 	
-	# Death flash VFX
 	if flash_vfx:
 		flash_vfx.start()
 	
-	# Play death animation
 	animation.set_state(AnimationComponent.State.DIE)
 
 func _on_damaged(current_health: int):

@@ -286,8 +286,7 @@ motion_mode = 1
 wall_min_slide_angle = 0.0
 floor_block_on_wall = false
 script = ExtResource("1_dxuae")
-enemy_knockback = 150.0
-player_knockback = 150.0
+self_knockback = 250.0
 
 [node name="ChaseComponent" type="Node" parent="." unique_id=840197303]
 script = ExtResource("3_1no88")
@@ -300,6 +299,7 @@ metadata/_custom_type_script = "uid://uftvlfyofqyv"
 collision_layer = 16
 collision_mask = 2
 script = ExtResource("4_ck52e")
+knockback = 200.0
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=637520732]

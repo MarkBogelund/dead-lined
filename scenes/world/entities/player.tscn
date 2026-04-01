@@ -499,7 +499,7 @@ color_ramp = SubResource("GradientTexture1D_particle")
 z_index = 2
 collision_layer = 2
 script = ExtResource("1_g2els")
-death_knockback_force = 150.0
+damage_freeze_duration = 0.08
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
 z_index = 5
@@ -567,7 +567,7 @@ process_material = SubResource("ParticleProcessMaterial_1esm0")
 
 [node name="DashComponent" type="Node" parent="." unique_id=1170774180]
 script = ExtResource("14_dash")
-dash_distance = 200.0
+dash_distance = 250.0
 cooldown_time = 0.2
 ease_out_power = 2.5
 
