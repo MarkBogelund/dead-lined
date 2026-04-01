@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
 [ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash_component.gd" id="14_dash"]
 [ext_resource type="Script" uid="uid://boq80sifs5ms8" path="res://scripts/world/entities/player/dash_trail.gd" id="15_trail"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/flash_vfx.tscn" id="16_74ekq"]
+[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="16_74ekq"]
 [ext_resource type="PackedScene" uid="uid://cimnnxqovkgd5" path="res://scenes/world/entities/dash_flash.tscn" id="16_flash"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
@@ -518,7 +518,7 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=2137359976]
 script = ExtResource("5_qlg0r")
-max_health = 50
+max_health = 200
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="ShootComponent" type="Node" parent="." unique_id=904350876]
