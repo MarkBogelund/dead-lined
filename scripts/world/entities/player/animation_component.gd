@@ -7,6 +7,7 @@ enum State {
 	IDLE,
 	MOVE,
 	SLASH,
+	DASH,
 	DAMAGE,
 	DIE
 }
@@ -20,6 +21,7 @@ var state_priority = {
 	State.IDLE: 0,
 	State.MOVE: 1,
 	State.SLASH: 2,
+	State.DASH: 2,
 	State.DAMAGE: 3,
 	State.DIE: 4
 }
@@ -56,6 +58,10 @@ func _play_animation_for_state(state: State):
 			locked = true
 			animation_player.play("slash")
 
+		State.DASH:
+			locked = true
+			animation_player.play("slash") # Temporary - replace with "dash" animation later
+
 		State.DAMAGE:
 			locked = true
 			animation_player.play("take_damage")
@@ -65,7 +71,7 @@ func _play_animation_for_state(state: State):
 			animation_player.play("die")
 
 func _on_animation_finished(_anim_name: String):
-	if current_state == State.SLASH or current_state == State.DAMAGE:
+	if current_state == State.SLASH or current_state == State.DAMAGE or current_state == State.DASH:
 		locked = false
 	
 	emit_signal("animation_finished", _anim_name)

@@ -13,7 +13,9 @@ signal damaged(current_health: int)
 @onready var movement: MovementComponent = $MovementComponent
 @onready var animation: AnimationComponent = $AnimationComponent
 @onready var melee_weapon: MeleeWeapon = $MeleeWeapon
+@onready var dash: DashComponent = $DashComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
+@onready var dash_particles: GPUParticles2D = $DashParticles
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -31,21 +33,31 @@ func _ready():
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
 	melee_weapon.slash_started.connect(_on_slash_started)
+	dash.dash_started.connect(_on_dash_started)
+	dash.dash_ended.connect(_on_dash_ended)
 	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
 
 func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 	
-	if knockback.is_active():
-		velocity = knockback.velocity
-	elif can_move:
-		velocity = movement.calculate_velocity(velocity, input_dir, delta)
-	else:
-		velocity = Vector2.ZERO
-	
 	knockback.process(delta)
-	move_and_slide()
+	
+	if dash.is_dashing():
+		velocity = dash.get_dash_velocity()
+		# Use move_and_collide for fixed-distance dash without wall sliding
+		var collision = move_and_collide(velocity * delta)
+		if collision:
+			dash.cancel_dash()
+	else:
+		if knockback.is_active():
+			velocity = knockback.velocity
+		elif can_move:
+			velocity = movement.calculate_velocity(velocity, input_dir, delta)
+		else:
+			velocity = Vector2.ZERO
+		
+		move_and_slide()
 	
 	_update_animation()
 	
@@ -59,6 +71,10 @@ func _unhandled_input(event: InputEvent):
 	
 	if event.is_action_pressed("slash"):
 		melee_weapon.try_slash(get_global_mouse_position())
+	
+	if event.is_action_pressed("dash"):
+		var dash_dir = _get_dash_direction()
+		dash.try_dash(dash_dir)
 
 func _update_animation():
 	if is_dead():
@@ -74,12 +90,34 @@ func _set_sprite_direction(dir_x: float):
 	if dir_x != 0:
 		animated_sprite.flip_h = dir_x < 0
 
+func _get_dash_direction() -> Vector2:
+	# If moving, dash in movement direction
+	if velocity.length() > MIN_MOVE_SPEED:
+		return velocity.normalized()
+	
+	# If idle, dash in the direction sprite is facing
+	if animated_sprite.flip_h:
+		return Vector2.LEFT
+	else:
+		return Vector2.RIGHT
+
 func _on_slash_started(target_pos: Vector2):
 	_set_sprite_direction(target_pos.x - global_position.x)
 	animation.set_state(AnimationComponent.State.SLASH)
 
+func _on_dash_started(direction: Vector2):
+	_set_sprite_direction(direction.x)
+	animation.set_state(AnimationComponent.State.DASH)
+	
+	if dash_particles:
+		dash_particles.emitting = true
+
+func _on_dash_ended():
+	if dash_particles:
+		dash_particles.emitting = false
+
 func take_damage(amount: int, knockback_force: float, from_position: Vector2) -> void:
-	if is_dead():
+	if is_dead() or dash.is_invincible():
 		return
 	
 	health.take_damage(amount)

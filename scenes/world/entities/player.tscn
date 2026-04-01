@@ -12,6 +12,8 @@
 [ext_resource type="Script" uid="uid://dwbus28tan8rh" path="res://scripts/world/entities/player/animation_component.gd" id="11_73kkf"]
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
+[ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash_component.gd" id="14_dash"]
+[ext_resource type="Script" uid="uid://boq80sifs5ms8" path="res://scripts/world/entities/player/dash_trail.gd" id="15_trail"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
 atlas = ExtResource("2_tuyoq")
@@ -431,6 +433,42 @@ scale_max = 0.39999998
 scale_curve = SubResource("CurveTexture_2454e")
 color_ramp = SubResource("GradientTexture1D_6qf0x")
 
+[sub_resource type="Curve" id="Curve_yfgcb"]
+_data = [Vector2(0, 0.29681003), 0.0, 0.0, 0, 0, Vector2(0.1394558, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_dash_trail"]
+offsets = PackedFloat32Array(0.546875, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.9999997, 0.84858555, 0.54073334, 1)
+
+[sub_resource type="Gradient" id="Gradient_particle_color"]
+offsets = PackedFloat32Array(0.6435185, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0.5833334, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_particle"]
+gradient = SubResource("Gradient_particle_color")
+
+[sub_resource type="Curve" id="Curve_74ekq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6qf0x"]
+curve = SubResource("Curve_74ekq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dash"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 3.0
+direction = Vector3(0, 0, 0)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 40.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.049999997
+scale_max = 0.29999998
+scale_curve = SubResource("CurveTexture_6qf0x")
+color_ramp = SubResource("GradientTexture1D_particle")
+
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 z_index = 2
 collision_layer = 2
@@ -499,3 +537,27 @@ lifetime = 0.3
 one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_1esm0")
+
+[node name="DashComponent" type="Node" parent="." unique_id=1170774180]
+script = ExtResource("14_dash")
+dash_distance = 200.0
+cooldown_time = 0.2
+ease_out_power = 2.5
+
+[node name="DashTrail" type="Line2D" parent="." unique_id=1786085531]
+z_index = 3
+position = Vector2(0, -12)
+width = 8.0
+width_curve = SubResource("Curve_yfgcb")
+gradient = SubResource("Gradient_dash_trail")
+script = ExtResource("15_trail")
+max_length = 15
+
+[node name="DashParticles" type="GPUParticles2D" parent="." unique_id=700782277]
+z_index = 4
+position = Vector2(0, -11)
+emitting = false
+amount = 45
+texture = ExtResource("13_ghcoa")
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_dash")
