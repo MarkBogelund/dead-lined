@@ -6,6 +6,7 @@ signal damaged(current_health: int)
 @onready var resource_manager: ResourceManager = %ResourceManager
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
+@onready var camera_shake_manager = %CameraShakeManager
 
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
@@ -109,6 +110,9 @@ func _on_dash_started(direction: Vector2):
 	_set_sprite_direction(direction.x)
 	animation.set_state(AnimationComponent.State.DASH)
 	
+	# Light screen shake on dash
+	camera_shake_manager.shake_screen(0.1, 0.15)
+	
 	if dash_particles:
 		dash_particles.emitting = true
 
@@ -122,6 +126,9 @@ func take_damage(amount: int, knockback_force: float, from_position: Vector2) ->
 	
 	health.take_damage(amount)
 	knockback.apply(from_position, knockback_force)
+	
+	# Heavy screen shake when taking damage
+	camera_shake_manager.shake_screen(0.2, 0.3)
 	
 	if hit_particles:
 		hit_particles.restart()

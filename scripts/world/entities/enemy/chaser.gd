@@ -15,14 +15,16 @@ signal died
 
 @export var damage := 20
 @export var speed := 30.0
-@export var enemy_knockback := 200.0
-@export var player_knockback := 100.0
+@export var enemy_knockback := 200.0 ## Knockback received when hit by weapons
+@export var player_knockback := 400.0 ## Knockback applied to player on contact
+@export var self_knockback := 200.0 ## Recoil knockback when hitting player (lower = heavier enemy)
 
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
 func _ready() -> void:
 	health.died.connect(_on_died)
 	health.damaged.connect(_on_damaged)
+	hitbox.hit_target.connect(_on_hit_target)
 	
 	# Setup contact damage hitbox
 	hitbox.damage = damage
@@ -73,6 +75,12 @@ func take_damage(amount: int, knockback_force: float, from_position: Vector2) ->
 func _on_damaged(_amount: int) -> void:
 	# Health component emits this signal, but we handle animation in take_damage directly now
 	pass
+
+func _on_hit_target(target: Node) -> void:
+	print("Chaser hit: ", target)
+	# Apply recoil knockback when hitting something (bidirectional knockback)
+	if target and self_knockback > 0:
+		knockback.apply(target.global_position, self_knockback)
 
 func _on_died() -> void:
 	remove_from_group("enemies")

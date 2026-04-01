@@ -9,7 +9,7 @@ signal slash_started(target_position: Vector2)
 @onready var hitbox: HitboxComponent = $HitboxComponent
 
 @export var damage := 10
-@export var target_knockback := 200.0
+@export var target_knockback := 300.0 ## Knockback applied to enemies hit by melee
 @export var slash_radius := 24.0
 @export var arc_angle := PI
 @export var slash_duration := 0.25
@@ -28,6 +28,11 @@ var _slashing := false
 
 func _ready() -> void:
 	_reset()
+	hitbox.hit_target.connect(_on_hit_target)
+	
+	# Configure hitbox damage and knockback
+	hitbox.damage = damage
+	hitbox.knockback = target_knockback
 
 func _reset() -> void:
 	_time = 0.0
@@ -99,3 +104,18 @@ func _update_slash(delta: float) -> void:
 	var flash := sin(t * PI) * flash_intensity
 	sprite.modulate = Color(1.0 + flash, 1.0 + flash, 1.0 + flash, 1.0)
 	position = Vector2.RIGHT.rotated(angle) * slash_radius
+
+func _on_hit_target(target: Node) -> void:
+	var player = get_parent() as Player
+	if not player:
+		return
+	
+	# Check if we hit an entity (has take_damage) or environment/wall
+	if target.has_method("take_damage"):
+		# Hit an enemy - apply screen shake
+		if player.camera_shake_manager:
+			player.camera_shake_manager.shake_screen(0.15, 0.2)
+	else:
+		# Hit world/environment - apply knockback to player away from hit point
+		if target is TileMapLayer or target is StaticBody2D:
+			player.knockback.apply(global_position, player.SLASH_SELF_KNOCKBACK)

@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
 [ext_resource type="Texture2D" uid="uid://dr1jaw3sxgsvp" path="res://assets/sprites/props.png" id="6_vtaks"]
 [ext_resource type="Script" uid="uid://ioxvj1ihixrt" path="res://scripts/systems/resource_manager.gd" id="7_u5sy4"]
+[ext_resource type="Script" uid="uid://ta3ftlocrs8x" path="res://scripts/systems/camera_shake_manager.gd" id="8_shake"]
 [ext_resource type="PackedScene" uid="uid://h0m8s5cfwoo8" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 [ext_resource type="Resource" uid="uid://bbi5f87py8cnr" path="res://resources/seeker.tres" id="14_trtic"]
 [ext_resource type="PackedScene" uid="uid://da6ouw6b58hpr" path="res://scenes/ui/game_over_ui.tscn" id="16_ca42v"]
@@ -195,7 +196,7 @@ metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
-time_between_waves = 20
+time_between_waves = 5
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="ResourceManager" type="Node" parent="Systems" unique_id=674344671 groups=["resource_manager"]]
@@ -209,6 +210,11 @@ unique_name_in_owner = true
 script = ExtResource("6_ssvqc")
 game_over_ui = NodePath("../../UI/GameOverUI")
 metadata/_custom_type_script = "uid://oouh8yqjltum"
+
+[node name="CameraShakeManager" type="Node" parent="Systems" unique_id=1539559632 node_paths=PackedStringArray("camera") groups=["camera_shake_manager"]]
+unique_name_in_owner = true
+script = ExtResource("8_shake")
+camera = NodePath("../../World/Player/Camera2D")
 
 [node name="World" type="Node" parent="." unique_id=792632933]
 
