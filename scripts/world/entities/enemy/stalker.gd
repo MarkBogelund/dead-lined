@@ -7,9 +7,7 @@ signal died
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var drop_scrap: DropScrapComponent = $DropScrapComponent
-@onready var chase: ChaseComponent = $ChaseComponent
 @onready var navigation: NavigationComponent = $NavigationComponent
-@onready var circle_movement: CircleMovementComponent = $CircleMovementComponent
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -17,8 +15,9 @@ signal died
 
 @export var damage := 15
 @export var speed := 25.0
-@export var min_range := 120.0
-@export var max_range := 180.0
+@export var ideal_distance := 100.0 ## Target distance to maintain from player
+@export var distance_tolerance := 20.0 ## Acceptable range around ideal distance before adjusting
+@export var max_shoot_distance := 120.0 ## Maximum distance to shoot from (wiggle room)
 @export var shoot_cooldown := 1.5
 @export var aim_rotation_speed := 4.0
 @export var aim_accuracy_angle := 0.25
@@ -40,30 +39,43 @@ func _physics_process(delta: float) -> void:
 	elif is_dead() or (player and player.is_dead()):
 		velocity = Vector2.ZERO
 	else:
-		var distance := global_position.distance_to(player.global_position)
+		# Calculate distance and line of sight
+		var to_player := player.global_position - global_position
+		var distance := to_player.length()
 		var has_line_of_sight := line_of_sight.can_see(player.global_position)
 		
-		var target_angle := (player.global_position - global_position).angle()
-		current_aim_angle = lerp_angle(current_aim_angle, target_angle, aim_rotation_speed * delta)
-		
+		# Movement logic: prioritize line of sight
 		if not has_line_of_sight:
-			velocity = navigation.get_velocity_to(player.global_position, speed)
-		elif distance > max_range:
-			velocity = navigation.get_velocity_to(player.global_position, speed)
-		elif distance < min_range:
-			var retreat_direction := (global_position - player.global_position).normalized()
-			var retreat_target := global_position + retreat_direction * 100.0
-			velocity = navigation.get_velocity_to(retreat_target, speed)
+			# Phase 1: No LOS - actively seek player to find line of sight
+			velocity = navigation.get_safe_velocity(player.global_position, speed)
 		else:
-			velocity = navigation.get_velocity_to(player.global_position, speed)
+			# Phase 2: Has LOS - maintain ideal distance
+			var ideal_position := player.global_position - to_player.normalized() * ideal_distance
+			
+			if distance < (ideal_distance - distance_tolerance):
+				# Too close - retreat to ideal position
+				velocity = navigation.get_safe_velocity(ideal_position, speed)
+			elif distance > (ideal_distance + distance_tolerance):
+				# Too far - advance toward player
+				velocity = navigation.get_safe_velocity(player.global_position, speed)
+			else:
+				# Good distance (80-120 range) - track player movement by navigating to ideal position
+				velocity = navigation.get_safe_velocity(ideal_position, speed)
 		
-		if has_line_of_sight and distance <= max_range:
-			var angle_diff: float = abs(angle_difference(current_aim_angle, target_angle))
-			if angle_diff < aim_accuracy_angle:
-				shoot.try_shoot(player.global_position, global_position)
+		# Aim and shoot only when has line of sight
+		if has_line_of_sight:
+			var target_angle := to_player.angle()
+			current_aim_angle = lerp_angle(current_aim_angle, target_angle, aim_rotation_speed * delta)
+			
+			# Shoot if within distance and aim is accurate
+			if distance <= max_shoot_distance:
+				var angle_diff = abs(angle_difference(current_aim_angle, target_angle))
+				if angle_diff < aim_accuracy_angle:
+					shoot.try_shoot(player.global_position, global_position)
 	
 	knockback.process(delta)
 	move_and_slide()
+
 
 func _play_anim(anim_name: String) -> void:
 	if animation_player.has_animation(anim_name):
