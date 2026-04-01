@@ -114,7 +114,7 @@ func _on_hit_target(target: Node) -> void:
 	if target.has_method("take_damage"):
 		# Hit an enemy - apply screen shake
 		if player.camera_shake_manager:
-			player.camera_shake_manager.shake_screen(0.15, 0.2)
+			player.camera_shake_manager.shake_screen(0.2, 0.2)
 	else:
 		# Hit world/environment - apply knockback to player away from hit point
 		if target is TileMapLayer or target is StaticBody2D:

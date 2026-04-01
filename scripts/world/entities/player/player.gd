@@ -23,8 +23,11 @@ signal damaged(current_health: int)
 
 @export var player_knockback := 200.0
 @export var player_body_damage := 5
+@export var death_knockback_multiplier := 1.5  ## Multiply knockback force on death
 
 var can_move := true
+var _death_damage_source: Vector2  ## Store killing blow position
+var _death_knockback_force: float  ## Store killing blow force
 
 const SHOOT_COST := 1
 const SLASH_SELF_KNOCKBACK := 50.0
@@ -111,7 +114,7 @@ func _on_dash_started(direction: Vector2):
 	animation.set_state(AnimationComponent.State.DASH)
 	
 	# Light screen shake on dash
-	camera_shake_manager.shake_screen(0.1, 0.15)
+	camera_shake_manager.shake_screen(0.15, 0.15)
 	
 	if dash_particles:
 		dash_particles.emitting = true
@@ -125,6 +128,13 @@ func take_damage(amount: int, knockback_force: float, from_position: Vector2) ->
 		return
 	
 	health.take_damage(amount)
+	
+	# If damage killed us, store info for death knockback
+	if is_dead():
+		_death_damage_source = from_position
+		_death_knockback_force = knockback_force
+		return
+	
 	knockback.apply(from_position, knockback_force)
 	
 	# Heavy screen shake when taking damage
@@ -135,11 +145,23 @@ func take_damage(amount: int, knockback_force: float, from_position: Vector2) ->
 
 func _on_died():
 	emit_signal("damaged", 0)
-	collision_shape.set_deferred("disabled", true)
+	
+	# Player handles its own death state
 	can_move = false
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
-	game_over_manager.player_died()
+	collision_shape.set_deferred("disabled", true)
+	
+	# Trigger death hit effects
+	if hit_particles:
+		hit_particles.restart()
+	
+	# Apply death knockback with multiplier
+	var death_force = _death_knockback_force * death_knockback_multiplier
+	knockback.apply(_death_damage_source, death_force)
+	
+	# Play death animation
+	animation.set_state(AnimationComponent.State.DIE)
 
 func _on_damaged(current_health: int):
 	animation.set_state(AnimationComponent.State.DAMAGE)

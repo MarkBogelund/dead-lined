@@ -3,6 +3,110 @@
 [ext_resource type="Script" uid="uid://barekkja2btsg" path="res://scripts/ui/game_over_ui.gd" id="1_gameover"]
 [ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="2_u4odh"]
 
+[sub_resource type="Animation" id="Animation_fade_in"]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BG:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.87058824)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Title:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WavesLabel:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("KillsLabel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("TurretsLabel:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("TimeLabel:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ScrapLabel:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("RestartButton:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gameover"]
+_data = {
+&"fade_in": SubResource("Animation_fade_in")
+}
+
 [node name="GameOverUI" type="Control" unique_id=921297923 groups=["game_over_ui"]]
 layout_mode = 3
 anchors_preset = 15
@@ -13,6 +117,8 @@ grow_vertical = 2
 script = ExtResource("1_gameover")
 
 [node name="BG" type="ColorRect" parent="." unique_id=366822474]
+modulate = Color(1, 1, 1, 0)
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,9 +126,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0, 0, 0, 0.7647059)
+color = Color(0, 0, 0, 1)
 
 [node name="Title" type="Label" parent="." unique_id=510281719]
+modulate = Color(1, 1, 1, 0)
+z_index = 11
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -39,9 +147,10 @@ theme_override_font_sizes/font_size = 32
 text = "You died"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="WavesLabel" type="Label" parent="." unique_id=1424212599]
+modulate = Color(1, 1, 1, 0)
+z_index = 11
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -58,9 +167,10 @@ theme_override_font_sizes/font_size = 16
 text = "Waves"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="KillsLabel" type="Label" parent="." unique_id=2045099268]
+modulate = Color(1, 1, 1, 0)
+z_index = 11
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -77,9 +187,10 @@ theme_override_font_sizes/font_size = 16
 text = "Kills"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="TurretsLabel" type="Label" parent="." unique_id=2055409843]
+modulate = Color(1, 1, 1, 0)
+z_index = 11
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -96,9 +207,10 @@ theme_override_font_sizes/font_size = 16
 text = "Turrets"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="TimeLabel" type="Label" parent="." unique_id=1563478874]
+modulate = Color(1, 1, 1, 0)
+z_index = 11
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -115,9 +227,10 @@ theme_override_font_sizes/font_size = 16
 text = "Time"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="ScrapLabel" type="Label" parent="." unique_id=559875209]
+modulate = Color(1, 1, 1, 0)
+z_index = 11
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -134,9 +247,10 @@ theme_override_font_sizes/font_size = 16
 text = "Scrap"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="RestartButton" type="Button" parent="." unique_id=1399231669]
+modulate = Color(1, 1, 1, 0)
+z_index = 11
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -152,3 +266,6 @@ grow_vertical = 0
 pivot_offset = Vector2(51, 8)
 theme_override_fonts/font = ExtResource("2_u4odh")
 text = "Restart"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=905195189]
+libraries/ = SubResource("AnimationLibrary_gameover")
