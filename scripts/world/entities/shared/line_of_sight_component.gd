@@ -27,10 +27,13 @@ func can_see(target_position: Vector2) -> bool:
 	var direction := (target_position - entity.global_position)
 	var distance := direction.length()
 	
-	if distance < sight_margin:
-		return true
+	if distance < 1.0:
+		return false
 	
-	var check_distance := distance - sight_margin
+	var check_distance = max(distance - sight_margin, 0.0)
+	if check_distance < 1.0:
+		return false
+	
 	ray_cast.global_position = entity.global_position
 	ray_cast.target_position = direction.normalized() * check_distance
 	ray_cast.force_raycast_update()

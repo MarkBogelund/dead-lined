@@ -282,6 +282,10 @@ path_desired_distance = 8.0
 target_desired_distance = 4.0
 path_postprocessing = 1
 avoidance_enabled = true
+radius = 12.0
+neighbor_distance = 50.0
+max_neighbors = 5
+debug_enabled = true
 script = ExtResource("10_nav")
 
 [node name="CircleMovementComponent" type="Node" parent="." unique_id=738101987]
@@ -289,7 +293,7 @@ script = ExtResource("11_circle")
 
 [node name="LineOfSightComponent" type="Node" parent="." unique_id=992499215]
 script = ExtResource("12_los")
-sight_margin = 35.0
+sight_margin = 50.0
 
 [node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
 script = ExtResource("13_shoot")

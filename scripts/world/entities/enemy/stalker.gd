@@ -47,17 +47,15 @@ func _physics_process(delta: float) -> void:
 		current_aim_angle = lerp_angle(current_aim_angle, target_angle, aim_rotation_speed * delta)
 		
 		if not has_line_of_sight:
-			var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
-			velocity = chase.move_towards(direction)
+			velocity = navigation.get_velocity_to(player.global_position, speed)
 		elif distance > max_range:
-			var direction := navigation.get_velocity_to(player.global_position, speed).normalized()
-			velocity = chase.move_towards(direction)
+			velocity = navigation.get_velocity_to(player.global_position, speed)
 		elif distance < min_range:
 			var retreat_direction := (global_position - player.global_position).normalized()
-			velocity = chase.move_towards(retreat_direction)
+			var retreat_target := global_position + retreat_direction * 100.0
+			velocity = navigation.get_velocity_to(retreat_target, speed)
 		else:
-			var hover_direction := circle_movement.get_hover_direction(player.global_position, min_range, max_range)
-			velocity = chase.move_towards(hover_direction * circle_movement.drift_speed_multiplier)
+			velocity = navigation.get_velocity_to(player.global_position, speed)
 		
 		if has_line_of_sight and distance <= max_range:
 			var angle_diff: float = abs(angle_difference(current_aim_angle, target_angle))
