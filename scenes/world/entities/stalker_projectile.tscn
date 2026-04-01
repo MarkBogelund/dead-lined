@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://c8hk7vr2ps4qi"]
+
+[ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_props"]
+[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/world/entities/shared/projectile.gd" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="3_vfx"]
+[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_hitbox"]
+[ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="5_vfx_comp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_stalker"]
+radius = 4.0
+
+[node name="StalkerProjectile" type="Node2D" groups=["projectiles"]]
+script = ExtResource("2_script")
+hit_vfx = ExtResource("3_vfx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 5
+modulate = Color(1, 0.4, 0.4, 1)
+texture = ExtResource("1_props")
+region_enabled = true
+region_rect = Rect2(0, 482, 31, 30)
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 32
+collision_mask = 3
+script = ExtResource("4_hitbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("CircleShape2D_stalker")
+
+[node name="VFXComponent" type="Node" parent="."]
+script = ExtResource("5_vfx_comp")

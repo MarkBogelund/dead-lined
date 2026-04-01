@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://ioxvj1ihixrt" path="res://scripts/systems/resource_manager.gd" id="7_u5sy4"]
 [ext_resource type="Script" uid="uid://ta3ftlocrs8x" path="res://scripts/systems/camera_shake_manager.gd" id="8_shake"]
 [ext_resource type="Script" uid="uid://du104cpiwp1j4" path="res://scripts/systems/death_sequence_controller.gd" id="9_death"]
+[ext_resource type="PackedScene" uid="uid://bvk8hf7vr3pqi" path="res://scenes/world/entities/stalker.tscn" id="10_264po"]
 [ext_resource type="Script" uid="uid://bcjdlvprcr1uv" path="res://scripts/systems/freeze_frame_manager.gd" id="10_freeze"]
 [ext_resource type="PackedScene" uid="uid://h0m8s5cfwoo8" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 [ext_resource type="Resource" uid="uid://bbi5f87py8cnr" path="res://resources/seeker.tres" id="14_trtic"]
@@ -198,7 +199,7 @@ metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
-time_between_waves = 5
+time_between_waves = 30
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="ResourceManager" type="Node" parent="Systems" unique_id=674344671 groups=["resource_manager"]]
@@ -222,20 +223,15 @@ camera = NodePath("../../World/Player/Camera2D")
 unique_name_in_owner = true
 script = ExtResource("10_freeze")
 
-[node name="DeathSequenceController" type="Node" parent="Systems" unique_id=1622485372 node_paths=PackedStringArray("player", "camera", "game_over_manager", "camera_shake_manager") groups=["death_sequence_controller"]]
+[node name="DeathSequenceController" type="Node" parent="Systems" unique_id=1622485372 node_paths=PackedStringArray("player", "camera", "game_over_manager") groups=["death_sequence_controller"]]
 unique_name_in_owner = true
 script = ExtResource("9_death")
-freeze_duration = 0.2
-zoom_delay = 0.0
-ui_delay = 1.5
-zoom_duration = 1.0
-zoom_target = 3.5
-shake_intensity = 0.5
-shake_duration = 0.3
 player = NodePath("../../World/Player")
 camera = NodePath("../../World/Player/Camera2D")
 game_over_manager = NodePath("../GameOverManager")
-camera_shake_manager = NodePath("../CameraShakeManager")
+ui_delay = 1.5
+zoom_duration = 1.0
+zoom_target = 3.5
 
 [node name="World" type="Node" parent="." unique_id=792632933]
 
@@ -303,12 +299,7 @@ metadata/_edit_lock_ = true
 unique_name_in_owner = true
 z_index = 5
 position = Vector2(0, -30)
-player_knockback = 200.0
-player_body_damage = 5
-death_knockback_force = 400.0
-freeze_on_damage = true
 damage_freeze_duration = 0.04
-death_freeze_duration = 0.08
 
 [node name="Camera2D" type="Camera2D" parent="World/Player" unique_id=410582709]
 position = Vector2(0, -10)
@@ -327,6 +318,10 @@ health_growth = 0.0
 
 [node name="ShopStation" parent="World" unique_id=1270538854 groups=["shop_stations"] instance=ExtResource("6_p57ef")]
 position = Vector2(0, -1)
+
+[node name="Stalker" parent="World" unique_id=1639555138 instance=ExtResource("10_264po")]
+position = Vector2(-112, -64)
+engagement_range = 100.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
 
