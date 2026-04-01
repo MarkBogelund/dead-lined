@@ -15,9 +15,9 @@ signal died
 
 @export var damage := 20
 @export var speed := 30.0
-@export var enemy_knockback := 250.0  ## Knockback received when hit by weapons
-@export var player_knockback := 250.0  ## Knockback applied to player on contact
-@export var self_knockback := 150.0  ## Recoil knockback when hitting player (lower = heavier enemy)
+@export var enemy_knockback := 250.0 ## Knockback received when hit by weapons
+@export var player_knockback := 250.0 ## Knockback applied to player on contact
+@export var self_knockback := 150.0 ## Recoil knockback when hitting player (lower = heavier enemy)
 
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
