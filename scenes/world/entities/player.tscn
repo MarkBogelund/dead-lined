@@ -16,6 +16,42 @@
 [ext_resource type="Script" uid="uid://boq80sifs5ms8" path="res://scripts/world/entities/player/dash_trail.gd" id="15_trail"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="16_74ekq"]
 
+[sub_resource type="Gradient" id="Gradient_particle_color"]
+offsets = PackedFloat32Array(0.6435185, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0.5833334, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_particle"]
+gradient = SubResource("Gradient_particle_color")
+
+[sub_resource type="Curve" id="Curve_74ekq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6qf0x"]
+curve = SubResource("Curve_74ekq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dash"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 3.0
+direction = Vector3(0, 0, 0)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 40.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.049999997
+scale_max = 0.29999998
+scale_curve = SubResource("CurveTexture_6qf0x")
+color_ramp = SubResource("GradientTexture1D_particle")
+
+[sub_resource type="Curve" id="Curve_yfgcb"]
+_data = [Vector2(0, 0.29681003), 0.0, 0.0, 0, 0, Vector2(0.1394558, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_dash_trail"]
+offsets = PackedFloat32Array(0.546875, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.9999997, 0.84858555, 0.54073334, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_c5rqy"]
 atlas = ExtResource("2_tuyoq")
 region = Rect2(72, 48, 24, 24)
@@ -458,67 +494,20 @@ scale_max = 0.39999998
 scale_curve = SubResource("CurveTexture_2454e")
 color_ramp = SubResource("GradientTexture1D_6qf0x")
 
-[sub_resource type="Gradient" id="Gradient_particle_color"]
-offsets = PackedFloat32Array(0.6435185, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 0.5833334, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_particle"]
-gradient = SubResource("Gradient_particle_color")
-
-[sub_resource type="Curve" id="Curve_74ekq"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_6qf0x"]
-curve = SubResource("Curve_74ekq")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dash"]
-particle_flag_disable_z = true
-emission_shape = 1
-emission_sphere_radius = 3.0
-direction = Vector3(0, 0, 0)
-spread = 30.0
-initial_velocity_min = 5.0
-initial_velocity_max = 40.0
-gravity = Vector3(0, 0, 0)
-scale_min = 0.049999997
-scale_max = 0.29999998
-scale_curve = SubResource("CurveTexture_6qf0x")
-color_ramp = SubResource("GradientTexture1D_particle")
-
-[sub_resource type="Curve" id="Curve_yfgcb"]
-_data = [Vector2(0, 0.29681003), 0.0, 0.0, 0, 0, Vector2(0.1394558, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Gradient" id="Gradient_dash_trail"]
-offsets = PackedFloat32Array(0.546875, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.9999997, 0.84858555, 0.54073334, 1)
-
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 z_index = 2
 collision_layer = 2
 script = ExtResource("1_g2els")
 damage_freeze_duration = 0.1
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
-z_index = 5
-position = Vector2(0, -12)
-sprite_frames = SubResource("SpriteFrames_a38lo")
-animation = &"idle"
-autoplay = "idle"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1867633058]
-position = Vector2(0, -8)
-shape = SubResource("CapsuleShape2D_g2els")
-
-[node name="KnockbackComponent" type="Node" parent="." unique_id=948374991]
-script = ExtResource("4_dqkch")
-metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
-
 [node name="HealthComponent" type="Node" parent="." unique_id=2137359976]
 script = ExtResource("5_qlg0r")
 max_health = 40
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
+
+[node name="KnockbackComponent" type="Node" parent="." unique_id=948374991]
+script = ExtResource("4_dqkch")
+metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="ShootComponent" type="Node" parent="." unique_id=904350876]
 script = ExtResource("5_tuyoq")
@@ -526,9 +515,6 @@ explosion_vfx_scene = ExtResource("6_c5rqy")
 projectile_scene = ExtResource("2_qhqgy")
 projectile_damage = 20
 metadata/_custom_type_script = "uid://blmoutagnygip"
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=371344470]
-libraries/ = SubResource("AnimationLibrary_fjrip")
 
 [node name="VFXComponent" type="Node" parent="." unique_id=1075206016]
 script = ExtResource("8_dnykm")
@@ -544,29 +530,11 @@ metadata/_custom_type_script = "uid://cdc3yx122ruc6"
 script = ExtResource("11_73kkf")
 metadata/_custom_type_script = "uid://dwbus28tan8rh"
 
-[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1454825118]
-position = Vector2(0, -10)
-scale = Vector2(0.8125, 0.8125)
-color = Color(1, 0.49803922, 0, 0.10980392)
-texture = SubResource("GradientTexture2D_n5sgd")
-
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
 position = Vector2(0, -12)
 
-[node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1941997998]
-z_index = 15
-position = Vector2(0, -11)
-emitting = false
-amount = 10
-texture = ExtResource("13_ghcoa")
-lifetime = 0.3
-one_shot = true
-explosiveness = 1.0
-process_material = SubResource("ParticleProcessMaterial_1esm0")
-
 [node name="DashComponent" type="Node2D" parent="." unique_id=1430415802 node_paths=PackedStringArray("dash_particles", "flash_vfx")]
 script = ExtResource("14_dash")
-invincible = false
 dash_particles = NodePath("DashParticles")
 flash_vfx = NodePath("FlashVfx")
 dash_distance = 250.0
@@ -593,6 +561,37 @@ max_length = 15
 
 [node name="FlashVfx" parent="DashComponent" unique_id=1132065496 instance=ExtResource("16_74ekq")]
 position = Vector2(0, -11)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]
+z_index = 5
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_a38lo")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1867633058]
+position = Vector2(0, -8)
+shape = SubResource("CapsuleShape2D_g2els")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=371344470]
+libraries/ = SubResource("AnimationLibrary_fjrip")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1454825118]
+position = Vector2(0, -10)
+scale = Vector2(0.8125, 0.8125)
+color = Color(1, 0.49803922, 0, 0.10980392)
+texture = SubResource("GradientTexture2D_n5sgd")
+
+[node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1941997998]
+z_index = 15
+position = Vector2(0, -11)
+emitting = false
+amount = 10
+texture = ExtResource("13_ghcoa")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_1esm0")
 
 [node name="FlashVfx" parent="." unique_id=462082651 instance=ExtResource("16_74ekq")]
 scale = Vector2(2, 2)

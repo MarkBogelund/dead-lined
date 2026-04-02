@@ -22,6 +22,8 @@ signal died
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+@export var shoot_cost := 1
+
 @export_group("Damage Effects")
 @export var damage_knockback_force := 200.0
 @export var damage_freeze_duration := 0.08
@@ -33,8 +35,6 @@ signal died
 @export var death_screen_shake_intensity := 0.35
 
 var can_move := true
-
-@export var shoot_cost := 1
 const MIN_MOVE_SPEED := 10.0
 
 func _ready():
@@ -119,6 +119,8 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 	if is_dead() or dash.is_invincible():
 		return
 	
+	dash.cancel_dash()
+
 	var was_fatal = health.take_damage(amount)
 	
 	if was_fatal:

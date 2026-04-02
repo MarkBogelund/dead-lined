@@ -11,18 +11,14 @@ signal died
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var navigation: NavigationComponent = $NavigationComponent
 @onready var hitbox: HitboxComponent = $HitboxComponent
+@onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
-@export var damage := 20
 @export var speed := 30.0
 @export var self_knockback := 150.0 ## Recoil knockback when hitting player (lower = heavier enemy)
 
-@onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
 func _ready() -> void:
 	hitbox.hit_target.connect(_on_hit_target)
-	
-	# Setup contact damage hitbox
-	hitbox.damage = damage
 
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
@@ -46,8 +42,7 @@ func buff_health(multiplier: float) -> void:
 	health.buff_max_health(multiplier)
 
 func buff_damage(multiplier: float) -> void:
-	damage = int(damage * multiplier)
-	hitbox.damage = damage
+	hitbox.damage = int(hitbox.damage * multiplier)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead():
