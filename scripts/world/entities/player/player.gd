@@ -14,7 +14,7 @@ signal died
 @onready var health: HealthComponent = $HealthComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
-@onready var animation: AnimationComponent = $AnimationComponent
+@onready var animation: AnimationHandler = $AnimationHandler
 @onready var melee_weapon: MeleeWeapon = $MeleeWeapon
 @onready var dash: DashComponent = $DashComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
@@ -38,6 +38,14 @@ var can_move := true
 const MIN_MOVE_SPEED := 10.0
 
 func _ready():
+	# Configure animations
+	animation.configure_animation("idle", 0, false)
+	animation.configure_animation("move", 1, false)
+	animation.configure_animation("slash", 2, true)
+	animation.configure_animation("dash", 2, true)
+	animation.configure_animation("take_damage", 3, true)
+	animation.configure_animation("die", 4, true)
+	
 	melee_weapon.slash_started.connect(_handle_slash_started)
 	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
@@ -65,7 +73,8 @@ func _physics_process(delta):
 	
 	_update_animation()
 	
-	if animation.current_state != AnimationComponent.State.SLASH:
+	# Don't change sprite direction during locked animations (slash, etc)
+	if not animation.is_locked():
 		_set_sprite_direction(velocity.x)
 
 func _unhandled_input(event: InputEvent):
@@ -83,13 +92,13 @@ func _unhandled_input(event: InputEvent):
 
 func _update_animation():
 	if is_dead():
-		animation.set_state(AnimationComponent.State.DIE)
-		return
+		return # Die animation already playing from _handle_death
 	
+	# Try to play movement animations (respects locking automatically)
 	if velocity.length() > MIN_MOVE_SPEED:
-		animation.set_state(AnimationComponent.State.MOVE)
+		animation.play_animation("move")
 	else:
-		animation.set_state(AnimationComponent.State.IDLE)
+		animation.play_animation("idle")
 
 func _set_sprite_direction(dir_x: float):
 	if dir_x != 0:
@@ -108,11 +117,11 @@ func _get_dash_direction() -> Vector2:
 
 func _handle_slash_started(target_pos: Vector2):
 	_set_sprite_direction(target_pos.x - global_position.x)
-	animation.set_state(AnimationComponent.State.SLASH)
+	animation.play_animation("slash")
 
 func _handle_dash_started(direction: Vector2):
 	_set_sprite_direction(direction.x)
-	animation.set_state(AnimationComponent.State.DASH)
+	animation.play_animation("dash")
 	camera_shake_manager.shake_screen(0.15, 0.15)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
@@ -141,7 +150,7 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	camera_shake_manager.shake_screen(damage_screen_shake_intensity, 0.3)
 	
 	# Animation
-	animation.set_state(AnimationComponent.State.DAMAGE)
+	animation.play_animation("take_damage")
 	
 	# Notify external systems
 	damaged.emit(health.get_current_health())
@@ -168,7 +177,7 @@ func _handle_death(from_position: Vector2) -> void:
 		flash_vfx.start()
 	
 	# Animation
-	animation.set_state(AnimationComponent.State.DIE)
+	animation.play_animation("die")
 	
 	# Notify external systems
 	damaged.emit(0) # HUD

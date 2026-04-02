@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="5_dot"]
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/chaser.png" id="6_sprite"]
+[ext_resource type="Script" path="res://scripts/world/entities/shared/animation_handler.gd" id="7_ag4mk"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="7_health"]
 [ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="8_shadow"]
 [ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/drop_scrap_component.gd" id="9_dropscrap"]
@@ -95,7 +96,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_idle4")
 }],
-"loop": true,
+"loop": false,
 "name": &"idle",
 "speed": 10.0
 }]
@@ -152,6 +153,18 @@ tracks/0/keys = {
 "update": 1,
 "values": [&"idle"]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_die"]
 resource_name = "die"
@@ -195,6 +208,24 @@ tracks/2/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_ag4mk"]
+resource_name = "idle"
+length = 0.3
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
 [sub_resource type="Animation" id="Animation_damage"]
 resource_name = "take_damage"
 length = 0.2
@@ -216,6 +247,7 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Animation_reset"),
 &"die": SubResource("Animation_die"),
+&"idle": SubResource("Animation_ag4mk"),
 &"take_damage": SubResource("Animation_damage")
 }
 
@@ -241,7 +273,6 @@ position = Vector2(0, -9.536743e-07)
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_stalker")
 animation = &"idle"
-autoplay = "idle"
 
 [node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1106374826]
 z_index = 10
@@ -260,8 +291,9 @@ script = ExtResource("4_knockback")
 script = ExtResource("7_health")
 max_health = 30
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1152610224]
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1949746839]
 libraries/ = SubResource("AnimationLibrary_stalker")
+script = ExtResource("7_ag4mk")
 
 [node name="DropScrapComponent" type="Node" parent="." unique_id=1674501989]
 script = ExtResource("9_dropscrap")

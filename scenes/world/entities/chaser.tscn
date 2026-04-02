@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="4_qurf7"]
 [ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="6_fffhc"]
 [ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/drop_scrap_component.gd" id="8_jg6m2"]
+[ext_resource type="Script" path="res://scripts/world/entities/shared/animation_handler.gd" id="8_uqckg"]
 [ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation_component.gd" id="11_uqckg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1no88"]
@@ -246,6 +247,24 @@ tracks/3/keys = {
 "values": [true, false]
 }
 
+[sub_resource type="Animation" id="Animation_uqckg"]
+resource_name = "idle"
+length = 0.3
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
 [sub_resource type="Animation" id="Animation_5uy6h"]
 resource_name = "take_damage"
 length = 0.2
@@ -267,6 +286,7 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Animation_otmr2"),
 &"die": SubResource("Animation_wtq4b"),
+&"idle": SubResource("Animation_uqckg"),
 &"take_damage": SubResource("Animation_5uy6h")
 }
 
@@ -308,7 +328,6 @@ position = Vector2(0, -9.536743e-07)
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_xwavj")
 animation = &"idle"
-autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1470453078]
 shape = SubResource("CircleShape2D_md0e3")
@@ -332,8 +351,9 @@ script = ExtResource("4_qurf7")
 max_health = 20
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=530157757]
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=504753542]
 libraries/ = SubResource("AnimationLibrary_j0cyh")
+script = ExtResource("8_uqckg")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=2020380487]
 position = Vector2(0, -9)

@@ -3,7 +3,7 @@ class_name Stalker
 
 signal died
 
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var animation: AnimationHandler = $AnimationHandler
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var drop_scrap: DropScrapComponent = $DropScrapComponent
@@ -27,6 +27,11 @@ var current_aim_angle := 0.0
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
 func _ready() -> void:
+	# Configure animations
+	animation.configure_animation("idle", 0, false)
+	animation.configure_animation("take_damage", 1, true)
+	animation.configure_animation("die", 2, true)
+	
 	if shoot:
 		shoot.shoot_cooldown = shoot_cooldown
 
@@ -69,14 +74,10 @@ func _physics_process(delta: float) -> void:
 				var angle_diff = abs(angle_difference(current_aim_angle, target_angle))
 				if angle_diff < aim_accuracy_angle:
 					shoot.try_shoot(player.global_position, global_position)
-	
+		# Play idle animation when moving
+		animation.play_animation("idle")
 	knockback.process(delta)
 	move_and_slide()
-
-
-func _play_anim(anim_name: String) -> void:
-	if animation_player.has_animation(anim_name):
-		animation_player.play(anim_name)
 
 func buff_health(multiplier: float) -> void:
 	health.buff_max_health(multiplier)
@@ -103,12 +104,12 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	if hit_particles:
 		hit_particles.restart()
 	
-	_play_anim("take_damage")
+	animation.play_animation("take_damage")
 
 func _handle_death() -> void:
 	remove_from_group("enemies")
 	died.emit()
-	_play_anim("die")
+	animation.play_animation("die")
 
 func despawn() -> void:
 	drop_scrap.drop()

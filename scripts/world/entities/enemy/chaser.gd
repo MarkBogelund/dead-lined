@@ -3,7 +3,7 @@ class_name Chaser
 
 signal died
 
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var animation: AnimationHandler = $AnimationHandler
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var drop_scrap: DropScrapComponent = $DropScrapComponent
@@ -18,6 +18,11 @@ signal died
 
 
 func _ready() -> void:
+	# Configure animations
+	animation.configure_animation("idle", 0, false)
+	animation.configure_animation("take_damage", 1, true)
+	animation.configure_animation("die", 2, true)
+	
 	hitbox.hit_target.connect(_on_hit_target)
 
 func _physics_process(delta: float) -> void:
@@ -26,17 +31,13 @@ func _physics_process(delta: float) -> void:
 	elif is_dead() or (player and player.is_dead()):
 		velocity = Vector2.ZERO
 	else:
-		velocity = navigation.get_safe_velocity(player.global_position, speed)
-	
+		velocity = navigation.get_safe_velocity(player.global_position, speed) # Play idle animation when moving
+		animation.play_animation("idle")
 	knockback.process(delta)
 	move_and_slide()
 
 func _get_direction_to_player() -> Vector2:
 	return (player.global_position - global_position).normalized()
-
-func _play_anim(anim_name: String) -> void:
-	if animation_player.has_animation(anim_name):
-		animation_player.play(anim_name)
 
 func buff_health(multiplier: float) -> void:
 	health.buff_max_health(multiplier)
@@ -61,12 +62,12 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	if hit_particles:
 		hit_particles.restart()
 	
-	_play_anim("take_damage")
+	animation.play_animation("take_damage")
 
 func _handle_death() -> void:
 	remove_from_group("enemies")
 	died.emit()
-	_play_anim("die")
+	animation.play_animation("die")
 
 func _on_hit_target(target: Node) -> void:
 	print("Chaser hit: ", target)
