@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://da0fvy8p6hv7l" path="res://scripts/world/entities/player/melee_weapon.gd" id="1_jkq8f"]
 [ext_resource type="Texture2D" uid="uid://bnr14l7147w74" path="res://assets/sprites/wrench.png" id="2_smgu6"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="3_dikvc"]
-[ext_resource type="Script" path="res://scenes/world/entities/trail.gd" id="4_grobf"]
+[ext_resource type="Script" path="res://scripts/world/vfx/trail.gd" id="4_grobf"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="5_7p1yo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2sq7"]
@@ -57,12 +57,13 @@ preprocess = 0.1
 randomness = 0.3
 process_material = SubResource("ParticleProcessMaterial_glimmer")
 
-[node name="Trail" type="Line2D" parent="." unique_id=1409917625]
+[node name="Trail" type="Line2D" parent="." unique_id=1409110467]
 show_behind_parent = true
 position = Vector2(0, -4)
+width = 8.0
 width_curve = SubResource("Curve_grobf")
 script = ExtResource("4_grobf")
-max_length = 25
+max_length = 15
 metadata/_custom_type_script = "uid://dwtddq52h1v0t"
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=454126189]

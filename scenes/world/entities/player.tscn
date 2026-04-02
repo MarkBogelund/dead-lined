@@ -10,10 +10,10 @@
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="8_dnykm"]
 [ext_resource type="Script" uid="uid://cdc3yx122ruc6" path="res://scripts/world/entities/player/movement.gd" id="10_b6tgf"]
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]
+[ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="12_yfgcb"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
 [ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash.gd" id="14_dash"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="14_yfgcb"]
-[ext_resource type="Script" uid="uid://boq80sifs5ms8" path="res://scripts/world/entities/player/dash_trail.gd" id="15_trail"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="16_74ekq"]
 
 [sub_resource type="Gradient" id="Gradient_particle_color"]
@@ -559,9 +559,10 @@ metadata/_custom_type_script = "uid://cdc3yx122ruc6"
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
 position = Vector2(0, -12)
 
-[node name="DashComponent" type="Node2D" parent="." unique_id=1430415802 node_paths=PackedStringArray("dash_particles", "flash_vfx")]
+[node name="DashComponent" type="Node2D" parent="." unique_id=1430415802 node_paths=PackedStringArray("dash_particles", "trail", "flash_vfx")]
 script = ExtResource("14_dash")
 dash_particles = NodePath("DashParticles")
+trail = NodePath("Trail")
 flash_vfx = NodePath("FlashVfx")
 dash_distance = 250.0
 cooldown_time = 0.2
@@ -576,13 +577,13 @@ texture = ExtResource("13_ghcoa")
 lifetime = 0.5
 process_material = SubResource("ParticleProcessMaterial_dash")
 
-[node name="DashTrail" type="Line2D" parent="DashComponent" unique_id=1786085531]
+[node name="Trail" type="Line2D" parent="DashComponent" unique_id=374380998]
 z_index = 3
 position = Vector2(0, -12)
 width = 8.0
 width_curve = SubResource("Curve_yfgcb")
 gradient = SubResource("Gradient_dash_trail")
-script = ExtResource("15_trail")
+script = ExtResource("12_yfgcb")
 max_length = 15
 
 [node name="FlashVfx" parent="DashComponent" unique_id=1132065496 instance=ExtResource("16_74ekq")]

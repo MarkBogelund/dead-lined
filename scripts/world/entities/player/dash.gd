@@ -10,7 +10,8 @@ enum State {IDLE, DASHING, COOLDOWN}
 @export var invincible := true
 
 @export_group("References")
-@export var dash_particles: GPUParticles2D = get_node_or_null("DashParticles")
+@export var dash_particles: GPUParticles2D
+@export var trail: Trail
 @export var flash_vfx: FlashVfx
 
 @export_group("Dash Movement")
@@ -83,6 +84,9 @@ func _start_dash(direction: Vector2) -> void:
 	# Start VFX
 	if dash_particles:
 		dash_particles.emitting = true
+	
+	if trail:
+		trail.start_tracking()
 
 	if flash_vfx:
 		flash_vfx.start()
@@ -97,5 +101,10 @@ func _end_dash() -> void:
 	# Stop VFX
 	if dash_particles:
 		dash_particles.emitting = false
+	
+	if trail:
+		trail.stop_tracking()
+	
+	emit_signal("dash_ended")
 	
 	emit_signal("dash_ended")
