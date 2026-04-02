@@ -8,9 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/chaser.png" id="4_fffhc"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="4_qurf7"]
 [ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="6_fffhc"]
-[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/drop_scrap_component.gd" id="8_jg6m2"]
-[ext_resource type="Script" path="res://scripts/world/entities/shared/animation_handler.gd" id="8_uqckg"]
-[ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation_component.gd" id="11_uqckg"]
+[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/drop_scrap.gd" id="8_jg6m2"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="8_uqckg"]
+[ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation.gd" id="11_uqckg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1no88"]
 radius = 7.071068

@@ -11,8 +11,8 @@
 [ext_resource type="Script" uid="uid://cdc3yx122ruc6" path="res://scripts/world/entities/player/movement.gd" id="10_b6tgf"]
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
-[ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash_component.gd" id="14_dash"]
-[ext_resource type="Script" path="res://scripts/world/entities/shared/animation_handler.gd" id="14_yfgcb"]
+[ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash.gd" id="14_dash"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="14_yfgcb"]
 [ext_resource type="Script" uid="uid://boq80sifs5ms8" path="res://scripts/world/entities/player/dash_trail.gd" id="15_trail"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="16_74ekq"]
 
