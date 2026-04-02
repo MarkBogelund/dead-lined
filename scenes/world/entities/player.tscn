@@ -584,6 +584,7 @@ width = 8.0
 width_curve = SubResource("Curve_yfgcb")
 gradient = SubResource("Gradient_dash_trail")
 script = ExtResource("12_yfgcb")
+coordinate_mode = 0
 max_length = 15
 
 [node name="FlashVfx" parent="DashComponent" unique_id=1132065496 instance=ExtResource("16_74ekq")]
