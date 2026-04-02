@@ -5,31 +5,25 @@ class_name HealthComponent
 var current_health: int
 var _is_dead = false
 
-signal died
-signal damaged(current_health: int)
-
 func _ready():
 	current_health = max_health
 	if current_health <= 0:
-		die()
+		current_health = 0
+		_is_dead = true
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int) -> bool:
+	"""Returns true if damage was fatal, false otherwise"""
 	if _is_dead:
-		return
+		return false
 	
 	current_health -= amount
 	
 	if current_health <= 0:
-		die()
-		return
+		current_health = 0
+		_is_dead = true
+		return true
 	
-	emit_signal("damaged", current_health)
-
-# Call this when health reaches zero
-func die() -> void:
-	current_health = 0
-	_is_dead = true
-	emit_signal("died")
+	return false
 
 ## Public API for querying health
 func get_current_health() -> int:

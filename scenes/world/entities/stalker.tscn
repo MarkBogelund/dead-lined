@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://buoachi42ivxl" path="res://assets/sprites/shadow.png" id="8_shadow"]
 [ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/drop_scrap_component.gd" id="9_dropscrap"]
 [ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation_component.gd" id="10_nav"]
-[ext_resource type="Script" uid="uid://51nldjhbr0qs" path="res://scripts/world/entities/enemy/circle_movement_component.gd" id="11_circle"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight_component.gd" id="12_los"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="13_shoot"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="14_6oldd"]
@@ -279,11 +278,9 @@ neighbor_distance = 50.0
 max_neighbors = 5
 script = ExtResource("10_nav")
 
-[node name="CircleMovementComponent" type="Node" parent="." unique_id=738101987]
-script = ExtResource("11_circle")
-
 [node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
 script = ExtResource("12_los")
+debug_draw = true
 
 [node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
 script = ExtResource("13_shoot")

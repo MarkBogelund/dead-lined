@@ -9,13 +9,13 @@ signal slash_started(target_position: Vector2)
 @onready var hitbox: HitboxComponent = $HitboxComponent
 @onready var camera_shake_manager: CameraShakeManager
 
-@export var damage := 10
+@export_group("Slash Settings")
 @export var slash_radius := 24.0
 @export var arc_angle := PI
 @export var slash_duration := 0.25
 @export var slash_cooldown := 0.3
 
-## Visual settings
+@export_group("Visual Effects")
 @export var ease_power := 3
 @export var flash_intensity := 1.0
 
@@ -28,12 +28,8 @@ var _slashing := false
 
 func _ready() -> void:
 	camera_shake_manager = get_tree().get_first_node_in_group("camera_shake_manager")
-
 	_reset()
 	hitbox.hit_target.connect(_on_hit_target)
-	
-	# Configure hitbox damage and knockback
-	hitbox.damage = damage
 
 func _reset() -> void:
 	_time = 0.0

@@ -17,8 +17,8 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	
 	# Call take_damage on body if it has the method
-	if body.has_method("take_damage"):
-		body.take_damage(damage, knockback, global_position)
+	if body.has_method("was_hit"):
+		body.was_hit(damage, knockback, global_position)
 	
 	# Notify owner that we hit something (for projectile destruction, etc.)
 	emit_signal("hit_target", body)

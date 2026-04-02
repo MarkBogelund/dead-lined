@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name Player
 
 signal damaged(current_health: int)
+signal died
 
 @onready var resource_manager: ResourceManager = %ResourceManager
 @onready var shop_manager: ShopManager = %ShopManager
@@ -22,17 +23,22 @@ signal damaged(current_health: int)
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+@export_group("Damage Effects")
+@export var damage_knockback_force := 200.0
 @export var damage_freeze_duration := 0.08
+@export var damage_screen_shake_intensity := 0.2
+
+@export_group("Death Effects")
+@export var death_knockback_force := 400.0
+@export var death_freeze_duration := 0.15
+@export var death_screen_shake_intensity := 0.35
 
 var can_move := true
 
-const SHOOT_COST := 1
-const SLASH_SELF_KNOCKBACK := 50.0
+@export var shoot_cost := 1
 const MIN_MOVE_SPEED := 10.0
 
 func _ready():
-	health.died.connect(_on_died)
-	health.damaged.connect(_on_damaged)
 	melee_weapon.slash_started.connect(_on_slash_started)
 	dash.dash_started.connect(_on_dash_started)
 	dash.dash_ended.connect(_on_dash_ended)
@@ -47,7 +53,7 @@ func _physics_process(delta):
 	if dash.is_dashing():
 		velocity = dash.get_dash_velocity()
 		# Use move_and_collide for fixed-distance dash without wall sliding
-		var collision = move_and_collide(velocity * delta)
+		var collision := move_and_collide(velocity * delta)
 		if collision:
 			dash.cancel_dash()
 	else:
@@ -66,9 +72,9 @@ func _physics_process(delta):
 		_set_sprite_direction(velocity.x)
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("shoot") and resource_manager.can_buy(SHOOT_COST):
+	if event.is_action_pressed("shoot") and resource_manager.can_buy(shoot_cost):
 		if shoot.try_shoot(get_global_mouse_position(), global_position):
-			resource_manager.subtract_scrap(SHOOT_COST)
+			resource_manager.subtract_scrap(shoot_cost)
 	
 	if event.is_action_pressed("slash"):
 		melee_weapon.try_slash(get_global_mouse_position())
@@ -120,37 +126,62 @@ func _on_dash_ended():
 	if dash_particles:
 		dash_particles.emitting = false
 
-func take_damage(amount: int, knockback_force: float, from_position: Vector2) -> void:
+func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead() or dash.is_invincible():
 		return
 	
+	var was_fatal = health.take_damage(amount)
+	
+	if was_fatal:
+		_handle_death(from_position)
+	else:
+		_handle_damage(from_position, knockback_force)
+
+func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
+	# Apply knockback
 	knockback.apply(from_position, knockback_force)
 	
+	# Visual feedback
 	if hit_particles:
 		hit_particles.restart()
 	
-	
+	# Impact effects
 	freeze_frame_manager.freeze(damage_freeze_duration)
-	print(damage_freeze_duration, " second freeze on damage")
+	camera_shake_manager.shake_screen(damage_screen_shake_intensity, 0.3)
 	
-	camera_shake_manager.shake_screen(0.2, 0.3)
+	# Animation
+	animation.set_state(AnimationComponent.State.DAMAGE)
 	
-	health.take_damage(amount)
+	# Notify external systems
+	damaged.emit(health.get_current_health())
 
-func _on_died():
-	emit_signal("damaged", 0)
+func _handle_death(from_position: Vector2) -> void:
+	# Stronger knockback on death
+	knockback.apply(from_position, death_knockback_force)
+	
+	# Visual feedback
+	if hit_particles:
+		hit_particles.restart()
+	
+	# Stronger impact effects on death
+	freeze_frame_manager.freeze(death_freeze_duration)
+	camera_shake_manager.shake_screen(death_screen_shake_intensity, 0.3)
+	
+	# Disable controls
 	can_move = false
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
 	
+	# Death VFX
 	if flash_vfx:
 		flash_vfx.start()
 	
+	# Animation
 	animation.set_state(AnimationComponent.State.DIE)
-
-func _on_damaged(current_health: int):
-	animation.set_state(AnimationComponent.State.DAMAGE)
-	emit_signal("damaged", current_health)
+	
+	# Notify external systems
+	damaged.emit(0) # HUD
+	died.emit() # DeathSequenceController
 
 func is_dead():
 	return health.is_dead()
@@ -160,12 +191,6 @@ func get_health():
 
 func collect_scrap(amount: int) -> void:
 	resource_manager.add_scrap(amount)
-
-func set_shooting_enabled(enabled: bool):
-	shoot.set_enabled(enabled)
-
-func set_slashing_enabled(enabled: bool):
-	melee_weapon.set_enabled(enabled)
 
 func _on_turret_placement_started():
 	shoot.set_enabled(false)

@@ -27,9 +27,6 @@ var current_aim_angle := 0.0
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
 func _ready() -> void:
-	health.died.connect(_on_died)
-	health.damaged.connect(_on_damaged)
-	
 	if shoot:
 		shoot.shoot_cooldown = shoot_cooldown
 
@@ -89,23 +86,26 @@ func buff_damage(multiplier: float) -> void:
 	if shoot:
 		shoot.projectile_damage = damage
 
-func take_damage(amount: int, knockback_force: float, from_position: Vector2) -> void:
+func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead():
 		return
 	
-	health.take_damage(amount)
+	var was_fatal = health.take_damage(amount)
+	
+	if was_fatal:
+		_handle_death()
+	else:
+		_handle_damage(from_position, knockback_force)
+
+func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	knockback.apply(from_position, knockback_force)
 	
 	if hit_particles:
 		hit_particles.restart()
 	
-	if not is_dead():
-		_play_anim("take_damage")
+	_play_anim("take_damage")
 
-func _on_damaged(_amount: int) -> void:
-	pass
-
-func _on_died() -> void:
+func _handle_death() -> void:
 	remove_from_group("enemies")
 	died.emit()
 	_play_anim("die")

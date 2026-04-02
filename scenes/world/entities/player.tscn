@@ -518,7 +518,7 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=2137359976]
 script = ExtResource("5_qlg0r")
-max_health = 200
+max_health = 40
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="ShootComponent" type="Node" parent="." unique_id=904350876]
@@ -593,3 +593,4 @@ process_material = SubResource("ParticleProcessMaterial_dash")
 position = Vector2(0, -12)
 
 [node name="FlashVfx" parent="." unique_id=462082651 instance=ExtResource("16_74ekq")]
+scale = Vector2(2, 2)

@@ -24,8 +24,7 @@ func _ready() -> void:
 	
 	if player:
 		await player.ready
-		if player.health:
-			player.health.died.connect(_on_player_died)
+		player.died.connect(_on_player_died)
 
 func _on_player_died() -> void:
 	if _sequence_running:

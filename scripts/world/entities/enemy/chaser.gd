@@ -19,8 +19,6 @@ signal died
 @onready var player: Node2D = get_tree().get_first_node_in_group("player")
 
 func _ready() -> void:
-	health.died.connect(_on_died)
-	health.damaged.connect(_on_damaged)
 	hitbox.hit_target.connect(_on_hit_target)
 	
 	# Setup contact damage hitbox
@@ -51,38 +49,35 @@ func buff_damage(multiplier: float) -> void:
 	damage = int(damage * multiplier)
 	hitbox.damage = damage
 
-func take_damage(amount: int, knockback_force: float, from_position: Vector2) -> void:
+func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead():
 		return
 	
-	# Ignore friendly fire from other enemies (check via collision layers instead)
-	# Note: This is handled by collision masks, but we keep this as a safety check
+	var was_fatal = health.take_damage(amount)
 	
-	health.take_damage(amount)
+	if was_fatal:
+		_handle_death()
+	else:
+		_handle_damage(from_position, knockback_force)
+
+func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	knockback.apply(from_position, knockback_force)
 	
 	if hit_particles:
 		hit_particles.restart()
 	
-	if not is_dead():
-		_play_anim("take_damage")
+	_play_anim("take_damage")
 
-func _on_damaged(_amount: int) -> void:
-	# Health component emits this signal, but we handle animation in take_damage directly now
-	pass
+func _handle_death() -> void:
+	remove_from_group("enemies")
+	died.emit()
+	_play_anim("die")
 
 func _on_hit_target(target: Node) -> void:
 	print("Chaser hit: ", target)
 	# Apply recoil knockback when hitting something (bidirectional knockback)
 	if target and self_knockback > 0:
 		knockback.apply(target.global_position, self_knockback)
-
-func _on_died() -> void:
-	remove_from_group("enemies")
-	died.emit()
-	
-	#collision_shape.set_deferred("disabled", true)
-	_play_anim("die")
 
 func despawn() -> void:
 	drop_scrap.drop()

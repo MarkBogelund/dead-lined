@@ -1,20 +1,20 @@
 extends Node
 class_name DashComponent
 
-## Handles player dash mechanic with invincibility and easing
-
-@export var enabled := true
-@export var dash_distance := 120.0
-@export var dash_duration := 0.2
-@export var cooldown_time := 0.5
-@export var invincible := true
-@export var ease_in_power := 4.0 ## High value = snappier start
-@export var ease_out_power := 2.0 ## Controls deceleration
-
 signal dash_started(direction: Vector2)
 signal dash_ended
 
 enum State {IDLE, DASHING, COOLDOWN}
+
+@export var enabled := true
+@export var invincible := true
+
+@export_group("Dash Movement")
+@export var dash_distance := 120.0
+@export var dash_duration := 0.2
+@export var cooldown_time := 0.5
+@export var ease_in_power := 4.0 ## High value = snappier start
+@export var ease_out_power := 2.0 ## Controls deceleration
 
 var _state := State.IDLE
 var _dash_direction := Vector2.ZERO
