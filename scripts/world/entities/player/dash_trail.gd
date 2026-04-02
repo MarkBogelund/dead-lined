@@ -9,9 +9,9 @@ var queue: Array = []
 var is_tracking: bool = false
 
 func _ready() -> void:
-	# Connect to dash component signals
-	var dash = get_parent().get_node_or_null("DashComponent")
-	if dash:
+	# Connect to parent dash component
+	var dash = get_parent()
+	if dash and dash is DashComponent:
 		dash.dash_started.connect(_on_dash_started)
 		dash.dash_ended.connect(_on_dash_ended)
 

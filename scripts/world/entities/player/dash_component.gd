@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name DashComponent
 
 signal dash_started(direction: Vector2)
@@ -8,6 +8,10 @@ enum State {IDLE, DASHING, COOLDOWN}
 
 @export var enabled := true
 @export var invincible := true
+
+@export_group("References")
+@export var dash_particles: GPUParticles2D = get_node_or_null("DashParticles")
+@export var flash_vfx: FlashVfx
 
 @export_group("Dash Movement")
 @export var dash_distance := 120.0
@@ -75,10 +79,23 @@ func _start_dash(direction: Vector2) -> void:
 	_state = State.DASHING
 	_dash_direction = direction
 	_dash_timer = 0.0
+	
+	# Start VFX
+	if dash_particles:
+		dash_particles.emitting = true
+
+	if flash_vfx:
+		flash_vfx.start()
+	
 	emit_signal("dash_started", direction)
 
 func _end_dash() -> void:
 	_state = State.COOLDOWN
 	_cooldown_timer = cooldown_time
 	_dash_direction = Vector2.ZERO
+	
+	# Stop VFX
+	if dash_particles:
+		dash_particles.emitting = false
+	
 	emit_signal("dash_ended")

@@ -18,7 +18,6 @@ signal died
 @onready var melee_weapon: MeleeWeapon = $MeleeWeapon
 @onready var dash: DashComponent = $DashComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
-@onready var dash_particles: GPUParticles2D = $DashParticles
 @onready var flash_vfx: FlashVfx = $FlashVfx
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -39,9 +38,7 @@ var can_move := true
 const MIN_MOVE_SPEED := 10.0
 
 func _ready():
-	melee_weapon.slash_started.connect(_on_slash_started)
-	dash.dash_started.connect(_on_dash_started)
-	dash.dash_ended.connect(_on_dash_ended)
+	melee_weapon.slash_started.connect(_handle_slash_started)
 	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
 
@@ -81,7 +78,8 @@ func _unhandled_input(event: InputEvent):
 	
 	if event.is_action_pressed("dash"):
 		var dash_dir = _get_dash_direction()
-		dash.try_dash(dash_dir)
+		if dash.try_dash(dash_dir):
+			_handle_dash_started(dash_dir)
 
 func _update_animation():
 	if is_dead():
@@ -108,23 +106,14 @@ func _get_dash_direction() -> Vector2:
 	else:
 		return Vector2.RIGHT
 
-func _on_slash_started(target_pos: Vector2):
+func _handle_slash_started(target_pos: Vector2):
 	_set_sprite_direction(target_pos.x - global_position.x)
 	animation.set_state(AnimationComponent.State.SLASH)
 
-func _on_dash_started(direction: Vector2):
+func _handle_dash_started(direction: Vector2):
 	_set_sprite_direction(direction.x)
 	animation.set_state(AnimationComponent.State.DASH)
-	
-	# Light screen shake on dash
 	camera_shake_manager.shake_screen(0.15, 0.15)
-	
-	if dash_particles:
-		dash_particles.emitting = true
-
-func _on_dash_ended():
-	if dash_particles:
-		dash_particles.emitting = false
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead() or dash.is_invincible():
