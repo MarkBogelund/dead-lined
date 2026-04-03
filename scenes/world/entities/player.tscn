@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c1up8f3hcb17m"]
 
 [ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/world/entities/player/player.gd" id="1_g2els"]
+[ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_74ekq"]
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/world/entities/player_projectile.tscn" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://dlrnady7rm2bb" path="res://assets/sprites/engineer-Sheet.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_dqkch"]
@@ -529,6 +530,9 @@ z_index = 2
 collision_layer = 2
 script = ExtResource("1_g2els")
 damage_freeze_duration = 0.1
+
+[node name="AimingComponent" type="Node" parent="." unique_id=915185371]
+script = ExtResource("2_74ekq")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=2137359976]
 script = ExtResource("5_qlg0r")

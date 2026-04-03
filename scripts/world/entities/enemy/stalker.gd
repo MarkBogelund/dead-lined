@@ -13,6 +13,7 @@ signal died
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var targeting: TargetingComponent = $TargetingComponent
+@onready var aiming: AimingComponent = $AimingComponent
 
 @export var damage := 15
 @export var speed := 25.0
@@ -20,10 +21,7 @@ signal died
 @export var distance_tolerance := 20.0 ## Acceptable range around ideal distance before adjusting
 @export var max_shoot_distance := 120.0 ## Maximum distance to shoot from (wiggle room)
 @export var shoot_cooldown := 1.5
-@export var aim_rotation_speed := 4.0
 @export var aim_accuracy_angle := 0.25
-
-var current_aim_angle := 0.0
 
 func _ready() -> void:
 	# Configure animations
@@ -69,13 +67,11 @@ func _physics_process(delta: float) -> void:
 			
 			# Aim and shoot only when has line of sight
 			if has_line_of_sight:
-				var target_angle := to_target.angle()
-				current_aim_angle = lerp_angle(current_aim_angle, target_angle, aim_rotation_speed * delta)
+				aiming.aim_at(target.global_position, global_position, delta)
 				
 				# Shoot if within distance and aim is accurate
 				if distance <= max_shoot_distance:
-					var angle_diff = abs(angle_difference(current_aim_angle, target_angle))
-					if angle_diff < aim_accuracy_angle:
+					if aiming.is_aimed_at(target.global_position, global_position, aim_accuracy_angle):
 						shoot.try_shoot(target.global_position, global_position)
 		# Play idle animation when moving
 		animation.play_animation("idle")

@@ -394,3 +394,4 @@ metadata/_custom_type_script = "uid://bfdfe71wkym8b"
 [node name="TargetingComponent" type="Node" parent="." unique_id=37251209]
 script = ExtResource("12_by6ef")
 target_configs = Array[ExtResource("13_wuiwp")]([SubResource("Resource_0qpcb"), SubResource("Resource_85msy")])
+priority_distance_threshold = 30.0

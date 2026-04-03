@@ -8,10 +8,10 @@ class_name Turret
 @onready var canon: Node2D = $Canon
 @onready var muzzle: Marker2D = $Canon/Graphics/Muzzle
 @onready var targeting: TargetingComponent = $TargetingComponent
+@onready var aiming: AimingComponent = $AimingComponent
 
 ## Targeting
 @export var detection_angle := 0.2 # Radians from aim direction
-@export var rotation_speed := 6.0 # Radians per second
 
 ## Firing
 @export var fire_rate := 0.5 # Seconds between shots
@@ -48,23 +48,15 @@ func _process(delta: float) -> void:
 	if not target:
 		return
 	
-	_rotate_towards(target.global_position, delta)
+	aiming.aim_at(target.global_position, canon.global_position, delta)
 	
-	if _can_fire_at(target):
+	if aiming.is_aimed_at(target.global_position, canon.global_position, detection_angle):
 		_fire_at(target.global_position)
 
-func _rotate_towards(target_pos: Vector2, delta: float) -> void:
-	var direction := (target_pos - canon.global_position).angle() + UP_FACING_OFFSET
-	canon.rotation = lerp_angle(canon.rotation, direction, rotation_speed * delta)
-
-func _can_fire_at(target: Node2D) -> bool:
-	if _fire_timer > 0:
-		return false
-	
-	var target_angle := (target.global_position - canon.global_position).angle() + UP_FACING_OFFSET
-	return abs(angle_difference(canon.rotation, target_angle)) < detection_angle
-
 func _fire_at(target_pos: Vector2) -> void:
+	if _fire_timer > 0:
+		return
+	
 	if shoot.try_shoot(target_pos, muzzle.global_position):
 		_fire_timer = fire_rate
 		animation_player.play("recoil")

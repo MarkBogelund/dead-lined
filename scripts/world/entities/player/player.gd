@@ -17,6 +17,7 @@ signal died
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var melee_weapon: MeleeWeapon = $MeleeWeapon
 @onready var dash: DashComponent = $DashComponent
+@onready var aiming: AimingComponent = $AimingComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var flash_vfx: FlashVfx = $FlashVfx
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -79,7 +80,9 @@ func _physics_process(delta):
 
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("shoot") and resource_manager.can_buy(shoot_cost):
-		if shoot.try_shoot(get_global_mouse_position(), global_position):
+		var mouse_pos := get_global_mouse_position()
+		aiming.aim_at(mouse_pos, global_position, 0.0)  # Instant aiming (delta not used)
+		if shoot.try_shoot(mouse_pos, global_position):
 			resource_manager.subtract_scrap(shoot_cost)
 	
 	if event.is_action_pressed("slash"):
