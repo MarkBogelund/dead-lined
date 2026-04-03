@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Oops! All Turrets"
+config/name="Dead-Lined"
 run/main_scene="uid://d1rku6qra3q8x"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
