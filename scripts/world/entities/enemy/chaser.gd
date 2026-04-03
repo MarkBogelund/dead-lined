@@ -11,7 +11,7 @@ signal died
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var navigation: NavigationComponent = $NavigationComponent
 @onready var hitbox: HitboxComponent = $HitboxComponent
-@onready var player: Node2D = get_tree().get_first_node_in_group("player")
+@onready var targeting: TargetingComponent = $TargetingComponent
 
 @export var speed := 30.0
 @export var self_knockback := 150.0 ## Recoil knockback when hitting player (lower = heavier enemy)
@@ -28,16 +28,19 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
 		velocity = knockback.velocity
-	elif is_dead() or (player and player.is_dead()):
+	elif is_dead():
 		velocity = Vector2.ZERO
 	else:
-		velocity = navigation.get_safe_velocity(player.global_position, speed) # Play idle animation when moving
-		animation.play_animation("idle")
+		var target := targeting.get_best_target(global_position)
+		if target:
+			velocity = navigation.get_safe_velocity(target.global_position, speed)
+			# Play idle animation when moving
+			animation.play_animation("idle")
+		else:
+			velocity = Vector2.ZERO
+	
 	knockback.process(delta)
 	move_and_slide()
-
-func _get_direction_to_player() -> Vector2:
-	return (player.global_position - global_position).normalized()
 
 func buff_health(multiplier: float) -> void:
 	health.buff_max_health(multiplier)

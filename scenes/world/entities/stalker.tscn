@@ -14,6 +14,17 @@
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="13_shoot"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="14_6oldd"]
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="14_projectile"]
+[ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="15_jqj1v"]
+[ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="16_mcjbk"]
+
+[sub_resource type="Resource" id="Resource_36hmg"]
+script = ExtResource("16_mcjbk")
+group_name = "player"
+priority = 1
+
+[sub_resource type="Resource" id="Resource_wkm5l"]
+script = ExtResource("16_mcjbk")
+group_name = "turrets"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
 radius = 7.0
@@ -258,6 +269,38 @@ wall_min_slide_angle = 0.0
 script = ExtResource("1_stalker")
 aim_accuracy_angle = 0.85
 
+[node name="TargetingComponent" type="Node" parent="." unique_id=486870823]
+script = ExtResource("15_jqj1v")
+target_configs = Array[ExtResource("16_mcjbk")]([SubResource("Resource_36hmg"), SubResource("Resource_wkm5l")])
+
+[node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
+script = ExtResource("13_shoot")
+explosion_vfx_scene = ExtResource("14_6oldd")
+projectile_scene = ExtResource("14_projectile")
+projectile_damage = 15
+projectile_knockback = 150
+muzzle_distance = 15.0
+shoot_cooldown = 1.5
+projectile_speed = 200.0
+
+[node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
+script = ExtResource("12_los")
+
+[node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1238538286]
+path_desired_distance = 25.0
+target_desired_distance = 12.0
+path_postprocessing = 1
+avoidance_enabled = true
+radius = 20.0
+neighbor_distance = 50.0
+max_neighbors = 5
+script = ExtResource("10_nav")
+
+[node name="DropScrapComponent" type="Node" parent="." unique_id=1674501989]
+script = ExtResource("9_dropscrap")
+scrap_drop_amount = 5
+scrap_scene = ExtResource("2_scrap")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=125532968]
 shape = SubResource("CircleShape2D_collision")
 
@@ -294,32 +337,3 @@ max_health = 30
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1949746839]
 libraries/ = SubResource("AnimationLibrary_stalker")
 script = ExtResource("7_ag4mk")
-
-[node name="DropScrapComponent" type="Node" parent="." unique_id=1674501989]
-script = ExtResource("9_dropscrap")
-scrap_drop_amount = 5
-scrap_scene = ExtResource("2_scrap")
-
-[node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1238538286]
-path_desired_distance = 25.0
-target_desired_distance = 12.0
-path_postprocessing = 1
-avoidance_enabled = true
-radius = 20.0
-neighbor_distance = 50.0
-max_neighbors = 5
-script = ExtResource("10_nav")
-
-[node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
-script = ExtResource("12_los")
-debug_draw = true
-
-[node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
-script = ExtResource("13_shoot")
-explosion_vfx_scene = ExtResource("14_6oldd")
-projectile_scene = ExtResource("14_projectile")
-projectile_damage = 15
-projectile_knockback = 150
-muzzle_distance = 15.0
-shoot_cooldown = 1.5
-projectile_speed = 200.0

@@ -1,23 +1,22 @@
 [gd_scene format=3 uid="uid://cjn5bnbk1raxk"]
 
 [ext_resource type="Script" uid="uid://ci6t3dum71ion" path="res://scripts/world/entities/turret/seeker.gd" id="1_6fjxm"]
+[ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="3_ih01a"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/seeker.png" id="3_pp6j5"]
+[ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="4_6h4p8"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_pp6j5"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="5_6fjxm"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_e28e4"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="5_oxiec"]
 
-[sub_resource type="Gradient" id="Gradient_elrtf"]
-offsets = PackedFloat32Array(0, 0.6716981)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+[sub_resource type="Resource" id="Resource_p0iej"]
+script = ExtResource("4_6h4p8")
+group_name = "enemies"
+priority = 1
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_t1nol"]
-gradient = SubResource("Gradient_elrtf")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
-radius = 7.0
+[sub_resource type="Resource" id="Resource_acdki"]
+script = ExtResource("4_6h4p8")
+group_name = "player"
 
 [sub_resource type="Animation" id="Animation_6fjxm"]
 length = 0.001
@@ -57,6 +56,18 @@ _data = {
 &"recoil": SubResource("Animation_dirdf")
 }
 
+[sub_resource type="Gradient" id="Gradient_elrtf"]
+offsets = PackedFloat32Array(0, 0.6716981)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_t1nol"]
+gradient = SubResource("Gradient_elrtf")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
+radius = 7.0
+
 [node name="Seeker" type="StaticBody2D" unique_id=909576845]
 z_index = 1
 script = ExtResource("1_6fjxm")
@@ -64,6 +75,17 @@ detection_angle = 0.1
 rotation_speed = 4.0
 fire_rate = 1.0
 vfx_scene = ExtResource("5_6fjxm")
+
+[node name="TargetingComponent" type="Node" parent="." unique_id=676946369]
+script = ExtResource("3_ih01a")
+target_configs = Array[ExtResource("4_6h4p8")]([SubResource("Resource_p0iej"), SubResource("Resource_acdki")])
+
+[node name="VFXComponent" type="Node" parent="." unique_id=1357204820]
+script = ExtResource("5_oxiec")
+metadata/_custom_type_script = "uid://buxf487a3gb6p"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114519724]
+libraries/ = SubResource("AnimationLibrary_mqfwu")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=436762941]
 show_behind_parent = true
@@ -102,10 +124,3 @@ region_rect = Rect2(7, 14, 22, 28)
 
 [node name="Muzzle" type="Marker2D" parent="Canon/Graphics" unique_id=838233975]
 position = Vector2(0, 15)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114519724]
-libraries/ = SubResource("AnimationLibrary_mqfwu")
-
-[node name="VFXComponent" type="Node" parent="." unique_id=1357204820]
-script = ExtResource("5_oxiec")
-metadata/_custom_type_script = "uid://buxf487a3gb6p"

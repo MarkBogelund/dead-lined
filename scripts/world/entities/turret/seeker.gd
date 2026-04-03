@@ -7,9 +7,9 @@ class_name Turret
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var canon: Node2D = $Canon
 @onready var muzzle: Marker2D = $Canon/Graphics/Muzzle
+@onready var targeting: TargetingComponent = $TargetingComponent
 
 ## Targeting
-@export var detection_range := 500.0
 @export var detection_angle := 0.2 # Radians from aim direction
 @export var rotation_speed := 6.0 # Radians per second
 
@@ -27,6 +27,8 @@ var enabled := true
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
 
 func _ready() -> void:
+	add_to_group("turrets")
+	
 	wave_manager.combat_phase_started.connect(func(_i): _active = true)
 	wave_manager.build_phase_started.connect(func(): _active = false)
 	
@@ -42,7 +44,7 @@ func _process(delta: float) -> void:
 	
 	_fire_timer -= delta
 	
-	var target := _find_closest_target()
+	var target := targeting.get_best_target(global_position)
 	if not target:
 		return
 	
@@ -50,22 +52,6 @@ func _process(delta: float) -> void:
 	
 	if _can_fire_at(target):
 		_fire_at(target.global_position)
-
-func _find_closest_target() -> Node2D:
-	var closest: Node2D = null
-	var closest_dist_sq := detection_range * detection_range
-	
-	for group in ["enemies", "player"]:
-		for node in get_tree().get_nodes_in_group(group):
-			if node.is_dead():
-				continue
-			
-			var dist_sq := global_position.distance_squared_to(node.global_position)
-			if dist_sq < closest_dist_sq:
-				closest_dist_sq = dist_sq
-				closest = node
-	
-	return closest
 
 func _rotate_towards(target_pos: Vector2, delta: float) -> void:
 	var direction := (target_pos - canon.global_position).angle() + UP_FACING_OFFSET

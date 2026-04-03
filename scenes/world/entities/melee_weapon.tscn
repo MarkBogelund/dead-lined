@@ -64,7 +64,6 @@ width = 8.0
 width_curve = SubResource("Curve_grobf")
 script = ExtResource("4_grobf")
 max_length = 15
-metadata/_custom_type_script = "uid://dwtddq52h1v0t"
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=454126189]
 collision_layer = 4
