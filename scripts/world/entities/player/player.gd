@@ -212,48 +212,31 @@ func _on_turret_placement_ended():
 	melee_weapon.set_enabled(true)
 
 ## Crunch time activation - apply multiplicative buffs
-func _on_crunch_time_started(damage_mult: float, radius_mult: float, speed_mult: float, arc_angle_mult: float, weapon_size_mult: float, cooldown_mult: float) -> void:
+func _on_crunch_time_started(buffs: Dictionary) -> void:
 	is_invincible = true
 	
 	# Multiply current values by multipliers
-	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage * damage_mult)
-	melee_weapon.slash_radius *= radius_mult
-	movement.speed *= speed_mult
-	melee_weapon.arc_angle *= arc_angle_mult
-	melee_weapon.scale *= weapon_size_mult
-	melee_weapon.slash_cooldown *= cooldown_mult
+	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage * buffs["damage"])
+	melee_weapon.slash_radius *= buffs["radius"]
+	movement.speed *= buffs["speed"]
+	melee_weapon.arc_angle *= buffs["arc_angle"]
+	melee_weapon.scale *= buffs["weapon_size"]
+	melee_weapon.slash_cooldown *= buffs["cooldown"]
 	
 	# Visual feedback - red tint
 	animated_sprite.modulate = Color(1.5, 0.5, 0.5, 1.0) # Red glow
-	
-	print("Crunch time buffs applied - Damage: %d, Radius: %.1f, Speed: %.1f, Arc: %.2f, Size: %.1fx, Cooldown: %.2fs" % [
-		melee_weapon.hitbox.damage,
-		melee_weapon.slash_radius,
-		movement.speed,
-		melee_weapon.arc_angle,
-		weapon_size_mult,
-		melee_weapon.slash_cooldown
-	])
 
 ## Crunch time deactivation - remove multiplicative buffs
-func _on_crunch_time_ended(damage_mult: float, radius_mult: float, speed_mult: float, arc_angle_mult: float, weapon_size_mult: float, cooldown_mult: float) -> void:
+func _on_crunch_time_ended(buffs: Dictionary) -> void:
 	is_invincible = false
 	
 	# Divide by same multipliers to reverse buffs
-	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage / damage_mult)
-	melee_weapon.slash_radius /= radius_mult
-	movement.speed /= speed_mult
-	melee_weapon.arc_angle /= arc_angle_mult
-	melee_weapon.scale /= weapon_size_mult
-	melee_weapon.slash_cooldown /= cooldown_mult
+	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage / buffs["damage"])
+	melee_weapon.slash_radius /= buffs["radius"]
+	movement.speed /= buffs["speed"]
+	melee_weapon.arc_angle /= buffs["arc_angle"]
+	melee_weapon.scale /= buffs["weapon_size"]
+	melee_weapon.slash_cooldown /= buffs["cooldown"]
 	
 	# Reset visual feedback
 	animated_sprite.modulate = Color.WHITE
-	
-	print("Crunch time buffs removed - Damage: %d, Radius: %.1f, Speed: %.1f, Arc: %.2f, Cooldown: %.2fs" % [
-		melee_weapon.hitbox.damage,
-		melee_weapon.slash_radius,
-		movement.speed,
-		melee_weapon.arc_angle,
-		melee_weapon.slash_cooldown
-	])
