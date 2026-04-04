@@ -12,22 +12,6 @@ class_name TargetingComponent
 ## If a lower priority target is closer by more than this amount, switch to it
 @export var priority_distance_threshold := 20.0
 
-func _ready() -> void:
-	# Validate all configured target groups
-	for config in target_configs:
-		if config == null:
-			push_error("TargetingComponent: Null TargetConfig found in target_configs array")
-			continue
-		
-		if config.group_name.is_empty():
-			push_warning("TargetingComponent: Empty group_name in TargetConfig")
-			continue
-		
-		# Note: Groups are created dynamically when nodes add themselves to groups
-		# So we only warn if the group doesn't exist yet, as it might be created later
-		if not get_tree().has_group(config.group_name):
-			push_warning("TargetingComponent: Group '%s' does not exist yet (priority: %d)" % [config.group_name, config.priority])
-
 ## Get the best target based on configured priorities and proximity
 ## Returns null if no valid targets found
 func get_best_target(from_position: Vector2) -> Node2D:
