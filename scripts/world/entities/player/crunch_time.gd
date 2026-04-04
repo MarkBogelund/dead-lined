@@ -5,7 +5,7 @@ class_name CrunchTimeComponent
 ## Emits signals for Player to apply/remove buffs
 
 signal crunch_time_started(damage_multiplier: float, radius_multiplier: float, speed_multiplier: float)
-signal crunch_time_ended()
+signal crunch_time_ended(damage_multiplier: float, radius_multiplier: float, speed_multiplier: float)
 
 ## Duration
 @export var duration := 10.0
@@ -20,11 +20,16 @@ signal crunch_time_ended()
 var is_active := false
 var time_remaining := 0.0
 
-@onready var stress_manager: StressLevelManager = %StressLevelManager
-@onready var wave_manager: WaveManager = %WaveManager
-@onready var player: Player = get_parent()
+var stress_manager: StressLevelManager
+var wave_manager: WaveManager
+var player: Player
 
 func _ready() -> void:
+	# Get references using group system (can't use % from inside Player node)
+	stress_manager = get_tree().get_first_node_in_group("stress_level_manager")
+	wave_manager = get_tree().get_first_node_in_group("wave_manager")
+	player = get_parent() as Player
+	
 	# Connect to activation triggers
 	stress_manager.crunch_time_activated.connect(activate)
 	
@@ -72,8 +77,8 @@ func deactivate() -> void:
 	
 	print("Crunch time ended!")
 	
-	# Emit signal for Player to remove buffs
-	crunch_time_ended.emit()
+	# Emit signal with same multipliers for Player to reverse buffs
+	crunch_time_ended.emit(damage_multiplier, radius_multiplier, speed_multiplier)
 
 ## Public API for checking if crunch time is active
 func is_crunch_time_active() -> bool:

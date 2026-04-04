@@ -41,9 +41,6 @@ const MIN_MOVE_SPEED := 10.0
 
 ## Crunch time state
 var is_invincible := false
-var _original_damage := 0
-var _original_radius := 0.0
-var _original_speed := 0.0
 
 func _ready():
 	# Configure animations
@@ -61,11 +58,6 @@ func _ready():
 	# Connect to crunch time signals
 	crunch_time.crunch_time_started.connect(_on_crunch_time_started)
 	crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
-	
-	# Store original values for crunch time buffs
-	_original_damage = melee_weapon.hitbox.damage
-	_original_radius = melee_weapon.slash_radius
-	_original_speed = movement.speed
 
 func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
@@ -219,32 +211,38 @@ func _on_turret_placement_ended():
 	shoot.set_enabled(true)
 	melee_weapon.set_enabled(true)
 
-## Crunch time activation - apply buffs
+## Crunch time activation - apply multiplicative buffs
 func _on_crunch_time_started(damage_mult: float, radius_mult: float, speed_mult: float) -> void:
 	is_invincible = true
 	
-	# Apply damage multiplier to melee weapon
-	melee_weapon.hitbox.damage = int(_original_damage * damage_mult)
+	# Multiply current values by multipliers
+	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage * damage_mult)
+	melee_weapon.slash_radius *= radius_mult
+	movement.speed *= speed_mult
 	
-	# Apply radius multiplier to slash
-	melee_weapon.slash_radius = _original_radius * radius_mult
+	# Visual feedback - red tint
+	animated_sprite.modulate = Color(1.5, 0.5, 0.5, 1.0)  # Red glow
 	
-	# Apply speed multiplier to movement
-	movement.speed = _original_speed * speed_mult
-	
-	print("Player buffs applied - Damage: %d, Radius: %.1f, Speed: %.1f" % [
-		melee_weapon.hitbox.damage, 
-		melee_weapon.slash_radius, 
+	print("Crunch time buffs applied - Damage: %d, Radius: %.1f, Speed: %.1f" % [
+		melee_weapon.hitbox.damage,
+		melee_weapon.slash_radius,
 		movement.speed
 	])
 
-## Crunch time deactivation - remove buffs
-func _on_crunch_time_ended() -> void:
+## Crunch time deactivation - remove multiplicative buffs
+func _on_crunch_time_ended(damage_mult: float, radius_mult: float, speed_mult: float) -> void:
 	is_invincible = false
 	
-	# Reset to original values
-	melee_weapon.hitbox.damage = _original_damage
-	melee_weapon.slash_radius = _original_radius
-	movement.speed = _original_speed
+	# Divide by same multipliers to reverse buffs
+	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage / damage_mult)
+	melee_weapon.slash_radius /= radius_mult
+	movement.speed /= speed_mult
 	
-	print("Player buffs removed - Stats reset to normal")
+	# Reset visual feedback
+	animated_sprite.modulate = Color.WHITE
+	
+	print("Crunch time buffs removed - Damage: %d, Radius: %.1f, Speed: %.1f" % [
+		melee_weapon.hitbox.damage,
+		melee_weapon.slash_radius,
+		movement.speed
+	])
