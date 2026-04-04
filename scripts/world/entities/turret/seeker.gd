@@ -8,9 +8,6 @@ signal died
 @onready var vfx_component: VFXComponent = $VFXComponent
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var health: HealthComponent = $HealthComponent
-@onready var hit_particles: GPUParticles2D = $HitParticles
-@onready var flash_vfx: FlashVfx = $FlashVfx
-@onready var health_ui: HealthUIComponent = $HealthUIComponent
 @onready var canon: Node2D = $Canon
 @onready var muzzle: Marker2D = $Canon/Graphics/Muzzle
 @onready var targeting: TargetingComponent = $TargetingComponent
@@ -31,6 +28,7 @@ var enabled := true
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
+@onready var camera_shake_manager: CameraShakeManager = get_tree().get_first_node_in_group("camera_shake_manager")
 
 func _ready() -> void:
 	add_to_group("turrets")
@@ -88,38 +86,26 @@ func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> v
 		_handle_damage()
 
 func _handle_damage() -> void:
-	if hit_particles:
-		hit_particles.restart()
-	
 	animation.play_animation("take_damage")
 
 func _handle_death() -> void:
-	# Remove from turrets group so enemies stop targeting
 	remove_from_group("turrets")
 	
 	# Disable turret functionality
 	enabled = false
 	_active = false
 	
-	# # Visual feedback
-	# if hit_particles:
-	# 	hit_particles.restart()
-	
-	# if flash_vfx:
-	# 	flash_vfx.start()
-	
 	# Play death animation
 	animation.play_animation("die")
 	
 	# Emit signal
 	died.emit()
-	
-	# # Despawn after delay (give time for animation and VFX)
-	# await get_tree().create_timer(0.8).timeout
-	# despawn()
 
 func despawn() -> void:
 	queue_free()
+
+func shake_screen(intensity: float, duration: float) -> void:
+	camera_shake_manager.shake_screen(intensity, duration)
 
 func is_dead() -> bool:
 	return health.is_dead() if health else false
