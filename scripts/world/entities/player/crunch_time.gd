@@ -4,8 +4,8 @@ class_name CrunchTimeComponent
 ## Manages crunch time activation, duration, and buff calculations
 ## Emits signals for Player to apply/remove buffs
 
-signal crunch_time_started(damage_multiplier: float, radius_multiplier: float, speed_multiplier: float)
-signal crunch_time_ended(damage_multiplier: float, radius_multiplier: float, speed_multiplier: float)
+signal crunch_time_started(damage_multiplier: float, radius_multiplier: float, speed_multiplier: float, arc_angle_multiplier: float, weapon_size_multiplier: float, cooldown_multiplier: float)
+signal crunch_time_ended(damage_multiplier: float, radius_multiplier: float, speed_multiplier: float, arc_angle_multiplier: float, weapon_size_multiplier: float, cooldown_multiplier: float)
 
 ## Duration
 @export var duration := 10.0
@@ -15,6 +15,9 @@ signal crunch_time_ended(damage_multiplier: float, radius_multiplier: float, spe
 @export var damage_multiplier := 3.0
 @export var radius_multiplier := 2.0
 @export var speed_multiplier := 1.5
+@export var arc_angle_multiplier := 2.0
+@export var weapon_size_multiplier := 2.0
+@export var cooldown_multiplier := 0.5  # 0.5 = half cooldown (faster)
 
 ## State
 var is_active := false
@@ -65,7 +68,7 @@ func activate() -> void:
 	print("Crunch time started! Duration: %ss" % duration)
 	
 	# Emit signal with buff values for Player to apply
-	crunch_time_started.emit(damage_multiplier, radius_multiplier, speed_multiplier)
+	crunch_time_started.emit(damage_multiplier, radius_multiplier, speed_multiplier, arc_angle_multiplier, weapon_size_multiplier, cooldown_multiplier)
 
 ## Deactivate crunch time and reset
 func deactivate() -> void:
@@ -78,7 +81,7 @@ func deactivate() -> void:
 	print("Crunch time ended!")
 	
 	# Emit signal with same multipliers for Player to reverse buffs
-	crunch_time_ended.emit(damage_multiplier, radius_multiplier, speed_multiplier)
+	crunch_time_ended.emit(damage_multiplier, radius_multiplier, speed_multiplier, arc_angle_multiplier, weapon_size_multiplier, cooldown_multiplier)
 
 ## Public API for checking if crunch time is active
 func is_crunch_time_active() -> bool:
