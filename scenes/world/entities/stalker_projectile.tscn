@@ -9,24 +9,24 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_stalker"]
 radius = 4.0
 
-[node name="StalkerProjectile" type="Node2D" groups=["projectiles"]]
+[node name="StalkerProjectile" type="Node2D" unique_id=1720582556 groups=["projectiles"]]
 script = ExtResource("2_script")
 hit_vfx = ExtResource("3_vfx")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-z_index = 5
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2131120723]
 modulate = Color(1, 0.4, 0.4, 1)
+z_index = 5
 texture = ExtResource("1_props")
 region_enabled = true
 region_rect = Rect2(0, 482, 31, 30)
 
-[node name="HitboxComponent" type="Area2D" parent="."]
-collision_layer = 32
-collision_mask = 3
+[node name="HitboxComponent" type="Area2D" parent="." unique_id=1256077360]
+collision_layer = 16
+collision_mask = 35
 script = ExtResource("4_hitbox")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=892395387]
 shape = SubResource("CircleShape2D_stalker")
 
-[node name="VFXComponent" type="Node" parent="."]
+[node name="VFXComponent" type="Node" parent="." unique_id=1374031333]
 script = ExtResource("5_vfx_comp")

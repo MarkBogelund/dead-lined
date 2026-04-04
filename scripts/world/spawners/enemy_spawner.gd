@@ -1,6 +1,8 @@
 extends Marker2D
 class_name EnemySpawner
 
+signal enemy_spawned(enemy: Node)
+
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
 
@@ -50,6 +52,9 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	
 	enemy.died.connect(game_over_manager._on_enemy_died)
 	enemy.died.connect(wave_manager._on_enemy_died)
+	
+	# Emit signal for systems that need to track enemy spawns
+	enemy_spawned.emit(enemy)
 
 func _build_spawn_queue_for_wave(wave_index: int) -> Array[PackedScene]:
 	var queue: Array[PackedScene] = []

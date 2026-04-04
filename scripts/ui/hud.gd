@@ -2,11 +2,13 @@ extends Control
 
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var resource_manager: ResourceManager = %ResourceManager
+@onready var stress_level_manager: StressLevelManager = %StressLevelManager
 @onready var player: Player = %Player
 
 @onready var health_label: Label = $HealthContainer/HealthLabel
 @onready var scrap_label: Label = $ScrapContainer/ScrapLabel
 @onready var wave_label: Label = $WaveContainer/WaveLabel
+@onready var stress_label: Label = $StressContainer/StressLabel
 @onready var build_phase_timer: Label = $BuildPhaseTimer
 @onready var build_phase_texture: TextureRect = $WaveContainer/BuildPhaseTexture
 @onready var combat_phase_texture: TextureRect = $WaveContainer/CombatPhaseTexture
@@ -19,6 +21,7 @@ func _initialize_values() -> void:
 	set_health(player.get_health())
 	set_scrap(resource_manager.scrap_amount)
 	set_wave(wave_manager.get_current_wave())
+	set_stress(0.0)
 	build_phase_timer.visible = false
 	build_phase_texture.visible = true
 	combat_phase_texture.visible = false
@@ -26,6 +29,7 @@ func _initialize_values() -> void:
 func _connect_signals() -> void:
 	player.damaged.connect(_on_player_damaged)
 	resource_manager.scrap_amount_changed.connect(set_scrap)
+	stress_level_manager.stress_changed.connect(set_stress)
 	wave_manager.combat_phase_started.connect(set_wave)
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -42,6 +46,9 @@ func set_scrap(amount: int) -> void:
 
 func set_wave(wave_index: int) -> void:
 	wave_label.text = str(wave_index)
+
+func set_stress(stress_value: float) -> void:
+	stress_label.text = str(int(stress_value))
 
 func _on_build_phase_started() -> void:
 	build_phase_timer.visible = true

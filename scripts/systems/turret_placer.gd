@@ -1,7 +1,7 @@
 extends Node2D
 class_name TurretPlacer
 
-signal turret_placed(turret_entry: TurretEntry)
+signal turret_placed(turret: Node, turret_entry: TurretEntry)
 signal turret_placement_cancelled
 signal placement_started
 signal placement_ended
@@ -57,7 +57,7 @@ func _place():
 	get_tree().current_scene.add_child(placed_turret)
 	
 	_cleanup()
-	emit_signal("turret_placed", current_turret_entry)
+	emit_signal("turret_placed", placed_turret, current_turret_entry)
 	emit_signal("placement_ended")
 
 func _cleanup() -> void:

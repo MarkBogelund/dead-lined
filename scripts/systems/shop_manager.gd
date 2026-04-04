@@ -45,7 +45,7 @@ func _on_turret_selected(turret_entry: TurretEntry):
 	turret_placer.start_placement(turret_entry)
 	shop_panel.close()
 
-func _on_turret_placed(turret_entry: TurretEntry):
+func _on_turret_placed(_turret: Node, turret_entry: TurretEntry):
 	resource_manager.subtract_scrap(turret_entry.price)
 	turrets_placed += 1
 

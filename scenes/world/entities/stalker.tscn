@@ -177,6 +177,18 @@ tracks/1/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.6134537, 0.7958314, 0.90716636, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_die"]
 resource_name = "die"
@@ -252,7 +264,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [Color(10, 10, 10, 1), Color(1, 1, 1, 1)]
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(0.6117647, 0.79607844, 0.90588236, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stalker"]
@@ -315,7 +327,7 @@ position = Vector2(0, 8)
 texture = ExtResource("8_shadow")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=89554983]
-modulate = Color(0.5, 0.8, 1, 1)
+modulate = Color(0.6134537, 0.7958314, 0.90716636, 1)
 z_index = 6
 position = Vector2(0, -9.536743e-07)
 scale = Vector2(0.8, 0.8)

@@ -11,10 +11,10 @@
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/world/spawners/shop_station.tscn" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
 [ext_resource type="Texture2D" uid="uid://dr1jaw3sxgsvp" path="res://assets/sprites/props.png" id="6_vtaks"]
+[ext_resource type="Script" uid="uid://dmrpqifvdv8m3" path="res://scripts/systems/stress_level_manager.gd" id="7_stress"]
 [ext_resource type="Script" uid="uid://ioxvj1ihixrt" path="res://scripts/systems/resource_manager.gd" id="7_u5sy4"]
 [ext_resource type="Script" uid="uid://ta3ftlocrs8x" path="res://scripts/systems/camera_shake_manager.gd" id="8_shake"]
 [ext_resource type="Script" uid="uid://du104cpiwp1j4" path="res://scripts/systems/death_sequence_controller.gd" id="9_death"]
-[ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/world/entities/seeker.tscn" id="10_bt5mj"]
 [ext_resource type="Script" uid="uid://bcjdlvprcr1uv" path="res://scripts/systems/freeze_frame_manager.gd" id="10_freeze"]
 [ext_resource type="PackedScene" uid="uid://h0m8s5cfwoo8" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="14_1kice"]
@@ -201,13 +201,14 @@ shop_station = NodePath("../../World/ShopStation")
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]
+unique_name_in_owner = true
 script = ExtResource("4_ca42v")
 metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
-time_between_waves = 30
+time_between_waves = 5
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="ResourceManager" type="Node" parent="Systems" unique_id=674344671 groups=["resource_manager"]]
@@ -221,6 +222,13 @@ unique_name_in_owner = true
 script = ExtResource("6_ssvqc")
 game_over_ui = NodePath("../../UI/GameOverUI")
 metadata/_custom_type_script = "uid://oouh8yqjltum"
+
+[node name="StressLevelManager" type="Node" parent="Systems" unique_id=1710259123 groups=["stress_level_manager"]]
+unique_name_in_owner = true
+script = ExtResource("7_stress")
+base_growth_rate = 0.1
+enemy_growth_modifier = 0.5
+turret_growth_modifier = 2.0
 
 [node name="CameraShakeManager" type="Node" parent="Systems" unique_id=1539559632 node_paths=PackedStringArray("camera") groups=["camera_shake_manager"]]
 unique_name_in_owner = true
@@ -240,9 +248,6 @@ game_over_manager = NodePath("../GameOverManager")
 ui_delay = 1.5
 zoom_duration = 1.0
 zoom_target = 3.5
-
-[node name="Seeker" parent="Systems" unique_id=909576845 instance=ExtResource("10_bt5mj")]
-position = Vector2(-104, -64)
 
 [node name="World" type="Node" parent="." unique_id=792632933]
 
@@ -323,12 +328,12 @@ limit_smoothed = true
 position_smoothing_enabled = true
 
 [node name="EnemySpawner2" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
-position = Vector2(-109, 35)
+position = Vector2(-136, 56)
 spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe")])
 health_growth = 0.0
 
 [node name="EnemySpawner3" parent="World" unique_id=271277418 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
-position = Vector2(-40, -128)
+position = Vector2(168, -128)
 spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe")])
 health_growth = 0.0
 
