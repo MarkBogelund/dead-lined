@@ -3,12 +3,17 @@
 [ext_resource type="Script" uid="uid://ci6t3dum71ion" path="res://scripts/world/entities/turret/seeker.gd" id="1_6fjxm"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="3_6h4p8"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="3_ih01a"]
+[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="3_p0iej"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/seeker.png" id="3_pp6j5"]
 [ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="4_6h4p8"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_pp6j5"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="5_6fjxm"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_e28e4"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="5_oxiec"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="9_jm6wr"]
+[ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_v4l8l"]
+[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="14_6yfjj"]
+[ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="14_flmdm"]
 
 [sub_resource type="Resource" id="Resource_p0iej"]
 script = ExtResource("4_6h4p8")
@@ -33,6 +38,71 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Canon/Graphics:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HitParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_jm6wr"]
+resource_name = "die"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Canon/Graphics:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_dirdf"]
 resource_name = "recoil"
@@ -51,10 +121,53 @@ tracks/0/keys = {
 "values": [Vector2(0, 0), Vector2(0, -2), Vector2(0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_v4l8l"]
+resource_name = "take_damage"
+length = 0.1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.100000024),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Canon/Graphics:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = false
+tracks/2/path = NodePath("HitParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mqfwu"]
 _data = {
 &"RESET": SubResource("Animation_6fjxm"),
-&"recoil": SubResource("Animation_dirdf")
+&"die": SubResource("Animation_jm6wr"),
+&"recoil": SubResource("Animation_dirdf"),
+&"take_damage": SubResource("Animation_v4l8l")
 }
 
 [sub_resource type="Gradient" id="Gradient_elrtf"]
@@ -69,12 +182,57 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
 radius = 7.0
 
+[sub_resource type="Curve" id="Curve_6yfjj"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_flmdm"]
+curve = SubResource("Curve_6yfjj")
+
+[sub_resource type="Gradient" id="Gradient_u0oon"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0.43845946, 0.44463333, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ghnks"]
+gradient = SubResource("Gradient_u0oon")
+
+[sub_resource type="Curve" id="Curve_n8pd0"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_s6fyr"]
+curve = SubResource("Curve_n8pd0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jnfwi"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_flmdm")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.39999998
+scale_curve = SubResource("CurveTexture_s6fyr")
+color_ramp = SubResource("GradientTexture1D_ghnks")
+
 [node name="Seeker" type="StaticBody2D" unique_id=909576845]
 z_index = 1
 script = ExtResource("1_6fjxm")
 detection_angle = 0.1
 fire_rate = 1.0
 vfx_scene = ExtResource("5_6fjxm")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=219458917]
+script = ExtResource("3_p0iej")
+max_health = 50
+metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="AimingComponent" type="Node" parent="." unique_id=1630660525 node_paths=PackedStringArray("visual_node")]
 script = ExtResource("3_6h4p8")
@@ -90,8 +248,10 @@ target_configs = Array[ExtResource("4_6h4p8")]([SubResource("Resource_p0iej"), S
 script = ExtResource("5_oxiec")
 metadata/_custom_type_script = "uid://buxf487a3gb6p"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114519724]
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1728277635]
 libraries/ = SubResource("AnimationLibrary_mqfwu")
+script = ExtResource("9_jm6wr")
+metadata/_custom_type_script = "uid://cq7h5m3f8n2jk"
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=436762941]
 show_behind_parent = true
@@ -130,3 +290,20 @@ region_rect = Rect2(7, 14, 22, 28)
 
 [node name="Muzzle" type="Marker2D" parent="Canon/Graphics" unique_id=838233975]
 position = Vector2(0, 15)
+
+[node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1788566274]
+z_index = 15
+emitting = false
+amount = 20
+texture = ExtResource("13_v4l8l")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_jnfwi")
+
+[node name="FlashVfx" parent="." unique_id=1645924480 instance=ExtResource("14_6yfjj")]
+scale = Vector2(2, 2)
+
+[node name="HealthUIComponent" parent="." unique_id=1686314379 node_paths=PackedStringArray("health_component") instance=ExtResource("14_flmdm")]
+position = Vector2(0, -24)
+health_component = NodePath("../HealthComponent")

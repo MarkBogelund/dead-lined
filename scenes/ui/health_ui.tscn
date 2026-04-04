@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dbvhg3xtca5"]
+
+[ext_resource type="Script" uid="uid://5wcqudc7efji" path="res://scripts/world/entities/shared/health_ui.gd" id="1_health_ui"]
+[ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="2_6rypn"]
+
+[node name="HealthUIComponent" type="Node2D" unique_id=324297092]
+script = ExtResource("1_health_ui")
+
+[node name="Label" type="Label" parent="." unique_id=1150794816]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -47.0
+offset_top = -10.0
+offset_right = 47.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_6rypn")
+theme_override_font_sizes/font_size = 8
+text = "100/100"
+horizontal_alignment = 1
+vertical_alignment = 1

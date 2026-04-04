@@ -81,7 +81,7 @@ func _physics_process(delta):
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("shoot") and resource_manager.can_buy(shoot_cost):
 		var mouse_pos := get_global_mouse_position()
-		aiming.aim_at(mouse_pos, global_position, 0.0)  # Instant aiming (delta not used)
+		aiming.aim_at(mouse_pos, global_position, 0.0) # Instant aiming (delta not used)
 		if shoot.try_shoot(mouse_pos, global_position):
 			resource_manager.subtract_scrap(shoot_cost)
 	
