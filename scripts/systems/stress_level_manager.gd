@@ -31,7 +31,7 @@ var turret_count := 0
 var is_combat_phase := false
 
 ## Focus mode flag
-var focus_mode_triggered := false
+var crunch_time_triggered := false
 
 func _ready() -> void:
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -63,9 +63,9 @@ func _process(delta: float) -> void:
 	# Cap at 100
 	if current_stress >= 100.0:
 		current_stress = 100.0
-		if not focus_mode_triggered:
-			focus_mode_triggered = true
-			print("Focus mode")
+		if not crunch_time_triggered:
+			crunch_time_triggered = true
+			print("Crunch time")
 			focus_mode_activated.emit()
 	
 	stress_changed.emit(current_stress)
@@ -75,7 +75,7 @@ func _calculate_growth_rate() -> float:
 	return base_growth_rate + (enemy_count * enemy_growth_modifier) + (turret_count * turret_growth_modifier)
 
 func _on_combat_phase_started(_wave_index: int) -> void:
-	focus_mode_triggered = false
+	crunch_time_triggered = false
 	is_combat_phase = true
 	
 	# Count all existing turrets in the scene

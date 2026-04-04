@@ -36,6 +36,4 @@ func _format_time(seconds: float) -> String:
 	return "%d:%02d" % [minutes, secs]
 
 func _on_restart_pressed() -> void:
-	#GameManager.reset()
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	emit_signal("restart_game")

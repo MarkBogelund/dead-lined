@@ -9,18 +9,12 @@ signal game_over
 
 func _ready() -> void:
 	add_to_group("game_over_manager")
-	
-	# Connect to player death
-	if player.has_signal("died"):
-		player.died.connect(_on_player_died)
+	player.died.connect(_on_player_died)
+	game_over_ui.restart_game.connect(_on_restart_pressed)
 
 func _on_player_died() -> void:
 	game_over.emit()
 	animation_player.play("play_death_sequence")
 
-func _on_enemy_died() -> void:
-	StatsManager.record_enemy_death()
-
-## Resets game over state
-func reset() -> void:
-	StatsManager.reset()
+func _on_restart_pressed() -> void:
+	get_tree().reload_current_scene()
