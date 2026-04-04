@@ -327,7 +327,7 @@ scale_max = 0.39999998
 scale_curve = SubResource("CurveTexture_s6fyr")
 color_ramp = SubResource("GradientTexture1D_ghnks")
 
-[node name="Seeker" type="StaticBody2D" unique_id=909576845]
+[node name="Seeker" type="StaticBody2D" unique_id=909576845 groups=["turrets"]]
 z_index = 1
 collision_layer = 32
 collision_mask = 19

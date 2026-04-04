@@ -55,6 +55,7 @@ func _place():
 	var placed_turret := current_turret_entry.turret_scene.instantiate()
 	placed_turret.position = ghost_turret.position
 	get_tree().current_scene.add_child(placed_turret)
+	placed_turret.add_to_group("turrets")
 	
 	_cleanup()
 	emit_signal("turret_placed", placed_turret, current_turret_entry)

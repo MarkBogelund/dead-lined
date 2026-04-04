@@ -5,7 +5,8 @@ class_name StressLevelManager
 ## Growth rate increases with enemy and turret counts
 
 signal stress_changed(new_stress: float)
-signal focus_mode_activated()
+signal crunch_time_available()
+signal crunch_time_activated()
 
 ## Base growth rate in stress % per second
 @export var base_growth_rate := 1.0
@@ -30,6 +31,9 @@ var turret_count := 0
 
 ## Phase tracking
 var is_combat_phase := false
+
+## Crunch time availability flag
+var crunch_time_ready := false
 
 func _ready() -> void:
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -58,14 +62,19 @@ func _process(delta: float) -> void:
 	# Increase stress
 	current_stress += growth_rate * delta
 	
-	# Check if stress reaches 100 (crunch time)
+	# Cap at 100 and notify when crunch time becomes available
 	if current_stress >= 100.0:
-		current_stress = 0.0 # Reset to 0 for retriggering
-		score_manager.add_crunch_time(10.0)
-		print("Crunch time activated! +10s")
-		focus_mode_activated.emit()
+		current_stress = 100.0
+		if not crunch_time_ready:
+			crunch_time_ready = true
+			crunch_time_available.emit()
+			print("Crunch time available! Press button to activate.")
 	
 	stress_changed.emit(current_stress)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("crunch_time"):
+		activate_crunch_time()
 
 func _calculate_growth_rate() -> float:
 	# Base rate + (enemies * modifier) + (turrets * modifier)
@@ -73,6 +82,7 @@ func _calculate_growth_rate() -> float:
 
 func _on_combat_phase_started(_wave_index: int) -> void:
 	is_combat_phase = true
+	crunch_time_ready = false
 	
 	# Count all existing turrets in the scene
 	turret_count = _count_existing_turrets()
@@ -85,8 +95,22 @@ func _on_combat_phase_started(_wave_index: int) -> void:
 func _on_build_phase_started() -> void:
 	# Reset stress to 0
 	current_stress = 0.0
+	crunch_time_ready = false
 	stress_changed.emit(current_stress)
 	is_combat_phase = false
+
+## Manually activate crunch time (called by button press)
+func activate_crunch_time() -> void:
+	if not crunch_time_ready or current_stress < 100.0:
+		return  # Can only activate when stress is at 100
+	
+	# Reset stress and add crunch time
+	current_stress = 0.0
+	crunch_time_ready = false
+	score_manager.add_crunch_time(10.0)
+	print("Crunch time activated! +10s")
+	crunch_time_activated.emit()
+	stress_changed.emit(current_stress)
 
 func _on_player_died() -> void:
 	# Stop stress growth when player dies

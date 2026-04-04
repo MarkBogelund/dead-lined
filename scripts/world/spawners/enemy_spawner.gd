@@ -47,6 +47,7 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	var enemy := enemy_scene.instantiate()
 	enemy.global_position = global_position + _get_random_spawn_offset()
 	get_tree().current_scene.add_child(enemy)
+	enemy.add_to_group("enemies")
 	_apply_wave_scaling(enemy)
 	
 	# Connect to wave manager for wave completion tracking
@@ -82,7 +83,7 @@ func _apply_wave_scaling(enemy: Node) -> void:
 	enemy.buff_health(health_multiplier)
 	
 	var damage_multiplier := 1.0 + wave_index_to_damage_multiplier(_current_wave)
-	enemy.buff_health(damage_multiplier)
+	enemy.buff_damage(damage_multiplier)
 
 func wave_index_to_health_multiplier(wave_index: int) -> float:
 	return wave_index * health_growth
