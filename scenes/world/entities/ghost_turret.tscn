@@ -7,10 +7,19 @@
 atlas = ExtResource("1_0e5db")
 region = Rect2(0, 0, 22, 26)
 
-[node name="GhostTurret" type="Node2D" unique_id=1787389694]
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 16.0
+
+[node name="GhostTurret" type="Area2D" unique_id=365649621]
+collision_layer = 0
+collision_mask = 35
 script = ExtResource("1_exqsx")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=770917120]
-z_index = 5
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2076395065]
+modulate = Color(0.5, 1, 0.5, 0.7)
+z_index = 12
 position = Vector2(0, 3)
 texture = SubResource("AtlasTexture_exqsx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=657266515]
+shape = SubResource("CircleShape2D_collision")

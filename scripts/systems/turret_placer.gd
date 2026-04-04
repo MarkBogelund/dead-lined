@@ -45,6 +45,13 @@ func cancel():
 	emit_signal("placement_ended")
 
 func _place():
+	# Check if placement is valid
+	if ghost_turret and not ghost_turret.is_placement_valid():
+		# Invalid placement - do not place turret
+		# Optional: Add feedback (sound, screen shake, particle effect)
+		return
+	
+	# Valid placement - proceed with turret placement
 	var placed_turret := current_turret_entry.turret_scene.instantiate()
 	placed_turret.position = ghost_turret.position
 	get_tree().current_scene.add_child(placed_turret)
