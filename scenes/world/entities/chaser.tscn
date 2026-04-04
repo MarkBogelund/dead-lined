@@ -320,7 +320,7 @@ self_knockback = 250.0
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=338084793]
 collision_layer = 16
-collision_mask = 2
+collision_mask = 34
 script = ExtResource("4_ck52e")
 knockback = 200.0
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
@@ -386,8 +386,6 @@ target_desired_distance = 2.0
 path_postprocessing = 1
 avoidance_enabled = true
 radius = 8.0
-neighbor_distance = 50.0
-max_neighbors = 5
 script = ExtResource("11_uqckg")
 metadata/_custom_type_script = "uid://bfdfe71wkym8b"
 

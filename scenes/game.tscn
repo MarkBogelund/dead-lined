@@ -16,7 +16,6 @@
 [ext_resource type="Script" uid="uid://du104cpiwp1j4" path="res://scripts/systems/death_sequence_controller.gd" id="9_death"]
 [ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/world/entities/seeker.tscn" id="10_bt5mj"]
 [ext_resource type="Script" uid="uid://bcjdlvprcr1uv" path="res://scripts/systems/freeze_frame_manager.gd" id="10_freeze"]
-[ext_resource type="PackedScene" uid="uid://dbn6ammn3fpex" path="res://scenes/world/entities/chaser.tscn" id="11_e1j6l"]
 [ext_resource type="PackedScene" uid="uid://h0m8s5cfwoo8" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="14_1kice"]
 [ext_resource type="Resource" uid="uid://bbi5f87py8cnr" path="res://resources/seeker.tres" id="14_trtic"]
@@ -239,9 +238,6 @@ zoom_target = 3.5
 
 [node name="Seeker" parent="Systems" unique_id=909576845 instance=ExtResource("10_bt5mj")]
 position = Vector2(-104, -64)
-
-[node name="Chaser" parent="Systems" unique_id=1145312353 instance=ExtResource("11_e1j6l")]
-position = Vector2(104, 32)
 
 [node name="World" type="Node" parent="." unique_id=792632933]
 
