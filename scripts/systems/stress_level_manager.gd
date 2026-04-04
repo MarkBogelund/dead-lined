@@ -19,6 +19,7 @@ signal focus_mode_activated()
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var turret_placer: TurretPlacer = %TurretPlacer
 @onready var player: CharacterBody2D = %Player
+@onready var score_manager: ScoreManager = %ScoreManager
 
 ## Current stress level (0-100)
 var current_stress := 0.0
@@ -29,9 +30,6 @@ var turret_count := 0
 
 ## Phase tracking
 var is_combat_phase := false
-
-## Focus mode flag
-var crunch_time_triggered := false
 
 func _ready() -> void:
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -60,13 +58,12 @@ func _process(delta: float) -> void:
 	# Increase stress
 	current_stress += growth_rate * delta
 	
-	# Cap at 100
+	# Check if stress reaches 100 (crunch time)
 	if current_stress >= 100.0:
-		current_stress = 100.0
-		if not crunch_time_triggered:
-			crunch_time_triggered = true
-			print("Crunch time")
-			focus_mode_activated.emit()
+		current_stress = 0.0 # Reset to 0 for retriggering
+		score_manager.add_crunch_time(10.0)
+		print("Crunch time activated! +10s")
+		focus_mode_activated.emit()
 	
 	stress_changed.emit(current_stress)
 
@@ -75,7 +72,6 @@ func _calculate_growth_rate() -> float:
 	return base_growth_rate + (enemy_count * enemy_growth_modifier) + (turret_count * turret_growth_modifier)
 
 func _on_combat_phase_started(_wave_index: int) -> void:
-	crunch_time_triggered = false
 	is_combat_phase = true
 	
 	# Count all existing turrets in the scene

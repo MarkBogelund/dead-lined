@@ -4,7 +4,6 @@ class_name EnemySpawner
 signal enemy_spawned(enemy: Node)
 
 @onready var wave_manager: WaveManager = %WaveManager
-@onready var game_over_manager: GameOverManager = %GameOverManager
 
 @export var spawn_entries: Array[EnemySpawnEntry] = []
 @export var spawn_radius := 24.0
@@ -50,10 +49,10 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	get_tree().current_scene.add_child(enemy)
 	_apply_wave_scaling(enemy)
 	
-	enemy.died.connect(game_over_manager._on_enemy_died)
+	# Connect to wave manager for wave completion tracking
 	enemy.died.connect(wave_manager._on_enemy_died)
 	
-	# Emit signal for systems that need to track enemy spawns
+	# Emit signal for systems that need to track enemy spawns (ScoreManager)
 	enemy_spawned.emit(enemy)
 
 func _build_spawn_queue_for_wave(wave_index: int) -> Array[PackedScene]:

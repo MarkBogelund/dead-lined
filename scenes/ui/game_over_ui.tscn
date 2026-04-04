@@ -32,7 +32,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WavesLabel:modulate")
+tracks/2/path = NodePath("DronesLabel:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -44,7 +44,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("KillsLabel:modulate")
+tracks/3/path = NodePath("TurretsLabel:modulate")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -56,7 +56,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("TurretsLabel:modulate")
+tracks/4/path = NodePath("WavesLabel:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -68,7 +68,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("TimeLabel:modulate")
+tracks/5/path = NodePath("CrunchTimeLabel:modulate")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -80,7 +80,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("ScrapLabel:modulate")
+tracks/6/path = NodePath("TotalLabel:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -148,7 +148,7 @@ text = "You died"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="WavesLabel" type="Label" parent="." unique_id=1424212599]
+[node name="DronesLabel" type="Label" parent="." unique_id=1424212599]
 modulate = Color(1, 1, 1, 0)
 z_index = 11
 layout_mode = 1
@@ -168,7 +168,7 @@ text = "Waves"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="KillsLabel" type="Label" parent="." unique_id=2045099268]
+[node name="TurretsLabel" type="Label" parent="." unique_id=2045099268]
 modulate = Color(1, 1, 1, 0)
 z_index = 11
 layout_mode = 1
@@ -188,7 +188,7 @@ text = "Kills"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TurretsLabel" type="Label" parent="." unique_id=2055409843]
+[node name="WavesLabel" type="Label" parent="." unique_id=2055409843]
 modulate = Color(1, 1, 1, 0)
 z_index = 11
 layout_mode = 1
@@ -208,7 +208,7 @@ text = "Turrets"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TimeLabel" type="Label" parent="." unique_id=1563478874]
+[node name="CrunchTimeLabel" type="Label" parent="." unique_id=1563478874]
 modulate = Color(1, 1, 1, 0)
 z_index = 11
 layout_mode = 1
@@ -228,7 +228,7 @@ text = "Time"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ScrapLabel" type="Label" parent="." unique_id=559875209]
+[node name="TotalLabel" type="Label" parent="." unique_id=559875209]
 modulate = Color(1, 1, 1, 0)
 z_index = 11
 layout_mode = 1

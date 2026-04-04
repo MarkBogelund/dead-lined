@@ -7,7 +7,6 @@ signal turret_placement_started
 signal turret_placement_ended
 
 @onready var wave_manager: WaveManager = %WaveManager
-@onready var game_over_manager: GameOverManager = %GameOverManager
 @export var shop_panel: ShopPanel
 @export var shop_station: ShopStation
 @onready var resource_manager: ResourceManager = %ResourceManager
@@ -27,11 +26,6 @@ func _ready() -> void:
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 	
-	game_over_manager.game_over.connect(_on_game_over)
-
-func _on_game_over() -> void:
-	StatsManager.set_turrets(turrets_placed)
-
 func _on_station_interacted():
 	shop_panel.open()
 
