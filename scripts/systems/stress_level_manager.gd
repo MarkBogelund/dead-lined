@@ -102,7 +102,7 @@ func _on_build_phase_started() -> void:
 ## Manually activate crunch time (called by button press)
 func activate_crunch_time() -> void:
 	if not crunch_time_ready or current_stress < 100.0:
-		return  # Can only activate when stress is at 100
+		return # Can only activate when stress is at 100
 	
 	# Reset stress and add crunch time
 	current_stress = 0.0

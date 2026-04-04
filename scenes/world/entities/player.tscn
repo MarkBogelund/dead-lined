@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="6_c5rqy"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="8_dnykm"]
 [ext_resource type="Script" uid="uid://cdc3yx122ruc6" path="res://scripts/world/entities/player/movement.gd" id="10_b6tgf"]
+[ext_resource type="Script" path="res://scripts/world/entities/player/crunch_time.gd" id="11_crunch"]
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]
 [ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="12_yfgcb"]
 [ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_ghcoa"]
@@ -560,6 +561,9 @@ script = ExtResource("10_b6tgf")
 speed = 160.0
 friction = 2500.0
 metadata/_custom_type_script = "uid://cdc3yx122ruc6"
+
+[node name="CrunchTimeComponent" type="Node" parent="."]
+script = ExtResource("11_crunch")
 
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
 position = Vector2(0, -12)

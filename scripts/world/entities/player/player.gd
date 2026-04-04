@@ -18,6 +18,7 @@ signal died
 @onready var melee_weapon: MeleeWeapon = $MeleeWeapon
 @onready var dash: DashComponent = $DashComponent
 @onready var aiming: AimingComponent = $AimingComponent
+@onready var crunch_time: CrunchTimeComponent = $CrunchTimeComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var flash_vfx: FlashVfx = $FlashVfx
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -38,6 +39,12 @@ signal died
 var can_move := true
 const MIN_MOVE_SPEED := 10.0
 
+## Crunch time state
+var is_invincible := false
+var _original_damage := 0
+var _original_radius := 0.0
+var _original_speed := 0.0
+
 func _ready():
 	# Configure animations
 	animation.configure_animation("idle", 0, false)
@@ -50,6 +57,15 @@ func _ready():
 	melee_weapon.slash_started.connect(_handle_slash_started)
 	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
+	
+	# Connect to crunch time signals
+	crunch_time.crunch_time_started.connect(_on_crunch_time_started)
+	crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
+	
+	# Store original values for crunch time buffs
+	_original_damage = melee_weapon.hitbox.damage
+	_original_radius = melee_weapon.slash_radius
+	_original_speed = movement.speed
 
 func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
@@ -128,7 +144,7 @@ func _handle_dash_started(direction: Vector2):
 	camera_shake_manager.shake_screen(0.15, 0.15)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
-	if is_dead() or dash.is_invincible():
+	if is_dead() or dash.is_invincible() or is_invincible:
 		return
 	
 	dash.cancel_dash()
@@ -202,3 +218,33 @@ func _on_turret_placement_started():
 func _on_turret_placement_ended():
 	shoot.set_enabled(true)
 	melee_weapon.set_enabled(true)
+
+## Crunch time activation - apply buffs
+func _on_crunch_time_started(damage_mult: float, radius_mult: float, speed_mult: float) -> void:
+	is_invincible = true
+	
+	# Apply damage multiplier to melee weapon
+	melee_weapon.hitbox.damage = int(_original_damage * damage_mult)
+	
+	# Apply radius multiplier to slash
+	melee_weapon.slash_radius = _original_radius * radius_mult
+	
+	# Apply speed multiplier to movement
+	movement.speed = _original_speed * speed_mult
+	
+	print("Player buffs applied - Damage: %d, Radius: %.1f, Speed: %.1f" % [
+		melee_weapon.hitbox.damage, 
+		melee_weapon.slash_radius, 
+		movement.speed
+	])
+
+## Crunch time deactivation - remove buffs
+func _on_crunch_time_ended() -> void:
+	is_invincible = false
+	
+	# Reset to original values
+	melee_weapon.hitbox.damage = _original_damage
+	melee_weapon.slash_radius = _original_radius
+	movement.speed = _original_speed
+	
+	print("Player buffs removed - Stats reset to normal")
