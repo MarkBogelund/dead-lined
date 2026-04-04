@@ -101,12 +101,12 @@ func _handle_death() -> void:
 	enabled = false
 	_active = false
 	
-	# Visual feedback
-	if hit_particles:
-		hit_particles.restart()
+	# # Visual feedback
+	# if hit_particles:
+	# 	hit_particles.restart()
 	
-	if flash_vfx:
-		flash_vfx.start()
+	# if flash_vfx:
+	# 	flash_vfx.start()
 	
 	# Play death animation
 	animation.play_animation("die")
@@ -114,9 +114,9 @@ func _handle_death() -> void:
 	# Emit signal
 	died.emit()
 	
-	# Despawn after delay (give time for animation and VFX)
-	await get_tree().create_timer(0.8).timeout
-	despawn()
+	# # Despawn after delay (give time for animation and VFX)
+	# await get_tree().create_timer(0.8).timeout
+	# despawn()
 
 func despawn() -> void:
 	queue_free()

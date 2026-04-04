@@ -490,7 +490,7 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_yfgcb"]
+[sub_resource type="CurveTexture" id="CurveTexture_74ekq"]
 curve = SubResource("Curve_4enbs")
 
 [sub_resource type="Gradient" id="Gradient_74ekq"]
@@ -504,7 +504,7 @@ gradient = SubResource("Gradient_74ekq")
 _data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_2454e"]
+[sub_resource type="CurveTexture" id="CurveTexture_1vgk0"]
 curve = SubResource("Curve_1vgk0")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1esm0"]
@@ -514,7 +514,7 @@ emission_shape = 1
 emission_sphere_radius = 8.0
 angle_min = 1.0728835e-05
 angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_yfgcb")
+angle_curve = SubResource("CurveTexture_74ekq")
 direction = Vector3(0, 0, 0)
 spread = 180.0
 initial_velocity_min = 50.0
@@ -522,7 +522,7 @@ initial_velocity_max = 100.0
 gravity = Vector3(0, 0, 0)
 scale_min = 0.19999999
 scale_max = 0.39999998
-scale_curve = SubResource("CurveTexture_2454e")
+scale_curve = SubResource("CurveTexture_1vgk0")
 color_ramp = SubResource("GradientTexture1D_6qf0x")
 
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
@@ -627,4 +627,5 @@ explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_1esm0")
 
 [node name="FlashVfx" parent="." unique_id=462082651 instance=ExtResource("16_74ekq")]
+position = Vector2(0, -12)
 scale = Vector2(2, 2)
