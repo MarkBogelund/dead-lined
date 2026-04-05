@@ -531,6 +531,8 @@ metadata/_custom_type_script = "uid://cdc3yx122ruc6"
 script = ExtResource("11_crunch")
 
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
+camera_shake_intensity = 0.5
+camera_shake_duration = 0.2
 
 [node name="DashComponent" type="Node2D" parent="." unique_id=1430415802 node_paths=PackedStringArray("dash_particles", "trail", "flash_vfx")]
 script = ExtResource("14_dash")

@@ -18,6 +18,8 @@ signal slash_started(target_position: Vector2)
 @export_group("Visual Effects")
 @export var ease_power := 3
 @export var flash_intensity := 1.0
+@export var camera_shake_intensity := 0.2
+@export var camera_shake_duration := 0.15
 
 var _enabled := true
 var _cooldown_timer := 0.0
@@ -103,4 +105,4 @@ func _update_slash(delta: float) -> void:
 	position = Vector2.RIGHT.rotated(angle) * slash_radius
 
 func _on_hit_target(_target: Node) -> void:
-	camera_shake_manager.shake_screen(0.15, 0.2)
+	camera_shake_manager.shake_screen(camera_shake_duration, camera_shake_intensity)

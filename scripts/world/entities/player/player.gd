@@ -92,6 +92,7 @@ func _unhandled_input(event: InputEvent):
 		aiming.aim_at(mouse_pos, global_position, 0.0) # Instant aiming (delta not used)
 		if shoot.try_shoot(mouse_pos, global_position):
 			resource_manager.subtract_scrap(shoot_cost)
+			animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	
 	if event.is_action_pressed("slash"):
 		melee_weapon.try_slash(get_global_mouse_position())
