@@ -3,23 +3,31 @@
 [ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/world/entities/shared/projectile.gd" id="1_f5wuv"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="2_x0bxo"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_binmj"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="5_f5wuv"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="5_i3n1b"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hqr2g"]
-load_path = "res://.godot/imported/TX Props.png-f7457ba6ca0129fa87f18c9706b42bd3.ctex"
+[sub_resource type="AtlasTexture" id="AtlasTexture_x0bxo"]
+atlas = ExtResource("5_f5wuv")
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6q2a6"]
-radius = 5.0
+radius = 4.0
+
+[sub_resource type="Gradient" id="Gradient_f5wuv"]
+offsets = PackedFloat32Array(0.24668436, 0.7161804)
+colors = PackedColorArray(0.55100006, 0.8436, 0.95, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x0bxo"]
+gradient = SubResource("Gradient_f5wuv")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [node name="Projectile" type="Node2D" unique_id=31779294 groups=["projectiles"]]
 script = ExtResource("1_f5wuv")
 hit_vfx = ExtResource("2_x0bxo")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=506901445]
-z_index = 5
-texture = SubResource("CompressedTexture2D_hqr2g")
-region_enabled = true
-region_rect = Rect2(34, 482, 28, 30)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=699264040]
+texture = SubResource("AtlasTexture_x0bxo")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=769139471]
 collision_layer = 20
@@ -33,3 +41,7 @@ shape = SubResource("CircleShape2D_6q2a6")
 [node name="VFXComponent" type="Node" parent="." unique_id=84486533]
 script = ExtResource("5_i3n1b")
 metadata/_custom_type_script = "uid://buxf487a3gb6p"
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=742823931]
+energy = 0.3
+texture = SubResource("GradientTexture2D_x0bxo")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccp2efd60ustu"
-path="res://.godot/imported/chaser.png-fac3be16aef9da90f3047eb2629912a6.ctex"
+uid="uid://1tbgasd1ucay"
+path="res://.godot/imported/chaser-shadow.png-5f0a0cc8c827e79e87a2f813d737f23e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemies/chaser.png"
-dest_files=["res://.godot/imported/chaser.png-fac3be16aef9da90f3047eb2629912a6.ctex"]
+source_file="res://assets/sprites/enemies/chaser-shadow.png"
+dest_files=["res://.godot/imported/chaser-shadow.png-5f0a0cc8c827e79e87a2f813d737f23e.ctex"]
 
 [params]
 

@@ -55,7 +55,7 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 	var was_fatal = health.take_damage(amount)
 	
 	if was_fatal:
-		_handle_death()
+		_handle_death(from_position, knockback_force)
 	else:
 		_handle_damage(from_position, knockback_force)
 
@@ -67,7 +67,8 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	
 	animation.play_animation("take_damage")
 
-func _handle_death() -> void:
+func _handle_death(from_position: Vector2, knockback_force: float) -> void:
+	knockback.apply(from_position, knockback_force)
 	remove_from_group("enemies")
 	died.emit()
 	animation.play_animation("die")

@@ -1,23 +1,24 @@
 [gd_scene format=3 uid="uid://bnu4fvr1hbp1v"]
 
-[ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_q3m7n"]
 [ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/world/entities/shared/projectile.gd" id="1_softn"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="2_8ngof"]
+[ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="3_y0lj3"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_xw27n"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="4_ykqt4"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1bpx"]
+atlas = ExtResource("3_y0lj3")
+region = Rect2(0, 0, 16, 16)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_6q2a6"]
-radius = 4.0
+radius = 6.0
 
 [node name="Projectile" type="Node2D" unique_id=31779294 groups=["projectiles"]]
 script = ExtResource("1_softn")
 hit_vfx = ExtResource("2_8ngof")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=506901445]
-z_index = 5
-texture = ExtResource("1_q3m7n")
-region_enabled = true
-region_rect = Rect2(0, 482, 31, 30)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=442925662]
+texture = SubResource("AtlasTexture_o1bpx")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=769139471]
 collision_layer = 4

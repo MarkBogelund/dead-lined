@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://id7yglgwtlqj"
-path="res://.godot/imported/TX Props.png-f7457ba6ca0129fa87f18c9706b42bd3.ctex"
+uid="uid://bioitf2isi5uq"
+path="res://.godot/imported/stalker.png-f3f45492dc6d02b680ed7a350db0bcb9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/Pixel Art Topdown/TX Props.png"
-dest_files=["res://.godot/imported/TX Props.png-f7457ba6ca0129fa87f18c9706b42bd3.ctex"]
+source_file="res://assets/sprites/enemies/stalker.png"
+dest_files=["res://.godot/imported/stalker.png-f3f45492dc6d02b680ed7a350db0bcb9.ctex"]
 
 [params]
 

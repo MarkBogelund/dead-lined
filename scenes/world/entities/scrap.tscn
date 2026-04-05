@@ -1,26 +1,17 @@
 [gd_scene format=3 uid="uid://dfdoke3xag1rp"]
 
 [ext_resource type="Script" uid="uid://dy43sa0c47hp2" path="res://scripts/world/entities/shared/scrap.gd" id="1_sd2yw"]
-[ext_resource type="Texture2D" uid="uid://dypmbj6k7c5qt" path="res://assets/sprites/_legacy/old_hud_ui.png" id="3_17eia"]
+[ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="2_wr666"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7fmk8"]
 animations = []
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7fmk8"]
-atlas = ExtResource("3_17eia")
-region = Rect2(34, 2, 13, 12)
+atlas = ExtResource("2_wr666")
+region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sd2yw"]
 radius = 7.0
-
-[sub_resource type="Gradient" id="Gradient_17eia"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_qtcbg"]
-gradient = SubResource("Gradient_17eia")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.82051283, 0.14957266)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_m4e56"]
 radius = 9.0
@@ -41,11 +32,6 @@ texture = SubResource("AtlasTexture_7fmk8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=13068341]
 shape = SubResource("CircleShape2D_sd2yw")
-
-[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1780779071]
-color = Color(0.7490196, 1, 0.9882353, 1)
-energy = 0.1
-texture = SubResource("GradientTexture2D_qtcbg")
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=612364774]
 collision_layer = 512
