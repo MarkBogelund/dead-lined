@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dnp5kkv3y8qko"]
 
 [ext_resource type="Script" uid="uid://cd56nfpfhpe8y" path="res://scripts/world/vfx/flash_vfx.gd" id="1_flashvfx"]
-[ext_resource type="Texture2D" uid="uid://durwi3f5ftcp7" path="res://assets/sprites/vfx-circle-with-hole.png" id="2_circle"]
+[ext_resource type="Texture2D" uid="uid://durwi3f5ftcp7" path="res://assets/sprites/vfx/vfx-circle-with-hole.png" id="2_circle"]
 
 [sub_resource type="Animation" id="Animation_27tge"]
 length = 0.001

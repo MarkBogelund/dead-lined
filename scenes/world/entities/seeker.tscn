@@ -2,27 +2,29 @@
 
 [ext_resource type="Script" uid="uid://ci6t3dum71ion" path="res://scripts/world/entities/turret/seeker.gd" id="1_6fjxm"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="3_6h4p8"]
-[ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="3_ih01a"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="3_p0iej"]
-[ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/seeker.png" id="3_pp6j5"]
-[ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="4_6h4p8"]
+[ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/turrets/seeker.png" id="3_pp6j5"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_pp6j5"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="5_6fjxm"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_e28e4"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="5_oxiec"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="9_jm6wr"]
-[ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/dot.png" id="13_v4l8l"]
+[ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="10_targeting"]
+[ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="11_target_config"]
+[ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/vfx/dot.png" id="13_v4l8l"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="14_6yfjj"]
 [ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="14_flmdm"]
 
-[sub_resource type="Resource" id="Resource_p0iej"]
-script = ExtResource("4_6h4p8")
+[sub_resource type="Resource" id="Resource_6yfjj"]
+script = ExtResource("11_target_config")
+group_name = "player"
+metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
+
+[sub_resource type="Resource" id="Resource_flmdm"]
+script = ExtResource("11_target_config")
 group_name = "enemies"
 priority = 1
-
-[sub_resource type="Resource" id="Resource_acdki"]
-script = ExtResource("4_6h4p8")
-group_name = "player"
+metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 
 [sub_resource type="Animation" id="Animation_6fjxm"]
 length = 0.001
@@ -336,6 +338,11 @@ detection_angle = 0.1
 fire_rate = 1.0
 vfx_scene = ExtResource("5_6fjxm")
 
+[node name="TargetingComponent" type="Node" parent="." unique_id=1604110218]
+script = ExtResource("10_targeting")
+target_configs = Array[ExtResource("11_target_config")]([SubResource("Resource_6yfjj"), SubResource("Resource_flmdm")])
+metadata/_custom_type_script = "uid://dule5ocnt8lxx"
+
 [node name="HealthComponent" type="Node" parent="." unique_id=219458917]
 script = ExtResource("3_p0iej")
 max_health = 50
@@ -346,10 +353,6 @@ script = ExtResource("3_6h4p8")
 aim_speed = 6.0
 visual_node = NodePath("../Canon")
 visual_offset = -1.571
-
-[node name="TargetingComponent" type="Node" parent="." unique_id=676946369]
-script = ExtResource("3_ih01a")
-target_configs = Array[ExtResource("4_6h4p8")]([SubResource("Resource_p0iej"), SubResource("Resource_acdki")])
 
 [node name="VFXComponent" type="Node" parent="." unique_id=1357204820]
 script = ExtResource("5_oxiec")

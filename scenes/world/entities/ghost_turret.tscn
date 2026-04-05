@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ch3rd301p0tmx"]
 
-[ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/seeker-icon.png" id="1_0e5db"]
+[ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/ui/seeker-icon.png" id="1_0e5db"]
 [ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/world/entities/turret/ghost_turret.gd" id="1_exqsx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_exqsx"]
