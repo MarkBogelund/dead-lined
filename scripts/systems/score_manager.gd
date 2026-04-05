@@ -21,7 +21,7 @@ var crunch_time_spent := 0.0 # In seconds
 
 func _ready() -> void:
 	# Connect to wave manager for wave tracking
-	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
+	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	
 	# Connect to turret placer for turret death tracking
 	turret_placer.turret_placed.connect(_on_turret_placed)
@@ -32,8 +32,12 @@ func _ready() -> void:
 		if spawner.has_signal("enemy_spawned"):
 			spawner.enemy_spawned.connect(_on_enemy_spawned)
 
-func _on_combat_phase_started(wave_index: int) -> void:
-	waves_survived = wave_index
+func _on_build_phase_started() -> void:
+	# Build phase starts after a wave is completed
+	# Only count if we've actually completed a wave (wave_index > 0)
+	var current_wave := wave_manager.get_current_wave()
+	if current_wave > 0:
+		waves_survived = current_wave
 
 func _on_enemy_spawned(enemy: Node) -> void:
 	# Connect to enemy's death signal
