@@ -43,5 +43,5 @@ script = ExtResource("5_i3n1b")
 metadata/_custom_type_script = "uid://buxf487a3gb6p"
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=742823931]
-energy = 0.3
+energy = 0.2
 texture = SubResource("GradientTexture2D_x0bxo")

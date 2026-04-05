@@ -19,17 +19,14 @@ signal died
 @export var ideal_distance := 100.0 ## Target distance to maintain from target
 @export var distance_tolerance := 20.0 ## Acceptable range around ideal distance before adjusting
 @export var max_shoot_distance := 120.0 ## Maximum distance to shoot from (wiggle room)
-@export var shoot_cooldown := 1.5
 @export var aim_accuracy_angle := 0.25
 
 func _ready() -> void:
 	# Configure animations
 	animation.configure_animation("idle", 0, false)
-	animation.configure_animation("take_damage", 1, true)
-	animation.configure_animation("die", 2, true)
-	
-	if shoot:
-		shoot.shoot_cooldown = shoot_cooldown
+	animation.configure_animation("take_damage", 2, true)
+	animation.configure_animation("die", 3, true)
+	animation.configure_animation("shoot", 1, true)
 
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
@@ -71,7 +68,9 @@ func _physics_process(delta: float) -> void:
 				# Shoot if within distance and aim is accurate
 				if distance <= max_shoot_distance:
 					if aiming.is_aimed_at(target.global_position, global_position, aim_accuracy_angle):
-						shoot.try_shoot(target.global_position, global_position)
+						if shoot.try_shoot(target.global_position, global_position):
+							animation.play_animation("shoot")
+
 		# Play idle animation when moving
 		animation.play_animation("idle")
 	
@@ -91,26 +90,20 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 	var was_fatal = health.take_damage(amount)
 	
 	if was_fatal:
-		_handle_death()
+		_handle_death(from_position, knockback_force)
 	else:
 		_handle_damage(from_position, knockback_force)
 
 func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	knockback.apply(from_position, knockback_force)
 	
-	if hit_particles:
-		hit_particles.restart()
-	
 	animation.play_animation("take_damage")
 
-func _handle_death() -> void:
+func _handle_death(from_position: Vector2, knockback_force: float) -> void:
 	remove_from_group("enemies")
+	knockback.apply(from_position, knockback_force)
 	died.emit()
 	animation.play_animation("die")
-
-func despawn() -> void:
-	drop_scrap.drop()
-	queue_free()
-
+	
 func is_dead() -> bool:
 	return health.is_dead()

@@ -4,11 +4,12 @@ extends RigidBody2D
 
 var can_collect := false
 @onready var detection_area: Area2D = $DetectionArea
+@onready var animation_handler: AnimationHandler = $AnimationHandler
 
 func _ready():
-	# Connect to detection area
-	if detection_area:
-		detection_area.body_entered.connect(_on_body_entered)
+	detection_area.body_entered.connect(_on_body_entered)
+	animation_handler.configure_animation("pick_up", 1, true)
+	animation_handler.configure_animation("idle", 0, false)
 
 func enable_collection() -> void:
 	can_collect = true
@@ -19,4 +20,4 @@ func _on_body_entered(body: Node2D):
 
 	if body.is_in_group("player"):
 		body.collect_scrap(value)
-		queue_free()
+		animation_handler.play_animation("pick_up")
