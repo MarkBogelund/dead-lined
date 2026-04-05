@@ -2,13 +2,17 @@
 
 [ext_resource type="Script" uid="uid://da0fvy8p6hv7l" path="res://scripts/world/entities/player/melee_weapon.gd" id="1_jkq8f"]
 [ext_resource type="Texture2D" uid="uid://bnr14l7147w74" path="res://assets/sprites/player/wrench.png" id="2_smgu6"]
-[ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/vfx/dot.png" id="3_7p1yo"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="3_7p1yo"]
 [ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="4_grobf"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="5_7p1yo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2sq7"]
 atlas = ExtResource("2_smgu6")
 region = Rect2(7, 0, 10, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xntly"]
+atlas = ExtResource("3_7p1yo")
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="Gradient" id="Gradient_glimmer"]
 offsets = PackedFloat32Array(0, 0.5, 1)
@@ -51,7 +55,7 @@ texture = SubResource("AtlasTexture_g2sq7")
 position = Vector2(0, -8)
 emitting = false
 amount = 15
-texture = ExtResource("3_7p1yo")
+texture = SubResource("AtlasTexture_xntly")
 lifetime = 0.3
 preprocess = 0.1
 randomness = 0.3

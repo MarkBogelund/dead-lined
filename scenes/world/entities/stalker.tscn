@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_mcjbk"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_scrap"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
-[ext_resource type="Texture2D" uid="uid://cccbpxfmoioa" path="res://assets/sprites/vfx/dot.png" id="5_dot"]
 [ext_resource type="Texture2D" uid="uid://cb5yfcpkyqrk4" path="res://assets/sprites/enemies/chaser.png" id="6_sprite"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="7_ag4mk"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="7_health"]
@@ -17,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="14_projectile"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="15_jqj1v"]
 [ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="16_mcjbk"]
+[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="17_mcjbk"]
 
 [sub_resource type="Resource" id="Resource_36hmg"]
 script = ExtResource("16_mcjbk")
@@ -112,44 +112,6 @@ animations = [{
 "name": &"idle",
 "speed": 10.0
 }]
-
-[sub_resource type="Curve" id="Curve_hit_angle"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_angle"]
-curve = SubResource("Curve_hit_angle")
-
-[sub_resource type="Gradient" id="Gradient_hit"]
-offsets = PackedFloat32Array(0.40481928, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.6901961, 0, 0.39607844, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_hit"]
-gradient = SubResource("Gradient_hit")
-
-[sub_resource type="Curve" id="Curve_hit_scale"]
-_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_scale"]
-curve = SubResource("Curve_hit_scale")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hit"]
-particle_flag_disable_z = true
-emission_shape = 1
-emission_sphere_radius = 8.0
-angle_min = 1.0728835e-05
-angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_angle")
-direction = Vector3(0, 0, 0)
-spread = 180.0
-initial_velocity_min = 50.0
-initial_velocity_max = 100.0
-gravity = Vector3(0, 0, 0)
-scale_min = 0.2
-scale_max = 0.4
-scale_curve = SubResource("CurveTexture_scale")
-color_ramp = SubResource("GradientTexture1D_hit")
 
 [sub_resource type="Animation" id="Animation_reset"]
 length = 0.001
@@ -275,6 +237,46 @@ _data = {
 &"take_damage": SubResource("Animation_damage")
 }
 
+[sub_resource type="Curve" id="Curve_36hmg"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wkm5l"]
+curve = SubResource("Curve_36hmg")
+
+[sub_resource type="Gradient" id="Gradient_rqd04"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.57594097, 0.0012844172, 0.73147595, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_26iul"]
+gradient = SubResource("Gradient_rqd04")
+
+[sub_resource type="Curve" id="Curve_j6h5e"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0juef"]
+curve = SubResource("Curve_j6h5e")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uhdj6"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_wkm5l")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.39999998
+scale_curve = SubResource("CurveTexture_0juef")
+color_ramp = SubResource("GradientTexture1D_26iul")
+
 [node name="Stalker" type="CharacterBody2D" unique_id=942424531 groups=["enemies"]]
 collision_layer = 8
 motion_mode = 1
@@ -335,16 +337,6 @@ scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_stalker")
 animation = &"idle"
 
-[node name="HitParticles" type="GPUParticles2D" parent="." unique_id=1106374826]
-z_index = 10
-emitting = false
-amount = 10
-texture = ExtResource("5_dot")
-lifetime = 0.3
-one_shot = true
-explosiveness = 1.0
-process_material = SubResource("ParticleProcessMaterial_hit")
-
 [node name="KnockbackComponent" type="Node" parent="." unique_id=207747810]
 script = ExtResource("4_knockback")
 
@@ -355,3 +347,6 @@ max_health = 30
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1949746839]
 libraries/ = SubResource("AnimationLibrary_stalker")
 script = ExtResource("7_ag4mk")
+
+[node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("17_mcjbk")]
+process_material = SubResource("ParticleProcessMaterial_uhdj6")
