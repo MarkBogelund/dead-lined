@@ -74,7 +74,6 @@ func _handle_death(from_position: Vector2, knockback_force: float) -> void:
 	animation.play_animation("die")
 
 func _on_hit_target(target: Node) -> void:
-	print("Chaser hit: ", target)
 	# Apply recoil knockback when hitting something (bidirectional knockback)
 	if target and self_knockback > 0:
 		knockback.apply(target.global_position, self_knockback)

@@ -68,7 +68,6 @@ func _process(delta: float) -> void:
 		if not crunch_time_ready:
 			crunch_time_ready = true
 			crunch_time_available.emit()
-			print("Crunch time available! Press button to activate.")
 	
 	stress_changed.emit(current_stress)
 
@@ -108,7 +107,6 @@ func activate_crunch_time() -> void:
 	current_stress = 0.0
 	crunch_time_ready = false
 	score_manager.add_crunch_time(10.0)
-	print("Crunch time activated! +10s")
 	crunch_time_activated.emit()
 	stress_changed.emit(current_stress)
 

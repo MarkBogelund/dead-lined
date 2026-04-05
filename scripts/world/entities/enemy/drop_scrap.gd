@@ -5,8 +5,8 @@ class_name DropScrapComponent
 @export var scrap_scene: PackedScene
 @export var impulse_min := 100.0
 @export var impulse_max := 300.0
-@export var linear_damp := 3.0  ## How quickly scrap slows down (higher = stops faster)
-@export var freeze_delay := 0.3  ## Seconds until scrap stops moving completely
+@export var linear_damp := 3.0 ## How quickly scrap slows down (higher = stops faster)
+@export var freeze_delay := 0.3 ## Seconds until scrap stops moving completely
 
 var parent: Node2D
 

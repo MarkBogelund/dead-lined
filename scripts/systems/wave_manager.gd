@@ -37,7 +37,6 @@ func _process(delta: float) -> void:
 		_enter_combat_phase()
 
 func _enter_build_phase() -> void:
-	print("build phase")
 	_current_phase = Phase.BUILD
 	_phase_timer = time_between_waves
 	emit_signal("build_phase_started")

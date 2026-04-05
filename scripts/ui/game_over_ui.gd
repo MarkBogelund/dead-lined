@@ -15,8 +15,6 @@ func _ready() -> void:
 	hide()
 
 func show_stats_with_fade(breakdown: Dictionary) -> void:
-	print("GameOverUI: show_stats_with_fade() called")
-	
 	# Set breakdown stats with scores
 	var drones: int = breakdown.get("drones_destroyed", 0)
 	var drones_score: int = breakdown.get("drones_score", 0)

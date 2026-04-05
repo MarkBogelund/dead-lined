@@ -64,9 +64,7 @@ func activate() -> void:
 	
 	is_active = true
 	time_remaining = duration
-	
-	print("Crunch time started! Duration: %ss" % duration)
-	
+		
 	# Build buff dictionary and emit for Player to apply
 	var buffs := {
 		"damage": damage_multiplier,
@@ -85,9 +83,7 @@ func deactivate() -> void:
 	
 	is_active = false
 	time_remaining = 0.0
-	
-	print("Crunch time ended!")
-	
+		
 	# Build buff dictionary and emit for Player to reverse buffs
 	var buffs := {
 		"damage": damage_multiplier,

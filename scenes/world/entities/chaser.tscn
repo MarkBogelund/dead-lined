@@ -522,7 +522,7 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=2089421128]
 script = ExtResource("4_qurf7")
-max_health = 20
+max_health = 30
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=504753542]
@@ -541,7 +541,6 @@ scrap_scene = ExtResource("2_fffhc")
 impulse_min = 20.0
 impulse_max = 150.0
 linear_damp = 8.0
-freeze_delay = 0.0
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1098384666]
 path_desired_distance = 4.0

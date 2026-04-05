@@ -529,7 +529,6 @@ scrap_drop_amount = 3
 scrap_scene = ExtResource("2_scrap")
 impulse_min = 20.0
 impulse_max = 150.0
-freeze_delay = 0.0
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=741080340]
 collision_layer = 16
