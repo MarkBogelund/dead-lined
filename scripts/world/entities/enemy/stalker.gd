@@ -15,7 +15,6 @@ signal died
 @onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
 
-@export var damage := 15
 @export var speed := 25.0
 @export var ideal_distance := 100.0 ## Target distance to maintain from target
 @export var distance_tolerance := 20.0 ## Acceptable range around ideal distance before adjusting
@@ -83,9 +82,7 @@ func buff_health(multiplier: float) -> void:
 	health.buff_max_health(multiplier)
 
 func buff_damage(multiplier: float) -> void:
-	damage = int(damage * multiplier)
-	if shoot:
-		shoot.projectile_damage = damage
+	shoot.projectile_damage = int(shoot.projectile_damage * multiplier)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead():

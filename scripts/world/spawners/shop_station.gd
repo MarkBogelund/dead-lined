@@ -7,6 +7,7 @@ signal station_closed
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var interaction_zone: Area2D = $InteractionZone
+@onready var animation_handler: AnimationHandler = $AnimationHandler
 
 var _enabled := false
 var _player_in_range := false
@@ -42,8 +43,10 @@ func _on_shop_system_disabled() -> void:
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_player_in_range = true
+		animation_handler.play("hover")
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_player_in_range = false
 		emit_signal("station_closed")
+		animation_handler.play("rest")

@@ -284,11 +284,12 @@ aim_accuracy_angle = 0.85
 
 [node name="AimingComponent" type="Node" parent="." unique_id=1729909200]
 script = ExtResource("2_mcjbk")
-aim_speed = 4.0
+aim_speed = 3.0
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=486870823]
 script = ExtResource("15_jqj1v")
 target_configs = Array[ExtResource("16_mcjbk")]([SubResource("Resource_36hmg"), SubResource("Resource_wkm5l")])
+priority_distance_threshold = 40.0
 
 [node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
 script = ExtResource("13_shoot")
@@ -297,8 +298,8 @@ projectile_scene = ExtResource("14_projectile")
 projectile_damage = 5
 projectile_knockback = 150
 muzzle_distance = 15.0
-shoot_cooldown = 1.5
-projectile_speed = 200.0
+shoot_cooldown = 2.0
+projectile_speed = 150.0
 
 [node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
 script = ExtResource("12_los")

@@ -345,7 +345,7 @@ metadata/_custom_type_script = "uid://dule5ocnt8lxx"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=219458917]
 script = ExtResource("3_p0iej")
-max_health = 50
+max_health = 100
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="AimingComponent" type="Node" parent="." unique_id=1630660525 node_paths=PackedStringArray("visual_node")]

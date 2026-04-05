@@ -1,27 +1,122 @@
 [gd_scene format=3 uid="uid://bcryhnwbbjcle"]
 
 [ext_resource type="Script" uid="uid://s0r02kaxei7e" path="res://scripts/world/spawners/shop_station.gd" id="1_noi0g"]
-[ext_resource type="Texture2D" uid="uid://id7yglgwtlqj" path="res://assets/sprites/Pixel Art Topdown/TX Props.png" id="1_qslmp"]
+[ext_resource type="Texture2D" uid="uid://deh7td2wo54yx" path="res://assets/sprites/environment/work-bench-sheet.png" id="2_bxg8e"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="3_e1c5o"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_noi0g"]
-size = Vector2(30, 29)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_e1c5o"]
+radius = 6.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mexib"]
-radius = 37.529987
+radius = 27.504545
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m6a0e"]
+atlas = ExtResource("2_bxg8e")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hmxn1"]
+atlas = ExtResource("2_bxg8e")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="Animation" id="Animation_m6a0e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BenchSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShadowSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_hmxn1"]
+resource_name = "hover"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BenchSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.4061262, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShadowSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.36602157, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 4)]
+}
+
+[sub_resource type="Animation" id="Animation_e1c5o"]
+resource_name = "rest"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BenchSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.24148405, 1),
+"update": 0,
+"values": [Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShadowSprite:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.29730183, 1),
+"update": 0,
+"values": [Vector2(0, 4), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tpfkk"]
+_data = {
+&"RESET": SubResource("Animation_m6a0e"),
+&"hover": SubResource("Animation_hmxn1"),
+&"rest": SubResource("Animation_e1c5o")
+}
 
 [node name="ShopStation" type="StaticBody2D" unique_id=1270538854]
 script = ExtResource("1_noi0g")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=786510499]
-z_index = 2
-position = Vector2(-0.5, -7.5)
-texture = ExtResource("1_qslmp")
-region_enabled = true
-region_rect = Rect2(83, 6, 57, 65)
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1488811291]
 position = Vector2(0, -0.5)
-shape = SubResource("RectangleShape2D_noi0g")
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_e1c5o")
 
 [node name="InteractionZone" type="Area2D" parent="." unique_id=1904561096]
 position = Vector2(-0.5, 0.5)
@@ -29,3 +124,16 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=826939621]
 shape = SubResource("CircleShape2D_mexib")
+
+[node name="ShadowSprite" type="Sprite2D" parent="." unique_id=1647571475]
+z_index = 1
+texture = SubResource("AtlasTexture_m6a0e")
+
+[node name="BenchSprite" type="Sprite2D" parent="." unique_id=1117805386]
+z_index = 5
+texture = SubResource("AtlasTexture_hmxn1")
+
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1147908400]
+libraries/ = SubResource("AnimationLibrary_tpfkk")
+script = ExtResource("3_e1c5o")
+metadata/_custom_type_script = "uid://cq7h5m3f8n2jk"
