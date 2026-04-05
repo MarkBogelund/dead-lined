@@ -19,6 +19,11 @@ func _ready() -> void:
 	interaction_zone.body_entered.connect(_on_interaction_area_body_entered)
 	interaction_zone.body_exited.connect(_on_interaction_area_body_exited)
 
+	animation_handler.configure_animation("rest", 0, false)
+	animation_handler.configure_animation("hover", 1, false)
+	animation_handler.configure_animation("appear", 2, true)
+	animation_handler.configure_animation("dissapear", 3, true)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not _enabled or not _player_in_range:
 		return
@@ -28,25 +33,19 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_shop_system_enabled() -> void:
 	_enabled = true
-	visible = true
-	collision_shape.set_deferred("disabled", false)
-	interaction_zone.set_deferred("monitoring", true)
-	interaction_zone.set_deferred("monitorable", true)
+	animation_handler.play_animation("appear")
 
 func _on_shop_system_disabled() -> void:
 	_enabled = false
-	visible = false
-	collision_shape.set_deferred("disabled", true)
-	interaction_zone.set_deferred("monitoring", false)
-	interaction_zone.set_deferred("monitorable", false)
+	animation_handler.play_animation("dissapear")
 
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_player_in_range = true
-		animation_handler.play("hover")
+		animation_handler.play_animation("hover")
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_player_in_range = false
 		emit_signal("station_closed")
-		animation_handler.play("rest")
+		animation_handler.play_animation("rest")
