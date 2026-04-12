@@ -16,8 +16,8 @@ signal crunch_time_activated()
 @onready var player: CharacterBody2D = %Player
 @onready var score_manager: ScoreManager = %ScoreManager
 
-## Current stress level (0-50)
-var current_stress := 31.0
+## Current stress level (0-80)
+var current_stress := 40.0
 
 ## Entity counts
 var enemy_count := 0
@@ -54,8 +54,12 @@ func _on_combat_phase_started(_wave_index: int) -> void:
 	is_combat_phase = true
 	crunch_time_ready = false
 	
+	# Despawn all uncollected scrap from the build phase
+	for scrap in get_tree().get_nodes_in_group("scrap"):
+		scrap.queue_free()
+	
 	# If stress carried over at max, immediately mark crunch time as available
-	if current_stress >= 50.0:
+	if current_stress >= 80.0:
 		crunch_time_ready = true
 		crunch_time_available.emit()
 	
@@ -76,11 +80,11 @@ func _on_build_phase_started() -> void:
 func activate_crunch_time() -> void:
 	if not is_combat_phase:
 		return # Cannot activate during build phase
-	if not crunch_time_ready or current_stress < 50.0:
-		return # Can only activate when stress is at 50
+	if not crunch_time_ready or current_stress < 70.0:
+		return # Can only activate when stress is at 70 or higher
 	
 	# Reset stress to 25 and add crunch time
-	current_stress = 25.0
+	current_stress = 40.0
 	crunch_time_ready = false
 	score_manager.add_crunch_time(10.0)
 	crunch_time_activated.emit()
@@ -127,7 +131,7 @@ func can_afford_safe(cost: float) -> bool:
 	return current_stress - cost >= 1.0
 
 func add_stress(amount: float) -> void:
-	current_stress = minf(current_stress + amount, 50.0)
+	current_stress = minf(current_stress + amount, 80.0)
 	if current_stress >= 50.0 and not crunch_time_ready:
 		crunch_time_ready = true
 		crunch_time_available.emit()

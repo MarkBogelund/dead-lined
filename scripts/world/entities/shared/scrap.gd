@@ -7,6 +7,7 @@ var can_collect := false
 @onready var animation_handler: AnimationHandler = $AnimationHandler
 
 func _ready():
+	add_to_group("scrap")
 	detection_area.body_entered.connect(_on_body_entered)
 	animation_handler.configure_animation("pick_up", 1, true)
 	animation_handler.configure_animation("idle", 0, false)

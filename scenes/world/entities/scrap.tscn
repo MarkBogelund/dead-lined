@@ -198,7 +198,7 @@ _data = {
 &"pick_up": SubResource("Animation_v70sy")
 }
 
-[node name="Scrap" type="RigidBody2D" unique_id=1809465642]
+[node name="Scrap" type="RigidBody2D" unique_id=1809465642 groups=["scrap"]]
 collision_layer = 512
 script = ExtResource("1_sd2yw")
 
