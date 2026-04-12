@@ -23,20 +23,12 @@ signal crunch_time_ended(buffs: Dictionary)
 var is_active := false
 var time_remaining := 0.0
 
-var stress_manager: StressLevelManager
 var wave_manager: WaveManager
 var player: Player
 
 func _ready() -> void:
-	# Get references using group system (can't use % from inside Player node)
-	stress_manager = get_tree().get_first_node_in_group("stress_level_manager")
 	wave_manager = get_tree().get_first_node_in_group("wave_manager")
 	player = get_parent() as Player
-	
-	# Connect to activation triggers
-	stress_manager.crunch_time_activated.connect(activate)
-	
-	# Connect to deactivation triggers
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	player.died.connect(_on_player_died)
 

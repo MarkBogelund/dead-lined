@@ -1,17 +1,16 @@
 extends CharacterBody2D
 class_name Player
 
-signal damaged(current_health: int)
+signal damaged(current_capacity: float)
 signal died
 
-@onready var resource_manager: ResourceManager = %ResourceManager
+@onready var capacity_manager: CapacityManager = %CapacityManager
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
 @onready var camera_shake_manager = %CameraShakeManager
 @onready var freeze_frame_manager = %FreezeFrameManager
 
 @onready var knockback: KnockbackComponent = $KnockbackComponent
-@onready var health: HealthComponent = $HealthComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
 @onready var animation: AnimationHandler = $AnimationHandler
@@ -24,7 +23,10 @@ signal died
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-@export var shoot_cost := 1
+@export_group("Capacity Costs")
+@export var shoot_capacity_cost: float = 2.0
+@export var damage_capacity_loss: float = 5.0
+@export var crunch_time_drain_per_second: float = 5.0
 
 @export_group("Damage Effects")
 @export var damage_knockback_force := 200.0
@@ -42,6 +44,8 @@ const MIN_MOVE_SPEED := 10.0
 ## Crunch time state
 var is_invincible := false
 
+var _is_dead := false
+
 func _ready():
 	# Configure animations
 	animation.configure_animation("idle", 0, false)
@@ -58,9 +62,14 @@ func _ready():
 	# Connect to crunch time signals
 	crunch_time.crunch_time_started.connect(_on_crunch_time_started)
 	crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
+	
+	capacity_manager.player_died.connect(_on_capacity_depleted)
 
 func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
+	
+	if crunch_time.is_crunch_time_active():
+		capacity_manager.spend(crunch_time_drain_per_second * delta)
 	
 	knockback.process(delta)
 	
@@ -87,11 +96,14 @@ func _physics_process(delta):
 		_set_sprite_direction(velocity.x)
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("shoot") and resource_manager.can_buy(shoot_cost):
+	if event.is_action_pressed("crunch_time") and capacity_manager.current_capacity >= 100.0:
+		crunch_time.activate()
+	
+	if event.is_action_pressed("shoot") and capacity_manager.can_afford(shoot_capacity_cost):
 		var mouse_pos := get_global_mouse_position()
 		aiming.aim_at(mouse_pos, global_position, 0.0) # Instant aiming (delta not used)
 		if shoot.try_shoot(mouse_pos, global_position):
-			resource_manager.subtract_scrap(shoot_cost)
+			capacity_manager.spend(shoot_capacity_cost)
 			animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	
 	if event.is_action_pressed("slash"):
@@ -136,17 +148,14 @@ func _handle_dash_started(direction: Vector2):
 	animation.play_animation("dash")
 	camera_shake_manager.shake_screen(0.15, 0.15)
 
-func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
+func was_hit(_amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead() or dash.is_invincible() or is_invincible:
 		return
 	
 	dash.cancel_dash()
-
-	var was_fatal = health.take_damage(amount)
+	capacity_manager.spend(damage_capacity_loss)
 	
-	if was_fatal:
-		_handle_death(from_position)
-	else:
+	if not is_dead():
 		_handle_damage(from_position, knockback_force)
 
 func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
@@ -165,7 +174,7 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	animation.play_animation("take_damage")
 	
 	# Notify external systems
-	damaged.emit(health.get_current_health())
+	damaged.emit(capacity_manager.current_capacity)
 
 func _handle_death(from_position: Vector2) -> void:
 	# Stronger knockback on death
@@ -192,17 +201,20 @@ func _handle_death(from_position: Vector2) -> void:
 	animation.play_animation("die")
 	
 	# Notify external systems
-	damaged.emit(0) # HUD
+	damaged.emit(0.0) # HUD
 	died.emit() # DeathSequenceController
 
-func is_dead():
-	return health.is_dead()
-
-func get_health():
-	return health.get_current_health()
+func is_dead() -> bool:
+	return _is_dead
 
 func collect_scrap(amount: int) -> void:
-	resource_manager.add_scrap(amount)
+	capacity_manager.gain(float(amount))
+
+func _on_capacity_depleted() -> void:
+	if _is_dead:
+		return
+	_is_dead = true
+	_handle_death(global_position) # No directional knockback for capacity death
 
 func _on_turret_placement_started():
 	shoot.set_enabled(false)

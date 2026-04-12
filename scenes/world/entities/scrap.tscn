@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://dfdoke3xag1rp"]
 
 [ext_resource type="Script" uid="uid://dy43sa0c47hp2" path="res://scripts/world/entities/shared/scrap.gd" id="1_sd2yw"]
-[ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="2_wr666"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="2_wf045"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="3_m4e56"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="4_wf045"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7fmk8"]
-atlas = ExtResource("2_wr666")
-region = Rect2(0, 0, 16, 16)
+atlas = ExtResource("2_wf045")
+region = Rect2(64, 0, 16, 16)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sd2yw"]
 radius = 7.0
@@ -25,7 +25,7 @@ curve = SubResource("Curve_wf045")
 
 [sub_resource type="Gradient" id="Gradient_v70sy"]
 offsets = PackedFloat32Array(0.31566265, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.5095078, 0.49878258, 0.49735212, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.86, 0.03440002, 0.04815979, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_s8mod"]
 gradient = SubResource("Gradient_v70sy")
@@ -72,19 +72,19 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/path = NodePath("DetectionArea:monitoring")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
+"update": 1,
+"values": [true]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("DetectionArea:monitoring")
+tracks/2/path = NodePath("DetectionArea:monitorable")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -96,32 +96,14 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("DetectionArea:monitorable")
+tracks/3/path = NodePath("Sprite2D:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
-[sub_resource type="Animation" id="Animation_wf045"]
-resource_name = "idle"
-length = 2.4
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.2, 2.4),
-"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(-1, 1), Vector2(1, 1)]
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_v70sy"]
@@ -191,12 +173,39 @@ tracks/4/keys = {
 "values": [false]
 }
 
+[sub_resource type="Animation" id="Animation_wf045"]
+resource_name = "spin"
+length = 4.0
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.2831855]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_s8mod"]
 _data = {
 &"RESET": SubResource("Animation_g63yp"),
-&"idle": SubResource("Animation_wf045"),
-&"pick_up": SubResource("Animation_v70sy")
+&"pick_up": SubResource("Animation_v70sy"),
+&"spin": SubResource("Animation_wf045")
 }
+
+[sub_resource type="Gradient" id="Gradient_f5wuv"]
+offsets = PackedFloat32Array(0, 0.7161804)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wf045"]
+gradient = SubResource("Gradient_f5wuv")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [node name="Scrap" type="RigidBody2D" unique_id=1809465642]
 collision_layer = 512
@@ -204,6 +213,7 @@ script = ExtResource("1_sd2yw")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=188524499]
 z_index = 2
+scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_7fmk8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=13068341]
@@ -222,5 +232,11 @@ process_material = SubResource("ParticleProcessMaterial_jj6sx")
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1863819974]
 libraries/ = SubResource("AnimationLibrary_s8mod")
+autoplay = &"spin"
 script = ExtResource("4_wf045")
 metadata/_custom_type_script = "uid://cq7h5m3f8n2jk"
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=47903072]
+color = Color(0.83565354, 0.3135801, 0, 1)
+energy = 0.2
+texture = SubResource("GradientTexture2D_wf045")
