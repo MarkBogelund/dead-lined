@@ -17,7 +17,7 @@ signal crunch_time_activated()
 @onready var score_manager: ScoreManager = %ScoreManager
 
 ## Current stress level (0-50)
-var current_stress := 10.0
+var current_stress := 25.0
 
 ## Entity counts
 var enemy_count := 0
@@ -74,8 +74,8 @@ func activate_crunch_time() -> void:
 	if not crunch_time_ready or current_stress < 50.0:
 		return # Can only activate when stress is at 50
 	
-	# Reset stress and add crunch time
-	current_stress = 0.0
+	# Reset stress to 25 and add crunch time
+	current_stress = 25.0
 	crunch_time_ready = false
 	score_manager.add_crunch_time(10.0)
 	crunch_time_activated.emit()
@@ -116,6 +116,10 @@ func _count_existing_turrets() -> int:
 
 func can_afford(cost: float) -> bool:
 	return current_stress >= cost
+
+## Returns true only if the action leaves at least 1 stress remaining
+func can_afford_safe(cost: float) -> bool:
+	return current_stress - cost >= 1.0
 
 func add_stress(amount: float) -> void:
 	current_stress = minf(current_stress + amount, 50.0)

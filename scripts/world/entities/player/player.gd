@@ -89,7 +89,7 @@ func _physics_process(delta):
 		_set_sprite_direction(velocity.x)
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("shoot") and stress_level_manager.can_afford(shoot_cost):
+	if event.is_action_pressed("shoot") and stress_level_manager.can_afford_safe(shoot_cost):
 		var mouse_pos := get_global_mouse_position()
 		aiming.aim_at(mouse_pos, global_position, 0.0) # Instant aiming (delta not used)
 		if shoot.try_shoot(mouse_pos, global_position):
@@ -144,10 +144,10 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 		return
 	
 	dash.cancel_dash()
-
-	var was_fatal = health.take_damage(amount)
 	
-	if was_fatal:
+	stress_level_manager.subtract_stress(amount)
+	
+	if stress_level_manager.current_stress <= 0.0:
 		_handle_death(from_position)
 	else:
 		_handle_damage(from_position, knockback_force)
@@ -168,7 +168,7 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	animation.play_animation("take_damage")
 	
 	# Notify external systems
-	damaged.emit(health.get_current_health())
+	damaged.emit(int(stress_level_manager.current_stress))
 
 func _handle_death(from_position: Vector2) -> void:
 	# Stronger knockback on death
@@ -199,10 +199,10 @@ func _handle_death(from_position: Vector2) -> void:
 	died.emit() # DeathSequenceController
 
 func is_dead():
-	return health.is_dead()
+	return stress_level_manager != null and stress_level_manager.current_stress <= 0.0
 
 func get_health():
-	return health.get_current_health()
+	return int(stress_level_manager.current_stress) if stress_level_manager else 0
 
 func collect_scrap(amount: int) -> void:
 	stress_level_manager.add_stress(amount)

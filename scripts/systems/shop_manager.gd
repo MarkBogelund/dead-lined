@@ -34,7 +34,7 @@ func _on_station_closed():
 	shop_panel.close()
 
 func _on_turret_selected(turret_entry: TurretEntry):
-	if not stress_level_manager.can_afford(turret_entry.price):
+	if not stress_level_manager.can_afford_safe(turret_entry.price):
 		return
 	
 	turret_placer.start_placement(turret_entry)
