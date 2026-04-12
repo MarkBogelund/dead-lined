@@ -20,9 +20,14 @@ func drop() -> void:
 	if not parent or not scrap_scene:
 		return
 	
+	var stress_manager: StressLevelManager = get_tree().get_first_node_in_group("stress_level_manager")
+	var multiplied_count := scrap_drop_amount
+	if stress_manager:
+		multiplied_count = roundi(scrap_drop_amount * (1.0 + stress_manager.turret_count * 0.1))
+	
 	var drop_position := parent.global_position
 	
-	for i in scrap_drop_amount:
+	for i in multiplied_count:
 		var scrap = scrap_scene.instantiate()
 		get_tree().current_scene.add_child(scrap)
 		

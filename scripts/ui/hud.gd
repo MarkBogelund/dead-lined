@@ -19,7 +19,7 @@ func _ready() -> void:
 
 func _initialize_values() -> void:
 	set_health(player.get_health())
-	set_scrap(resource_manager.scrap_amount)
+	set_scrap(int(stress_level_manager.current_stress))
 	set_wave(wave_manager.get_current_wave())
 	set_stress(0.0)
 	build_phase_timer.visible = false
@@ -30,6 +30,7 @@ func _connect_signals() -> void:
 	player.damaged.connect(_on_player_damaged)
 	resource_manager.scrap_amount_changed.connect(set_scrap)
 	stress_level_manager.stress_changed.connect(set_stress)
+	stress_level_manager.stress_changed.connect(func(v): set_scrap(int(v)))
 	wave_manager.combat_phase_started.connect(set_wave)
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)

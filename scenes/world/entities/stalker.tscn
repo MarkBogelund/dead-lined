@@ -493,7 +493,7 @@ aim_accuracy_angle = 0.85
 
 [node name="AimingComponent" type="Node" parent="." unique_id=1729909200]
 script = ExtResource("2_mcjbk")
-aim_speed = 3.0
+aim_speed = 2.0
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=486870823]
 script = ExtResource("15_jqj1v")
@@ -508,7 +508,7 @@ projectile_damage = 5
 projectile_knockback = 150
 muzzle_distance = 15.0
 shoot_cooldown = 2.0
-projectile_speed = 150.0
+projectile_speed = 100.0
 
 [node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
 script = ExtResource("12_los")
@@ -525,7 +525,7 @@ script = ExtResource("10_nav")
 
 [node name="DropScrapComponent" type="Node" parent="." unique_id=1674501989]
 script = ExtResource("9_dropscrap")
-scrap_drop_amount = 3
+scrap_drop_amount = 5
 scrap_scene = ExtResource("2_scrap")
 impulse_min = 20.0
 impulse_max = 150.0
@@ -534,6 +534,7 @@ impulse_max = 150.0
 collision_layer = 16
 collision_mask = 34
 script = ExtResource("12_36hmg")
+knockback = 200.0
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1613851753]
@@ -547,7 +548,7 @@ script = ExtResource("4_knockback")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=775711309]
 script = ExtResource("7_health")
-max_health = 30
+max_health = 20
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1949746839]
 libraries/ = SubResource("AnimationLibrary_stalker")

@@ -496,7 +496,6 @@ z_index = 2
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_g2els")
-shoot_cost = 2
 damage_freeze_duration = 0.1
 
 [node name="AimingComponent" type="Node" parent="." unique_id=915185371]
@@ -515,7 +514,6 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 script = ExtResource("5_tuyoq")
 explosion_vfx_scene = ExtResource("6_c5rqy")
 projectile_scene = ExtResource("2_qhqgy")
-projectile_damage = 20
 metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="VFXComponent" type="Node" parent="." unique_id=1075206016]

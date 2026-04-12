@@ -10,6 +10,7 @@ signal turret_placement_ended
 @export var shop_panel: ShopPanel
 @export var shop_station: ShopStation
 @onready var resource_manager: ResourceManager = %ResourceManager
+@onready var stress_level_manager: StressLevelManager = %StressLevelManager
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
 var turrets_placed := 0
 
@@ -33,14 +34,14 @@ func _on_station_closed():
 	shop_panel.close()
 
 func _on_turret_selected(turret_entry: TurretEntry):
-	if not resource_manager.can_buy(turret_entry.price):
+	if not stress_level_manager.can_afford(turret_entry.price):
 		return
 	
 	turret_placer.start_placement(turret_entry)
 	shop_panel.close()
 
 func _on_turret_placed(_turret: Node, turret_entry: TurretEntry):
-	resource_manager.subtract_scrap(turret_entry.price)
+	stress_level_manager.subtract_stress(turret_entry.price)
 	turrets_placed += 1
 
 func _on_placement_started() -> void:

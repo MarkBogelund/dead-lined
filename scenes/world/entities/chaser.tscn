@@ -522,7 +522,7 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=2089421128]
 script = ExtResource("4_qurf7")
-max_health = 30
+max_health = 40
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=504753542]
@@ -536,7 +536,7 @@ texture = SubResource("GradientTexture2D_fffhc")
 
 [node name="DropScrapComponent" type="Node" parent="." unique_id=478857233]
 script = ExtResource("8_jg6m2")
-scrap_drop_amount = 2
+scrap_drop_amount = 3
 scrap_scene = ExtResource("2_fffhc")
 impulse_min = 20.0
 impulse_max = 150.0

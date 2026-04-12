@@ -19,5 +19,8 @@ func _on_body_entered(body: Node2D):
 		return
 
 	if body.is_in_group("player"):
+		var crunch_time: CrunchTimeComponent = body.get_node_or_null("CrunchTimeComponent")
+		if crunch_time and crunch_time.is_active:
+			return
 		body.collect_scrap(value)
 		animation_handler.play_animation("pick_up")

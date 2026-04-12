@@ -8,7 +8,7 @@ signal crunch_time_started(buffs: Dictionary)
 signal crunch_time_ended(buffs: Dictionary)
 
 ## Duration
-@export var duration := 10.0
+@export var duration := 5.0
 
 ## Buff multipliers (configurable in inspector)
 @export_group("Buff Multipliers")

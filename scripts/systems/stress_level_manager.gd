@@ -8,22 +8,16 @@ signal stress_changed(new_stress: float)
 signal crunch_time_available()
 signal crunch_time_activated()
 
-## Base growth rate in stress % per second
-@export var base_growth_rate := 1.0
-
-## Additional growth % per enemy
-@export var enemy_growth_modifier := 1.0
-
-## Additional growth % per turret
-@export var turret_growth_modifier := 5.0
+## Multiplier applied to each enemy drop per turret on screen
+@export var turret_growth_modifier := 1.5
 
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var turret_placer: TurretPlacer = %TurretPlacer
 @onready var player: CharacterBody2D = %Player
 @onready var score_manager: ScoreManager = %ScoreManager
 
-## Current stress level (0-100)
-var current_stress := 0.0
+## Current stress level (0-50)
+var current_stress := 10.0
 
 ## Entity counts
 var enemy_count := 0
@@ -52,32 +46,9 @@ func _ready() -> void:
 	# Connect to turret placer
 	turret_placer.turret_placed.connect(_on_turret_placed)
 
-func _process(delta: float) -> void:
-	if not is_combat_phase:
-		return
-	
-	# Calculate growth rate based on entity counts
-	var growth_rate := _calculate_growth_rate()
-	
-	# Increase stress
-	current_stress += growth_rate * delta
-	
-	# Cap at 100 and notify when crunch time becomes available
-	if current_stress >= 100.0:
-		current_stress = 100.0
-		if not crunch_time_ready:
-			crunch_time_ready = true
-			crunch_time_available.emit()
-	
-	stress_changed.emit(current_stress)
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("crunch_time"):
 		activate_crunch_time()
-
-func _calculate_growth_rate() -> float:
-	# Base rate + (enemies * modifier) + (turrets * modifier)
-	return base_growth_rate + (enemy_count * enemy_growth_modifier) + (turret_count * turret_growth_modifier)
 
 func _on_combat_phase_started(_wave_index: int) -> void:
 	is_combat_phase = true
@@ -92,16 +63,16 @@ func _on_combat_phase_started(_wave_index: int) -> void:
 	stress_changed.emit(current_stress)
 
 func _on_build_phase_started() -> void:
-	# Reset stress to 0
-	current_stress = 0.0
+	# Stress carries over into build phase so it can be spent on turrets
 	crunch_time_ready = false
-	stress_changed.emit(current_stress)
 	is_combat_phase = false
 
 ## Manually activate crunch time (called by button press)
 func activate_crunch_time() -> void:
-	if not crunch_time_ready or current_stress < 100.0:
-		return # Can only activate when stress is at 100
+	if not is_combat_phase:
+		return # Cannot activate during build phase
+	if not crunch_time_ready or current_stress < 50.0:
+		return # Can only activate when stress is at 50
 	
 	# Reset stress and add crunch time
 	current_stress = 0.0
@@ -140,3 +111,19 @@ func _count_existing_turrets() -> int:
 	var turrets := get_tree().get_nodes_in_group("turrets")
 	count = turrets.size()
 	return count
+
+## --- Prototype: stress-as-resource API ---
+
+func can_afford(cost: float) -> bool:
+	return current_stress >= cost
+
+func add_stress(amount: float) -> void:
+	current_stress = minf(current_stress + amount, 50.0)
+	if current_stress >= 50.0 and not crunch_time_ready:
+		crunch_time_ready = true
+		crunch_time_available.emit()
+	stress_changed.emit(current_stress)
+
+func subtract_stress(amount: float) -> void:
+	current_stress = maxf(current_stress - amount, 0.0)
+	stress_changed.emit(current_stress)

@@ -73,6 +73,7 @@ max_length = 15
 collision_layer = 4
 collision_mask = 9
 script = ExtResource("5_7p1yo")
+damage = 15
 knockback = 200.0
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 

@@ -5,6 +5,7 @@ signal damaged(current_health: int)
 signal died
 
 @onready var resource_manager: ResourceManager = %ResourceManager
+@onready var stress_level_manager: StressLevelManager = %StressLevelManager
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
 @onready var camera_shake_manager = %CameraShakeManager
@@ -24,7 +25,8 @@ signal died
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-@export var shoot_cost := 1
+@export var shoot_cost := 2
+@export var dash_cost := 0
 
 @export_group("Damage Effects")
 @export var damage_knockback_force := 200.0
@@ -87,19 +89,20 @@ func _physics_process(delta):
 		_set_sprite_direction(velocity.x)
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("shoot") and resource_manager.can_buy(shoot_cost):
+	if event.is_action_pressed("shoot") and stress_level_manager.can_afford(shoot_cost):
 		var mouse_pos := get_global_mouse_position()
 		aiming.aim_at(mouse_pos, global_position, 0.0) # Instant aiming (delta not used)
 		if shoot.try_shoot(mouse_pos, global_position):
-			resource_manager.subtract_scrap(shoot_cost)
+			stress_level_manager.subtract_stress(shoot_cost)
 			animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	
 	if event.is_action_pressed("slash"):
 		melee_weapon.try_slash(get_global_mouse_position())
 	
-	if event.is_action_pressed("dash"):
+	if event.is_action_pressed("dash") and stress_level_manager.can_afford(dash_cost):
 		var dash_dir = _get_dash_direction()
 		if dash.try_dash(dash_dir):
+			stress_level_manager.subtract_stress(dash_cost)
 			_handle_dash_started(dash_dir)
 
 func _update_animation():
@@ -202,7 +205,7 @@ func get_health():
 	return health.get_current_health()
 
 func collect_scrap(amount: int) -> void:
-	resource_manager.add_scrap(amount)
+	stress_level_manager.add_stress(amount)
 
 func _on_turret_placement_started():
 	shoot.set_enabled(false)

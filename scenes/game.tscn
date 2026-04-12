@@ -313,9 +313,6 @@ libraries/ = SubResource("AnimationLibrary_e1j6l")
 [node name="StressLevelManager" type="Node" parent="Systems" unique_id=1710259123 groups=["stress_level_manager"]]
 unique_name_in_owner = true
 script = ExtResource("7_stress")
-base_growth_rate = 0.1
-enemy_growth_modifier = 0.3
-turret_growth_modifier = 2.0
 
 [node name="ScoreManager" type="Node" parent="Systems" unique_id=1686909808 groups=["score_manager"]]
 unique_name_in_owner = true
