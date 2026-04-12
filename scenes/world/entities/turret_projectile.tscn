@@ -31,7 +31,7 @@ texture = SubResource("AtlasTexture_x0bxo")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=769139471]
 collision_layer = 20
-collision_mask = 11
+collision_mask = 43
 script = ExtResource("4_binmj")
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 

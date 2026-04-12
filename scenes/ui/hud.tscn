@@ -436,7 +436,7 @@ grow_vertical = 2
 theme_override_fonts/font = SubResource("FontFile_h022r")
 theme_override_font_sizes/font_size = 24
 text = "0"
-horizontal_alignment = 1
+horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="BuildPhaseTimer" type="Label" parent="." unique_id=1327985161]

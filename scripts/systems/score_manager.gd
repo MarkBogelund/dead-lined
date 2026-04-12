@@ -4,6 +4,8 @@ class_name ScoreManager
 ## Manages scoring system based on player performance
 ## Tracks: drones destroyed, turrets destroyed, waves survived, crunch time
 
+signal score_changed(new_score: int)
+
 ## Score values
 const DRONE_VALUE := 100
 const TURRET_VALUE := 100
@@ -46,6 +48,7 @@ func _on_enemy_spawned(enemy: Node) -> void:
 
 func _on_drone_destroyed() -> void:
 	drones_destroyed += 1
+	score_changed.emit(calculate_score())
 
 func _on_turret_placed(turret: Node, _turret_entry) -> void:
 	# Connect to turret's death signal
@@ -54,10 +57,12 @@ func _on_turret_placed(turret: Node, _turret_entry) -> void:
 
 func _on_turret_destroyed() -> void:
 	turrets_destroyed += 1
+	score_changed.emit(calculate_score())
 
 ## Called by StressLevelManager when crunch time is triggered
 func add_crunch_time(seconds: float = 10.0) -> void:
 	crunch_time_spent += seconds
+	score_changed.emit(calculate_score())
 
 ## Calculate total score based on formula
 func calculate_score() -> int:

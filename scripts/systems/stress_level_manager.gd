@@ -17,7 +17,7 @@ signal crunch_time_activated()
 @onready var score_manager: ScoreManager = %ScoreManager
 
 ## Current stress level (0-50)
-var current_stress := 25.0
+var current_stress := 31.0
 
 ## Entity counts
 var enemy_count := 0
@@ -53,6 +53,11 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_combat_phase_started(_wave_index: int) -> void:
 	is_combat_phase = true
 	crunch_time_ready = false
+	
+	# If stress carried over at max, immediately mark crunch time as available
+	if current_stress >= 50.0:
+		crunch_time_ready = true
+		crunch_time_available.emit()
 	
 	# Count all existing turrets in the scene
 	turret_count = _count_existing_turrets()

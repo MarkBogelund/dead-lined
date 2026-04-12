@@ -15,15 +15,21 @@
 [ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="14_flmdm"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="14_u0oon"]
 
+[sub_resource type="Resource" id="Resource_u0oon"]
+script = ExtResource("11_target_config")
+group_name = "turrets"
+metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
+
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("11_target_config")
 group_name = "player"
+priority = 1
 metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 
 [sub_resource type="Resource" id="Resource_flmdm"]
 script = ExtResource("11_target_config")
 group_name = "enemies"
-priority = 1
+priority = 2
 metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 
 [sub_resource type="Animation" id="Animation_6fjxm"]
@@ -314,7 +320,7 @@ vfx_scene = ExtResource("5_6fjxm")
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=1604110218]
 script = ExtResource("10_targeting")
-target_configs = Array[ExtResource("11_target_config")]([SubResource("Resource_6yfjj"), SubResource("Resource_flmdm")])
+target_configs = Array[ExtResource("11_target_config")]([SubResource("Resource_u0oon"), SubResource("Resource_6yfjj"), SubResource("Resource_flmdm")])
 metadata/_custom_type_script = "uid://dule5ocnt8lxx"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=219458917]
@@ -357,7 +363,6 @@ shape = SubResource("CircleShape2D_el7wl")
 [node name="ShootComponent" type="Node" parent="." unique_id=316514408]
 script = ExtResource("4_pp6j5")
 projectile_scene = ExtResource("5_e28e4")
-muzzle_distance = 5.0
 projectile_speed = 200.0
 metadata/_custom_type_script = "uid://blmoutagnygip"
 
@@ -372,7 +377,7 @@ region_enabled = true
 region_rect = Rect2(7, 14, 22, 28)
 
 [node name="Muzzle" type="Marker2D" parent="Canon/Graphics" unique_id=838233975]
-position = Vector2(0, 15)
+position = Vector2(0, 31)
 
 [node name="FlashVfx" parent="." unique_id=1645924480 instance=ExtResource("14_6yfjj")]
 scale = Vector2(2, 2)

@@ -38,6 +38,10 @@ func get_best_target(from_position: Vector2) -> Node2D:
 			if not is_instance_valid(node) or not node is Node2D:
 				continue
 			
+			# Skip self
+			if node == get_parent():
+				continue
+			
 			# Skip dead entities if they have is_dead() method
 			if node.has_method("is_dead") and node.is_dead():
 				continue
