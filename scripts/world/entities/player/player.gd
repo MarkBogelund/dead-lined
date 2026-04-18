@@ -26,7 +26,7 @@ signal died
 @export_group("Capacity Costs")
 @export var shoot_capacity_cost: float = 2.0
 @export var damage_capacity_loss: float = 5.0
-@export var crunch_time_drain_per_second: float = 5.0
+@export var crunch_time_seconds_per_unit: float = 0.2
 
 @export_group("Damage Effects")
 @export var damage_knockback_force := 200.0
@@ -43,6 +43,7 @@ const MIN_MOVE_SPEED := 10.0
 
 ## Crunch time state
 var is_invincible := false
+var _crunch_drain_timer := 0.0
 
 var _is_dead := false
 
@@ -69,7 +70,16 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
 	
 	if crunch_time.is_crunch_time_active():
-		capacity_manager.spend(crunch_time_drain_per_second * delta)
+		_crunch_drain_timer -= delta
+		if _crunch_drain_timer <= 0.0:
+			_crunch_drain_timer = crunch_time_seconds_per_unit
+			var max_drain := maxf(0.0, capacity_manager.current_capacity - crunch_time.deactivation_threshold)
+			capacity_manager.spend(minf(1.0, max_drain))
+		if capacity_manager.current_capacity <= crunch_time.deactivation_threshold:
+			_crunch_drain_timer = 0.0
+			crunch_time.deactivate()
+	else:
+		_crunch_drain_timer = 0.0
 	
 	knockback.process(delta)
 	
@@ -96,8 +106,8 @@ func _physics_process(delta):
 		_set_sprite_direction(velocity.x)
 
 func _unhandled_input(event: InputEvent):
-	if event.is_action_pressed("crunch_time") and capacity_manager.current_capacity >= 100.0:
-		crunch_time.activate()
+	if event.is_action_pressed("crunch_time"):
+		crunch_time.toggle(capacity_manager.can_crunch_time())
 	
 	if event.is_action_pressed("shoot") and capacity_manager.can_afford(shoot_capacity_cost):
 		var mouse_pos := get_global_mouse_position()
@@ -208,6 +218,8 @@ func is_dead() -> bool:
 	return _is_dead
 
 func collect_scrap(amount: int) -> void:
+	if crunch_time.is_crunch_time_active():
+		return
 	capacity_manager.gain(float(amount))
 
 func _on_capacity_depleted() -> void:

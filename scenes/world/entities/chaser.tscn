@@ -536,7 +536,7 @@ texture = SubResource("GradientTexture2D_fffhc")
 
 [node name="DropScrapComponent" type="Node" parent="." unique_id=478857233]
 script = ExtResource("8_jg6m2")
-scrap_drop_amount = 2
+scrap_drop_amount = 5
 scrap_scene = ExtResource("2_fffhc")
 impulse_min = 20.0
 impulse_max = 150.0

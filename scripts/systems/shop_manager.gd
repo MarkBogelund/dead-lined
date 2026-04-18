@@ -39,9 +39,15 @@ func _on_turret_selected(turret_entry: TurretEntry):
 	turret_placer.start_placement(turret_entry)
 	shop_panel.close()
 
-func _on_turret_placed(_turret: Node, turret_entry: TurretEntry):
+func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
 	capacity_manager.spend(turret_entry.price)
 	turrets_placed += 1
+	capacity_manager.lower_threshold()
+	if turret.has_signal("died"):
+		turret.died.connect(_on_turret_destroyed)
+
+func _on_turret_destroyed() -> void:
+	capacity_manager.raise_threshold()
 
 func _on_placement_started() -> void:
 	emit_signal("turret_placement_started")
