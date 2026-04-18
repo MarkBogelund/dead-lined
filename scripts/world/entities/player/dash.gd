@@ -106,5 +106,3 @@ func _end_dash() -> void:
 		trail.stop_tracking()
 	
 	emit_signal("dash_ended")
-	
-	emit_signal("dash_ended")

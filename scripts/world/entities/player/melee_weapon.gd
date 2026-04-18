@@ -7,7 +7,7 @@ signal slash_started(target_position: Vector2)
 @onready var trail: Line2D = $Trail
 @onready var glimmer_particles: GPUParticles2D = $GlimmerParticles
 @onready var hitbox: HitboxComponent = $HitboxComponent
-@onready var camera_shake_manager: CameraShakeManager
+@export var camera_shake_manager: CameraShakeManager
 
 @export_group("Slash Settings")
 @export var slash_radius := 24.0
@@ -29,7 +29,6 @@ var _direction := 1
 var _slashing := false
 
 func _ready() -> void:
-	camera_shake_manager = get_tree().get_first_node_in_group("camera_shake_manager")
 	_reset()
 	hitbox.hit_target.connect(_on_hit_target)
 

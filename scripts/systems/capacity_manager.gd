@@ -1,10 +1,14 @@
 extends Node
-class_name CapacityManager
+class_name CapacityComponent
 
 signal capacity_changed(amount: float)
-signal player_died
 signal crunch_time_unlocked
 signal crunch_time_threshold_changed(new_threshold: float)
+
+@export_group("Capacity Costs")
+@export var shoot_cost: float = 2.0
+@export var damage_cost: float = 5.0
+@export var crunch_drain_seconds_per_unit: float = 0.2
 
 const INITIAL_CAPACITY := 80.0
 const BASE_CRUNCH_THRESHOLD := 90.0
@@ -31,8 +35,6 @@ func raise_threshold() -> void:
 func spend(cost: float) -> void:
 	current_capacity = maxf(0.0, current_capacity - cost)
 	emit_signal("capacity_changed", current_capacity)
-	if current_capacity <= 0.0:
-		emit_signal("player_died")
 
 func gain(amount: float) -> void:
 	var was_below_threshold := not can_crunch_time()

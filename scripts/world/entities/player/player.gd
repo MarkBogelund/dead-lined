@@ -4,7 +4,8 @@ class_name Player
 signal damaged(current_capacity: float)
 signal died
 
-@onready var capacity_manager: CapacityManager = %CapacityManager
+@onready var capacity: CapacityComponent = %CapacityComponent
+@onready var wave_manager: WaveManager = %WaveManager
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
 @onready var camera_shake_manager = %CameraShakeManager
@@ -22,11 +23,6 @@ signal died
 @onready var flash_vfx: FlashVfx = $FlashVfx
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-
-@export_group("Capacity Costs")
-@export var shoot_capacity_cost: float = 2.0
-@export var damage_capacity_loss: float = 5.0
-@export var crunch_time_seconds_per_unit: float = 0.2
 
 @export_group("Damage Effects")
 @export var damage_knockback_force := 200.0
@@ -57,6 +53,7 @@ func _ready():
 	animation.configure_animation("die", 4, true)
 	
 	melee_weapon.slash_started.connect(_handle_slash_started)
+	melee_weapon.camera_shake_manager = camera_shake_manager
 	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
 	
@@ -64,7 +61,11 @@ func _ready():
 	crunch_time.crunch_time_started.connect(_on_crunch_time_started)
 	crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
 	
-	capacity_manager.player_died.connect(_on_capacity_depleted)
+	wave_manager.build_phase_started.connect(_on_wave_build_phase_started)
+	wave_manager.combat_phase_started.connect(_on_wave_combat_phase_started)
+	died.connect(func(): crunch_time.deactivate())
+	
+	capacity.capacity_changed.connect(_on_capacity_changed)
 
 func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "up", "down")
@@ -72,10 +73,10 @@ func _physics_process(delta):
 	if crunch_time.is_crunch_time_active():
 		_crunch_drain_timer -= delta
 		if _crunch_drain_timer <= 0.0:
-			_crunch_drain_timer = crunch_time_seconds_per_unit
-			var max_drain := maxf(0.0, capacity_manager.current_capacity - crunch_time.deactivation_threshold)
-			capacity_manager.spend(minf(1.0, max_drain))
-		if capacity_manager.current_capacity <= crunch_time.deactivation_threshold:
+			_crunch_drain_timer = capacity.crunch_drain_seconds_per_unit
+			var max_drain := maxf(0.0, capacity.current_capacity - crunch_time.deactivation_threshold)
+			capacity.spend(minf(1.0, max_drain))
+		if capacity.current_capacity <= crunch_time.deactivation_threshold:
 			_crunch_drain_timer = 0.0
 			crunch_time.deactivate()
 	else:
@@ -107,13 +108,13 @@ func _physics_process(delta):
 
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("crunch_time"):
-		crunch_time.toggle(capacity_manager.can_crunch_time())
+		crunch_time.toggle(capacity.can_crunch_time())
 	
-	if event.is_action_pressed("shoot") and capacity_manager.can_afford(shoot_capacity_cost):
+	if event.is_action_pressed("shoot") and capacity.can_afford(capacity.shoot_cost):
 		var mouse_pos := get_global_mouse_position()
 		aiming.aim_at(mouse_pos, global_position, 0.0) # Instant aiming (delta not used)
 		if shoot.try_shoot(mouse_pos, global_position):
-			capacity_manager.spend(shoot_capacity_cost)
+			capacity.spend(capacity.shoot_cost)
 			animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	
 	if event.is_action_pressed("slash"):
@@ -163,7 +164,7 @@ func was_hit(_amount: int, knockback_force: float, from_position: Vector2) -> vo
 		return
 	
 	dash.cancel_dash()
-	capacity_manager.spend(damage_capacity_loss)
+	capacity.spend(capacity.damage_cost)
 	
 	if not is_dead():
 		_handle_damage(from_position, knockback_force)
@@ -184,7 +185,7 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	animation.play_animation("take_damage")
 	
 	# Notify external systems
-	damaged.emit(capacity_manager.current_capacity)
+	damaged.emit(capacity.current_capacity)
 
 func _handle_death(from_position: Vector2) -> void:
 	# Stronger knockback on death
@@ -220,13 +221,12 @@ func is_dead() -> bool:
 func collect_scrap(amount: int) -> void:
 	if crunch_time.is_crunch_time_active():
 		return
-	capacity_manager.gain(float(amount))
+	capacity.gain(float(amount))
 
-func _on_capacity_depleted() -> void:
-	if _is_dead:
-		return
-	_is_dead = true
-	_handle_death(global_position) # No directional knockback for capacity death
+func _on_capacity_changed(value: float) -> void:
+	if value <= 0.0 and not _is_dead:
+		_is_dead = true
+		_handle_death(global_position)
 
 func _on_turret_placement_started():
 	shoot.set_enabled(false)
@@ -235,6 +235,12 @@ func _on_turret_placement_started():
 func _on_turret_placement_ended():
 	shoot.set_enabled(true)
 	melee_weapon.set_enabled(true)
+
+func _on_wave_build_phase_started() -> void:
+	crunch_time.set_build_phase(true)
+
+func _on_wave_combat_phase_started(_wave_index: int) -> void:
+	crunch_time.set_build_phase(false)
 
 ## Crunch time activation - apply multiplicative buffs
 func _on_crunch_time_started(buffs: Dictionary) -> void:

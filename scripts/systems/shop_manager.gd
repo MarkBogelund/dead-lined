@@ -9,7 +9,7 @@ signal turret_placement_ended
 @onready var wave_manager: WaveManager = %WaveManager
 @export var shop_panel: ShopPanel
 @export var shop_station: ShopStation
-@onready var capacity_manager: CapacityManager = %CapacityManager
+@onready var capacity_manager: CapacityComponent = %CapacityComponent
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
 var turrets_placed := 0
 

@@ -293,10 +293,6 @@ unique_name_in_owner = true
 script = ExtResource("2_kvuet")
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
-[node name="CapacityManager" type="Node" parent="Systems" unique_id=674344671 groups=["capacity_manager"]]
-unique_name_in_owner = true
-script = ExtResource("7_u5sy4")
-
 [node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]
 unique_name_in_owner = true
 script = ExtResource("6_ssvqc")
@@ -464,6 +460,10 @@ limit_right = 290
 limit_bottom = 180
 limit_smoothed = true
 position_smoothing_enabled = true
+
+[node name="CapacityComponent" type="Node" parent="World/Player" unique_id=674344671]
+unique_name_in_owner = true
+script = ExtResource("7_u5sy4")
 
 [node name="EnemySpawner2" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(-136, 56)
