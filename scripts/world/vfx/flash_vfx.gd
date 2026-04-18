@@ -8,11 +8,6 @@ class_name FlashVfx
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-func _ready() -> void:
-	sprite.modulate = flash_color
-	# Start invisible
-	visible = false
-
 func start() -> void:
 	if animation_player and animation_player.has_animation("flash"):
 		visible = true

@@ -57,6 +57,7 @@ func _setup_animations() -> void:
 func _connect_signals() -> void:
 	# Components
 	melee_weapon.camera_shake_manager = camera_shake_manager
+	aiming.muzzle = $Muzzle
 	crunch_time.crunch_time_started.connect(_on_crunch_time_started)
 	crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
 	crunch_time.drain_tick.connect(_on_crunch_drain_tick)
@@ -111,8 +112,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("shoot") and capacity.can_afford(capacity.shoot_cost):
 		var mouse_pos := get_global_mouse_position()
-		aiming.aim_at(mouse_pos, global_position, 0.0) # Instant aiming (delta not used)
-		if shoot.try_shoot(mouse_pos, global_position):
+		aiming.aim_at(mouse_pos, 0.0)
+		if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 			capacity.spend(capacity.shoot_cost)
 			animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	

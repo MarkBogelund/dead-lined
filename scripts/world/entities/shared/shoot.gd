@@ -1,13 +1,11 @@
 extends Node
 class_name ShootComponent
 
-@onready var vfx_component: VFXComponent = get_node_or_null("../VFXComponent")
 @export var explosion_vfx_scene: PackedScene
 
 @export var projectile_scene: PackedScene
 @export var projectile_damage := 10
 @export var projectile_knockback := 200
-@export var muzzle_distance := 20.0
 @export var shoot_cooldown := 0.5
 @export var projectile_speed := 300.0
 
@@ -21,7 +19,7 @@ func _process(delta: float):
 func set_enabled(enabled: bool):
 	shooting_activated = enabled
 
-func try_shoot(target_pos: Vector2, shooter_pos: Vector2) -> bool:
+func try_shoot(from_pos: Vector2, direction: Vector2) -> bool:
 	if _shoot_timer > 0.0 or not shooting_activated:
 		return false
 
@@ -30,9 +28,7 @@ func try_shoot(target_pos: Vector2, shooter_pos: Vector2) -> bool:
 		return false
 
 	var projectile := projectile_scene.instantiate()
-	var dir = (target_pos - shooter_pos).normalized()
-	
-	projectile.set_orientation(shooter_pos + dir * muzzle_distance, dir.angle(), dir)
+	projectile.set_orientation(from_pos, direction.angle(), direction)
 	projectile.set_parameters(projectile_speed, projectile_damage, projectile_knockback)
 
 	get_tree().current_scene.add_child(projectile)

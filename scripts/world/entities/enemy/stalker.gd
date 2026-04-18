@@ -19,7 +19,6 @@ signal died
 @export var ideal_distance := 100.0 ## Target distance to maintain from target
 @export var distance_tolerance := 20.0 ## Acceptable range around ideal distance before adjusting
 @export var max_shoot_distance := 120.0 ## Maximum distance to shoot from (wiggle room)
-@export var aim_accuracy_angle := 0.25
 
 func _ready() -> void:
 	# Configure animations
@@ -63,12 +62,12 @@ func _physics_process(delta: float) -> void:
 			
 			# Aim and shoot only when has line of sight
 			if has_line_of_sight:
-				aiming.aim_at(target.global_position, global_position, delta)
+				aiming.aim_at(target.global_position, delta)
 				
 				# Shoot if within distance and aim is accurate
 				if distance <= max_shoot_distance:
-					if aiming.is_aimed_at(target.global_position, global_position, aim_accuracy_angle):
-						if shoot.try_shoot(target.global_position, global_position):
+					if aiming.is_aimed_at(target.global_position):
+						if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 							animation.play_animation("shoot")
 
 		# Play idle animation when moving

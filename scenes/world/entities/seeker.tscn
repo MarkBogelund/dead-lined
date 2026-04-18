@@ -322,11 +322,13 @@ script = ExtResource("3_p0iej")
 max_health = 100
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
-[node name="AimingComponent" type="Node" parent="." unique_id=1630660525 node_paths=PackedStringArray("visual_node")]
+[node name="AimingComponent" type="Node" parent="." unique_id=1630660525 node_paths=PackedStringArray("visual_node", "muzzle")]
 script = ExtResource("3_6h4p8")
 aim_speed = 6.0
+accuracy_angle = 0.2
 visual_node = NodePath("../Canon")
 visual_offset = -1.571
+muzzle = NodePath("../Canon/Graphics/Muzzle")
 
 [node name="VFXComponent" type="Node" parent="." unique_id=1357204820]
 script = ExtResource("5_oxiec")
@@ -357,7 +359,6 @@ shape = SubResource("CircleShape2D_el7wl")
 [node name="ShootComponent" type="Node" parent="." unique_id=316514408]
 script = ExtResource("4_pp6j5")
 projectile_scene = ExtResource("5_e28e4")
-muzzle_distance = 5.0
 projectile_speed = 200.0
 metadata/_custom_type_script = "uid://blmoutagnygip"
 

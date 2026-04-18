@@ -666,5 +666,7 @@ texture = SubResource("GradientTexture2D_n5sgd")
 
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("18_1vgk0")]
 
+[node name="Muzzle" type="Marker2D" parent="." unique_id=234567891]
+
 [node name="FlashVfx" parent="." unique_id=462082651 instance=ExtResource("16_74ekq")]
 scale = Vector2(2, 2)

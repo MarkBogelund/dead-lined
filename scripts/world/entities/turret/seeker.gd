@@ -8,13 +8,8 @@ signal died
 @onready var vfx_component: VFXComponent = $VFXComponent
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var health: HealthComponent = $HealthComponent
-@onready var canon: Node2D = $Canon
-@onready var muzzle: Marker2D = $Canon/Graphics/Muzzle
 @onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
-
-## Targeting
-@export var detection_angle := 0.2 # Radians from aim direction
 
 ## Firing
 @export var fire_rate := 0.5 # Seconds between shots
@@ -58,20 +53,20 @@ func _process(delta: float) -> void:
 	if not target:
 		return
 	
-	aiming.aim_at(target.global_position, canon.global_position, delta)
+	aiming.aim_at(target.global_position, delta)
 	
-	if aiming.is_aimed_at(target.global_position, canon.global_position, detection_angle):
-		_fire_at(target.global_position)
+	if aiming.is_aimed_at(target.global_position):
+		_fire_at()
 
-func _fire_at(target_pos: Vector2) -> void:
+func _fire_at() -> void:
 	if _fire_timer > 0:
 		return
 	
-	if shoot.try_shoot(target_pos, muzzle.global_position):
+	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 		_fire_timer = fire_rate
 		animation.play_animation("recoil")
 		if vfx_scene and vfx_component:
-			vfx_component.instantiate_vfx(vfx_scene, muzzle.global_position)
+			vfx_component.instantiate_vfx(vfx_scene, aiming.get_muzzle_position())
 
 ## Damage handling - called by enemy hitboxes
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
