@@ -5,11 +5,13 @@ signal shop_system_enabled
 signal shop_system_disabled
 signal turret_placement_started
 signal turret_placement_ended
+signal turret_bought(price: float)
+signal turret_lost
 
 @onready var wave_manager: WaveManager = %WaveManager
+@onready var player: Player = %Player
 @export var shop_panel: ShopPanel
 @export var shop_station: ShopStation
-@onready var capacity_manager: CapacityComponent = %CapacityComponent
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
 var turrets_placed := 0
 
@@ -33,21 +35,20 @@ func _on_station_closed():
 	shop_panel.close()
 
 func _on_turret_selected(turret_entry: TurretEntry):
-	if not capacity_manager.can_afford(turret_entry.price):
+	if not player.can_afford(turret_entry.price):
 		return
 
 	turret_placer.start_placement(turret_entry)
 	shop_panel.close()
 
 func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
-	capacity_manager.spend(turret_entry.price)
 	turrets_placed += 1
-	capacity_manager.lower_threshold()
+	turret_bought.emit(turret_entry.price)
 	if turret.has_signal("died"):
 		turret.died.connect(_on_turret_destroyed)
 
 func _on_turret_destroyed() -> void:
-	capacity_manager.raise_threshold()
+	turret_lost.emit()
 
 func _on_placement_started() -> void:
 	emit_signal("turret_placement_started")

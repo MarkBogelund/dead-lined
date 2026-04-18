@@ -1,8 +1,6 @@
 extends Node2D
 class_name MeleeWeapon
 
-signal slash_started(target_position: Vector2)
-
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var trail: Line2D = $Trail
 @onready var glimmer_particles: GPUParticles2D = $GlimmerParticles
@@ -45,9 +43,9 @@ func _reset() -> void:
 func set_enabled(enabled: bool) -> void:
 	_enabled = enabled
 
-func try_slash(target_pos: Vector2) -> void:
+func try_slash(target_pos: Vector2) -> bool:
 	if _cooldown_timer > 0.0 or not _enabled:
-		return
+		return false
 	
 	_cooldown_timer = slash_cooldown
 	_reset()
@@ -71,7 +69,7 @@ func try_slash(target_pos: Vector2) -> void:
 	if glimmer_particles:
 		glimmer_particles.emitting = true
 	
-	emit_signal("slash_started", target_pos)
+	return true
 
 func _process(delta: float) -> void:
 	if _cooldown_timer > 0.0:

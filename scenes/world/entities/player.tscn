@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/world/entities/player/player.gd" id="1_g2els"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_74ekq"]
+[ext_resource type="Script" uid="uid://dxhdl8qdlw3o8" path="res://scripts/world/entities/player/capacity.gd" id="2_2454e"]
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/world/entities/player_projectile.tscn" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://dlrnady7rm2bb" path="res://assets/sprites/player/player-sheet.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_dqkch"]
-[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="5_qlg0r"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="5_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="6_c5rqy"]
 [ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="8_dnykm"]
@@ -97,6 +97,18 @@ tracks/2/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HitParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_yfgcb"]
 resource_name = "dash"
@@ -178,6 +190,46 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1, 4.438277),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(0.18, 0.18, 0.18, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("HitParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("HitParticles")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"restart"
+}]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("FlashVfx")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_b6tgf"]
@@ -282,7 +334,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_tuyoq"]
 resource_name = "take_damage"
-length = 0.2
+length = 0.1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -295,6 +347,32 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("HitParticles")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"restart"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HitParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fjrip"]
@@ -498,13 +576,12 @@ collision_mask = 33
 script = ExtResource("1_g2els")
 damage_freeze_duration = 0.1
 
+[node name="CapacityComponent" type="Node" parent="." unique_id=1117474515]
+script = ExtResource("2_2454e")
+metadata/_custom_type_script = "uid://dxhdl8qdlw3o8"
+
 [node name="AimingComponent" type="Node" parent="." unique_id=915185371]
 script = ExtResource("2_74ekq")
-
-[node name="HealthComponent" type="Node" parent="." unique_id=2137359976]
-script = ExtResource("5_qlg0r")
-max_health = 100
-metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="KnockbackComponent" type="Node" parent="." unique_id=948374991]
 script = ExtResource("4_dqkch")
@@ -531,6 +608,7 @@ metadata/_custom_type_script = "uid://cdc3yx122ruc6"
 script = ExtResource("11_crunch")
 damage_multiplier = 2.0
 arc_angle_multiplier = 1.5
+drain_seconds_per_unit = 0.05
 
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
 camera_shake_intensity = 0.5

@@ -31,7 +31,6 @@ func _on_animation_finished(anim_name: String) -> void:
 func _on_body_entered(body: Node2D):
 	if not can_collect:
 		return
-
-	if body.is_in_group("player"):
-		body.collect_scrap(value)
+	if body.is_in_group("player") and body.can_pickup:
+		body.pickup(value)
 		animation_handler.play_animation("pick_up")

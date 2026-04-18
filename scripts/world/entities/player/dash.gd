@@ -76,6 +76,9 @@ func cancel_dash() -> void:
 	if _state == State.DASHING:
 		_end_dash()
 
+func set_enabled(value: bool) -> void:
+	enabled = value
+
 func _start_dash(direction: Vector2) -> void:
 	_state = State.DASHING
 	_dash_direction = direction

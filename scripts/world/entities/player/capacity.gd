@@ -7,8 +7,6 @@ signal crunch_time_threshold_changed(new_threshold: float)
 
 @export_group("Capacity Costs")
 @export var shoot_cost: float = 2.0
-@export var damage_cost: float = 5.0
-@export var crunch_drain_seconds_per_unit: float = 0.2
 
 const INITIAL_CAPACITY := 80.0
 const BASE_CRUNCH_THRESHOLD := 90.0

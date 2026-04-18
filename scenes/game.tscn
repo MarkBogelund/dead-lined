@@ -8,7 +8,6 @@
 [ext_resource type="Script" uid="uid://bkervm4vmc0wh" path="res://scripts/systems/turret_placer.gd" id="4_ca42v"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/world/spawners/shop_station.tscn" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
-[ext_resource type="Script" uid="uid://dxhdl8qdlw3o8" path="res://scripts/systems/capacity_manager.gd" id="7_u5sy4"]
 [ext_resource type="Script" uid="uid://b2gaurk2muptq" path="res://scripts/systems/score_manager.gd" id="8_score"]
 [ext_resource type="Script" uid="uid://ta3ftlocrs8x" path="res://scripts/systems/camera_shake_manager.gd" id="8_shake"]
 [ext_resource type="Script" uid="uid://bcjdlvprcr1uv" path="res://scripts/systems/freeze_frame_manager.gd" id="10_freeze"]
@@ -460,10 +459,6 @@ limit_right = 290
 limit_bottom = 180
 limit_smoothed = true
 position_smoothing_enabled = true
-
-[node name="CapacityComponent" type="Node" parent="World/Player" unique_id=674344671]
-unique_name_in_owner = true
-script = ExtResource("7_u5sy4")
 
 [node name="EnemySpawner2" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(-136, 56)

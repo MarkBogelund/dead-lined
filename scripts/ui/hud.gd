@@ -1,7 +1,7 @@
 extends Control
 
 @onready var wave_manager: WaveManager = %WaveManager
-@onready var capacity: CapacityComponent = %CapacityComponent
+@onready var player: Player = %Player
 
 @onready var wave_label: Label = $WaveContainer/WaveLabel
 @onready var build_phase_timer: Label = $BuildPhaseTimer
@@ -22,15 +22,15 @@ func _ready() -> void:
 
 func _initialize_values() -> void:
 	set_wave(wave_manager.get_current_wave())
-	call_deferred("_update_indicator", capacity.current_capacity)
-	call_deferred("_set_threshold_line_position", capacity.crunch_time_threshold)
+	call_deferred("_update_indicator", player.capacity.current_capacity)
+	call_deferred("_set_threshold_line_position", player.capacity.crunch_time_threshold)
 	build_phase_timer.visible = false
 	build_phase_texture.visible = true
 	combat_phase_texture.visible = false
 
 func _connect_signals() -> void:
-	capacity.capacity_changed.connect(_update_indicator)
-	capacity.crunch_time_threshold_changed.connect(_tween_threshold_line)
+	player.capacity.capacity_changed.connect(_update_indicator)
+	player.capacity.crunch_time_threshold_changed.connect(_tween_threshold_line)
 	wave_manager.combat_phase_started.connect(set_wave)
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -43,7 +43,7 @@ func _update_indicator(capacity: float) -> void:
 	indicator.position.x = center_x - indicator.size.x / 2.0
 	capacity_label.text = "%d" % int(capacity)
 	capacity_label.position.x = center_x - capacity_label.size.x / 2.0
-	indicator.color = INDICATOR_CRUNCH_COLOR if capacity.can_crunch_time() else INDICATOR_DEFAULT_COLOR
+	indicator.color = INDICATOR_CRUNCH_COLOR if player.capacity.can_crunch_time() else INDICATOR_DEFAULT_COLOR
 
 func _set_threshold_line_position(threshold: float) -> void:
 	var bar_x := bar_track.position.x

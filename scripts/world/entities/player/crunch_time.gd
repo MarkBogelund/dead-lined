@@ -6,6 +6,7 @@ class_name CrunchTimeComponent
 
 signal crunch_time_started(buffs: Dictionary)
 signal crunch_time_ended(buffs: Dictionary)
+signal drain_tick
 
 ## Buff multipliers (configurable in inspector)
 @export_group("Buff Multipliers")
@@ -18,10 +19,21 @@ signal crunch_time_ended(buffs: Dictionary)
 
 @export_group("Deactivation")
 @export var deactivation_threshold: float = 1.0
+@export var drain_seconds_per_unit: float = 0.2
 
 ## State
 var is_active := false
 var _is_build_phase := true
+var _drain_timer: float = 0.0
+
+func _process(delta: float) -> void:
+	if not is_active:
+		_drain_timer = 0.0
+		return
+	_drain_timer -= delta
+	if _drain_timer <= 0.0:
+		_drain_timer = drain_seconds_per_unit
+		emit_signal("drain_tick")
 
 func set_build_phase(is_build: bool) -> void:
 	_is_build_phase = is_build
