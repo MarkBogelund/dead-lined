@@ -18,6 +18,7 @@ signal drain_tick
 @export var cooldown_multiplier := 0.5 # 0.5 = half cooldown (faster)
 
 @export_group("Deactivation")
+@export var activation_cost: float = 10.0
 @export var deactivation_threshold: float = 1.0
 @export var drain_seconds_per_unit: float = 0.2
 

@@ -4,7 +4,7 @@ class_name GameOverManager
 signal game_over
 
 @export var game_over_ui: Control
-@onready var player: Player = get_tree().get_first_node_in_group("player")
+@onready var player: Player = %Player
 @onready var animation_player: AnimationPlayer = $"./AnimationPlayer"
 @onready var score_manager: ScoreManager = %ScoreManager
 

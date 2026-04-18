@@ -222,6 +222,7 @@ func _on_turret_lost() -> void:
 	capacity.raise_threshold()
 
 func _on_crunch_time_started(buffs: Dictionary) -> void:
+	capacity.spend(crunch_time.activation_cost)
 	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage * buffs["damage"])
 	melee_weapon.slash_radius *= buffs["radius"]
 	movement.speed *= buffs["speed"]
