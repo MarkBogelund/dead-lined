@@ -52,7 +52,7 @@ func _process(delta: float) -> void:
 	_shoot_delay -= delta
 	
 	var target := targeting.get_best_target(global_position, func(node: Node2D):
-			return line_of_sight.can_see(global_position, node.global_position))
+			return node != self and line_of_sight.can_see(global_position, node.global_position))
 	if not target:
 		return
 	
