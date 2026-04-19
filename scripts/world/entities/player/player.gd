@@ -23,6 +23,9 @@ signal died
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
+@export_group("Capacity Costs")
+@export var shoot_cost: float = 2.0
+
 @export_group("Damage Effects")
 @export var damage_knockback_force := 200.0
 @export var damage_freeze_duration := 0.08
@@ -109,11 +112,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("crunch_time"):
 		crunch_time.toggle(capacity.can_crunch_time())
 	
-	if event.is_action_pressed("shoot") and capacity.can_afford(capacity.shoot_cost):
+	if event.is_action_pressed("shoot") and capacity.can_afford(shoot_cost):
 		var mouse_pos := get_global_mouse_position()
 		aiming.aim_at(mouse_pos, 0.0)
 		if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-			capacity.spend(capacity.shoot_cost)
+			capacity.spend(shoot_cost)
 			animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	
 	if event.is_action_pressed("slash"):

@@ -8,6 +8,8 @@ class_name MeleeWeapon
 @export var camera_shake_manager: CameraShakeManager
 
 @export_group("Slash Settings")
+@export var damage := 20
+@export var knockback := 200.0
 @export var slash_radius := 24.0
 @export var arc_angle := PI
 @export var slash_duration := 0.25
@@ -27,6 +29,8 @@ var _direction := 1
 var _slashing := false
 
 func _ready() -> void:
+	hitbox.damage = damage
+	hitbox.knockback = knockback
 	_reset()
 	hitbox.hit_target.connect(_on_hit_target)
 

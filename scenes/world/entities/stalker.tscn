@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bvk8hf7vr3pqi"]
 
 [ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="1_stalker"]
+[ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/stalker_stats.tres" id="1_stalkerstats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_mcjbk"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_scrap"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
@@ -29,9 +30,6 @@ script = ExtResource("16_mcjbk")
 group_name = "turrets"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wkm5l"]
-radius = 9.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
 radius = 9.0
 
 [sub_resource type="Animation" id="Animation_reset"]
@@ -363,6 +361,9 @@ _data = {
 &"take_damage": SubResource("Animation_die")
 }
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 9.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_rqd04"]
 atlas = ExtResource("16_36hmg")
 region = Rect2(0, 0, 24, 24)
@@ -488,11 +489,10 @@ collision_layer = 8
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_stalker")
+stats = ExtResource("1_stalkerstats")
 
 [node name="AimingComponent" type="Node" parent="." unique_id=1729909200]
 script = ExtResource("2_mcjbk")
-aim_speed = 3.0
-accuracy_angle = 0.25
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=486870823]
 script = ExtResource("15_jqj1v")
@@ -502,10 +502,12 @@ priority_distance_threshold = 40.0
 [node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
 script = ExtResource("13_shoot")
 projectile_scene = ExtResource("14_projectile")
-projectile_damage = 5
-projectile_knockback = 150
-shoot_cooldown = 2.0
-projectile_speed = 150.0
+
+[node name="KnockbackComponent" type="Node" parent="." unique_id=207747810]
+script = ExtResource("4_knockback")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=775711309]
+script = ExtResource("7_health")
 
 [node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
 script = ExtResource("12_los")
@@ -522,7 +524,6 @@ script = ExtResource("10_nav")
 
 [node name="DropScrapComponent" type="Node" parent="." unique_id=1674501989]
 script = ExtResource("9_dropscrap")
-scrap_drop_amount = 3
 scrap_scene = ExtResource("2_scrap")
 impulse_min = 20.0
 impulse_max = 150.0
@@ -536,19 +537,12 @@ metadata/_custom_type_script = "uid://de8v0knxsnhob"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1613851753]
 shape = SubResource("CircleShape2D_wkm5l")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=125532968]
-shape = SubResource("CircleShape2D_collision")
-
-[node name="KnockbackComponent" type="Node" parent="." unique_id=207747810]
-script = ExtResource("4_knockback")
-
-[node name="HealthComponent" type="Node" parent="." unique_id=775711309]
-script = ExtResource("7_health")
-max_health = 30
-
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1949746839]
 libraries/ = SubResource("AnimationLibrary_stalker")
 script = ExtResource("7_ag4mk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=125532968]
+shape = SubResource("CircleShape2D_collision")
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=1725397380]
 z_index = 1
