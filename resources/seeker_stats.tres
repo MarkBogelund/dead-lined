@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="TurretStats" format=3 uid="uid://dtmfssne2yp6e"]
+[gd_resource type="Resource" script_class="SeekerStats" format=3 uid="uid://cwq21j4s01byy"]
 
-[ext_resource type="Script" path="res://scripts/data/turret_stats.gd" id="1_stats"]
+[ext_resource type="Script" path="res://scripts/data/seeker_stats.gd" id="1_seekerstats"]
 
 [resource]
-script = ExtResource("1_stats")
+script = ExtResource("1_seekerstats")
+max_range = -1.0

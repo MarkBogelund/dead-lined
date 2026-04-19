@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="14_6yfjj"]
 [ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="14_flmdm"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="14_u0oon"]
-[ext_resource type="Resource" uid="uid://dtmfssne2yp6e" path="res://resources/seeker_stats.tres" id="16_stats"]
+[ext_resource type="Resource" uid="uid://cwq21j4s01byy" path="res://resources/seeker_stats.tres" id="16_stats"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("11_target_config")
@@ -331,6 +331,10 @@ collision_mask = 19
 script = ExtResource("1_6fjxm")
 stats = ExtResource("16_stats")
 
+[node name="HealthUIComponent" parent="." unique_id=1686314379 node_paths=PackedStringArray("health_component") instance=ExtResource("14_flmdm")]
+position = Vector2(0, -24)
+health_component = NodePath("../HealthComponent")
+
 [node name="ShootComponent" type="Node" parent="." unique_id=316514408]
 script = ExtResource("4_pp6j5")
 projectile_scene = ExtResource("5_e28e4")
@@ -347,8 +351,6 @@ metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="AimingComponent" type="Node" parent="." unique_id=1630660525 node_paths=PackedStringArray("visual_node", "muzzle")]
 script = ExtResource("3_6h4p8")
-aim_speed = 6.0
-accuracy_angle = 0.1
 visual_node = NodePath("../Canon")
 muzzle = NodePath("../Canon/Graphics/Muzzle")
 visual_offset = -1.571
@@ -397,10 +399,6 @@ position = Vector2(0, 15)
 
 [node name="FlashVfx" parent="." unique_id=1645924480 instance=ExtResource("14_6yfjj")]
 scale = Vector2(2, 2)
-
-[node name="HealthUIComponent" parent="." unique_id=1686314379 node_paths=PackedStringArray("health_component") instance=ExtResource("14_flmdm")]
-position = Vector2(0, -24)
-health_component = NodePath("../HealthComponent")
 
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("14_u0oon")]
 process_material = SubResource("ParticleProcessMaterial_3wv22")

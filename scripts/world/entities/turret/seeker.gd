@@ -11,16 +11,11 @@ signal died
 @onready var aiming: AimingComponent = $AimingComponent
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 
-## Balancing stats — assign in inspector or injected by TurretPlacer
-@export var stats: TurretStats
-
-## Firing
-@export var fire_rate := 0.5 # Seconds between shots
-@export var shoot_start_delay := 1.0 # Seconds after combat phase before shooting is allowed
+## Stats
+@export var stats: SeekerStats
 
 const UP_FACING_OFFSET := -PI / 2
 
-var _fire_timer := 0.0
 var _active := false
 var enabled := true
 var _shoot_delay := 0.0
@@ -30,26 +25,30 @@ var _shoot_delay := 0.0
 @onready var camera_shake_manager: CameraShakeManager = get_tree().get_first_node_in_group("camera_shake_manager")
 
 func _ready() -> void:
-	if stats:
-		health.initialize(stats.max_health)
-		targeting.max_range = stats.max_range
-		fire_rate = stats.fire_rate
-		shoot.projectile_damage = stats.projectile_damage
-		shoot.projectile_knockback = stats.projectile_knockback
-		shoot.projectile_speed = stats.projectile_speed
-	
 	add_to_group("turrets")
+	_initialize()
 	
-	# Configure animations
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("recoil", 1, false)
 	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 3, true)
 	
-	wave_manager.combat_phase_started.connect(func(_i): _active = true; _shoot_delay = shoot_start_delay)
+	wave_manager.combat_phase_started.connect(func(_i): _active = true; _shoot_delay = stats.shoot_start_delay)
 	wave_manager.build_phase_started.connect(func(): _active = false)
 	
 	game_over_manager.game_over.connect(_on_game_over)
+
+func _initialize() -> void:
+	if not stats:
+		return
+	health.initialize(stats.max_health)
+	targeting.max_range = stats.max_range
+	shoot.shoot_cooldown = stats.shoot_cooldown
+	shoot.projectile_damage = stats.projectile_damage
+	shoot.projectile_knockback = stats.projectile_knockback
+	shoot.projectile_speed = stats.projectile_speed
+	aiming.aim_speed = stats.aim_speed
+	aiming.accuracy_angle = stats.accuracy_angle
 
 func _on_game_over() -> void:
 	_active = false
@@ -59,7 +58,6 @@ func _process(delta: float) -> void:
 	if not _active or not enabled or is_dead():
 		return
 	
-	_fire_timer -= delta
 	_shoot_delay -= delta
 	
 	var target := targeting.get_best_target(global_position, func(node: Node2D):
@@ -77,11 +75,7 @@ func _process(delta: float) -> void:
 		_fire_at()
 
 func _fire_at() -> void:
-	if _fire_timer > 0:
-		return
-	
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-		_fire_timer = fire_rate
 		animation.play_animation("recoil")
 
 ## Damage handling - called by enemy hitboxes
