@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_pp6j5"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="5_6fjxm"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_e28e4"]
-[ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="5_oxiec"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="9_jm6wr"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="10_targeting"]
 [ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="11_target_config"]
@@ -213,6 +212,20 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0, 0), Vector2(0, -2), Vector2(0, 0)]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Canon/Graphics/Muzzle/ExplosionVFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_v4l8l"]
 resource_name = "take_damage"
@@ -308,9 +321,7 @@ z_index = 1
 collision_layer = 32
 collision_mask = 19
 script = ExtResource("1_6fjxm")
-detection_angle = 0.1
 fire_rate = 1.0
-vfx_scene = ExtResource("5_6fjxm")
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=1604110218]
 script = ExtResource("10_targeting")
@@ -325,14 +336,9 @@ metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 [node name="AimingComponent" type="Node" parent="." unique_id=1630660525 node_paths=PackedStringArray("visual_node", "muzzle")]
 script = ExtResource("3_6h4p8")
 aim_speed = 6.0
-accuracy_angle = 0.2
 visual_node = NodePath("../Canon")
-visual_offset = -1.571
 muzzle = NodePath("../Canon/Graphics/Muzzle")
-
-[node name="VFXComponent" type="Node" parent="." unique_id=1357204820]
-script = ExtResource("5_oxiec")
-metadata/_custom_type_script = "uid://buxf487a3gb6p"
+visual_offset = -1.571
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1728277635]
 libraries/ = SubResource("AnimationLibrary_mqfwu")
@@ -374,6 +380,8 @@ region_rect = Rect2(7, 14, 22, 28)
 
 [node name="Muzzle" type="Marker2D" parent="Canon/Graphics" unique_id=838233975]
 position = Vector2(0, 15)
+
+[node name="ExplosionVFX" parent="Canon/Graphics/Muzzle" unique_id=-1447576240 instance=ExtResource("5_6fjxm")]
 
 [node name="FlashVfx" parent="." unique_id=1645924480 instance=ExtResource("14_6yfjj")]
 scale = Vector2(2, 2)

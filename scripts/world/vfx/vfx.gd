@@ -1,11 +1,7 @@
-extends Node
-class_name VFXComponent
+extends Node2D
+class_name Vfx
 
-func instantiate_vfx(vfx_scene: PackedScene, vfx_position: Vector2):
-	if vfx_scene == null:
-		push_error("No hit vfx scene attached")
-		return
-	
-	var vfx = vfx_scene.instantiate()
-	vfx.position = vfx_position
-	get_tree().current_scene.add_child(vfx)
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+func start() -> void:
+	animation_player.play("start")

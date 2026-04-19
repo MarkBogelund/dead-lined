@@ -12,7 +12,7 @@ enum State {IDLE, DASHING, COOLDOWN}
 @export_group("References")
 @export var dash_particles: GPUParticles2D
 @export var trail: Trail
-@export var flash_vfx: FlashVfx
+@export var flash_vfx: Vfx
 
 @export_group("Dash Movement")
 @export var dash_distance := 120.0

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dnp5kkv3y8qko"]
 
-[ext_resource type="Script" uid="uid://cd56nfpfhpe8y" path="res://scripts/world/vfx/flash_vfx.gd" id="1_flashvfx"]
+[ext_resource type="Script" uid="uid://cd56nfpfhpe8y" path="res://scripts/world/vfx/vfx.gd" id="1_flashvfx"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="2_27tge"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j6t25"]
@@ -66,7 +66,7 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_flash"]
 _data = {
 &"RESET": SubResource("Animation_27tge"),
-&"flash": SubResource("Animation_flash")
+&"start": SubResource("Animation_flash")
 }
 
 [node name="FlashVfx" type="Node2D" unique_id=1756477109]

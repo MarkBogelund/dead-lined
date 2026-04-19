@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="2_x0bxo"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_binmj"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="5_f5wuv"]
-[ext_resource type="Script" uid="uid://buxf487a3gb6p" path="res://scripts/world/vfx/vfx.gd" id="5_i3n1b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x0bxo"]
 atlas = ExtResource("5_f5wuv")
@@ -36,6 +35,51 @@ tracks/0/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_il7cj"]
+resource_name = "hit"
+length = 0.4
+step = 0.1
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ExplosionVFX")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_x0bxo"]
 resource_name = "spin"
@@ -57,12 +101,12 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_il7cj"]
 _data = {
 &"RESET": SubResource("Animation_f5wuv"),
+&"hit": SubResource("Animation_il7cj"),
 &"spin": SubResource("Animation_x0bxo")
 }
 
 [node name="Projectile" type="Node2D" unique_id=31779294 groups=["projectiles"]]
 script = ExtResource("1_f5wuv")
-hit_vfx = ExtResource("2_x0bxo")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=699264040]
 texture = SubResource("AtlasTexture_x0bxo")
@@ -76,10 +120,6 @@ metadata/_custom_type_script = "uid://de8v0knxsnhob"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=356633356]
 shape = SubResource("CircleShape2D_6q2a6")
 
-[node name="VFXComponent" type="Node" parent="." unique_id=84486533]
-script = ExtResource("5_i3n1b")
-metadata/_custom_type_script = "uid://buxf487a3gb6p"
-
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=742823931]
 energy = 0.2
 texture = SubResource("GradientTexture2D_x0bxo")
@@ -87,3 +127,5 @@ texture = SubResource("GradientTexture2D_x0bxo")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1163536148]
 libraries/ = SubResource("AnimationLibrary_il7cj")
 autoplay = &"spin"
+
+[node name="ExplosionVFX" parent="." unique_id=1846526661 instance=ExtResource("2_x0bxo")]

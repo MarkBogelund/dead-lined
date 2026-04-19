@@ -5,7 +5,6 @@ signal died
 
 ## Components
 @onready var shoot: ShootComponent = $ShootComponent
-@onready var vfx_component: VFXComponent = $VFXComponent
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var health: HealthComponent = $HealthComponent
 @onready var targeting: TargetingComponent = $TargetingComponent
@@ -13,7 +12,6 @@ signal died
 
 ## Firing
 @export var fire_rate := 0.5 # Seconds between shots
-@export var vfx_scene: PackedScene
 
 const UP_FACING_OFFSET := -PI / 2
 
@@ -65,8 +63,6 @@ func _fire_at() -> void:
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 		_fire_timer = fire_rate
 		animation.play_animation("recoil")
-		if vfx_scene and vfx_component:
-			vfx_component.instantiate_vfx(vfx_scene, aiming.get_muzzle_position())
 
 ## Damage handling - called by enemy hitboxes
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:

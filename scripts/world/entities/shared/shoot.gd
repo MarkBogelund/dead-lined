@@ -1,8 +1,6 @@
 extends Node
 class_name ShootComponent
 
-@export var explosion_vfx_scene: PackedScene
-
 @export var projectile_scene: PackedScene
 @export var projectile_damage := 10
 @export var projectile_knockback := 200
