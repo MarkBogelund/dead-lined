@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_stalkerstats")
-shoot_start_delay = 1.5
+shoot_cooldown = 1.0
 projectile_speed = 150.0

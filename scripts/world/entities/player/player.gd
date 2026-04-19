@@ -54,7 +54,16 @@ func _initialize() -> void:
 	melee_weapon.initialize(stats.slash_damage, stats.slash_knockback, stats.slash_radius, stats.slash_arc_angle, stats.slash_duration, stats.slash_cooldown)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
 	capacity.initialize(stats.initial_capacity, stats.max_capacity, stats.crunch_threshold, stats.threshold_step, stats.min_crunch_threshold)
-	crunch_time.initialize(stats.crunch_activation_cost, stats.crunch_deactivation_threshold, stats.drain_seconds_per_unit, stats.damage_multiplier, stats.radius_multiplier, stats.speed_multiplier, stats.arc_angle_multiplier, stats.weapon_size_multiplier, stats.cooldown_multiplier)
+	crunch_time.initialize(
+		stats.crunch_activation_cost,
+		stats.crunch_deactivation_threshold,
+		stats.drain_seconds_per_unit,
+		stats.damage_multiplier,
+		stats.radius_multiplier,
+		stats.speed_multiplier,
+		stats.arc_angle_multiplier,
+		stats.weapon_size_multiplier,
+		stats.cooldown_multiplier)
 	shoot_cost = stats.shoot_cost
 	damage_knockback_force = stats.damage_knockback_force
 	damage_freeze_duration = stats.damage_freeze_duration

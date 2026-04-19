@@ -15,7 +15,6 @@ func calculate_velocity(
 	input_dir: Vector2,
 	delta: float
 ) -> Vector2:
-	
 	if input_dir != Vector2.ZERO:
 		return current_velocity.move_toward(
 			input_dir * speed,
