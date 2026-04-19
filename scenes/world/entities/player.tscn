@@ -7,7 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://dlrnady7rm2bb" path="res://assets/sprites/player/player-sheet.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_dqkch"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="5_tuyoq"]
-[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="6_c5rqy"]
 [ext_resource type="Script" uid="uid://cdc3yx122ruc6" path="res://scripts/world/entities/player/movement.gd" id="10_b6tgf"]
 [ext_resource type="Script" uid="uid://cpeb23n7k753t" path="res://scripts/world/entities/player/crunch_time.gd" id="11_crunch"]
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]

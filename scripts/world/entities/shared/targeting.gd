@@ -12,6 +12,9 @@ class_name TargetingComponent
 ## If a lower priority target is closer by more than this amount, switch to it
 @export var priority_distance_threshold := 20.0
 
+## Maximum distance to consider targets in this group (-1 = unlimited)
+@export var max_range: float = -1.0
+
 ## Get the best target based on configured priorities and proximity
 ## Returns null if no valid targets found
 func get_best_target(from_position: Vector2) -> Node2D:
@@ -43,6 +46,10 @@ func get_best_target(from_position: Vector2) -> Node2D:
 				continue
 			
 			var distance_sq := from_position.distance_squared_to(node.global_position)
+			
+			# Skip if outside this group's max range
+			if max_range >= 0.0 and distance_sq > max_range * max_range:
+				continue
 			
 			# First valid target found
 			if best_target == null:

@@ -326,6 +326,7 @@ fire_rate = 1.0
 [node name="TargetingComponent" type="Node" parent="." unique_id=1604110218]
 script = ExtResource("10_targeting")
 target_configs = Array[ExtResource("11_target_config")]([SubResource("Resource_6yfjj"), SubResource("Resource_flmdm")])
+max_range = 150.0
 metadata/_custom_type_script = "uid://dule5ocnt8lxx"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=219458917]
