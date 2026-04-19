@@ -47,8 +47,6 @@ colors = PackedColorArray(1, 1, 1, 1, 0.9999997, 0.84858555, 0.54073334, 1)
 
 [node name="DashComponent" type="Node2D" unique_id=583500876]
 script = ExtResource("1_1hc6r")
-dash_distance = 250.0
-cooldown_time = 0.2
 ease_out_power = 2.5
 
 [node name="DashParticles" type="GPUParticles2D" parent="." unique_id=1960158413]

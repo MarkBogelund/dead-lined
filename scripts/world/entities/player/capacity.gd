@@ -21,6 +21,15 @@ func _ready() -> void:
 	current_capacity = initial_capacity
 	crunch_time_threshold = crunch_threshold
 
+func initialize(p_initial: float, p_max: float, p_threshold: float, p_step: float, p_min: float) -> void:
+	initial_capacity = p_initial
+	max_capacity = p_max
+	crunch_threshold = p_threshold
+	threshold_step = p_step
+	min_crunch_threshold = p_min
+	current_capacity = p_initial
+	crunch_time_threshold = p_threshold
+
 func can_afford(cost: float) -> bool:
 	return current_capacity - cost >= 1.0
 

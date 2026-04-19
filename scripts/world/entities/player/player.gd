@@ -23,18 +23,15 @@ signal died
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-@export_group("Capacity Costs")
-@export var shoot_cost: float = 2.0
+@export var stats: PlayerStats
 
-@export_group("Damage Effects")
-@export var damage_knockback_force := 200.0
-@export var damage_freeze_duration := 0.08
-@export var damage_screen_shake_intensity := 0.2
-
-@export_group("Death Effects")
-@export var death_knockback_force := 400.0
-@export var death_freeze_duration := 0.15
-@export var death_screen_shake_intensity := 0.35
+var shoot_cost: float = 2.0
+var damage_knockback_force := 200.0
+var damage_freeze_duration := 0.1
+var damage_screen_shake_intensity := 0.2
+var death_knockback_force := 400.0
+var death_freeze_duration := 0.15
+var death_screen_shake_intensity := 0.35
 
 enum MoveState {NORMAL, DASHING, KNOCKED, FROZEN}
 
@@ -45,8 +42,26 @@ var _is_dead := false
 const MIN_MOVE_SPEED := 10.0
 
 func _ready() -> void:
+	_initialize()
 	_setup_animations()
 	_connect_signals()
+
+func _initialize() -> void:
+	if not stats:
+		return
+	movement.initialize(stats.speed, stats.acceleration, stats.friction)
+	dash.initialize(stats.dash_distance, stats.dash_duration, stats.dash_cooldown)
+	melee_weapon.initialize(stats.slash_damage, stats.slash_knockback, stats.slash_radius, stats.slash_arc_angle, stats.slash_duration, stats.slash_cooldown)
+	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
+	capacity.initialize(stats.initial_capacity, stats.max_capacity, stats.crunch_threshold, stats.threshold_step, stats.min_crunch_threshold)
+	crunch_time.initialize(stats.crunch_activation_cost, stats.crunch_deactivation_threshold, stats.drain_seconds_per_unit, stats.damage_multiplier, stats.radius_multiplier, stats.speed_multiplier, stats.arc_angle_multiplier, stats.weapon_size_multiplier, stats.cooldown_multiplier)
+	shoot_cost = stats.shoot_cost
+	damage_knockback_force = stats.damage_knockback_force
+	damage_freeze_duration = stats.damage_freeze_duration
+	damage_screen_shake_intensity = stats.damage_screen_shake_intensity
+	death_knockback_force = stats.death_knockback_force
+	death_freeze_duration = stats.death_freeze_duration
+	death_screen_shake_intensity = stats.death_screen_shake_intensity
 
 func _setup_animations() -> void:
 	animation.configure_animation("idle", 0, false)

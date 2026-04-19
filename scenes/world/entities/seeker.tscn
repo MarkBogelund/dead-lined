@@ -357,7 +357,6 @@ visual_offset = -1.571
 
 [node name="LineOfSightComponent" type="Node2D" parent="." unique_id=1061356274]
 script = ExtResource("8_6yfjj")
-debug_draw = true
 metadata/_custom_type_script = "uid://dduqtrq3c2qol"
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1728277635]

@@ -27,6 +27,17 @@ var is_active := false
 var _is_build_phase := true
 var _drain_timer: float = 0.0
 
+func initialize(p_activation_cost: float, p_deactivation_threshold: float, p_drain_seconds: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float) -> void:
+	activation_cost = p_activation_cost
+	deactivation_threshold = p_deactivation_threshold
+	drain_seconds_per_unit = p_drain_seconds
+	damage_multiplier = p_damage
+	radius_multiplier = p_radius
+	speed_multiplier = p_speed
+	arc_angle_multiplier = p_arc_angle
+	weapon_size_multiplier = p_weapon_size
+	cooldown_multiplier = p_cooldown
+
 func _process(delta: float) -> void:
 	if not is_active:
 		_drain_timer = 0.0

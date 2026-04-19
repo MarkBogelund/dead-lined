@@ -29,6 +29,15 @@ var _dash_speed := 0.0
 func _ready() -> void:
 	_dash_speed = dash_distance / dash_duration
 
+func configure(p_distance: float, p_duration: float, p_cooldown: float) -> void:
+	dash_distance = p_distance
+	dash_duration = p_duration
+	cooldown_time = p_cooldown
+	_dash_speed = p_distance / p_duration
+
+func initialize(p_distance: float, p_duration: float, p_cooldown: float) -> void:
+	configure(p_distance, p_duration, p_cooldown)
+
 func _process(delta: float) -> void:
 	match _state:
 		State.DASHING:

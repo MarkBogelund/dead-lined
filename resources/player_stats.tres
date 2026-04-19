@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PlayerStats" format=3 uid="uid://bmfg4nfa6di48"]
+
+[ext_resource type="Script" path="res://scripts/data/player_stats.gd" id="1_playerstats"]
+
+[resource]
+script = ExtResource("1_playerstats")
+slash_arc_angle = 3.14159

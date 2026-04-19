@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c1up8f3hcb17m"]
 
 [ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/world/entities/player/player.gd" id="1_g2els"]
+[ext_resource type="Resource" uid="uid://playerstats01" path="res://resources/player_stats.tres" id="1_playerstats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_74ekq"]
 [ext_resource type="Script" uid="uid://dxhdl8qdlw3o8" path="res://scripts/world/entities/player/capacity.gd" id="2_2454e"]
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/world/entities/player_projectile.tscn" id="2_qhqgy"]
@@ -530,7 +531,7 @@ z_index = 2
 collision_layer = 2
 collision_mask = 33
 script = ExtResource("1_g2els")
-damage_freeze_duration = 0.1
+stats = ExtResource("1_playerstats")
 
 [node name="CapacityComponent" type="Node" parent="." unique_id=1117474515]
 script = ExtResource("2_2454e")
@@ -546,20 +547,14 @@ metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 [node name="ShootComponent" type="Node" parent="." unique_id=904350876]
 script = ExtResource("5_tuyoq")
 projectile_scene = ExtResource("2_qhqgy")
-projectile_damage = 20
 metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="MovementComponent" type="Node" parent="." unique_id=1380084559]
 script = ExtResource("10_b6tgf")
-speed = 160.0
-friction = 2500.0
 metadata/_custom_type_script = "uid://cdc3yx122ruc6"
 
 [node name="CrunchTimeComponent" type="Node" parent="." unique_id=1645953685]
 script = ExtResource("11_crunch")
-damage_multiplier = 2.0
-arc_angle_multiplier = 1.5
-drain_seconds_per_unit = 0.05
 
 [node name="MeleeWeapon" parent="." unique_id=1644048502 instance=ExtResource("12_ghcoa")]
 camera_shake_intensity = 0.5

@@ -34,6 +34,16 @@ func _ready() -> void:
 	_reset()
 	hitbox.hit_target.connect(_on_hit_target)
 
+func initialize(p_damage: int, p_knockback: float, p_radius: float, p_arc_angle: float, p_duration: float, p_cooldown: float) -> void:
+	damage = p_damage
+	knockback = p_knockback
+	slash_radius = p_radius
+	arc_angle = p_arc_angle
+	slash_duration = p_duration
+	slash_cooldown = p_cooldown
+	hitbox.damage = p_damage
+	hitbox.knockback = p_knockback
+
 func _reset() -> void:
 	_time = 0.0
 	_slashing = false

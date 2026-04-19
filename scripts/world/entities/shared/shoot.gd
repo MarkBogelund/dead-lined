@@ -14,6 +14,12 @@ func _process(delta: float):
 	if _shoot_timer > 0.0:
 		_shoot_timer -= delta
 
+func initialize(p_shoot_cooldown: float, p_damage: int, p_knockback: int, p_speed: float) -> void:
+	shoot_cooldown = p_shoot_cooldown
+	projectile_damage = p_damage
+	projectile_knockback = p_knockback
+	projectile_speed = p_speed
+
 func set_enabled(enabled: bool):
 	shooting_activated = enabled
 
