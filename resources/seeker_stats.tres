@@ -4,4 +4,4 @@
 
 [resource]
 script = ExtResource("1_seekerstats")
-max_range = -1.0
+max_range = 150.0

@@ -13,17 +13,30 @@ signal died
 @onready var hitbox: HitboxComponent = $HitboxComponent
 @onready var targeting: TargetingComponent = $TargetingComponent
 
-@export var speed := 30.0
-@export var self_knockback := 150.0 ## Recoil knockback when hitting player (lower = heavier enemy)
+@export var stats: ChaserStats
+
+var _speed := 30.0
+var _self_knockback := 150.0
 
 
 func _ready() -> void:
+	_initialize()
 	# Configure animations
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("take_damage", 1, true)
 	animation.configure_animation("die", 2, true)
 	
 	hitbox.hit_target.connect(_on_hit_target)
+
+func _initialize() -> void:
+	if not stats:
+		return
+	health.initialize(stats.max_health)
+	hitbox.damage = stats.hitbox_damage
+	hitbox.knockback = stats.hitbox_knockback
+	drop_scrap.scrap_drop_amount = stats.scrap_drop_amount
+	_speed = stats.speed
+	_self_knockback = stats.self_knockback
 
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
@@ -33,7 +46,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		var target := targeting.get_best_target(global_position)
 		if target:
-			velocity = navigation.get_safe_velocity(target.global_position, speed)
+			velocity = navigation.get_safe_velocity(target.global_position, _speed)
 			# Play idle animation when moving
 			animation.play_animation("idle")
 		else:
@@ -74,9 +87,8 @@ func _handle_death(from_position: Vector2, knockback_force: float) -> void:
 	animation.play_animation("die")
 
 func _on_hit_target(target: Node) -> void:
-	# Apply recoil knockback when hitting something (bidirectional knockback)
-	if target and self_knockback > 0:
-		knockback.apply(target.global_position, self_knockback)
+	if target and _self_knockback > 0:
+		knockback.apply(target.global_position, _self_knockback)
 
 func despawn() -> void:
 	drop_scrap.drop()
