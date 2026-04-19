@@ -9,6 +9,7 @@ signal died
 @onready var health: HealthComponent = $HealthComponent
 @onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
+@onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 
 ## Firing
 @export var fire_rate := 0.5 # Seconds between shots
@@ -47,9 +48,14 @@ func _process(delta: float) -> void:
 	
 	_fire_timer -= delta
 	
-	var target := targeting.get_best_target(global_position)
+	var target := targeting.get_best_target(global_position, func(node: Node2D):
+			return line_of_sight.can_see(global_position, node.global_position))
 	if not target:
 		return
+	
+	# Refresh debug state for the chosen target (filter calls pollute last_target with every candidate)
+	if line_of_sight.debug_draw:
+		line_of_sight.can_see(global_position, target.global_position)
 	
 	aiming.aim_at(target.global_position, delta)
 	

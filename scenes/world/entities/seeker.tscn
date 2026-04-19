@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_pp6j5"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="5_6fjxm"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_e28e4"]
+[ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="8_6yfjj"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="9_jm6wr"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="10_targeting"]
 [ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="11_target_config"]
@@ -323,10 +324,15 @@ collision_mask = 19
 script = ExtResource("1_6fjxm")
 fire_rate = 1.0
 
+[node name="ShootComponent" type="Node" parent="." unique_id=316514408]
+script = ExtResource("4_pp6j5")
+projectile_scene = ExtResource("5_e28e4")
+projectile_speed = 200.0
+metadata/_custom_type_script = "uid://blmoutagnygip"
+
 [node name="TargetingComponent" type="Node" parent="." unique_id=1604110218]
 script = ExtResource("10_targeting")
 target_configs = Array[ExtResource("11_target_config")]([SubResource("Resource_6yfjj"), SubResource("Resource_flmdm")])
-max_range = 150.0
 metadata/_custom_type_script = "uid://dule5ocnt8lxx"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=219458917]
@@ -337,9 +343,15 @@ metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 [node name="AimingComponent" type="Node" parent="." unique_id=1630660525 node_paths=PackedStringArray("visual_node", "muzzle")]
 script = ExtResource("3_6h4p8")
 aim_speed = 6.0
+accuracy_angle = 0.1
 visual_node = NodePath("../Canon")
 muzzle = NodePath("../Canon/Graphics/Muzzle")
 visual_offset = -1.571
+
+[node name="LineOfSightComponent" type="Node2D" parent="." unique_id=1061356274]
+script = ExtResource("8_6yfjj")
+debug_draw = true
+metadata/_custom_type_script = "uid://dduqtrq3c2qol"
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1728277635]
 libraries/ = SubResource("AnimationLibrary_mqfwu")
@@ -362,12 +374,6 @@ region_rect = Rect2(35, 14, 28, 25)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=464062235]
 shape = SubResource("CircleShape2D_el7wl")
-
-[node name="ShootComponent" type="Node" parent="." unique_id=316514408]
-script = ExtResource("4_pp6j5")
-projectile_scene = ExtResource("5_e28e4")
-projectile_speed = 200.0
-metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="Canon" type="Node2D" parent="." unique_id=850792081]
 position = Vector2(0, -4)

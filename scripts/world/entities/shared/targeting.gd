@@ -16,8 +16,9 @@ class_name TargetingComponent
 @export var max_range: float = -1.0
 
 ## Get the best target based on configured priorities and proximity
+## filter: optional callable(Node2D) -> bool; return false to exclude a candidate
 ## Returns null if no valid targets found
-func get_best_target(from_position: Vector2) -> Node2D:
+func get_best_target(from_position: Vector2, filter: Callable = Callable()) -> Node2D:
 	if target_configs.is_empty():
 		return null
 	
@@ -47,8 +48,12 @@ func get_best_target(from_position: Vector2) -> Node2D:
 			
 			var distance_sq := from_position.distance_squared_to(node.global_position)
 			
-			# Skip if outside this group's max range
+			# Skip if outside max range
 			if max_range >= 0.0 and distance_sq > max_range * max_range:
+				continue
+			
+			# Apply optional caller-supplied filter (e.g. line of sight)
+			if filter.is_valid() and not filter.call(node):
 				continue
 			
 			# First valid target found

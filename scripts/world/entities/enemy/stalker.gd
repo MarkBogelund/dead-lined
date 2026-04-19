@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 			# Calculate distance and line of sight
 			var to_target := target.global_position - global_position
 			var distance := to_target.length()
-			var has_line_of_sight := line_of_sight.can_see(target.global_position)
+			var has_line_of_sight := line_of_sight.can_see(global_position, target.global_position)
 			
 			# Movement logic: prioritize line of sight
 			if not has_line_of_sight:
