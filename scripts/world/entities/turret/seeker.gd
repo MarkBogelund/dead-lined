@@ -13,12 +13,14 @@ signal died
 
 ## Firing
 @export var fire_rate := 0.5 # Seconds between shots
+@export var shoot_start_delay := 1.0 # Seconds after combat phase before shooting is allowed
 
 const UP_FACING_OFFSET := -PI / 2
 
 var _fire_timer := 0.0
 var _active := false
 var enabled := true
+var _shoot_delay := 0.0
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
@@ -33,7 +35,7 @@ func _ready() -> void:
 	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 3, true)
 	
-	wave_manager.combat_phase_started.connect(func(_i): _active = true)
+	wave_manager.combat_phase_started.connect(func(_i): _active = true; _shoot_delay = shoot_start_delay)
 	wave_manager.build_phase_started.connect(func(): _active = false)
 	
 	game_over_manager.game_over.connect(_on_game_over)
@@ -47,6 +49,7 @@ func _process(delta: float) -> void:
 		return
 	
 	_fire_timer -= delta
+	_shoot_delay -= delta
 	
 	var target := targeting.get_best_target(global_position, func(node: Node2D):
 			return line_of_sight.can_see(global_position, node.global_position))
@@ -59,7 +62,7 @@ func _process(delta: float) -> void:
 	
 	aiming.aim_at(target.global_position, delta)
 	
-	if aiming.is_aimed_at(target.global_position):
+	if aiming.is_aimed_at(target.global_position) and _shoot_delay <= 0.0:
 		_fire_at()
 
 func _fire_at() -> void:

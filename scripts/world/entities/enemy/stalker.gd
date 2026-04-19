@@ -19,8 +19,12 @@ signal died
 @export var ideal_distance := 100.0 ## Target distance to maintain from target
 @export var distance_tolerance := 20.0 ## Acceptable range around ideal distance before adjusting
 @export var max_shoot_distance := 120.0 ## Maximum distance to shoot from (wiggle room)
+@export var shoot_start_delay := 1.0 ## Seconds after spawn before shooting is allowed
+
+var _shoot_delay := 0.0
 
 func _ready() -> void:
+	_shoot_delay = shoot_start_delay
 	# Configure animations
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("take_damage", 2, true)
@@ -28,6 +32,7 @@ func _ready() -> void:
 	animation.configure_animation("shoot", 1, true)
 
 func _physics_process(delta: float) -> void:
+	_shoot_delay -= delta
 	if knockback.is_active():
 		velocity = knockback.velocity
 	elif is_dead():
@@ -65,7 +70,7 @@ func _physics_process(delta: float) -> void:
 				aiming.aim_at(target.global_position, delta)
 				
 				# Shoot if within distance and aim is accurate
-				if distance <= max_shoot_distance:
+				if distance <= max_shoot_distance and _shoot_delay <= 0.0:
 					if aiming.is_aimed_at(target.global_position):
 						if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 							animation.play_animation("shoot")
