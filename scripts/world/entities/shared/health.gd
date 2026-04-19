@@ -29,6 +29,12 @@ func take_damage(amount: int) -> bool:
 func get_current_health() -> int:
 	return current_health
 
+## Apply stats from a TurretStats resource (call from parent _ready after children have initialized)
+func initialize(new_max_health: int) -> void:
+	max_health = new_max_health
+	current_health = new_max_health
+	_is_dead = false
+
 func is_dead() -> bool:
 	return _is_dead
 

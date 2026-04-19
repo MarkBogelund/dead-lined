@@ -11,6 +11,9 @@ signal died
 @onready var aiming: AimingComponent = $AimingComponent
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 
+## Balancing stats — assign in inspector or injected by TurretPlacer
+@export var stats: TurretStats
+
 ## Firing
 @export var fire_rate := 0.5 # Seconds between shots
 @export var shoot_start_delay := 1.0 # Seconds after combat phase before shooting is allowed
@@ -27,6 +30,14 @@ var _shoot_delay := 0.0
 @onready var camera_shake_manager: CameraShakeManager = get_tree().get_first_node_in_group("camera_shake_manager")
 
 func _ready() -> void:
+	if stats:
+		health.initialize(stats.max_health)
+		targeting.max_range = stats.max_range
+		fire_rate = stats.fire_rate
+		shoot.projectile_damage = stats.projectile_damage
+		shoot.projectile_knockback = stats.projectile_knockback
+		shoot.projectile_speed = stats.projectile_speed
+	
 	add_to_group("turrets")
 	
 	# Configure animations

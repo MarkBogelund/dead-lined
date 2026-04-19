@@ -34,12 +34,7 @@ func start_placement(turret_entry: TurretEntry):
 	
 	current_turret_entry = turret_entry
 	ghost_turret = current_turret_entry.ghost_scene.instantiate()
-	
-	var temp_turret := current_turret_entry.turret_scene.instantiate()
-	var targeting := temp_turret.get_node_or_null("TargetingComponent")
-	ghost_turret.range_radius = targeting.max_range if targeting else -1.0
-	temp_turret.free()
-	
+	ghost_turret.range_radius = current_turret_entry.stats.max_range if current_turret_entry.stats else -1.0
 	get_tree().current_scene.add_child(ghost_turret)
 	
 	active = true

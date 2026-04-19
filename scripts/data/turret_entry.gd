@@ -6,3 +6,4 @@ class_name TurretEntry
 @export var price: int
 @export var turret_scene: PackedScene
 @export var ghost_scene: PackedScene
+@export var stats: TurretStats

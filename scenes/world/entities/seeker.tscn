@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="14_6yfjj"]
 [ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="14_flmdm"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="14_u0oon"]
+[ext_resource type="Resource" uid="uid://dtmfssne2yp6e" path="res://resources/seeker_stats.tres" id="16_stats"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("11_target_config")
@@ -328,23 +329,20 @@ z_index = 1
 collision_layer = 32
 collision_mask = 19
 script = ExtResource("1_6fjxm")
-fire_rate = 1.0
+stats = ExtResource("16_stats")
 
 [node name="ShootComponent" type="Node" parent="." unique_id=316514408]
 script = ExtResource("4_pp6j5")
 projectile_scene = ExtResource("5_e28e4")
-projectile_speed = 200.0
 metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=1604110218]
 script = ExtResource("10_targeting")
 target_configs = Array[ExtResource("11_target_config")]([SubResource("Resource_6yfjj"), SubResource("Resource_flmdm"), SubResource("Resource_turrets")])
-max_range = 130.0
 metadata/_custom_type_script = "uid://dule5ocnt8lxx"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=219458917]
 script = ExtResource("3_p0iej")
-max_health = 100
 metadata/_custom_type_script = "uid://b21esqh8u7q8e"
 
 [node name="AimingComponent" type="Node" parent="." unique_id=1630660525 node_paths=PackedStringArray("visual_node", "muzzle")]

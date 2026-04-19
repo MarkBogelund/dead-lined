@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/ui/seeker-icon.png" id="2_2hyx4"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="3_sfh23"]
 [ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/world/entities/seeker.tscn" id="4_q04sb"]
+[ext_resource type="Resource" path="res://resources/seeker_stats.tres" id="5_stats"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m4va3"]
 atlas = ExtResource("2_2hyx4")
@@ -16,4 +17,5 @@ icon = SubResource("AtlasTexture_m4va3")
 price = 30
 turret_scene = ExtResource("4_q04sb")
 ghost_scene = ExtResource("1_3hrap")
+stats = ExtResource("5_stats")
 metadata/_custom_type_script = "uid://q2sxkhmik7ny"

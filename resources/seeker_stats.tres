@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="TurretStats" format=3 uid="uid://dtmfssne2yp6e"]
+
+[ext_resource type="Script" path="res://scripts/data/turret_stats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
