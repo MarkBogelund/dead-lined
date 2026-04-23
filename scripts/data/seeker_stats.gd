@@ -15,6 +15,12 @@ class_name SeekerStats
 ## Angle tolerance in radians within which the seeker will fire
 @export var accuracy_angle: float = 0.1
 
+@export_group("Repair")
+## Capacity drained from the player per second while repairing
+@export var capacity_drain_rate: float = 10.0
+## Health restored to this turret per second while repairing
+@export var health_restore_rate: float = 15.0
+
 @export_group("Shooting")
 ## Seconds after acquiring a target before the first shot is fired
 @export var shoot_start_delay: float = 1.0

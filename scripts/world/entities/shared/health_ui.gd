@@ -7,19 +7,19 @@ class_name HealthUIComponent
 
 @export var health_component: HealthComponent
 @export var offset := Vector2(0, -40) ## Position offset from parent entity
-@export var show_when_full := false ## Show UI even at full health
 
 @onready var label: Label = $Label
 
+var _player_in_range := false
+
 func _ready() -> void:
+	visible = false
 	position = offset
 	
 	if label:
 		# Center the label
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	
-	_update_display()
 
 func _process(_delta: float) -> void:
 	# Poll for health changes each frame
@@ -36,5 +36,7 @@ func _update_display() -> void:
 	
 	label.text = "%d/%d" % [current, max_hp]
 	
-	# Only show when damaged (unless show_when_full is true)
-	visible = show_when_full or current < max_hp
+	visible = _player_in_range
+
+func set_player_in_range(in_range: bool) -> void:
+	_player_in_range = in_range
