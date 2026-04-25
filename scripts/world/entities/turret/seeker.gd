@@ -2,6 +2,7 @@ extends StaticBody2D
 class_name Turret
 
 signal died
+signal upgrade_requested(turret: Turret)
 
 ## Components
 @onready var shoot: ShootComponent = $ShootComponent
@@ -22,6 +23,8 @@ var _active := false
 var enabled := true
 var _shoot_delay := 0.0
 var _repair_accumulator := 0.0
+var level := 1
+var _is_build_phase := true
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
@@ -38,6 +41,8 @@ func _ready() -> void:
 	
 	wave_manager.combat_phase_started.connect(func(_i): _active = true; _shoot_delay = stats.shoot_start_delay)
 	wave_manager.build_phase_started.connect(func(): _active = false)
+	wave_manager.combat_phase_started.connect(func(_i): _is_build_phase = false)
+	wave_manager.build_phase_started.connect(func(): _is_build_phase = true)
 	
 	game_over_manager.game_over.connect(_on_game_over)
 
@@ -59,6 +64,15 @@ func _initialize() -> void:
 func _on_game_over() -> void:
 	_active = false
 	enabled = false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not _is_build_phase or is_dead():
+		return
+	if not interaction_range.is_player_in_range():
+		return
+	if event.is_action_pressed("open"):
+		get_viewport().set_input_as_handled()
+		upgrade_requested.emit(self)
 
 func _process(delta: float) -> void:
 	_handle_repair(delta)
@@ -87,7 +101,7 @@ func _fire_at() -> void:
 		animation.play_animation("recoil")
 
 func _handle_repair(delta: float) -> void:
-	if is_dead() or not interaction_range.is_player_in_range():
+	if _is_build_phase or is_dead() or not interaction_range.is_player_in_range():
 		_repair_accumulator = 0.0
 		return
 	if not Input.is_action_pressed("open"):
@@ -138,6 +152,14 @@ func _handle_death() -> void:
 	
 	# Emit signal
 	died.emit()
+
+func apply_health_upgrade() -> void:
+	level += 1
+	health.increase_max_health(stats.health_upgrade_amount)
+
+func apply_damage_upgrade() -> void:
+	level += 1
+	shoot.projectile_damage += stats.damage_upgrade_amount
 
 func despawn() -> void:
 	queue_free()

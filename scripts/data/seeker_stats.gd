@@ -21,6 +21,14 @@ class_name SeekerStats
 ## Health restored to this turret per second while repairing
 @export var health_restore_rate: float = 15.0
 
+@export_group("Upgrades")
+## Capacity cost per upgrade
+@export var upgrade_cost: float = 15.0
+## HP added to max health on health upgrade
+@export var health_upgrade_amount: int = 10
+## Projectile damage added on damage upgrade
+@export var damage_upgrade_amount: int = 5
+
 @export_group("Shooting")
 ## Seconds after acquiring a target before the first shot is fired
 @export var shoot_start_delay: float = 1.0

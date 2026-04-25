@@ -14,6 +14,7 @@ signal turret_lost
 @export var shop_station: ShopStation
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
 @export var max_turrets: int = 6
+@export var upgrade_panel: UpgradePanel
 var turrets_placed := 0
 
 func _ready() -> void:
@@ -30,6 +31,8 @@ func _ready() -> void:
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 	
 func _on_station_interacted():
+	if upgrade_panel:
+		upgrade_panel.close()
 	shop_panel.open()
 
 func _on_station_closed():
@@ -49,10 +52,18 @@ func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
 	turret_bought.emit(turret_entry.price)
 	if turret.has_signal("died"):
 		turret.died.connect(_on_turret_destroyed)
+	if turret.has_signal("upgrade_requested"):
+		turret.upgrade_requested.connect(_on_upgrade_requested)
 
 func _on_turret_destroyed() -> void:
 	turrets_placed -= 1
 	turret_lost.emit()
+
+func _on_upgrade_requested(turret: Turret) -> void:
+	if not upgrade_panel:
+		return
+	shop_panel.close()
+	upgrade_panel.open(turret, player, wave_manager)
 
 func _on_placement_started() -> void:
 	emit_signal("turret_placement_started")
@@ -67,3 +78,5 @@ func _on_combat_phase_started(_wave: int) -> void:
 	emit_signal("shop_system_disabled")
 	turret_placer.cancel()
 	shop_panel.close()
+	if upgrade_panel:
+		upgrade_panel.close()
