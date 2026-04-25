@@ -134,7 +134,8 @@ func _process_locomotion() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("crunch_time"):
-		crunch_time.toggle(capacity.can_crunch_time())
+		var can_activate := capacity.can_crunch_time() and capacity.can_afford(crunch_time.activation_cost)
+		crunch_time.toggle(can_activate)
 	
 	if event.is_action_pressed("shoot") and capacity.can_afford(shoot_cost):
 		var mouse_pos := get_global_mouse_position()
@@ -222,7 +223,7 @@ func can_afford(price: float) -> bool:
 	return capacity.can_afford(price)
 
 var can_pickup: bool:
-	get: return not crunch_time.is_crunch_time_active() and capacity.current_capacity < 100.0
+	get: return not _is_dead and not crunch_time.is_crunch_time_active() and capacity.current_capacity < 100.0
 
 func pickup(amount: int) -> void:
 	capacity.gain(float(amount))
