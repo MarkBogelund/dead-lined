@@ -6,4 +6,5 @@
 script = ExtResource("1_seekerstats")
 max_health = 200
 max_range = 170.0
-accuracy_angle = 0.15
+aim_speed = 8.0
+accuracy_angle = 0.2

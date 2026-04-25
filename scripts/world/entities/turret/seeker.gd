@@ -23,7 +23,6 @@ const UP_FACING_OFFSET := -PI / 2
 var _active := false
 var enabled := true
 var _shoot_delay := 0.0
-var _repair_accumulator := 0.0
 var level := 1
 var _is_build_phase := true
 var _upgrade_panel_open := false
@@ -73,11 +72,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		if _upgrade_panel_open:
 			upgrade_dismissed.emit()
 		else:
-			upgrade_requested.emit(self)
+			upgrade_requested.emit(self )
 
 func _process(delta: float) -> void:
-	_handle_repair(delta)
-
 	if not _active or not enabled or is_dead():
 		return
 	
@@ -101,30 +98,8 @@ func _fire_at() -> void:
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 		animation.play_animation("recoil")
 
-func _handle_repair(delta: float) -> void:
-	if _is_build_phase or is_dead() or not interaction_range.is_player_in_range():
-		_repair_accumulator = 0.0
-		return
-	if not Input.is_action_pressed("open"):
-		_repair_accumulator = 0.0
-		return
-	if health.get_current_health() >= health.max_health:
-		_repair_accumulator = 0.0
-		return
-	var player := interaction_range.get_player()
-	if not player:
-		_repair_accumulator = 0.0
-		return
-	var drain := stats.capacity_drain_rate * delta
-	if not player.capacity.can_afford(drain):
-		_repair_accumulator = 0.0
-		return
-	player.capacity.spend(drain)
-	_repair_accumulator += stats.health_restore_rate * delta
-	if _repair_accumulator >= 1.0:
-		var to_heal := int(_repair_accumulator)
-		health.heal(to_heal)
-		_repair_accumulator -= float(to_heal)
+func heal_shot(amount: int) -> void:
+	health.heal(amount)
 
 ## Damage handling - called by enemy hitboxes
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
