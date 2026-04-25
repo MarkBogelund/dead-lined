@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c5s1fnj3brs4"]
+
+[ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/world/entities/turret/ghost_turret.gd" id="1_c0yox"]
+[ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/ui/seeker-icon.png" id="2_16pqk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exqsx"]
+atlas = ExtResource("2_16pqk")
+region = Rect2(0, 0, 22, 26)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 16.0
+
+[node name="GhostTurret" type="Area2D" unique_id=365649621]
+collision_layer = 0
+collision_mask = 35
+script = ExtResource("1_c0yox")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2076395065]
+modulate = Color(1, 0.29000002, 0.5621666, 1)
+z_index = 12
+position = Vector2(0, 3)
+texture = SubResource("AtlasTexture_exqsx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=657266515]
+shape = SubResource("CircleShape2D_collision")

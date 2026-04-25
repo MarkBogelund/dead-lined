@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SeekerStats" format=3 uid="uid://duk1unxdeylhi"]
+
+[ext_resource type="Script" uid="uid://cseekerstat01" path="res://scripts/data/seeker_stats.gd" id="1_ou7rm"]
+
+[resource]
+script = ExtResource("1_ou7rm")
+max_health = 300
+max_range = 190.0
+aim_speed = 4.0
+accuracy_angle = 0.3
+upgrade_cost = 20.0
+damage_upgrade_amount = 10
+health_restore_rate = 20.0
+projectile_damage = 20

@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://bypcrn2bs0717"]
+
+[ext_resource type="Script" uid="uid://bbt0clpi8uvre" path="res://scripts/ui/turret_slot.gd" id="1_tslot"]
+[ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="2_tslot"]
+[ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="3_tslot"]
+[ext_resource type="Texture2D" uid="uid://dgx2akh6lc25s" path="res://assets/sprites/ui/ui-box.png" id="4_tslot"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_scrap"]
+atlas = ExtResource("3_tslot")
+region = Rect2(0, 0, 16, 16)
+
+[node name="TurretSlot" type="Control" unique_id=354999974]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 128.0
+offset_bottom = 128.0
+script = ExtResource("1_tslot")
+
+[node name="Background" type="NinePatchRect" parent="." unique_id=100000001]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_tslot")
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 7
+
+[node name="Content" type="MarginContainer" parent="." unique_id=100000002]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="Content" unique_id=446380105]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="NameLabel" type="Label" parent="Content/VBox" unique_id=706605644]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_tslot")
+theme_override_font_sizes/font_size = 16
+text = "Turret"
+horizontal_alignment = 1
+
+[node name="BuyButton" type="TextureButton" parent="Content/VBox" unique_id=761417669]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="PriceRow" type="HBoxContainer" parent="Content/VBox" unique_id=1177452363]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="PriceIcon" type="TextureRect" parent="Content/VBox/PriceRow" unique_id=1173069482]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = SubResource("AtlasTexture_scrap")
+stretch_mode = 5
+
+[node name="PriceLabel" type="Label" parent="Content/VBox/PriceRow" unique_id=978919418]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tslot")
+theme_override_font_sizes/font_size = 16
+text = "0"

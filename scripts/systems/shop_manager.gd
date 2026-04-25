@@ -14,6 +14,7 @@ signal turret_lost
 @export var shop_station: ShopStation
 @export var turret_info_panel: TurretInfoPanel
 @export var upgrade_panel: UpgradePanel
+@export var turret_entries: Array[TurretEntry] = []
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
 @export var max_turrets: int = 6
 var turrets_placed := 0
@@ -32,7 +33,7 @@ func _ready() -> void:
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 	
 func _on_station_interacted():
-	shop_panel.open()
+	shop_panel.open(turret_entries, player.can_afford)
 
 func _on_station_closed():
 	shop_panel.close()

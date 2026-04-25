@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://bcjdlvprcr1uv" path="res://scripts/systems/freeze_frame_manager.gd" id="10_freeze"]
 [ext_resource type="Texture2D" uid="uid://cislfhx7gb77a" path="res://assets/sprites/_legacy/environment.png" id="11_5newe"]
 [ext_resource type="Texture2D" uid="uid://cknqvqanj5h2b" path="res://assets/sprites/environment/environment-tileset.png" id="11_37s47"]
-[ext_resource type="PackedScene" uid="uid://h0m8s5cfwoo8" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
+[ext_resource type="PackedScene" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 [ext_resource type="PackedScene" uid="uid://cgem2dpa2ox1r" path="res://scenes/world/environment/props/arm_prop.tscn" id="12_37s47"]
 [ext_resource type="Texture2D" uid="uid://dlgs16i2yhqmx" path="res://assets/sprites/environment/props/grading-prop.png" id="13_bt5mj"]
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="14_1kice"]
@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://cturretinfo02" path="res://scenes/ui/turret_info_panel.tscn" id="20_info"]
 [ext_resource type="PackedScene" uid="uid://dohma355t64w8" path="res://scenes/ui/upgrade_panel.tscn" id="21_upgrade"]
 [ext_resource type="Script" uid="uid://8f5c4ell2tmr" path="res://scripts/ui/capacity_overlay.gd" id="24_e1j6l"]
+[ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="25_tentry"]
+[ext_resource type="Resource" uid="uid://clop50yhbqa44" path="res://resources/shop/seeker_strong_shop_details.tres" id="26_sstrsh"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -336,6 +338,7 @@ shop_panel = NodePath("../../UI/ShopPanel")
 shop_station = NodePath("../../World/ShopStation")
 turret_info_panel = NodePath("../../UI/TurretInfoPanel")
 upgrade_panel = NodePath("../../UI/UpgradePanel")
+turret_entries = Array[ExtResource("25_tentry")]([ExtResource("14_trtic"), ExtResource("26_sstrsh")])
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]
@@ -531,11 +534,6 @@ texture = SubResource("GradientTexture2D_vtaks")
 metadata/_edit_lock_ = true
 
 [node name="ShopPanel" parent="UI" unique_id=507885227 groups=["shop_panel"] instance=ExtResource("11_kvuet")]
-offset_left = -90.77315
-offset_top = -47.5
-offset_right = 90.77315
-offset_bottom = 47.5
-turret_entry = ExtResource("14_trtic")
 metadata/_edit_lock_ = true
 
 [node name="GameOverUI" parent="UI" unique_id=921297923 instance=ExtResource("16_ca42v")]
