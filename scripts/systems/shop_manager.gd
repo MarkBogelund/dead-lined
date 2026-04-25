@@ -13,6 +13,7 @@ signal turret_lost
 @export var shop_panel: ShopPanel
 @export var shop_station: ShopStation
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
+@export var max_turrets: int = 6
 var turrets_placed := 0
 
 func _ready() -> void:
@@ -37,6 +38,8 @@ func _on_station_closed():
 func _on_turret_selected(turret_entry: TurretEntry):
 	if not player.can_afford(turret_entry.price):
 		return
+	if turrets_placed >= max_turrets:
+		return
 
 	turret_placer.start_placement(turret_entry)
 	shop_panel.close()
@@ -48,6 +51,7 @@ func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
 		turret.died.connect(_on_turret_destroyed)
 
 func _on_turret_destroyed() -> void:
+	turrets_placed -= 1
 	turret_lost.emit()
 
 func _on_placement_started() -> void:
