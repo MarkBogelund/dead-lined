@@ -30,6 +30,8 @@ class_name SeekerStats
 @export var capacity_drain_rate: float = 10.0
 ## Health restored to this turret per second while repairing
 @export var health_restore_rate: float = 15.0
+## Health restored per player projectile hit
+@export var repair_amount_per_player_shot: int = 5
 
 @export_group("Shooting")
 ## Seconds after acquiring a target before the first shot is fired

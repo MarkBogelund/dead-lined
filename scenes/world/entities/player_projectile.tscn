@@ -80,6 +80,7 @@ _data = {
 
 [node name="PlayerProjectile" type="Node2D" unique_id=31779294 groups=["projectiles"]]
 script = ExtResource("1_softn")
+is_player_projectile = true
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=442925662]
 scale = Vector2(0.49915063, 0.5)
@@ -87,9 +88,10 @@ texture = SubResource("AtlasTexture_o1bpx")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=769139471]
 collision_layer = 4
-collision_mask = 9
+collision_mask = 41
 script = ExtResource("4_xw27n")
 damage = 5
+no_damage_group = &"turrets"
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=356633356]

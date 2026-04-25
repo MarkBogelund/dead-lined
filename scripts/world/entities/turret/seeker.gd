@@ -35,6 +35,7 @@ func _ready() -> void:
 	
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("recoil", 1, false)
+	animation.configure_animation("repair", 1, false)
 	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 3, true)
 	
@@ -53,7 +54,7 @@ func _initialize() -> void:
 	if not stats:
 		return
 	health.initialize(stats.max_health)
-	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate)
+	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_player_shot)
 	targeting.max_range = stats.max_range
 	shoot.shoot_cooldown = stats.shoot_cooldown
 	shoot.projectile_damage = stats.projectile_damage
@@ -61,6 +62,11 @@ func _initialize() -> void:
 	shoot.projectile_speed = stats.projectile_speed
 	aiming.aim_speed = stats.aim_speed
 	aiming.accuracy_angle = stats.accuracy_angle
+
+func receive_repair_shot() -> void:
+	if not health.is_full():
+		repair.receive_repair_shot()
+		animation.play_animation("repair")
 
 func _on_game_over() -> void:
 	_active = false

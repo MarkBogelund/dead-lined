@@ -16,8 +16,9 @@
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="14_u0oon"]
 [ext_resource type="Resource" uid="uid://cwq21j4s01byy" path="res://resources/seeker_stats.tres" id="16_stats"]
 [ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="17_interact"]
-[ext_resource type="Script" uid="uid://cturretupgrade1" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="18_upgrade"]
+[ext_resource type="Script" uid="uid://crnamexhvkfv7" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="18_upgrade"]
 [ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="19_repair"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="19_s6fyr"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("11_target_config")
@@ -109,6 +110,54 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Canon:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("FlashSprite:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("FlashSprite:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("FlashSprite:modulate")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_jm6wr"]
@@ -238,6 +287,71 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_jnfwi"]
+resource_name = "repair"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.10192204, 0.64728075, 0, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Canon:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0.64796144, 0.16578129, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FlashSprite:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FlashSprite:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.35355353, 0.22531264),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(3, 3)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("FlashSprite:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.1, 0.3),
+"transitions": PackedFloat32Array(3.1383367, 1),
+"update": 0,
+"values": [Color(9.62615e-08, 0.6466281, 0.20816076, 1), Color(0, 0.64965105, 0.08456034, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_v4l8l"]
 resource_name = "take_damage"
 length = 0.2
@@ -272,6 +386,7 @@ _data = {
 &"RESET": SubResource("Animation_6fjxm"),
 &"die": SubResource("Animation_jm6wr"),
 &"recoil": SubResource("Animation_dirdf"),
+&"repair": SubResource("Animation_jnfwi"),
 &"take_damage": SubResource("Animation_v4l8l")
 }
 
@@ -330,6 +445,10 @@ color_ramp = SubResource("GradientTexture1D_jnfwi")
 [sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
 radius = 64.070274
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_v6o1g"]
+atlas = ExtResource("19_s6fyr")
+region = Rect2(0, 0, 16, 16)
+
 [node name="Seeker" type="StaticBody2D" unique_id=909576845 groups=["turrets"]]
 z_index = 1
 collision_layer = 32
@@ -365,7 +484,7 @@ visual_offset = -1.571
 script = ExtResource("8_6yfjj")
 metadata/_custom_type_script = "uid://dduqtrq3c2qol"
 
-[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1728277635]
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1728277635 groups=["turrets"]]
 libraries/ = SubResource("AnimationLibrary_mqfwu")
 script = ExtResource("9_jm6wr")
 metadata/_custom_type_script = "uid://cq7h5m3f8n2jk"
@@ -421,3 +540,9 @@ script = ExtResource("18_upgrade")
 
 [node name="RepairComponent" type="Node" parent="." unique_id=1823740004]
 script = ExtResource("19_repair")
+
+[node name="FlashSprite" type="Sprite2D" parent="." unique_id=1958461362]
+visible = false
+z_index = 10
+scale = Vector2(1e-05, 1e-05)
+texture = SubResource("AtlasTexture_v6o1g")

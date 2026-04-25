@@ -11,11 +11,13 @@ signal capacity_drained(amount: float)
 
 var _capacity_drain_rate := 0.0
 var _health_restore_rate := 0.0
+var _repair_amount_per_player_shot := 0
 var _accumulator := 0.0
 
-func initialize(capacity_drain_rate: float, health_restore_rate: float) -> void:
+func initialize(capacity_drain_rate: float, health_restore_rate: float, repair_amount_per_player_shot: int) -> void:
 	_capacity_drain_rate = capacity_drain_rate
 	_health_restore_rate = health_restore_rate
+	_repair_amount_per_player_shot = repair_amount_per_player_shot
 
 func try_repair(delta: float, available_capacity: float) -> void:
 	var drain := _capacity_drain_rate * delta
@@ -28,6 +30,9 @@ func try_repair(delta: float, available_capacity: float) -> void:
 	if to_heal > 0:
 		repaired.emit(to_heal)
 		_accumulator -= float(to_heal)
+
+func receive_repair_shot() -> void:
+	repaired.emit(_repair_amount_per_player_shot)
 
 func reset() -> void:
 	_accumulator = 0.0
