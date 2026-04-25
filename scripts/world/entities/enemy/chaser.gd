@@ -32,9 +32,8 @@ func _initialize() -> void:
 	if not stats:
 		return
 	health.initialize(stats.max_health)
-	hitbox.damage = stats.hitbox_damage
-	hitbox.knockback = stats.hitbox_knockback
-	drop_scrap.scrap_drop_amount = stats.scrap_drop_amount
+	hitbox.initialize(stats.hitbox_damage, stats.hitbox_knockback)
+	drop_scrap.initialize(stats.scrap_drop_amount)
 	_speed = stats.speed
 	_self_knockback = stats.self_knockback
 

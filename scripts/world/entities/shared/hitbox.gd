@@ -10,6 +10,10 @@ class_name HitboxComponent
 
 signal hit_target(target: Node)
 
+func initialize(s_damage: int, s_knockback: float) -> void:
+	damage = s_damage
+	knockback = s_knockback
+
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 

@@ -22,6 +22,10 @@ class_name AimingComponent
 ## Current aim angle in radians
 var current_angle := 0.0
 
+func initialize(s_aim_speed: float, s_accuracy_angle: float) -> void:
+	aim_speed = s_aim_speed
+	accuracy_angle = s_accuracy_angle
+
 ## Returns the rotation pivot: visual_node position if set, else parent position
 func _get_pivot() -> Vector2:
 	if visual_node:

@@ -35,13 +35,9 @@ func _initialize() -> void:
 	if not stats:
 		return
 	health.initialize(stats.max_health)
-	aiming.aim_speed = stats.aim_speed
-	aiming.accuracy_angle = stats.accuracy_angle
-	shoot.shoot_cooldown = stats.shoot_cooldown
-	shoot.projectile_damage = stats.projectile_damage
-	shoot.projectile_knockback = stats.projectile_knockback
-	shoot.projectile_speed = stats.projectile_speed
-	drop_scrap.scrap_drop_amount = stats.scrap_drop_amount
+	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
+	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
+	drop_scrap.initialize(stats.scrap_drop_amount)
 	_speed = stats.speed
 	_ideal_distance = stats.ideal_distance
 	_distance_tolerance = stats.distance_tolerance

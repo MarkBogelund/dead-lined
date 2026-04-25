@@ -15,6 +15,9 @@ class_name TargetingComponent
 ## Maximum distance to consider targets in this group (-1 = unlimited)
 @export var max_range: float = -1.0
 
+func initialize(s_max_range: float) -> void:
+	max_range = s_max_range
+
 ## Get the best target based on configured priorities and proximity
 ## filter: optional callable(Node2D) -> bool; return false to exclude a candidate
 ## Returns null if no valid targets found

@@ -10,6 +10,9 @@ class_name DropScrapComponent
 
 var parent: Node2D
 
+func initialize(s_scrap_drop_amount: int) -> void:
+	scrap_drop_amount = s_scrap_drop_amount
+
 func _ready() -> void:
 	if not get_parent() is Node2D:
 		push_error("DropScrapComponent must be a child of a Node2D entity")

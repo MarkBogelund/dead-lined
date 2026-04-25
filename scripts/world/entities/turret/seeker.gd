@@ -59,13 +59,9 @@ func _initialize() -> void:
 		return
 	health.initialize(stats.max_health)
 	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_player_shot)
-	targeting.max_range = stats.max_range
-	shoot.shoot_cooldown = stats.shoot_cooldown
-	shoot.projectile_damage = stats.projectile_damage
-	shoot.projectile_knockback = stats.projectile_knockback
-	shoot.projectile_speed = stats.projectile_speed
-	aiming.aim_speed = stats.aim_speed
-	aiming.accuracy_angle = stats.accuracy_angle
+	targeting.initialize(stats.max_range)
+	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
+	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
 
 func receive_repair_shot() -> void:
 	if not health.is_full():
