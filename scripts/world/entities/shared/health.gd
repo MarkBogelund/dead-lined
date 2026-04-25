@@ -47,7 +47,14 @@ func buff_max_health(multiplier: float) -> void:
 	max_health = int(max_health * multiplier)
 	restore_to_max()
 
+func increase_max_health(amount: int) -> void:
+	max_health += amount
+	current_health = mini(current_health + amount, max_health)
+
 func heal(amount: int) -> void:
 	if _is_dead:
 		return
 	current_health = mini(current_health + amount, max_health)
+
+func is_full() -> bool:
+	return current_health >= max_health

@@ -1,6 +1,8 @@
 extends Resource
 class_name SeekerStats
 
+@export var display_name: String = "Seeker"
+
 @export_group("Health")
 ## Maximum hit points
 @export var max_health: int = 100
@@ -14,6 +16,14 @@ class_name SeekerStats
 @export var aim_speed: float = 6.0
 ## Angle tolerance in radians within which the seeker will fire
 @export var accuracy_angle: float = 0.1
+
+@export_group("Upgrades")
+## Capacity cost per upgrade purchase
+@export var upgrade_cost: float = 15.0
+## Max HP added per health upgrade
+@export var health_upgrade_amount: int = 10
+## Projectile damage added per damage upgrade
+@export var damage_upgrade_amount: int = 5
 
 @export_group("Repair")
 ## Capacity drained from the player per second while repairing

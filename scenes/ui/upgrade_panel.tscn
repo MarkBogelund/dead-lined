@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dohma355t64w8"]
+
+[ext_resource type="Script" uid="uid://dohma355t64w7" path="res://scripts/ui/upgrade_panel.gd" id="1_upgrade"]
+[ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="2_upgrade"]
+
+[node name="UpgradePanel" type="Control" unique_id=1340407775]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_upgrade")
+
+[node name="Background" type="PanelContainer" parent="." unique_id=1053398735]
+layout_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="Background" unique_id=817995749]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="UpgradeHealthButton" type="Button" parent="Background/VBox" unique_id=999844623]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_upgrade")
+theme_override_font_sizes/font_size = 8
+text = "+10 HP (15 cap)"
+
+[node name="UpgradeDamageButton" type="Button" parent="Background/VBox" unique_id=1262611279]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_upgrade")
+theme_override_font_sizes/font_size = 8
+text = "+5 DMG (15 cap)"
+
+[node name="RepairButton" type="Button" parent="Background/VBox" unique_id=1156644721]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_upgrade")
+theme_override_font_sizes/font_size = 8
+text = "Hold: Repair"

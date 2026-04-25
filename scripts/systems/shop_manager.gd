@@ -12,6 +12,8 @@ signal turret_lost
 @onready var player: Player = %Player
 @export var shop_panel: ShopPanel
 @export var shop_station: ShopStation
+@export var turret_info_panel: TurretInfoPanel
+@export var upgrade_panel: UpgradePanel
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
 @export var max_turrets: int = 6
 var turrets_placed := 0
@@ -49,6 +51,12 @@ func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
 	turret_bought.emit(turret_entry.price)
 	if turret.has_signal("died"):
 		turret.died.connect(_on_turret_destroyed)
+	if turret.has_node("TurretUpgradeComponent"):
+		var upgrader: TurretUpgradeComponent = turret.get_node("TurretUpgradeComponent")
+		upgrader.info_panel_requested.connect(_on_info_panel_requested)
+		upgrader.info_panel_dismissed.connect(_on_info_panel_dismissed)
+		upgrader.upgrade_panel_requested.connect(_on_upgrade_panel_requested)
+		upgrader.upgrade_panel_dismissed.connect(func(): upgrade_panel.close())
 
 func _on_turret_destroyed() -> void:
 	turrets_placed -= 1
@@ -67,3 +75,21 @@ func _on_combat_phase_started(_wave: int) -> void:
 	emit_signal("shop_system_disabled")
 	turret_placer.cancel()
 	shop_panel.close()
+	if upgrade_panel:
+		upgrade_panel.close()
+
+func _on_info_panel_requested(turret: Node) -> void:
+	if turret_info_panel:
+		turret_info_panel.open(turret)
+
+func _on_info_panel_dismissed() -> void:
+	if turret_info_panel:
+		turret_info_panel.close()
+	if upgrade_panel:
+		upgrade_panel.close()
+
+func _on_upgrade_panel_requested(turret: Node) -> void:
+	if not upgrade_panel or not turret_info_panel:
+		return
+	shop_panel.close()
+	upgrade_panel.open(turret, player, wave_manager, turret_info_panel)

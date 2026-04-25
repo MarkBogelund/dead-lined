@@ -12,6 +12,7 @@ signal died
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 @onready var interaction_range: InteractionRangeComponent = $InteractionRangeComponent
 @onready var health_ui: HealthUIComponent = $HealthUIComponent
+@onready var upgrader: TurretUpgradeComponent = $TurretUpgradeComponent
 
 ## Stats
 @export var stats: SeekerStats
@@ -38,11 +39,13 @@ func _ready() -> void:
 	
 	wave_manager.combat_phase_started.connect(func(_i): _active = true; _shoot_delay = stats.shoot_start_delay)
 	wave_manager.build_phase_started.connect(func(): _active = false)
-	
+
 	game_over_manager.game_over.connect(_on_game_over)
 
 	interaction_range.player_entered.connect(func(): health_ui.set_player_in_range(true))
 	interaction_range.player_exited.connect(func(): health_ui.set_player_in_range(false))
+	interaction_range.player_entered.connect(upgrader.on_player_entered)
+	interaction_range.player_exited.connect(upgrader.on_player_exited)
 
 func _initialize() -> void:
 	if not stats:
