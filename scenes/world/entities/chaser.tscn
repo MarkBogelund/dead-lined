@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dbn6ammn3fpex"]
 
+[ext_resource type="Resource" uid="uid://blw5awhrqlike" path="res://resources/chaser_stats.tres" id="1_chaserstats"]
 [ext_resource type="Script" uid="uid://73dnhyc0uhym" path="res://scripts/world/entities/enemy/chaser.gd" id="1_dxuae"]
-[ext_resource type="Resource" uid="uid://chaserstats1" path="res://resources/chaser_stats.tres" id="1_chaserstats"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_fffhc"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="3_fffhc"]
 [ext_resource type="Texture2D" uid="uid://ccp2efd60ustu" path="res://assets/sprites/enemies/chaser.png" id="4_by6ef"]
@@ -251,6 +251,18 @@ tracks/7/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("CollisionShape2D:disabled")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_wtq4b"]
 resource_name = "die"
@@ -394,6 +406,18 @@ tracks/10/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("CollisionShape2D:disabled")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_uqckg"]
@@ -583,4 +607,3 @@ process_material = SubResource("ParticleProcessMaterial_lei18")
 
 [node name="FlashVfx" parent="." unique_id=1756477109 instance=ExtResource("14_wuiwp")]
 scale = Vector2(2, 2)
-flash_color = Color(0.98421293, 0, 0.2990333, 1)

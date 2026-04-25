@@ -13,6 +13,7 @@ signal restart_game
 func _ready() -> void:
 	restart_button.pressed.connect(_on_restart_pressed)
 	hide()
+	MenuManager.register(&"game_over", MenuManager.Layer.GAME_OVER, Callable(), Callable())
 
 func show_stats_with_fade(breakdown: Dictionary) -> void:
 	# Set breakdown stats with scores
@@ -38,6 +39,7 @@ func show_stats_with_fade(breakdown: Dictionary) -> void:
 	# Fade in with animation (no need to set modulate, animation handles it)
 	show()
 	animation_player.play("fade_in")
+	MenuManager.request_open(&"game_over")
 
 # Keep original for backward compatibility
 func show_stats(stats: Dictionary) -> void:

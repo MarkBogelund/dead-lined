@@ -4,6 +4,7 @@ class_name ShopPanel
 signal turret_selected(turret_entry: TurretEntry)
 
 @export var _slots: Array[TurretSlot] = []
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:
 	visible = false
@@ -22,6 +23,9 @@ func open(entries: Array[TurretEntry], can_afford_fn: Callable) -> void:
 		else:
 			slot.visible = false
 	visible = true
+	animation_player.play(&"appear")
 
 func close() -> void:
+	animation_player.play(&"disappear")
+	await animation_player.animation_finished
 	visible = false

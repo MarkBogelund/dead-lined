@@ -36,15 +36,13 @@ func _do_open() -> void:
 	animation_player.stop()
 	get_tree().paused = true
 	visible = true
-	if animation_player.has_animation(&"open"):
-		animation_player.play(&"open")
+	animation_player.play(&"appear")
 
 
 func _do_close() -> void:
 	# Unpause immediately so close animation plays at normal speed
 	# and the game world can be seen resuming behind the fading overlay.
 	get_tree().paused = false
-	if animation_player.has_animation(&"close"):
-		animation_player.play(&"close")
-		await animation_player.animation_finished
+	animation_player.play(&"disappear")
+	await animation_player.animation_finished
 	visible = false

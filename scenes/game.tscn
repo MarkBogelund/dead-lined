@@ -544,4 +544,3 @@ danger_curve = SubResource("Curve_e1j6l")
 good_curve = SubResource("Curve_pl11u")
 
 [node name="PauseMenu" parent="UI" unique_id=48360480 instance=ExtResource("27_qnb83")]
-layout_mode = 3

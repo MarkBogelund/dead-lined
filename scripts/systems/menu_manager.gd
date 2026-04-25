@@ -18,6 +18,7 @@ signal menu_closed(id: StringName)
 enum Layer {
 	WORLD = 0,
 	SYSTEM = 10,
+	GAME_OVER = 20,
 }
 
 class _Entry:
