@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://deh7td2wo54yx" path="res://assets/sprites/environment/work-bench-sheet.png" id="2_bxg8e"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="3_e1c5o"]
 [ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="4_zone"]
+[ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="5_hmxn1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_e1c5o"]
 radius = 6.5
@@ -223,3 +224,13 @@ texture = SubResource("AtlasTexture_hmxn1")
 libraries/ = SubResource("AnimationLibrary_tpfkk")
 script = ExtResource("3_e1c5o")
 metadata/_custom_type_script = "uid://cq7h5m3f8n2jk"
+
+[node name="ToggleMenuComponent" type="Node" parent="." unique_id=105654116]
+script = ExtResource("5_hmxn1")
+menu_id = &"shop"
+open_on_proximity_and_button = true
+close_on_exit_proximity = true
+close_on_toggle_button = true
+close_on_cancel = true
+close_on_click_away = true
+metadata/_custom_type_script = "uid://chr2ddbgj1iim"

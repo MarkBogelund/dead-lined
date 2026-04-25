@@ -14,6 +14,8 @@ signal died
 @onready var health_ui: HealthUIComponent = $HealthUIComponent
 @onready var upgrader: TurretUpgradeComponent = $TurretUpgradeComponent
 @onready var repair: RepairComponent = $RepairComponent
+@onready var turret_info_toggle: ToggleMenuComponent = $TurretInfoToggle
+@onready var turret_upgrade_toggle: ToggleMenuComponent = $TurretUpgradeToggle
 
 ## Stats
 @export var stats: SeekerStats
@@ -46,10 +48,12 @@ func _ready() -> void:
 
 	interaction_range.player_entered.connect(func(): health_ui.set_player_in_range(true))
 	interaction_range.player_exited.connect(func(): health_ui.set_player_in_range(false))
-	interaction_range.player_entered.connect(upgrader.on_player_entered)
-	interaction_range.player_exited.connect(upgrader.on_player_exited)
 	repair.repaired.connect(health.heal)
 	repair.capacity_drained.connect(player.capacity.spend)
+
+	turret_info_toggle.interaction_zone = interaction_range
+	turret_upgrade_toggle.interaction_zone = interaction_range
+	upgrader.upgrade_toggle = turret_upgrade_toggle
 func _initialize() -> void:
 	if not stats:
 		return

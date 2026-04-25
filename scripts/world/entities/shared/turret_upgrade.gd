@@ -1,35 +1,33 @@
 extends Node
 class_name TurretUpgradeComponent
 
-signal info_panel_requested(turret: Node)
-signal info_panel_dismissed
-signal upgrade_panel_requested(turret: Node)
-signal upgrade_panel_dismissed
+## Manages turret upgrade level and gates the upgrade menu via wave phase.
+## Open/close triggering is handled by TurretUpgradeToggle (ToggleMenuComponent).
+
+@export var upgrade_toggle: ToggleMenuComponent
 
 var level := 1
-var _is_build_phase := true
+
 
 func _ready() -> void:
 	var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
-	wave_manager.build_phase_started.connect(func(): _is_build_phase = true)
-	wave_manager.combat_phase_started.connect(func(_i): _is_build_phase = false)
+	wave_manager.build_phase_started.connect(func():
+		if not upgrade_toggle:
+			return
+		upgrade_toggle.enabled = true
+		if upgrade_toggle.interaction_zone and upgrade_toggle.interaction_zone.is_player_in_range():
+			MenuManager.request_open(&"upgrade", get_parent())
+	)
+	wave_manager.combat_phase_started.connect(func(_i):
+		if upgrade_toggle: upgrade_toggle.enabled = false
+	)
 
-func on_player_entered() -> void:
-	var turret := get_parent()
-	if turret.is_dead():
-		return
-	info_panel_requested.emit(turret)
-	if _is_build_phase:
-		upgrade_panel_requested.emit(turret)
-
-func on_player_exited() -> void:
-	info_panel_dismissed.emit()
-	upgrade_panel_dismissed.emit()
 
 func apply_health_upgrade() -> void:
 	var turret := get_parent()
 	level += 1
 	turret.health.increase_max_health(turret.stats.health_upgrade_amount)
+
 
 func apply_damage_upgrade() -> void:
 	var turret := get_parent()
