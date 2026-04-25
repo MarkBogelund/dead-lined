@@ -6,18 +6,17 @@ signal station_closed
 
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var interaction_zone: Area2D = $InteractionZone
+@onready var interaction_zone: InteractionZone = $InteractionZone
 @onready var animation_handler: AnimationHandler = $AnimationHandler
 
 var _enabled := false
-var _player_in_range := false
 
 func _ready() -> void:
 	shop_manager.shop_system_enabled.connect(_on_shop_system_enabled)
 	shop_manager.shop_system_disabled.connect(_on_shop_system_disabled)
 
-	interaction_zone.body_entered.connect(_on_interaction_area_body_entered)
-	interaction_zone.body_exited.connect(_on_interaction_area_body_exited)
+	interaction_zone.player_entered.connect(_on_player_entered)
+	interaction_zone.player_exited.connect(_on_player_exited)
 
 	animation_handler.configure_animation("rest", 0, false)
 	animation_handler.configure_animation("hover", 1, false)
@@ -25,7 +24,7 @@ func _ready() -> void:
 	animation_handler.configure_animation("dissapear", 3, true)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not _enabled or not _player_in_range:
+	if not _enabled or not interaction_zone.is_player_in_range():
 		return
 	
 	if event.is_action_pressed("open"):
@@ -39,13 +38,9 @@ func _on_shop_system_disabled() -> void:
 	_enabled = false
 	animation_handler.play_animation("dissapear")
 
-func _on_interaction_area_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		_player_in_range = true
-		animation_handler.play_animation("hover")
+func _on_player_entered() -> void:
+	animation_handler.play_animation("hover")
 
-func _on_interaction_area_body_exited(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		_player_in_range = false
-		emit_signal("station_closed")
-		animation_handler.play_animation("rest")
+func _on_player_exited() -> void:
+	emit_signal("station_closed")
+	animation_handler.play_animation("rest")

@@ -1,8 +1,7 @@
 extends Area2D
-class_name InteractionRangeComponent
+class_name InteractionZone
 
 ## Detects when the player enters or exits the interaction radius.
-## Used by turrets to gate repair interactions.
 
 signal player_entered
 signal player_exited

@@ -10,7 +10,7 @@ signal died
 @onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
-@onready var interaction_range: InteractionRangeComponent = $InteractionRangeComponent
+@onready var interaction_range: InteractionZone = $InteractionZone
 @onready var health_ui: HealthUIComponent = $HealthUIComponent
 @onready var upgrader: TurretUpgradeComponent = $TurretUpgradeComponent
 
@@ -99,7 +99,7 @@ func _handle_repair(delta: float) -> void:
 	if health.get_current_health() >= health.max_health:
 		_repair_accumulator = 0.0
 		return
-	var player := interaction_range.get_player()
+	var player = interaction_range.get_player()
 	if not player:
 		_repair_accumulator = 0.0
 		return

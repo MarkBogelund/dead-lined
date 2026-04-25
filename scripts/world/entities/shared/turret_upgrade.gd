@@ -1,12 +1,6 @@
 extends Node
 class_name TurretUpgradeComponent
 
-## Self-contained upgrade component. Drop onto any turret scene.
-## Parent turret must expose: stats (SeekerStats), health (HealthComponent), shoot (ShootComponent), is_dead().
-## In the parent's _ready, wire:
-##   interaction_range.player_entered.connect(upgrader.on_player_entered)
-##   interaction_range.player_exited.connect(upgrader.on_player_exited)
-
 signal info_panel_requested(turret: Node)
 signal info_panel_dismissed
 signal upgrade_panel_requested(turret: Node)

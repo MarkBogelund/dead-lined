@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="14_flmdm"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="14_u0oon"]
 [ext_resource type="Resource" uid="uid://cwq21j4s01byy" path="res://resources/seeker_stats.tres" id="16_stats"]
-[ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_range.gd" id="17_interact"]
+[ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="17_interact"]
 [ext_resource type="Script" uid="uid://cturretupgrade1" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="18_upgrade"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
@@ -407,12 +407,12 @@ scale = Vector2(2, 2)
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("14_u0oon")]
 process_material = SubResource("ParticleProcessMaterial_3wv22")
 
-[node name="InteractionRangeComponent" type="Area2D" parent="." unique_id=1823740001]
+[node name="InteractionZone" type="Area2D" parent="." unique_id=1823740001]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("17_interact")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionRangeComponent" unique_id=1823740002]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=1823740002]
 shape = SubResource("CircleShape2D_interact")
 
 [node name="TurretUpgradeComponent" type="Node" parent="." unique_id=1823740003]
