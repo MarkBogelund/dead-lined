@@ -533,6 +533,7 @@ metadata/_edit_lock_ = true
 [node name="UpgradePanel" parent="UI" unique_id=922000002 instance=ExtResource("21_upgrade")]
 
 [node name="CapacityOverlay" type="ColorRect" parent="UI" unique_id=1519067538]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -12,14 +12,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -72.0
-offset_right = 140.0
-offset_bottom = 72.0
+offset_left = -72.0
+offset_top = -36.0
+offset_right = 136.0
+offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_j21la")
-_slots = [NodePath("SlotCenter/SlotsContainer/Slot1"), NodePath("SlotCenter/SlotsContainer/Slot2")]
+_slots = [NodePath("SlotCenter/SlotsContainer/TurretSlot"), NodePath("SlotCenter/SlotsContainer/TurretSlot2")]
 
 [node name="Background" type="NinePatchRect" parent="." unique_id=2130820617]
 layout_mode = 1
@@ -48,8 +48,8 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Slot1" parent="SlotCenter/SlotsContainer" unique_id=354999974 instance=ExtResource("6_j21la")]
+[node name="TurretSlot" parent="SlotCenter/SlotsContainer" unique_id=354999974 instance=ExtResource("6_j21la")]
 layout_mode = 2
 
-[node name="Slot2" parent="SlotCenter/SlotsContainer" unique_id=509427941 instance=ExtResource("6_j21la")]
+[node name="TurretSlot2" parent="SlotCenter/SlotsContainer" unique_id=987574273 instance=ExtResource("6_j21la")]
 layout_mode = 2
