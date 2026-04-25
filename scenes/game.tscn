@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://bcjdlvprcr1uv" path="res://scripts/systems/freeze_frame_manager.gd" id="10_freeze"]
 [ext_resource type="Texture2D" uid="uid://cislfhx7gb77a" path="res://assets/sprites/_legacy/environment.png" id="11_5newe"]
 [ext_resource type="Texture2D" uid="uid://cknqvqanj5h2b" path="res://assets/sprites/environment/environment-tileset.png" id="11_37s47"]
-[ext_resource type="PackedScene" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
+[ext_resource type="PackedScene" uid="uid://dq6se5v2fekwy" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 [ext_resource type="PackedScene" uid="uid://cgem2dpa2ox1r" path="res://scenes/world/environment/props/arm_prop.tscn" id="12_37s47"]
 [ext_resource type="Texture2D" uid="uid://dlgs16i2yhqmx" path="res://assets/sprites/environment/props/grading-prop.png" id="13_bt5mj"]
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="14_1kice"]
@@ -29,18 +29,6 @@
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("World/Player/Camera2D:zoom")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(2, 2)]
-}
 
 [sub_resource type="Animation" id="Animation_bt5mj"]
 resource_name = "play_death_sequence"
@@ -497,7 +485,7 @@ z_index = 5
 
 [node name="Camera2D" type="Camera2D" parent="World/Player" unique_id=410582709]
 position = Vector2(0, -10)
-zoom = Vector2(2, 2)
+zoom = Vector2(1.5, 1.5)
 process_callback = 0
 limit_left = -290
 limit_top = -180

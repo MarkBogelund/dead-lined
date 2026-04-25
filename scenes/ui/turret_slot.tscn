@@ -3,7 +3,12 @@
 [ext_resource type="Script" uid="uid://bbt0clpi8uvre" path="res://scripts/ui/turret_slot.gd" id="1_tslot"]
 [ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="2_tslot"]
 [ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="3_tslot"]
+[ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/ui/seeker-icon.png" id="4_l0mfe"]
 [ext_resource type="Texture2D" uid="uid://dgx2akh6lc25s" path="res://assets/sprites/ui/ui-box.png" id="4_tslot"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pd32r"]
+atlas = ExtResource("4_l0mfe")
+region = Rect2(0, 0, 22, 26)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_scrap"]
 atlas = ExtResource("3_tslot")
@@ -47,6 +52,7 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 6
+alignment = 1
 
 [node name="NameLabel" type="Label" parent="Content/VBox" unique_id=706605644]
 unique_name_in_owner = true
@@ -63,6 +69,7 @@ custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
+texture_normal = SubResource("AtlasTexture_pd32r")
 ignore_texture_size = true
 stretch_mode = 5
 
