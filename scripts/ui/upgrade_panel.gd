@@ -4,8 +4,6 @@ class_name UpgradePanel
 @onready var background: PanelContainer = $Background
 @onready var name_label: Label = $Background/VBox/NameLabel
 @onready var level_label: Label = $Background/VBox/LevelLabel
-@onready var health_label: Label = $Background/VBox/Stats/HealthLabel
-@onready var damage_label: Label = $Background/VBox/Stats/DamageLabel
 @onready var upgrade_health_button: Button = $Background/VBox/UpgradeHealthButton
 @onready var upgrade_damage_button: Button = $Background/VBox/UpgradeDamageButton
 
@@ -61,13 +59,11 @@ func _disconnect_turret() -> void:
 func _refresh() -> void:
 	if not _turret or not _player or not _wave_manager:
 		return
-	name_label.text = _turret.name
-	level_label.text = "Level %d" % _turret.level
-	health_label.text = "HP  %d/%d" % [_turret.health.get_current_health(), _turret.health.max_health]
-	damage_label.text = "DMG  %d" % _turret.shoot.projectile_damage
+	name_label.text = _turret.stats.display_name
+	level_label.text = "%d" % _turret.level
 	var cost := _turret.stats.upgrade_cost
-	upgrade_health_button.text = "+%d HP  (%d cap)" % [_turret.stats.health_upgrade_amount, int(cost)]
-	upgrade_damage_button.text = "+%d DMG  (%d cap)" % [_turret.stats.damage_upgrade_amount, int(cost)]
+	upgrade_health_button.text = "HP: %d  (+%d cap)" % [_turret.health.max_health, int(cost)]
+	upgrade_damage_button.text = "DMG: %d  (+%d cap)" % [_turret.shoot.projectile_damage, int(cost)]
 	var can_upgrade := _turret.level < _wave_manager.current_wave \
 		and _player.capacity.can_afford(cost)
 	upgrade_health_button.disabled = not can_upgrade
