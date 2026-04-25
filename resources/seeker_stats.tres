@@ -4,4 +4,6 @@
 
 [resource]
 script = ExtResource("1_seekerstats")
-max_range = 150.0
+max_health = 200
+max_range = 170.0
+accuracy_angle = 0.15

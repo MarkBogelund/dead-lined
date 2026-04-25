@@ -1,12 +1,7 @@
-[gd_resource type="Resource" script_class="ChaserStats" format=3 uid="uid://chaserstats1"]
+[gd_resource type="Resource" script_class="ChaserStats" format=3 uid="uid://blw5awhrqlike"]
 
 [ext_resource type="Script" uid="uid://cchaserstats1" path="res://scripts/data/chaser_stats.gd" id="1_chaserstats"]
 
 [resource]
 script = ExtResource("1_chaserstats")
-max_health = 30
-speed = 30.0
-hitbox_damage = 10
-hitbox_knockback = 200.0
-self_knockback = 250.0
-scrap_drop_amount = 5
+scrap_drop_amount = 3
