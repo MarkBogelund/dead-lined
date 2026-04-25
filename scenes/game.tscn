@@ -26,6 +26,7 @@
 [ext_resource type="Script" uid="uid://8f5c4ell2tmr" path="res://scripts/ui/capacity_overlay.gd" id="24_e1j6l"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="25_tentry"]
 [ext_resource type="Resource" uid="uid://clop50yhbqa44" path="res://resources/shop/seeker_strong_shop_details.tres" id="26_sstrsh"]
+[ext_resource type="PackedScene" uid="uid://c3pausemenu01" path="res://scenes/ui/pause_menu.tscn" id="27_qnb83"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -533,7 +534,6 @@ metadata/_edit_lock_ = true
 [node name="UpgradePanel" parent="UI" unique_id=922000002 instance=ExtResource("21_upgrade")]
 
 [node name="CapacityOverlay" type="ColorRect" parent="UI" unique_id=1519067538]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -542,3 +542,6 @@ grow_vertical = 2
 script = ExtResource("24_e1j6l")
 danger_curve = SubResource("Curve_e1j6l")
 good_curve = SubResource("Curve_pl11u")
+
+[node name="PauseMenu" parent="UI" unique_id=48360480 instance=ExtResource("27_qnb83")]
+layout_mode = 3

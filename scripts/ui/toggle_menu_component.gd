@@ -22,20 +22,17 @@ class_name ToggleMenuComponent
 @export var close_on_click_away: bool = false
 @export var cancel_action: StringName = &"cancel"
 
-@export_group("References")
 ## Area2D with InteractionZone script — used for proximity detection.
-## Supports being set either from the scene file or programmatically after _ready.
-@export var interaction_zone: InteractionZone:
+## Set in code by the owning entity's _ready().
+var interaction_zone: InteractionZone:
 	set(value):
 		_disconnect_interaction_zone()
 		interaction_zone = value
 		if is_node_ready():
 			_connect_interaction_zone()
 ## Root Control of the menu — used for click-away hit testing.
-@export var menu_control: Control
-## Passed as context to MenuManager.request_open (e.g. which turret to show).
-## Defaults to get_parent() if not set.
-@export var context_node: Node
+## Set in code by the owning system's _ready().
+var menu_control: Control
 
 ## Set to false to block all triggers (e.g. during combat phase).
 var enabled: bool = true
@@ -94,8 +91,7 @@ func _on_player_exited() -> void:
 
 
 func _request_open() -> void:
-	var ctx: Node = context_node if context_node else get_parent()
-	MenuManager.request_open(menu_id, ctx)
+	MenuManager.request_open(menu_id, get_parent())
 
 
 func _connect_interaction_zone() -> void:

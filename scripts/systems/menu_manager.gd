@@ -88,31 +88,6 @@ func request_close(id: StringName) -> void:
 	menu_closed.emit(id)
 
 
-## For menus opened externally (e.g. ShopManager calling panel.open(args)).
-## Enforces group exclusivity and updates state — does NOT call open_fn.
-func notify_opened(id: StringName, context: Variant = null) -> void:
-	if not _entries.has(id):
-		push_warning("MenuManager: notify_opened — unknown id '%s'" % id)
-		return
-	var e: _Entry = _entries[id]
-	if _is_blocked_by_higher_layer(e.layer):
-		return
-	_close_groups(e.closes_groups)
-	e.is_open = true
-	menu_opened.emit(id)
-
-
-## For menus closed externally. Updates state — does NOT call close_fn.
-func notify_closed(id: StringName) -> void:
-	if not _entries.has(id):
-		return
-	var e: _Entry = _entries[id]
-	if not e.is_open:
-		return
-	e.is_open = false
-	menu_closed.emit(id)
-
-
 func is_open(id: StringName) -> bool:
 	if not _entries.has(id):
 		return false
