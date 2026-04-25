@@ -54,6 +54,8 @@ func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
 		turret.died.connect(_on_turret_destroyed)
 	if turret.has_signal("upgrade_requested"):
 		turret.upgrade_requested.connect(_on_upgrade_requested)
+	if turret.has_signal("upgrade_dismissed"):
+		turret.upgrade_dismissed.connect(func(): upgrade_panel.close())
 
 func _on_turret_destroyed() -> void:
 	turrets_placed -= 1

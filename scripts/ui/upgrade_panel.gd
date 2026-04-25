@@ -32,10 +32,15 @@ func open(turret: Turret, player: Player, wave_manager: WaveManager) -> void:
 	_wave_manager = wave_manager
 	_turret.interaction_range.player_exited.connect(close)
 	_turret.died.connect(close)
+	_turret.health_ui.set_upgrade_open(true)
+	_turret.set_upgrade_panel_open(true)
 	_refresh()
 	visible = true
 
 func close() -> void:
+	if is_instance_valid(_turret):
+		_turret.health_ui.set_upgrade_open(false)
+		_turret.set_upgrade_panel_open(false)
 	_disconnect_turret()
 	visible = false
 

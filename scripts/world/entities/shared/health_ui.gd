@@ -10,7 +10,7 @@ class_name HealthUIComponent
 
 @onready var label: Label = $Label
 
-var _player_in_range := false
+var _upgrade_open := false
 
 func _ready() -> void:
 	visible = false
@@ -36,7 +36,7 @@ func _update_display() -> void:
 	
 	label.text = "%d/%d" % [current, max_hp]
 	
-	visible = _player_in_range
+	visible = not _upgrade_open
 
-func set_player_in_range(in_range: bool) -> void:
-	_player_in_range = in_range
+func set_upgrade_open(open: bool) -> void:
+	_upgrade_open = open

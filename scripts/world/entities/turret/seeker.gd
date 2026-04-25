@@ -3,6 +3,7 @@ class_name Turret
 
 signal died
 signal upgrade_requested(turret: Turret)
+signal upgrade_dismissed
 
 ## Components
 @onready var shoot: ShootComponent = $ShootComponent
@@ -25,6 +26,7 @@ var _shoot_delay := 0.0
 var _repair_accumulator := 0.0
 var level := 1
 var _is_build_phase := true
+var _upgrade_panel_open := false
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
@@ -45,10 +47,6 @@ func _ready() -> void:
 	wave_manager.build_phase_started.connect(func(): _is_build_phase = true)
 	
 	game_over_manager.game_over.connect(_on_game_over)
-
-	interaction_range.player_entered.connect(func(): health_ui.set_player_in_range(true))
-	interaction_range.player_exited.connect(func(): health_ui.set_player_in_range(false))
-
 func _initialize() -> void:
 	if not stats:
 		return
@@ -72,7 +70,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("open"):
 		get_viewport().set_input_as_handled()
-		upgrade_requested.emit(self)
+		if _upgrade_panel_open:
+			upgrade_dismissed.emit()
+		else:
+			upgrade_requested.emit(self)
 
 func _process(delta: float) -> void:
 	_handle_repair(delta)
@@ -160,6 +161,9 @@ func apply_health_upgrade() -> void:
 func apply_damage_upgrade() -> void:
 	level += 1
 	shoot.projectile_damage += stats.damage_upgrade_amount
+
+func set_upgrade_panel_open(open: bool) -> void:
+	_upgrade_panel_open = open
 
 func despawn() -> void:
 	queue_free()
