@@ -13,10 +13,13 @@ extends Control
 @onready var capacity_label: Label = $CapacityBar/CapacityLabel
 @onready var crunch_time_threshold_line: ColorRect = $CapacityBar/CrunchTimeThreshold
 
+var _capacity_overlay: CapacityOverlay
+
 const INDICATOR_DEFAULT_COLOR := Color.WHITE
 const INDICATOR_CRUNCH_COLOR := Color.RED
 
 func _ready() -> void:
+	_capacity_overlay = get_parent().get_node("CapacityOverlay") as CapacityOverlay
 	_initialize_values()
 	_connect_signals()
 
@@ -44,6 +47,7 @@ func _update_indicator(capacity: float) -> void:
 	capacity_label.text = "%d" % int(capacity)
 	capacity_label.position.x = center_x - capacity_label.size.x / 2.0
 	indicator.color = INDICATOR_CRUNCH_COLOR if player.capacity.can_crunch_time() else INDICATOR_DEFAULT_COLOR
+	_capacity_overlay.update_capacity(capacity)
 
 func _set_threshold_line_position(threshold: float) -> void:
 	var bar_x := bar_track.position.x
