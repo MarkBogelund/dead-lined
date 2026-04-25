@@ -142,11 +142,8 @@ func _handle_death() -> void:
 	# Emit signal
 	died.emit()
 
-func despawn() -> void:
-	queue_free()
-
 func shake_screen(intensity: float, duration: float) -> void:
 	camera_shake_manager.shake_screen(intensity, duration)
 
 func is_dead() -> bool:
-	return health.is_dead() if health else false
+	return health.is_dead()
