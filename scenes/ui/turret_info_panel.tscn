@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://cturretinfo01"]
+
+[ext_resource type="Script" uid="uid://cturretinfo02" path="res://scripts/ui/turret_info_panel.gd" id="1_info"]
+[ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="2_info"]
+
+[node name="TurretInfoPanel" type="Control" unique_id=200000001]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_info")
+
+[node name="Background" type="PanelContainer" parent="." unique_id=200000002]
+layout_mode = 0
+offset_right = 80.0
+offset_bottom = 55.0
+
+[node name="VBox" type="VBoxContainer" parent="Background" unique_id=200000003]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="VSeparator" type="VSeparator" parent="Background/VBox" unique_id=535857511]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="Background/VBox" unique_id=200000005]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_info")
+theme_override_font_sizes/font_size = 16
+text = "1"
+horizontal_alignment = 1
+
+[node name="HealthLabel" type="Label" parent="Background/VBox" unique_id=200000006]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_info")
+theme_override_font_sizes/font_size = 8
+text = "HP: 100/100"
+horizontal_alignment = 1
+
+[node name="DamageLabel" type="Label" parent="Background/VBox" unique_id=200000007]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("2_info")
+theme_override_font_sizes/font_size = 8
+text = "DMG: 10"
+horizontal_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="Background/VBox" unique_id=1037199243]
+layout_mode = 2

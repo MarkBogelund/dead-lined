@@ -15,28 +15,12 @@ script = ExtResource("1_upgrade")
 
 [node name="Background" type="PanelContainer" parent="." unique_id=729726873]
 layout_mode = 0
+offset_right = 115.0
+offset_bottom = 56.0
 
 [node name="VBox" type="VBoxContainer" parent="Background" unique_id=587817364]
 layout_mode = 2
 theme_override_constants/separation = 4
-
-[node name="NameLabel" type="Label" parent="Background/VBox" unique_id=123456001]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_upgrade")
-theme_override_font_sizes/font_size = 8
-text = "Seeker"
-horizontal_alignment = 1
-
-[node name="LevelLabel" type="Label" parent="Background/VBox" unique_id=569087059]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("2_upgrade")
-theme_override_font_sizes/font_size = 16
-text = "1"
-horizontal_alignment = 1
 
 [node name="UpgradeHealthButton" type="Button" parent="Background/VBox" unique_id=1700423035]
 layout_mode = 2
@@ -49,3 +33,9 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_upgrade")
 theme_override_font_sizes/font_size = 8
 text = "DMG: 20  (15 cap)"
+
+[node name="RepairButton" type="Button" parent="Background/VBox" unique_id=312984761]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_upgrade")
+theme_override_font_sizes/font_size = 8
+text = "Hold: Repair"

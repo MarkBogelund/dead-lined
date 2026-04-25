@@ -7,4 +7,3 @@ script = ExtResource("1_playerstats")
 slash_arc_angle = 3.14159
 slash_cooldown = 0.5
 projectile_damage = 10
-initial_capacity = 50.0

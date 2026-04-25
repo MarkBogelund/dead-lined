@@ -4,6 +4,8 @@ class_name Turret
 signal died
 signal upgrade_requested(turret: Turret)
 signal upgrade_dismissed
+signal info_requested(turret: Turret)
+signal info_dismissed
 
 ## Components
 @onready var shoot: ShootComponent = $ShootComponent
@@ -46,6 +48,9 @@ func _ready() -> void:
 	wave_manager.build_phase_started.connect(func(): _is_build_phase = true)
 	
 	game_over_manager.game_over.connect(_on_game_over)
+	interaction_range.player_entered.connect(_on_player_entered_range)
+	interaction_range.player_exited.connect(_on_player_exited_range)
+
 func _initialize() -> void:
 	if not stats:
 		return
@@ -62,17 +67,15 @@ func _on_game_over() -> void:
 	_active = false
 	enabled = false
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not _is_build_phase or is_dead():
-		return
-	if not interaction_range.is_player_in_range():
-		return
-	if event.is_action_pressed("open"):
-		get_viewport().set_input_as_handled()
-		if _upgrade_panel_open:
-			upgrade_dismissed.emit()
-		else:
-			upgrade_requested.emit(self )
+func _on_player_entered_range() -> void:
+	if not is_dead():
+		info_requested.emit(self)
+		if _is_build_phase:
+			upgrade_requested.emit(self)
+
+func _on_player_exited_range() -> void:
+	info_dismissed.emit()
+	upgrade_dismissed.emit()
 
 func _process(delta: float) -> void:
 	if not _active or not enabled or is_dead():

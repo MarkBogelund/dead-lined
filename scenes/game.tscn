@@ -21,7 +21,8 @@
 [ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/spawner/chaser_spawn_details.tres" id="15_5newe"]
 [ext_resource type="Resource" uid="uid://cq5r8y2nwx7ih" path="res://resources/spawner/stalker_spawn_details.tres" id="16_5newe"]
 [ext_resource type="PackedScene" uid="uid://da6ouw6b58hpr" path="res://scenes/ui/game_over_ui.tscn" id="16_ca42v"]
-[ext_resource type="PackedScene" path="res://scenes/ui/upgrade_panel.tscn" id="22_37s47"]
+[ext_resource type="PackedScene" uid="uid://b488qpnps454p" path="res://scenes/ui/upgrade_panel.tscn" id="22_37s47"]
+[ext_resource type="PackedScene" uid="uid://cturretinfo01" path="res://scenes/ui/turret_info_panel.tscn" id="23_37s47"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -319,12 +320,13 @@ region = Rect2(16, 16, 18, 48)
 
 [node name="Systems" type="Node" parent="." unique_id=618035649]
 
-[node name="ShopManager" type="Node" parent="Systems" unique_id=1221676986 node_paths=PackedStringArray("shop_panel", "shop_station", "upgrade_panel") groups=["shop_manager"]]
+[node name="ShopManager" type="Node" parent="Systems" unique_id=1221676986 node_paths=PackedStringArray("shop_panel", "shop_station", "upgrade_panel", "turret_info_panel") groups=["shop_manager"]]
 unique_name_in_owner = true
 script = ExtResource("1_ir15t")
 shop_panel = NodePath("../../UI/ShopPanel")
 shop_station = NodePath("../../World/ShopStation")
 upgrade_panel = NodePath("../../UI/UpgradePanel")
+turret_info_panel = NodePath("../../UI/TurretInfoPanel")
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]
@@ -532,5 +534,15 @@ z_index = 1
 metadata/_edit_lock_ = true
 
 [node name="UpgradePanel" parent="UI" unique_id=228089148 instance=ExtResource("22_37s47")]
-layout_mode = 3
 anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="TurretInfoPanel" parent="UI" unique_id=228089149 instance=ExtResource("23_37s47")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1

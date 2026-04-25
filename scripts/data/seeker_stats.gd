@@ -25,6 +25,12 @@ class_name SeekerStats
 ## Projectile damage added on damage upgrade
 @export var damage_upgrade_amount: int = 5
 
+@export_group("Repair")
+## Capacity drained per second while holding the repair button
+@export var capacity_drain_rate: float = 10.0
+## HP restored to the turret per second while holding the repair button
+@export var health_restore_rate: float = 20.0
+
 @export_group("Shooting")
 ## Seconds after acquiring a target before the first shot is fired
 @export var shoot_start_delay: float = 1.0

@@ -15,6 +15,7 @@ signal turret_lost
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
 @export var max_turrets: int = 6
 @export var upgrade_panel: UpgradePanel
+@export var turret_info_panel: TurretInfoPanel
 var turrets_placed := 0
 
 func _ready() -> void:
@@ -56,6 +57,10 @@ func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
 		turret.upgrade_requested.connect(_on_upgrade_requested)
 	if turret.has_signal("upgrade_dismissed"):
 		turret.upgrade_dismissed.connect(func(): upgrade_panel.close())
+	if turret.has_signal("info_requested"):
+		turret.info_requested.connect(_on_info_requested)
+	if turret.has_signal("info_dismissed"):
+		turret.info_dismissed.connect(_on_info_dismissed)
 
 func _on_turret_destroyed() -> void:
 	turrets_placed -= 1
@@ -65,7 +70,17 @@ func _on_upgrade_requested(turret: Turret) -> void:
 	if not upgrade_panel:
 		return
 	shop_panel.close()
-	upgrade_panel.open(turret, player, wave_manager)
+	upgrade_panel.open(turret, player, wave_manager, turret_info_panel)
+
+func _on_info_requested(turret: Turret) -> void:
+	if turret_info_panel:
+		turret_info_panel.open(turret)
+
+func _on_info_dismissed() -> void:
+	if turret_info_panel:
+		turret_info_panel.close()
+	if upgrade_panel:
+		upgrade_panel.close()
 
 func _on_placement_started() -> void:
 	emit_signal("turret_placement_started")
