@@ -262,3 +262,77 @@ When creating or refactoring a component, verify:
 
 *Keep components independent, communication clear, and dependencies minimal.*
 
+---
+
+## Stats Resources
+
+All balancing values for an entity live in a single `Resource` subclass. Components and entities never hardcode numbers — they read from the stats resource.
+
+### Defining a stats resource
+
+```gdscript
+# scripts/data/seeker_stats.gd
+extends Resource
+class_name SeekerStats
+
+@export_group("Health")
+@export var max_health: int = 100
+
+@export_group("Shooting")
+@export var shoot_cooldown: float = 0.5
+@export var projectile_damage: int = 20
+
+@export_group("Upgrades")
+@export var upgrade_cost: float = 15.0
+@export var health_upgrade_amount: int = 10
+```
+
+- Extends `Resource` (not `Node`) — no scene needed, pure data
+- Use `@export_group` to organise values by system (Health, Movement, Shooting, etc.)
+- Default values in the script are the canonical fallback; `.tres` files override them per variant
+
+### Creating a variant
+
+1. In the Godot editor: **right-click** `resources/` → **New Resource** → select your stats class
+2. Or duplicate an existing `.tres` and change the values
+3. Save as e.g. `resources/seeker_strong_stats.tres`
+
+The `.tres` file only stores properties that differ from the script defaults:
+
+```
+# resources/seeker_stats.tres
+[resource]
+script = ExtResource("seeker_stats.gd")
+max_health = 200
+max_range = 170.0
+accuracy_angle = 0.15
+```
+
+### Wiring to an entity
+
+The entity exposes the resource as an `@export` and reads from it in `_initialize()`:
+
+```gdscript
+# Entity (e.g. Turret / Chaser)
+@export var stats: SeekerStats
+
+func _ready() -> void:
+    _initialize()
+
+func _initialize() -> void:
+    if not stats:
+        return
+    health.initialize(stats.max_health)
+    shoot.shoot_cooldown = stats.shoot_cooldown
+    shoot.projectile_damage = stats.projectile_damage
+```
+
+Assign the `.tres` file to the `stats` export in the scene inspector (or per-instance in the parent scene). Components receive values through their own initialise methods — they never hold a reference to the stats resource directly.
+
+### Rules
+
+- **One resource per entity type.** `SeekerStats`, `StalkerStats`, `PlayerStats` — not one god resource.
+- **Components don't hold the resource.** The entity reads from stats in `_initialize()` and pushes values into components. Components stay decoupled.
+- **Variants by `.tres`, not by code.** A `SeekerStrong` is the same scene/script as `Seeker` with a different `stats` assigned — no subclassing needed.
+- **Runtime mutations go on the component, not the resource.** If an upgrade increases `projectile_damage`, update `shoot.projectile_damage` directly. The resource stays read-only.
+
