@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c1up8f3hcb17m"]
 
 [ext_resource type="Script" uid="uid://b3j3lpbasrpx1" path="res://scripts/world/entities/player/player.gd" id="1_g2els"]
-[ext_resource type="Resource" uid="uid://playerstats01" path="res://resources/player_stats.tres" id="1_playerstats"]
+[ext_resource type="Resource" uid="uid://bmfg4nfa6di48" path="res://resources/player_stats.tres" id="1_playerstats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_74ekq"]
 [ext_resource type="Script" uid="uid://dxhdl8qdlw3o8" path="res://scripts/world/entities/player/capacity.gd" id="2_2454e"]
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/world/entities/player_projectile.tscn" id="2_qhqgy"]
@@ -535,6 +535,7 @@ stats = ExtResource("1_playerstats")
 
 [node name="CapacityComponent" type="Node" parent="." unique_id=1117474515]
 script = ExtResource("2_2454e")
+initial_capacity = 50.0
 metadata/_custom_type_script = "uid://dxhdl8qdlw3o8"
 
 [node name="AimingComponent" type="Node" parent="." unique_id=915185371]

@@ -13,6 +13,7 @@ signal died
 @onready var interaction_range: InteractionZone = $InteractionZone
 @onready var health_ui: HealthUIComponent = $HealthUIComponent
 @onready var upgrader: TurretUpgradeComponent = $TurretUpgradeComponent
+@onready var repair: RepairComponent = $RepairComponent
 
 ## Stats
 @export var stats: SeekerStats
@@ -22,11 +23,11 @@ const UP_FACING_OFFSET := -PI / 2
 var _active := false
 var enabled := true
 var _shoot_delay := 0.0
-var _repair_accumulator := 0.0
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
 @onready var camera_shake_manager: CameraShakeManager = get_tree().get_first_node_in_group("camera_shake_manager")
+@onready var player: Player = get_tree().get_first_node_in_group("player")
 
 func _ready() -> void:
 	add_to_group("turrets")
@@ -46,11 +47,13 @@ func _ready() -> void:
 	interaction_range.player_exited.connect(func(): health_ui.set_player_in_range(false))
 	interaction_range.player_entered.connect(upgrader.on_player_entered)
 	interaction_range.player_exited.connect(upgrader.on_player_exited)
-
+	repair.repaired.connect(health.heal)
+	repair.capacity_drained.connect(player.capacity.spend)
 func _initialize() -> void:
 	if not stats:
 		return
 	health.initialize(stats.max_health)
+	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate)
 	targeting.max_range = stats.max_range
 	shoot.shoot_cooldown = stats.shoot_cooldown
 	shoot.projectile_damage = stats.projectile_damage
@@ -64,7 +67,10 @@ func _on_game_over() -> void:
 	enabled = false
 
 func _process(delta: float) -> void:
-	_handle_repair(delta)
+	if interaction_range.is_player_in_range() and not health.is_full() and Input.is_action_pressed("open"):
+		repair.try_repair(delta, player.capacity.current_capacity)
+	else:
+		repair.reset()
 
 	if not _active or not enabled or is_dead():
 		return
@@ -88,31 +94,6 @@ func _process(delta: float) -> void:
 func _fire_at() -> void:
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 		animation.play_animation("recoil")
-
-func _handle_repair(delta: float) -> void:
-	if is_dead() or not interaction_range.is_player_in_range():
-		_repair_accumulator = 0.0
-		return
-	if not Input.is_action_pressed("open"):
-		_repair_accumulator = 0.0
-		return
-	if health.get_current_health() >= health.max_health:
-		_repair_accumulator = 0.0
-		return
-	var player = interaction_range.get_player()
-	if not player:
-		_repair_accumulator = 0.0
-		return
-	var drain := stats.capacity_drain_rate * delta
-	if not player.capacity.can_afford(drain):
-		_repair_accumulator = 0.0
-		return
-	player.capacity.spend(drain)
-	_repair_accumulator += stats.health_restore_rate * delta
-	if _repair_accumulator >= 1.0:
-		var to_heal := int(_repair_accumulator)
-		health.heal(to_heal)
-		_repair_accumulator -= float(to_heal)
 
 ## Damage handling - called by enemy hitboxes
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
