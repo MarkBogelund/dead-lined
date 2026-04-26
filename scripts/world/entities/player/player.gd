@@ -111,9 +111,7 @@ func _process_movement(delta: float) -> void:
 	match _get_move_state():
 		MoveState.DASHING:
 			velocity = dash.get_dash_velocity()
-			var collision := move_and_collide(velocity * delta)
-			if collision:
-				dash.cancel_dash()
+			move_and_slide()
 		MoveState.KNOCKED:
 			velocity = knockback.velocity
 			move_and_slide()
