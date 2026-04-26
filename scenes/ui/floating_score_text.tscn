@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://ppcskmuwki6w"]
+
+[ext_resource type="Script" uid="uid://fd3enej1o3eu" path="res://scripts/ui/floating_score_text.gd" id="1_fst"]
+[ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="2_fst"]
+
+[node name="FloatingScoreText" type="Control" unique_id=372362335]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fst")
+
+[node name="LabelTemplate" type="Label" parent="." unique_id=73236923]
+visible = false
+layout_mode = 0
+theme_override_fonts/font = ExtResource("2_fst")
+theme_override_font_sizes/font_size = 12
+text = "+100"

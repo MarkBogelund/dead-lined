@@ -2,6 +2,7 @@ extends Control
 
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var player: Player = %Player
+@onready var score_manager: ScoreManager = %ScoreManager
 
 @onready var wave_label: Label = $WaveContainer/WaveLabel
 @onready var build_phase_timer: Label = $BuildPhaseTimer
@@ -12,6 +13,8 @@ extends Control
 @onready var indicator: ColorRect = $CapacityBar/Indicator
 @onready var capacity_label: Label = $CapacityBar/CapacityLabel
 @onready var crunch_time_threshold_line: ColorRect = $CapacityBar/CrunchTimeThreshold
+@onready var score_label: Label = %ScoreLabel
+@onready var floating_score_text: FloatingScoreText = $FloatingScoreText
 
 var _capacity_overlay: CapacityOverlay
 
@@ -30,6 +33,7 @@ func _initialize_values() -> void:
 	build_phase_timer.visible = false
 	build_phase_texture.visible = true
 	combat_phase_texture.visible = false
+	score_label.text = "0"
 
 func _connect_signals() -> void:
 	player.capacity.capacity_changed.connect(_update_indicator)
@@ -38,6 +42,8 @@ func _connect_signals() -> void:
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 	wave_manager.build_phase_tick.connect(_on_build_phase_tick)
+	score_manager.score_earned.connect(_on_score_earned)
+	floating_score_text.arrived.connect(_on_floating_text_arrived)
 
 func _update_indicator(capacity: float) -> void:
 	var bar_x := bar_track.position.x
@@ -76,3 +82,9 @@ func _on_combat_phase_started(_wave_index: int) -> void:
 
 func _on_build_phase_tick(time_left: float) -> void:
 	build_phase_timer.text = str(ceili(time_left))
+
+func _on_score_earned(points: int, world_position: Vector2) -> void:
+	floating_score_text.spawn("+%d" % points, Color.WHITE, world_position)
+
+func _on_floating_text_arrived() -> void:
+	score_label.text = str(score_manager.calculate_score())

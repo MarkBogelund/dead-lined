@@ -4,6 +4,8 @@ class_name ScoreManager
 ## Manages scoring system based on player performance
 ## Tracks: drones destroyed, turrets destroyed, waves survived, crunch time
 
+signal score_earned(points: int, world_position: Vector2)
+
 ## Score values
 const DRONE_VALUE := 100
 const TURRET_VALUE := 100
@@ -40,12 +42,14 @@ func _on_build_phase_started() -> void:
 		waves_survived = current_wave
 
 func _on_enemy_spawned(enemy: Node) -> void:
-	# Connect to enemy's death signal
+	# Connect to enemy's death signal, capturing the enemy reference for position
 	if enemy.has_signal("died"):
-		enemy.died.connect(_on_drone_destroyed)
+		enemy.died.connect(func(): _on_drone_destroyed(enemy))
 
-func _on_drone_destroyed() -> void:
+func _on_drone_destroyed(enemy: Node) -> void:
 	drones_destroyed += 1
+	var world_pos = enemy.global_position if is_instance_valid(enemy) else Vector2.ZERO
+	emit_signal("score_earned", DRONE_VALUE, world_pos)
 
 func _on_turret_placed(turret: Node, _turret_entry) -> void:
 	# Connect to turret's death signal
