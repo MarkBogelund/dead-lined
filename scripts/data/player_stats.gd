@@ -22,6 +22,8 @@ class_name PlayerStats
 @export var slash_damage: int = 20
 ## Knockback force applied to hit targets
 @export var slash_knockback: float = 200.0
+## Knockback force applied to the player when the slash hits a wall or obstacle
+@export var slash_self_knockback: float = 150.0
 ## Radius of the slash arc in pixels
 @export var slash_radius: float = 24.0
 ## Full sweep angle of the slash in radians

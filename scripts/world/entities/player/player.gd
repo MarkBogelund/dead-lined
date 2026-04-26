@@ -51,7 +51,7 @@ func _initialize() -> void:
 		return
 	movement.initialize(stats.speed, stats.acceleration, stats.friction)
 	dash.initialize(stats.dash_distance, stats.dash_duration, stats.dash_cooldown)
-	melee_weapon.initialize(stats.slash_damage, stats.slash_knockback, stats.slash_radius, stats.slash_arc_angle, stats.slash_duration, stats.slash_cooldown)
+	melee_weapon.initialize(stats.slash_damage, stats.slash_knockback, stats.slash_self_knockback, stats.slash_radius, stats.slash_arc_angle, stats.slash_duration, stats.slash_cooldown)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
 	capacity.initialize(stats.initial_capacity, stats.max_capacity, stats.crunch_threshold, stats.threshold_step, stats.min_crunch_threshold)
 	crunch_time.initialize(
@@ -83,6 +83,7 @@ func _setup_animations() -> void:
 func _connect_signals() -> void:
 	# Components
 	melee_weapon.camera_shake_manager = camera_shake_manager
+	melee_weapon.hit_obstacle.connect(_on_melee_hit_obstacle)
 	aiming.muzzle = $Muzzle
 	crunch_time.crunch_time_started.connect(_on_crunch_time_started)
 	crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
@@ -178,6 +179,9 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 		_handle_death(from_position)
 	else:
 		_handle_damage(from_position, knockback_force)
+
+func _on_melee_hit_obstacle(hit_position: Vector2, self_knockback_force: float) -> void:
+	knockback.apply(hit_position, self_knockback_force)
 
 func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	# Apply knockback

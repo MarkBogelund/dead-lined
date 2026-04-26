@@ -7,9 +7,12 @@ class_name MeleeWeapon
 @onready var hitbox: HitboxComponent = $HitboxComponent
 @export var camera_shake_manager: CameraShakeManager
 
+signal hit_obstacle(hit_position: Vector2, self_knockback: float)
+
 @export_group("Slash Settings")
 @export var damage := 20
 @export var knockback := 200.0
+@export var self_knockback := 150.0
 @export var slash_radius := 24.0
 @export var arc_angle := PI
 @export var slash_duration := 0.25
@@ -34,9 +37,10 @@ func _ready() -> void:
 	_reset()
 	hitbox.hit_target.connect(_on_hit_target)
 
-func initialize(p_damage: int, p_knockback: float, p_radius: float, p_arc_angle: float, p_duration: float, p_cooldown: float) -> void:
+func initialize(p_damage: int, p_knockback: float, p_self_knockback: float, p_radius: float, p_arc_angle: float, p_duration: float, p_cooldown: float) -> void:
 	damage = p_damage
 	knockback = p_knockback
+	self_knockback = p_self_knockback
 	slash_radius = p_radius
 	arc_angle = p_arc_angle
 	slash_duration = p_duration
@@ -115,5 +119,7 @@ func _update_slash(delta: float) -> void:
 	sprite.modulate = Color(1.0 + flash, 1.0 + flash, 1.0 + flash, 1.0)
 	position = Vector2.RIGHT.rotated(angle) * slash_radius
 
-func _on_hit_target(_target: Node) -> void:
+func _on_hit_target(target: Node) -> void:
 	camera_shake_manager.shake_screen(camera_shake_duration, camera_shake_intensity)
+	if not target.has_method("was_hit"):
+		emit_signal("hit_obstacle", hitbox.global_position, self_knockback)
