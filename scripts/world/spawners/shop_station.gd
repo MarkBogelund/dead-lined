@@ -25,11 +25,13 @@ func _ready() -> void:
 
 func _on_shop_system_enabled() -> void:
 	toggle_menu.enabled = true
+	interaction_zone.monitoring = true
 	animation_handler.play_animation("appear")
 
 
 func _on_shop_system_disabled() -> void:
 	toggle_menu.enabled = false
+	interaction_zone.monitoring = false
 	animation_handler.play_animation("dissapear")
 
 
