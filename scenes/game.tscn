@@ -21,8 +21,6 @@
 [ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/spawner/chaser_spawn_details.tres" id="15_5newe"]
 [ext_resource type="Resource" uid="uid://cq5r8y2nwx7ih" path="res://resources/spawner/stalker_spawn_details.tres" id="16_5newe"]
 [ext_resource type="PackedScene" uid="uid://da6ouw6b58hpr" path="res://scenes/ui/game_over_ui.tscn" id="16_ca42v"]
-[ext_resource type="PackedScene" uid="uid://cturretinfo02" path="res://scenes/ui/turret_info_panel.tscn" id="20_info"]
-[ext_resource type="PackedScene" uid="uid://dohma355t64w8" path="res://scenes/ui/upgrade_panel.tscn" id="21_upgrade"]
 [ext_resource type="Script" uid="uid://8f5c4ell2tmr" path="res://scripts/ui/capacity_overlay.gd" id="24_e1j6l"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="25_tentry"]
 [ext_resource type="Resource" uid="uid://clop50yhbqa44" path="res://resources/shop/seeker_strong_shop_details.tres" id="26_sstrsh"]
@@ -336,6 +334,7 @@ metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
+time_between_waves = 5
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]

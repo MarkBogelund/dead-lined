@@ -56,16 +56,21 @@ func _disconnect_turret() -> void:
 func _refresh() -> void:
 	if not _turret or not _wave_manager:
 		return
-	var cost: float = _turret.stats.upgrade_cost
-	upgrade_health_button.text = "+%d HP (%d cap)" % [_turret.stats.health_upgrade_amount, int(cost)]
-	upgrade_damage_button.text = "+%d DMG (%d cap)" % [_turret.stats.damage_upgrade_amount, int(cost)]
+	var hp_data: TurretUpgrade = _turret.upgrader.health_upgrade_data()
+	var dmg_data: TurretUpgrade = _turret.upgrader.damage_upgrade_data()
+	upgrade_health_button.text = "+%d HP (%d cap)" % [hp_data.value, int(hp_data.cost)] if hp_data else "Max HP"
+	upgrade_damage_button.text = "+%d DMG (%d cap)" % [dmg_data.value, int(dmg_data.cost)] if dmg_data else "Max DMG"
 
 func _update_button_states(delta: float) -> void:
-	var cost: float = _turret.stats.upgrade_cost
-	var can_upgrade = _turret.upgrader.level < _wave_manager.current_wave \
-		and _player.capacity.can_afford(cost)
-	upgrade_health_button.disabled = not can_upgrade
-	upgrade_damage_button.disabled = not can_upgrade
+	var hp_data: TurretUpgrade = _turret.upgrader.health_upgrade_data()
+	var dmg_data: TurretUpgrade = _turret.upgrader.damage_upgrade_data()
+	var level_ok = _turret.upgrader.level < _wave_manager.current_wave
+	upgrade_health_button.disabled = hp_data == null \
+		or not level_ok \
+		or not _player.capacity.can_afford(hp_data.cost)
+	upgrade_damage_button.disabled = dmg_data == null \
+		or not level_ok \
+		or not _player.capacity.can_afford(dmg_data.cost)
 	repair_button.disabled = _turret.health.is_full() \
 		or not _player.capacity.can_afford(_turret.stats.capacity_drain_rate * delta)
 
@@ -91,13 +96,19 @@ func _handle_repair(delta: float) -> void:
 func _on_upgrade_health_pressed() -> void:
 	if not _turret or not _player:
 		return
+	var data: TurretUpgrade = _turret.upgrader.health_upgrade_data()
+	if not data:
+		return
+	_player.capacity.spend(data.cost)
 	_turret.upgrader.apply_health_upgrade()
-	_player.capacity.spend(_turret.stats.upgrade_cost)
 	_refresh()
 
 func _on_upgrade_damage_pressed() -> void:
 	if not _turret or not _player:
 		return
+	var data: TurretUpgrade = _turret.upgrader.damage_upgrade_data()
+	if not data:
+		return
+	_player.capacity.spend(data.cost)
 	_turret.upgrader.apply_damage_upgrade()
-	_player.capacity.spend(_turret.stats.upgrade_cost)
 	_refresh()

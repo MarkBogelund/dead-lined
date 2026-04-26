@@ -1,9 +1,56 @@
 [gd_resource type="Resource" script_class="SeekerStats" format=3 uid="uid://cwq21j4s01byy"]
 
 [ext_resource type="Script" uid="uid://cseekerstat01" path="res://scripts/data/seeker_stats.gd" id="1_seekerstats"]
+[ext_resource type="Script" uid="uid://d0774ofuob1o8" path="res://scripts/data/turret_upgrade_level.gd" id="2_nmlpx"]
+
+[sub_resource type="Resource" id="Resource_nmlpx"]
+script = ExtResource("2_nmlpx")
+cost = 25.0
+value = 5
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
+
+[sub_resource type="Resource" id="Resource_qtbxs"]
+script = ExtResource("2_nmlpx")
+cost = 35.0
+value = 5
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
+
+[sub_resource type="Resource" id="Resource_2gvxv"]
+script = ExtResource("2_nmlpx")
+cost = 45.0
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
+
+[sub_resource type="Resource" id="Resource_faxe0"]
+script = ExtResource("2_nmlpx")
+cost = 55.0
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
+
+[sub_resource type="Resource" id="Resource_nh28m"]
+script = ExtResource("2_nmlpx")
+value = 20
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
+
+[sub_resource type="Resource" id="Resource_jw1wh"]
+script = ExtResource("2_nmlpx")
+cost = 25.0
+value = 20
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
+
+[sub_resource type="Resource" id="Resource_5qqth"]
+script = ExtResource("2_nmlpx")
+cost = 30.0
+value = 15
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
+
+[sub_resource type="Resource" id="Resource_nuvq8"]
+script = ExtResource("2_nmlpx")
+cost = 40.0
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [resource]
 script = ExtResource("1_seekerstats")
 max_health = 200
 max_range = 170.0
 accuracy_angle = 0.15
+health_upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Resource_nh28m"), SubResource("Resource_jw1wh"), SubResource("Resource_5qqth"), SubResource("Resource_nuvq8")])
+damage_upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Resource_nmlpx"), SubResource("Resource_qtbxs"), SubResource("Resource_2gvxv"), SubResource("Resource_faxe0")])

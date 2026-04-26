@@ -22,12 +22,10 @@ class_name SeekerStats
 @export var accuracy_angle: float = 0.1
 
 @export_group("Upgrades")
-## Capacity cost per upgrade purchase
-@export var upgrade_cost: float = 15.0
-## Max HP added per health upgrade
-@export var health_upgrade_amount: int = 10
-## Projectile damage added per damage upgrade
-@export var damage_upgrade_amount: int = 5
+## Each entry is one purchasable health upgrade, in order.
+@export var health_upgrades: Array[TurretUpgrade] = []
+## Each entry is one purchasable damage upgrade, in order.
+@export var damage_upgrades: Array[TurretUpgrade] = []
 
 @export_group("Repair")
 ## Capacity drained from the player per second while repairing
