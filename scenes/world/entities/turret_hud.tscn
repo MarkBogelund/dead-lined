@@ -1,0 +1,170 @@
+[gd_scene format=3 uid="uid://bsb8p01cc8uih"]
+
+[ext_resource type="Script" uid="uid://dpi7tvafhwm14" path="res://scripts/world/entities/turret/turret_hud.gd" id="1_hud"]
+[ext_resource type="Script" uid="uid://cturretinfo01" path="res://scripts/ui/turret_info_panel.gd" id="2_hud"]
+[ext_resource type="Script" uid="uid://dohma355t64w7" path="res://scripts/ui/upgrade_panel.gd" id="3_hud"]
+[ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="4_hud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_normal"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_hover"]
+bg_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_pressed"]
+bg_color = Color(0.12, 0.12, 0.12, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_normal"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_hover"]
+bg_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_pressed"]
+bg_color = Color(0.12, 0.12, 0.12, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_normal"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_hover"]
+bg_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_pressed"]
+bg_color = Color(0.12, 0.12, 0.12, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[node name="TurretHUD" type="Node"]
+script = ExtResource("1_hud")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TurretInfoPanel" type="Control" parent="CanvasLayer"]
+layout_mode = 0
+mouse_filter = 2
+script = ExtResource("2_hud")
+
+[node name="Background" type="PanelContainer" parent="CanvasLayer/TurretInfoPanel"]
+layout_mode = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/TurretInfoPanel/Background"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="LevelLabel" type="Label" parent="CanvasLayer/TurretInfoPanel/Background/VBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_hud")
+theme_override_font_sizes/font_size = 16
+text = "1"
+horizontal_alignment = 1
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer/TurretInfoPanel/Background/VBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_hud")
+theme_override_font_sizes/font_size = 8
+text = "HP: 100/100"
+horizontal_alignment = 1
+
+[node name="DamageLabel" type="Label" parent="CanvasLayer/TurretInfoPanel/Background/VBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("4_hud")
+theme_override_font_sizes/font_size = 8
+text = "DMG: 10"
+horizontal_alignment = 1
+
+[node name="UpgradePanel" type="Control" parent="CanvasLayer"]
+layout_mode = 0
+mouse_filter = 2
+script = ExtResource("3_hud")
+
+[node name="Background" type="PanelContainer" parent="CanvasLayer/UpgradePanel"]
+layout_mode = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/Background"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="UpgradeHealthButton" type="Button" parent="CanvasLayer/UpgradePanel/Background/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_hud")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_hp_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hp_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hp_pressed")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_hp_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hp_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_hp_normal")
+text = "+10 HP (15 cap)"
+
+[node name="UpgradeDamageButton" type="Button" parent="CanvasLayer/UpgradePanel/Background/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_hud")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_dmg_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dmg_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dmg_pressed")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_dmg_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dmg_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_dmg_normal")
+text = "+5 DMG (15 cap)"
+
+[node name="RepairButton" type="Button" parent="CanvasLayer/UpgradePanel/Background/VBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_hud")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_repair_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_repair_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_repair_pressed")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_repair_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_repair_normal")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_repair_normal")
+text = "Hold: Repair"
+

@@ -1,14 +1,9 @@
 extends Control
 class_name TurretInfoPanel
 
-## Displays turret level, HP, and damage when the player is in interaction range.
-## Positions itself above the turret in screen space each frame.
-## Open/close is driven by ShopManager via TurretUpgradeComponent signals.
-
-@onready var background: PanelContainer = $Background
-@onready var level_label: Label = $Background/VBox/LevelLabel
-@onready var health_label: Label = $Background/VBox/HealthLabel
-@onready var damage_label: Label = $Background/VBox/DamageLabel
+@onready var level_label: Label = %LevelLabel
+@onready var health_label: Label = %HealthLabel
+@onready var damage_label: Label = %DamageLabel
 
 var _turret: Node = null
 
@@ -18,8 +13,6 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not visible or not is_instance_valid(_turret):
 		return
-	var screen_pos = get_viewport().get_canvas_transform() * _turret.global_position
-	background.position = screen_pos + Vector2(-background.size.x * 0.5, -background.size.y - 20.0)
 	_update_labels()
 
 func open(turret: Node) -> void:

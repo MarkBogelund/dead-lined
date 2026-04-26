@@ -1,19 +1,13 @@
 extends Control
 class_name UpgradePanel
 
-## Shows upgrade and repair options when the player is in range during build phase.
-## Positions itself below TurretInfoPanel in screen space.
-## Open/close is driven by ShopManager via TurretUpgradeComponent signals.
-
-@onready var background: PanelContainer = $Background
-@onready var upgrade_health_button: Button = $Background/VBox/UpgradeHealthButton
-@onready var upgrade_damage_button: Button = $Background/VBox/UpgradeDamageButton
-@onready var repair_button: Button = $Background/VBox/RepairButton
+@onready var upgrade_health_button: Button = %UpgradeHealthButton
+@onready var upgrade_damage_button: Button = %UpgradeDamageButton
+@onready var repair_button: Button = %RepairButton
 
 var _turret: Node = null
 var _player: Player = null
 var _wave_manager: WaveManager = null
-var _info_panel: TurretInfoPanel = null
 var _repairing := false
 var _repair_accumulator := 0.0
 
@@ -25,26 +19,18 @@ func _ready() -> void:
 	repair_button.button_up.connect(func(): _repairing = false; _repair_accumulator = 0.0)
 
 func _process(delta: float) -> void:
-	if not visible or not is_instance_valid(_turret) or not is_instance_valid(_info_panel):
+	if not visible or not is_instance_valid(_turret):
 		_repairing = false
 		return
-	# Match info panel width and position below it
-	var info_bg := _info_panel.background
-	background.custom_minimum_size.x = info_bg.size.x
-	background.position = Vector2(
-		info_bg.position.x + info_bg.size.x * 0.5 - background.size.x * 0.5,
-		info_bg.position.y + info_bg.size.y + 4.0
-	)
 	_handle_repair(delta)
 	_update_button_states(delta)
 
-func open(turret: Node, player: Player, wave_manager: WaveManager, info_panel: TurretInfoPanel) -> void:
+func open(turret: Node, player: Player, wave_manager: WaveManager) -> void:
 	if _turret:
 		_disconnect_turret()
 	_turret = turret
 	_player = player
 	_wave_manager = wave_manager
-	_info_panel = info_panel
 	_turret.died.connect(close)
 	_refresh()
 	visible = true
@@ -60,14 +46,12 @@ func _disconnect_turret() -> void:
 		_turret = null
 		_player = null
 		_wave_manager = null
-		_info_panel = null
 		return
 	if _turret.died.is_connected(close):
 		_turret.died.disconnect(close)
 	_turret = null
 	_player = null
 	_wave_manager = null
-	_info_panel = null
 
 func _refresh() -> void:
 	if not _turret or not _wave_manager:

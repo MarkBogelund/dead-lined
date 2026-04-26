@@ -5,8 +5,9 @@ class_name TurretHUD
 ## Lives as a child of the turret scene.
 ## Show/hide is driven by the turret's InteractionZone and wave phase.
 
-@onready var info_panel: TurretInfoPanel = $CanvasLayer/TurretInfoPanel
-@onready var upgrade_panel: UpgradePanel = $CanvasLayer/UpgradePanel
+@onready var info_panel: TurretInfoPanel = %InfoPanel
+@onready var upgrade_panel: UpgradePanel = %UpgradePanel
+@onready var canvas_layer: CanvasLayer = $CanvasLayer
 
 var _turret: Node = null
 var _player: Player = null
@@ -27,12 +28,16 @@ func setup(turret: Node, player: Player, wave_manager: WaveManager) -> void:
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 	turret.died.connect(_on_turret_died)
 
+func _process(_delta: float) -> void:
+	if not is_instance_valid(_turret):
+		return
+	canvas_layer.offset = _turret.get_viewport().get_canvas_transform() * _turret.global_position
+
 func _on_player_entered() -> void:
 	_player_in_range = true
 	info_panel.open(_turret)
 	if _build_phase:
-		upgrade_panel.open(_turret, _player, _wave_manager, info_panel)
-
+			upgrade_panel.open(_turret, _player, _wave_manager)
 func _on_player_exited() -> void:
 	_player_in_range = false
 	info_panel.close()
@@ -41,8 +46,7 @@ func _on_player_exited() -> void:
 func _on_build_phase_started() -> void:
 	_build_phase = true
 	if _player_in_range:
-		upgrade_panel.open(_turret, _player, _wave_manager, info_panel)
-
+			upgrade_panel.open(_turret, _player, _wave_manager)
 func _on_combat_phase_started(_wave: int) -> void:
 	_build_phase = false
 	upgrade_panel.close()

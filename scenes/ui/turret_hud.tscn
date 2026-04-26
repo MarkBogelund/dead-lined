@@ -1,14 +1,153 @@
 [gd_scene format=3 uid="uid://ctsmflabw1lo7"]
 
 [ext_resource type="Script" uid="uid://dpi7tvafhwm14" path="res://scripts/world/entities/turret/turret_hud.gd" id="1_jrbl1"]
-[ext_resource type="PackedScene" uid="uid://cturretinfo02" path="res://scenes/ui/turret_info_panel.tscn" id="2_nuabg"]
-[ext_resource type="PackedScene" uid="uid://dohma355t64w8" path="res://scenes/ui/upgrade_panel.tscn" id="3_ykdch"]
+[ext_resource type="Script" uid="uid://cturretinfo01" path="res://scripts/ui/turret_info_panel.gd" id="2_nuabg"]
+[ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="3_jrbl1"]
+[ext_resource type="Script" uid="uid://dohma355t64w7" path="res://scripts/ui/upgrade_panel.gd" id="4_ykdch"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pm3rh"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.24313726, 0.24313726, 0.24313726, 0.57254905)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nuabg"]
+bg_color = Color(0.24477634, 0.24477643, 0.24477628, 0.57254905)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_normal"]
+bg_color = Color(0.15, 0.15, 0.15, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_pressed"]
+bg_color = Color(0.08, 0.08, 0.08, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_hover"]
+bg_color = Color(0.25, 0.25, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_normal"]
+bg_color = Color(0.15, 0.15, 0.15, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_pressed"]
+bg_color = Color(0.08, 0.08, 0.08, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_hover"]
+bg_color = Color(0.25, 0.25, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_normal"]
+bg_color = Color(0.15, 0.15, 0.15, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_pressed"]
+bg_color = Color(0.08, 0.08, 0.08, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_hover"]
+bg_color = Color(0.25, 0.25, 0.25, 1)
 
 [node name="TurretHUD" type="Node" unique_id=1583887513]
 script = ExtResource("1_jrbl1")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1650106890]
 
-[node name="TurretInfoPanel" parent="CanvasLayer" unique_id=1123377055 instance=ExtResource("2_nuabg")]
+[node name="InfoPanel" type="PanelContainer" parent="CanvasLayer" unique_id=1801815046]
+unique_name_in_owner = true
+offset_left = -35.0
+offset_top = -51.0
+offset_right = 35.0
+offset_bottom = -15.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_pm3rh")
+script = ExtResource("2_nuabg")
 
-[node name="UpgradePanel" parent="CanvasLayer" unique_id=1469987097 instance=ExtResource("3_ykdch")]
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/InfoPanel" unique_id=687781196]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="LevelLabel" type="Label" parent="CanvasLayer/InfoPanel/VBox" unique_id=1487526564]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_jrbl1")
+theme_override_font_sizes/font_size = 12
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer/InfoPanel/VBox" unique_id=1753805009]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_jrbl1")
+theme_override_font_sizes/font_size = 4
+text = "HP: 200/200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DamageLabel" type="Label" parent="CanvasLayer/InfoPanel/VBox" unique_id=23806639]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_jrbl1")
+theme_override_font_sizes/font_size = 4
+text = "DMG: 20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradePanel" type="PanelContainer" parent="CanvasLayer" unique_id=1632633299]
+unique_name_in_owner = true
+offset_left = -52.0
+offset_top = 15.0
+offset_right = 54.0
+offset_bottom = 71.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_nuabg")
+script = ExtResource("4_ykdch")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UpgradePanel" unique_id=816033217]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer" unique_id=265804257]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="UpgradeHealthButton" type="Button" parent="CanvasLayer/UpgradePanel/MarginContainer/VBox" unique_id=1424632460]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_jrbl1")
+theme_override_font_sizes/font_size = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_hp_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hp_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hp_hover")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_hp_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_hp_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hp_normal")
+text = "+10 HP (-15 cap)"
+
+[node name="UpgradeDamageButton" type="Button" parent="CanvasLayer/UpgradePanel/MarginContainer/VBox" unique_id=1573084624]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_jrbl1")
+theme_override_font_sizes/font_size = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_dmg_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dmg_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dmg_hover")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_dmg_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_dmg_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dmg_normal")
+text = "+5 DMG (-20 cap)"
+
+[node name="RepairButton" type="Button" parent="CanvasLayer/UpgradePanel/MarginContainer/VBox" unique_id=590112515]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_jrbl1")
+theme_override_font_sizes/font_size = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_repair_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_repair_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_repair_hover")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_repair_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_repair_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_repair_normal")
+text = "Hold to repair"
