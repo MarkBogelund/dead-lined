@@ -6,6 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://ppcskmuwki6w" path="res://scenes/ui/floating_score_text.tscn" id="4_8qguk"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="5_136eg"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_136eg"]
+bg_color = Color(0.28485027, 0.28485027, 0.2848502, 0.9647059)
+
+[sub_resource type="LabelSettings" id="LabelSettings_136eg"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_hqnrr"]
 atlas = ExtResource("2_8qguk")
 region = Rect2(32, 0, 16, 16)
@@ -24,22 +29,10 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScoreContainer/ScoreLabel:scale")
+tracks/0/path = NodePath("ScoreContainer/MarginContainer/ScoreLabel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ScoreContainer/ScoreLabel:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -47,38 +40,26 @@ tracks/1/keys = {
 }
 
 [sub_resource type="Animation" id="Animation_gss2c"]
-resource_name = "add_to_score"
+resource_name = "score_update"
 length = 0.3
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ScoreContainer/ScoreLabel:scale")
+tracks/0/path = NodePath("ScoreContainer/MarginContainer/ScoreLabel:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(0.15389307, 1, 2.3784137),
 "update": 0,
-"values": []
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ScoreContainer/ScoreLabel:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 1), Color(2.4065375e-07, 0.6515545, 0.27857754, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_h022r"]
 _data = {
 &"RESET": SubResource("Animation_oj5la"),
-&"add_to_score": SubResource("Animation_gss2c")
+&"score_update": SubResource("Animation_gss2c")
 }
 
 [node name="HUD" type="Control" unique_id=1136343478]
@@ -91,91 +72,124 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_bo48s")
 
-[node name="WaveContainer" type="Control" parent="." unique_id=1886418961]
+[node name="ScoreContainer" type="PanelContainer" parent="." unique_id=1261836232]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -36.0
+offset_top = -35.0
+offset_right = -6.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_136eg")
+
+[node name="MarginContainer" type="MarginContainer" parent="ScoreContainer" unique_id=1884218529]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="ScoreLabel" type="Label" parent="ScoreContainer/MarginContainer" unique_id=391607876]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_bo48s")
+theme_override_font_sizes/font_size = 16
+text = "$0"
+label_settings = SubResource("LabelSettings_136eg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BuildPhaseTimerContainer" type="PanelContainer" parent="." unique_id=357868585]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -15.0
+offset_top = -35.0
+offset_right = 15.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_136eg")
+
+[node name="MarginContainer" type="MarginContainer" parent="BuildPhaseTimerContainer" unique_id=6763074]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="BuildPhaseTimer" type="Label" parent="BuildPhaseTimerContainer/MarginContainer" unique_id=485245544]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_fonts/font = ExtResource("3_bo48s")
+theme_override_font_sizes/font_size = 16
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaveContainer" type="PanelContainer" parent="." unique_id=627865544]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -24.0
-offset_right = 72.0
+offset_left = 5.0
+offset_top = -35.0
+offset_right = 51.0
+offset_bottom = -5.0
 grow_vertical = 0
 mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_136eg")
 
-[node name="BuildPhaseTexture" type="TextureRect" parent="WaveContainer" unique_id=2086600713]
+[node name="MarginContainer" type="MarginContainer" parent="WaveContainer" unique_id=547987404]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WaveContainer/MarginContainer" unique_id=1581491902]
+layout_mode = 2
+alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="WaveContainer/MarginContainer/HBoxContainer" unique_id=1528504938]
+layout_mode = 2
+
+[node name="BuildPhaseTexture" type="TextureRect" parent="WaveContainer/MarginContainer/HBoxContainer/CenterContainer" unique_id=1702312051]
+unique_name_in_owner = true
 z_index = 5
 custom_minimum_size = Vector2(16, 16)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 4.0
-offset_top = -6.0
-offset_right = 17.0
-offset_bottom = 6.0
-grow_vertical = 2
+layout_mode = 2
 texture = SubResource("AtlasTexture_hqnrr")
 stretch_mode = 5
 
-[node name="CombatPhaseTexture" type="TextureRect" parent="WaveContainer" unique_id=1559283969]
+[node name="CombatPhaseTexture" type="TextureRect" parent="WaveContainer/MarginContainer/HBoxContainer/CenterContainer" unique_id=176029873]
+unique_name_in_owner = true
 z_index = 5
 custom_minimum_size = Vector2(16, 16)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 4.0
-offset_top = -6.0
-offset_right = 17.0
-offset_bottom = 6.0
-grow_vertical = 2
+layout_mode = 2
 texture = SubResource("AtlasTexture_bo48s")
 stretch_mode = 5
 
-[node name="WaveLabel" type="Label" parent="WaveContainer" unique_id=144821333]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 24.0
-offset_top = -8.0
-offset_right = 80.0
-offset_bottom = 8.0
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("3_bo48s")
-theme_override_font_sizes/font_size = 16
-text = "50"
-vertical_alignment = 1
-
-[node name="ScoreContainer" type="Control" parent="." unique_id=1375628313]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -72.0
-offset_top = -24.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_filter = 2
-
-[node name="ScoreLabel" type="Label" parent="ScoreContainer" unique_id=391607876]
+[node name="WaveLabel" type="Label" parent="WaveContainer/MarginContainer/HBoxContainer" unique_id=2050066302]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -66.0
-offset_top = -22.0
-grow_horizontal = 0
-grow_vertical = 0
-pivot_offset_ratio = Vector2(0.5, 0.5)
+layout_mode = 2
+size_flags_vertical = 1
 theme_override_fonts/font = ExtResource("3_bo48s")
 theme_override_font_sizes/font_size = 16
-text = "$50000"
-horizontal_alignment = 2
+text = "0"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CapacityBar" type="NinePatchRect" parent="." unique_id=105724629]
@@ -253,27 +267,9 @@ text = "50"
 label_settings = SubResource("LabelSettings_gonto")
 horizontal_alignment = 1
 
-[node name="BuildPhaseTimer" type="Label" parent="." unique_id=485245544]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -21.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_fonts/font = ExtResource("3_bo48s")
-theme_override_font_sizes/font_size = 16
-text = "10"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="FloatingScoreText" parent="." unique_id=1948583328 node_paths=PackedStringArray("target") instance=ExtResource("4_8qguk")]
 layout_mode = 1
-target = NodePath("../ScoreContainer/ScoreLabel")
+target = NodePath("../ScoreContainer/MarginContainer/ScoreLabel")
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=727727138]
 libraries/ = SubResource("AnimationLibrary_h022r")
