@@ -8,6 +8,7 @@ var can_collect := false
 @onready var animation_handler: AnimationHandler = $AnimationHandler
 
 func _ready():
+	add_to_group("scrap")
 	detection_area.body_entered.connect(_on_body_entered)
 	animation_handler.configure_animation("pick_up", 1, true)
 	animation_handler.configure_animation("idle", 0, false)
@@ -21,6 +22,14 @@ func enable_collection() -> void:
 func _on_despawn_timer() -> void:
 	if not is_inside_tree() or not can_collect:
 		return
+	_despawn()
+
+func despawn_on_combat() -> void:
+	if not can_collect:
+		return
+	_despawn()
+
+func _despawn() -> void:
 	can_collect = false
 	animation_handler.play_animation("despawn")
 
