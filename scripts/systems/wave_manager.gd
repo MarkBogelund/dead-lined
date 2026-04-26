@@ -25,6 +25,14 @@ func get_current_wave() -> int:
 func is_build_phase() -> bool:
 	return _current_phase == Phase.BUILD
 
+func skip_build_phase() -> void:
+	if _current_phase == Phase.BUILD:
+		_phase_timer = 0.0
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("skip_build_phase"):
+		skip_build_phase()
+
 func _ready() -> void:
 	await get_tree().process_frame
 	_enter_build_phase()
