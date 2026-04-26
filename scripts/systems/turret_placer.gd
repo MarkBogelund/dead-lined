@@ -35,7 +35,10 @@ func start_placement(turret_entry: TurretEntry):
 	current_turret_entry = turret_entry
 	ghost_turret = current_turret_entry.ghost_scene.instantiate()
 	ghost_turret.range_radius = current_turret_entry.stats.max_range if current_turret_entry.stats else -1.0
+	ghost_turret.exclusion_radius = current_turret_entry.stats.exclusion_radius if current_turret_entry.stats else -1.0
 	get_tree().current_scene.add_child(ghost_turret)
+	
+	get_tree().call_group("turret_exclusion_zones", "show")
 	
 	active = true
 	emit_signal("placement_started")
@@ -66,4 +69,5 @@ func _cleanup() -> void:
 	if ghost_turret:
 		ghost_turret.queue_free()
 		ghost_turret = null
+	get_tree().call_group("turret_exclusion_zones", "hide")
 	active = false

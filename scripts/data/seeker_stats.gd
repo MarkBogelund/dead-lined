@@ -11,6 +11,10 @@ class_name SeekerStats
 ## Maximum range in pixels at which the seeker will acquire a target
 @export var max_range: float = 130.0
 
+@export_group("Placement")
+## Radius around this turret where no other turret can be placed
+@export var exclusion_radius: float = 80.0
+
 @export_group("Aiming")
 ## Rotation speed toward the target in radians/second
 @export var aim_speed: float = 6.0

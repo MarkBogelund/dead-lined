@@ -6,6 +6,7 @@
 script = ExtResource("1_ou7rm")
 max_health = 300
 max_range = 190.0
+exclusion_radius = 120.0
 aim_speed = 4.0
 accuracy_angle = 0.3
 upgrade_cost = 20.0

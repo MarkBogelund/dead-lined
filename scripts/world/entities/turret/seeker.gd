@@ -16,6 +16,7 @@ signal died
 @onready var repair: RepairComponent = $RepairComponent
 @onready var turret_info_toggle: ToggleMenuComponent = $TurretInfoToggle
 @onready var turret_upgrade_toggle: ToggleMenuComponent = $TurretUpgradeToggle
+@onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 
 ## Stats
 @export var stats: SeekerStats
@@ -60,6 +61,7 @@ func _initialize() -> void:
 	health.initialize(stats.max_health)
 	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_player_shot)
 	targeting.initialize(stats.max_range)
+	exclusion_zone.initialize(stats.exclusion_radius)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
 	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
 

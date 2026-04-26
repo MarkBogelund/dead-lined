@@ -8,6 +8,9 @@ class_name GhostTurret
 
 ## Range indicator (-1 = no indicator)
 var range_radius: float = -1.0
+var exclusion_radius: float = -1.0
+
+@export var exclusion_color := Color(1.0, 0.4, 0.2, 0.12)
 
 ## Component references
 @onready var sprite: Sprite2D = $Sprite2D
@@ -15,6 +18,7 @@ var range_radius: float = -1.0
 ## State
 var is_valid := true
 var overlapping_count := 0
+var _in_exclusion_zone := false
 
 func _ready() -> void:
 	# Connect signals directly to self
@@ -25,6 +29,21 @@ func _ready() -> void:
 	
 	# Initial visual update
 	_update_visual_feedback()
+
+func _process(_delta: float) -> void:
+	_check_turret_proximity()
+
+func _check_turret_proximity() -> void:
+	var was_in_zone := _in_exclusion_zone
+	_in_exclusion_zone = false
+	for zone in get_tree().get_nodes_in_group("turret_exclusion_zones"):
+		if zone is Node2D:
+			if global_position.distance_to(zone.global_position) < zone.exclusion_radius:
+				_in_exclusion_zone = true
+				break
+	if _in_exclusion_zone != was_in_zone:
+		_check_placement_validity()
+
 func _on_body_entered(_body: Node2D) -> void:
 	overlapping_count += 1
 	_check_placement_validity()
@@ -42,7 +61,7 @@ func _on_area_exited(_area: Area2D) -> void:
 	_check_placement_validity()
 
 func _check_placement_validity() -> void:
-	is_valid = overlapping_count == 0
+	is_valid = overlapping_count == 0 and not _in_exclusion_zone
 	_update_visual_feedback()
 
 func _update_visual_feedback() -> void:
@@ -54,6 +73,8 @@ func _update_visual_feedback() -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	if exclusion_radius > 0.0:
+		draw_circle(Vector2.ZERO, exclusion_radius, exclusion_color)
 	if range_radius > 0.0:
 		draw_arc(Vector2.ZERO, range_radius, 0.0, TAU, 64, range_color, 1.0)
 

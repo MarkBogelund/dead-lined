@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="19_repair"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="19_s6fyr"]
 [ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="20_toggle"]
+[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="21_exclusion"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("11_target_config")
@@ -30,12 +31,6 @@ metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 script = ExtResource("11_target_config")
 group_name = "enemies"
 priority = 1
-metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
-
-[sub_resource type="Resource" id="Resource_turrets"]
-script = ExtResource("11_target_config")
-group_name = "turrets"
-priority = -1
 metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 
 [sub_resource type="Animation" id="Animation_6fjxm"]
@@ -468,7 +463,7 @@ metadata/_custom_type_script = "uid://blmoutagnygip"
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=1604110218]
 script = ExtResource("10_targeting")
-target_configs = Array[ExtResource("11_target_config")]([SubResource("Resource_6yfjj"), SubResource("Resource_flmdm"), SubResource("Resource_turrets")])
+target_configs = Array[ExtResource("11_target_config")]([SubResource("Resource_6yfjj"), SubResource("Resource_flmdm")])
 metadata/_custom_type_script = "uid://dule5ocnt8lxx"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=219458917]
@@ -561,3 +556,6 @@ visible = false
 z_index = 10
 scale = Vector2(1e-05, 1e-05)
 texture = SubResource("AtlasTexture_v6o1g")
+
+[node name="TurretExclusionZone" type="Node2D" parent="." unique_id=1823740020]
+script = ExtResource("21_exclusion")
