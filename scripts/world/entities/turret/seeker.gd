@@ -37,7 +37,7 @@ func _ready() -> void:
 	
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("recoil", 1, false)
-	animation.configure_animation("repair", 1, false)
+	animation.configure_animation("repair", 2, true)
 	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 3, true)
 	

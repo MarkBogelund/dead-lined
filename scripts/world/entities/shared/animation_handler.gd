@@ -49,6 +49,11 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	if _locked:
 		emit_signal("animation_locked")
 	
+	# Reset all animated properties to their RESET track values before playing
+	if has_animation("RESET"):
+		super.play("RESET")
+		super.advance(0.0)
+	
 	# Call parent play method
 	super.play(anim_name, custom_blend, custom_speed, from_end)
 	return true
