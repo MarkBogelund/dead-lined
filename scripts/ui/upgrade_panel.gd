@@ -41,6 +41,9 @@ func close() -> void:
 	_disconnect_turret()
 	visible = false
 
+func is_open() -> bool:
+	return visible
+
 func _disconnect_turret() -> void:
 	if not is_instance_valid(_turret):
 		_turret = null

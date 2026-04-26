@@ -36,17 +36,21 @@ func _process(_delta: float) -> void:
 func _on_player_entered() -> void:
 	_player_in_range = true
 	info_panel.open(_turret)
-	if _build_phase:
-			upgrade_panel.open(_turret, _player, _wave_manager)
 func _on_player_exited() -> void:
 	_player_in_range = false
 	info_panel.close()
 	upgrade_panel.close()
 
+func toggle_upgrade_panel() -> void:
+	if not _build_phase or not _player_in_range:
+		return
+	if upgrade_panel.is_open():
+		upgrade_panel.close()
+	else:
+		upgrade_panel.open(_turret, _player, _wave_manager)
+
 func _on_build_phase_started() -> void:
 	_build_phase = true
-	if _player_in_range:
-			upgrade_panel.open(_turret, _player, _wave_manager)
 func _on_combat_phase_started(_wave: int) -> void:
 	_build_phase = false
 	upgrade_panel.close()
