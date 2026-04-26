@@ -4,7 +4,10 @@ class_name TurretExclusionZone
 @export var exclusion_color := Color(1.0, 0.4, 0.2, 0.12)
 @export var invalid_color := Color(1.0, 0.1, 0.1, 0.25)
 
-var exclusion_radius: float = 80.0
+@export var exclusion_radius: float = 80.0:
+	set(v):
+		exclusion_radius = v
+		queue_redraw()
 var _invalid := false
 
 func _ready() -> void:
@@ -13,7 +16,6 @@ func _ready() -> void:
 
 func initialize(radius: float) -> void:
 	exclusion_radius = radius
-	queue_redraw()
 
 func set_invalid(value: bool) -> void:
 	if value != _invalid:

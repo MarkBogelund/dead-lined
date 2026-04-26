@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="3_e1c5o"]
 [ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="4_zone"]
 [ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="5_hmxn1"]
+[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="6_excl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_e1c5o"]
 radius = 6.5
@@ -234,3 +235,7 @@ close_on_toggle_button = true
 close_on_cancel = true
 close_on_click_away = true
 metadata/_custom_type_script = "uid://chr2ddbgj1iim"
+
+[node name="TurretExclusionZone" type="Node2D" parent="." unique_id=1004110152]
+script = ExtResource("6_excl")
+exclusion_color = Color(1, 0.39999998, 0.19999999, 0.2901961)
