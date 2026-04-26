@@ -2,32 +2,24 @@ extends Node
 class_name ScoreManager
 
 ## Manages scoring system based on player performance
-## Tracks: drones destroyed, turrets destroyed, waves survived, crunch time
+## Tracks: drones destroyed, crunch time (exact seconds), current wave
 
 signal score_earned(points: int, world_position: Vector2)
 
 ## Score values
 const DRONE_VALUE := 100
-const TURRET_VALUE := 100
-const CRUNCH_TIME_VALUE := 100 # Per 10 seconds
+const CRUNCH_TIME_VALUE := 10 # Per second in crunch time
 const WAVE_VALUE := 500
 
 ## Metrics
 var drones_destroyed := 0
-var turrets_destroyed := 0
-var waves_survived := 0
-var crunch_time_spent := 0.0 # In seconds
+var crunch_time_spent := 0.0 # Exact seconds in crunch time
+var last_wave_survived := 0
 
 @onready var wave_manager: WaveManager = %WaveManager
-@onready var turret_placer: TurretPlacer = %TurretPlacer
 
 func _ready() -> void:
-	# Connect to wave manager for wave tracking
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
-	
-	# Connect to turret placer for turret death tracking
-	turret_placer.turret_placed.connect(_on_turret_placed)
-	
 	# Connect to all enemy spawners for enemy death tracking
 	var enemy_spawners := get_tree().get_nodes_in_group("enemy_spawners")
 	for spawner in enemy_spawners:
@@ -35,11 +27,9 @@ func _ready() -> void:
 			spawner.enemy_spawned.connect(_on_enemy_spawned)
 
 func _on_build_phase_started() -> void:
-	# Build phase starts after a wave is completed
-	# Only count if we've actually completed a wave (wave_index > 0)
 	var current_wave := wave_manager.get_current_wave()
 	if current_wave > 0:
-		waves_survived = current_wave
+		last_wave_survived = current_wave
 
 func _on_enemy_spawned(enemy: Node) -> void:
 	# Connect to enemy's death signal, capturing the enemy reference for position
@@ -51,44 +41,31 @@ func _on_drone_destroyed(enemy: Node) -> void:
 	var world_pos = enemy.global_position if is_instance_valid(enemy) else Vector2.ZERO
 	emit_signal("score_earned", DRONE_VALUE, world_pos)
 
-func _on_turret_placed(turret: Node, _turret_entry) -> void:
-	# Connect to turret's death signal
-	if turret.has_signal("died"):
-		turret.died.connect(_on_turret_destroyed)
-
-func _on_turret_destroyed() -> void:
-	turrets_destroyed += 1
-
-## Called by StressLevelManager when crunch time is triggered
-func add_crunch_time(seconds: float = 10.0) -> void:
+## Called each frame while player is in crunch time
+func add_crunch_time(seconds: float) -> void:
 	crunch_time_spent += seconds
 
 ## Calculate total score based on formula
 func calculate_score() -> int:
 	var drone_score := drones_destroyed * DRONE_VALUE
-	var turret_score := turrets_destroyed * TURRET_VALUE
-	var crunch_score := int((crunch_time_spent / 10.0) * CRUNCH_TIME_VALUE)
-	var wave_score := waves_survived * WAVE_VALUE
-	
-	return drone_score + turret_score + crunch_score + wave_score
+	var crunch_score := int(crunch_time_spent * CRUNCH_TIME_VALUE)
+	var wave_score := last_wave_survived * WAVE_VALUE
+	return drone_score + crunch_score + wave_score
 
 ## Get formatted score breakdown for UI
 func get_score_breakdown() -> Dictionary:
 	return {
 		"drones_destroyed": drones_destroyed,
 		"drones_score": drones_destroyed * DRONE_VALUE,
-		"turrets_destroyed": turrets_destroyed,
-		"turrets_score": turrets_destroyed * TURRET_VALUE,
 		"crunch_time_spent": crunch_time_spent,
-		"crunch_time_score": int((crunch_time_spent / 10.0) * CRUNCH_TIME_VALUE),
-		"waves_survived": waves_survived,
-		"waves_score": waves_survived * WAVE_VALUE,
+		"crunch_time_score": int(crunch_time_spent * CRUNCH_TIME_VALUE),
+		"current_wave": last_wave_survived,
+		"wave_score": last_wave_survived * WAVE_VALUE,
 		"total_score": calculate_score()
 	}
 
 ## Reset all metrics
 func reset() -> void:
 	drones_destroyed = 0
-	turrets_destroyed = 0
-	waves_survived = 0
 	crunch_time_spent = 0.0
+	last_wave_survived = 0
