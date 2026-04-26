@@ -478,6 +478,7 @@ visual_offset = -1.571
 
 [node name="LineOfSightComponent" type="Node2D" parent="." unique_id=1061356274]
 script = ExtResource("8_6yfjj")
+ray_offset = 3.0
 metadata/_custom_type_script = "uid://dduqtrq3c2qol"
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1728277635 groups=["turrets"]]
@@ -545,7 +546,7 @@ texture = SubResource("AtlasTexture_v6o1g")
 
 [node name="TurretExclusionZone" type="Node2D" parent="." unique_id=1823740020]
 script = ExtResource("21_exclusion")
-exclusion_color = Color(1, 0.39999998, 0.19999999, 0.14901961)
+exclusion_color = Color(0.78, 0.57199997, 0, 0.21176471)
 invalid_color = Color(1, 0.100000024, 0.100000024, 0.21176471)
 
 [node name="TurretHUD" parent="." unique_id=1823740030 instance=ExtResource("22_hud")]

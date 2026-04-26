@@ -37,9 +37,9 @@ func _ready() -> void:
 	
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("recoil", 1, false)
-	animation.configure_animation("repair", 2, true)
+	animation.configure_animation("repair", 3, true)
 	animation.configure_animation("take_damage", 2, true)
-	animation.configure_animation("die", 3, true)
+	animation.configure_animation("die", 4, true)
 	
 	wave_manager.combat_phase_started.connect(func(_i): _active = true; _shoot_delay = stats.shoot_start_delay)
 	wave_manager.build_phase_started.connect(func(): _active = false)

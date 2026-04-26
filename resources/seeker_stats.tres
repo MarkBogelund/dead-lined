@@ -27,30 +27,33 @@ metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [sub_resource type="Resource" id="Resource_nh28m"]
 script = ExtResource("2_nmlpx")
+cost = 25.0
 value = 20
 metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [sub_resource type="Resource" id="Resource_jw1wh"]
 script = ExtResource("2_nmlpx")
-cost = 25.0
+cost = 35.0
 value = 20
 metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [sub_resource type="Resource" id="Resource_5qqth"]
 script = ExtResource("2_nmlpx")
-cost = 30.0
+cost = 45.0
 value = 15
 metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [sub_resource type="Resource" id="Resource_nuvq8"]
 script = ExtResource("2_nmlpx")
-cost = 40.0
+cost = 55.0
+value = 15
 metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [resource]
 script = ExtResource("1_seekerstats")
 max_health = 200
-max_range = 170.0
+max_range = 200.0
 accuracy_angle = 0.15
 health_upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Resource_nh28m"), SubResource("Resource_jw1wh"), SubResource("Resource_5qqth"), SubResource("Resource_nuvq8")])
 damage_upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Resource_nmlpx"), SubResource("Resource_qtbxs"), SubResource("Resource_2gvxv"), SubResource("Resource_faxe0")])
+health_restore_rate = 20.0

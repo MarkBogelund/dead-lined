@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_playerstats")
+dash_distance = 300.0
 slash_arc_angle = 3.14159
 slash_cooldown = 0.5
-initial_capacity = 100.0
+initial_capacity = 50.0

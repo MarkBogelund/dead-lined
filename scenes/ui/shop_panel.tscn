@@ -18,10 +18,22 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SlotCenter:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_sjk1b"]
 resource_name = "appear"
-length = 0.2
+length = 0.3
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -34,6 +46,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(0.2588163, 1),
 "update": 0,
 "values": [Vector2(0, 0), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SlotCenter:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.3),
+"transitions": PackedFloat32Array(0.37892917, 1),
+"update": 0,
+"values": [0.1361356816555579, 0.0]
 }
 
 [sub_resource type="Animation" id="Animation_j21la"]
@@ -99,6 +123,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
 
 [node name="SlotsContainer" type="HBoxContainer" parent="SlotCenter" unique_id=600000005]
 unique_name_in_owner = true

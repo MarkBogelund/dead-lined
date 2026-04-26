@@ -27,5 +27,5 @@ shape = SubResource("CircleShape2D_collision")
 
 [node name="TurretExclusionZone" type="Node2D" parent="." unique_id=365649622]
 script = ExtResource("3_6ve0x")
-exclusion_color = Color(1, 0.39999998, 0.19999999, 0.47058824)
+exclusion_color = Color(0.7849286, 0.5798808, 3.85046e-07, 0.47058824)
 invalid_color = Color(1, 0.100000024, 0.100000024, 0.34901962)

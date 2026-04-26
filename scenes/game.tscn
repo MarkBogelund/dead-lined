@@ -334,7 +334,6 @@ metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
-time_between_waves = 5
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]
