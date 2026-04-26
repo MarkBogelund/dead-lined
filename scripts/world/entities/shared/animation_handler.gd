@@ -49,13 +49,18 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	if _locked:
 		emit_signal("animation_locked")
 	
-	# Reset all animated properties to their RESET track values before playing
-	if has_animation("RESET"):
-		super.play("RESET")
-		super.advance(0.0)
-	
-	# Call parent play method
-	super.play(anim_name, custom_blend, custom_speed, from_end)
+	# Defer actual play calls to avoid issues when called during physics callbacks
+	var custom_blend_captured := custom_blend
+	var custom_speed_captured := custom_speed
+	var from_end_captured := from_end
+	(func():
+		if not is_inside_tree():
+			return
+		if has_animation("RESET"):
+			super.play("RESET")
+			super.advance(0.0)
+		super.play(anim_name, custom_blend_captured, custom_speed_captured, from_end_captured)
+	).call_deferred()
 	return true
 
 func _on_animation_finished(_anim_name: StringName) -> void:

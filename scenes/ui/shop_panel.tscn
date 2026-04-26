@@ -74,6 +74,7 @@ offset_right = 104.0
 offset_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0)
 script = ExtResource("1_j21la")
 _slots = [NodePath("SlotCenter/SlotsContainer/TurretSlot"), NodePath("SlotCenter/SlotsContainer/TurretSlot2")]
 
