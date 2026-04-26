@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/world/entities/turret/ghost_turret.gd" id="1_6ve0x"]
 [ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/ui/seeker-icon.png" id="2_6j2aa"]
 [ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="3_6ve0x"]
+[ext_resource type="Script" uid="uid://crangeind001" path="res://scripts/world/entities/turret/range_indicator.gd" id="4_range"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_exqsx"]
 atlas = ExtResource("2_6j2aa")
@@ -29,3 +30,6 @@ shape = SubResource("CircleShape2D_collision")
 script = ExtResource("3_6ve0x")
 exclusion_color = Color(0.7849286, 0.5798808, 3.85046e-07, 0.47058824)
 invalid_color = Color(1, 0.100000024, 0.100000024, 0.34901962)
+
+[node name="RangeIndicator" type="Node2D" parent="."]
+script = ExtResource("4_range")

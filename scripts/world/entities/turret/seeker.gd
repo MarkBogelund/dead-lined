@@ -16,6 +16,7 @@ signal died
 @onready var repair: RepairComponent = $RepairComponent
 @onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 @onready var hud: TurretHUD = $TurretHUD
+@onready var range_indicator: RangeIndicator = $RangeIndicator
 
 ## Stats
 @export var stats: SeekerStats
@@ -46,8 +47,8 @@ func _ready() -> void:
 
 	game_over_manager.game_over.connect(_on_game_over)
 
-	interaction_range.player_entered.connect(func(): health_ui.set_player_in_range(true))
-	interaction_range.player_exited.connect(func(): health_ui.set_player_in_range(false))
+	interaction_range.player_entered.connect(func(): health_ui.set_player_in_range(true); range_indicator.show_indicator())
+	interaction_range.player_exited.connect(func(): health_ui.set_player_in_range(false); range_indicator.hide_indicator())
 	repair.repaired.connect(health.heal)
 	repair.capacity_drained.connect(player.capacity.spend)
 
@@ -59,6 +60,7 @@ func _initialize() -> void:
 	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_player_shot)
 	targeting.initialize(stats.max_range)
 	exclusion_zone.initialize(stats.exclusion_radius)
+	range_indicator.initialize(stats.max_range)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
 	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
 

@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="19_repair"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="19_s6fyr"]
 [ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="21_exclusion"]
+[ext_resource type="Script" uid="uid://crangeind001" path="res://scripts/world/entities/turret/range_indicator.gd" id="23_range"]
 [ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="22_hud"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
@@ -548,5 +549,8 @@ texture = SubResource("AtlasTexture_v6o1g")
 script = ExtResource("21_exclusion")
 exclusion_color = Color(0.78, 0.57199997, 0, 0.21176471)
 invalid_color = Color(1, 0.100000024, 0.100000024, 0.21176471)
+
+[node name="RangeIndicator" type="Node2D" parent="."]
+script = ExtResource("23_range")
 
 [node name="TurretHUD" parent="." unique_id=1823740030 instance=ExtResource("22_hud")]
