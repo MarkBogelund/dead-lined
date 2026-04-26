@@ -8,22 +8,30 @@ class_name TurretHUD
 @onready var info_panel: TurretInfoPanel = %InfoPanel
 @onready var upgrade_panel: UpgradePanel = %UpgradePanel
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
+@onready var toggle_menu: ToggleMenuComponent = $ToggleMenuUpgrade
+@onready var _toggle_info: ToggleMenuComponent = $ToggleMenuInfo
 
 var _turret: Node = null
 var _player: Player = null
 var _wave_manager: WaveManager = null
-var _player_in_range := false
 var _build_phase := false
 
 func setup(turret: Node, player: Player, wave_manager: WaveManager) -> void:
 	_turret = turret
 	_player = player
 	_wave_manager = wave_manager
-
 	_build_phase = wave_manager.is_build_phase()
 
-	turret.interaction_range.player_entered.connect(_on_player_entered)
-	turret.interaction_range.player_exited.connect(_on_player_exited)
+	toggle_menu.open_fn = func(): upgrade_panel.open(_turret, _player, _wave_manager)
+	toggle_menu.close_fn = func(): upgrade_panel.close()
+	toggle_menu.interaction_zone = turret.interaction_range
+	toggle_menu.menu_control = upgrade_panel
+	toggle_menu.enabled = _build_phase
+
+	_toggle_info.open_fn = func(): info_panel.open(_turret)
+	_toggle_info.close_fn = func(): info_panel.close()
+	_toggle_info.interaction_zone = turret.interaction_range
+
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 	turret.died.connect(_on_turret_died)
@@ -33,27 +41,15 @@ func _process(_delta: float) -> void:
 		return
 	canvas_layer.offset = _turret.get_viewport().get_canvas_transform() * _turret.global_position
 
-func _on_player_entered() -> void:
-	_player_in_range = true
-	info_panel.open(_turret)
-func _on_player_exited() -> void:
-	_player_in_range = false
-	info_panel.close()
-	upgrade_panel.close()
-
-func toggle_upgrade_panel() -> void:
-	if not _build_phase or not _player_in_range:
-		return
-	if upgrade_panel.is_open():
-		upgrade_panel.close()
-	else:
-		upgrade_panel.open(_turret, _player, _wave_manager)
-
 func _on_build_phase_started() -> void:
 	_build_phase = true
+	toggle_menu.enabled = true
+
 func _on_combat_phase_started(_wave: int) -> void:
 	_build_phase = false
-	upgrade_panel.close()
+	toggle_menu.enabled = false
 
 func _on_turret_died() -> void:
+	toggle_menu.close()
+	_toggle_info.close()
 	queue_free()

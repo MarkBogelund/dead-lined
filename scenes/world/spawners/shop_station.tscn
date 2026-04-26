@@ -228,12 +228,12 @@ metadata/_custom_type_script = "uid://cq7h5m3f8n2jk"
 
 [node name="ToggleMenuComponent" type="Node" parent="." unique_id=105654116]
 script = ExtResource("5_hmxn1")
-menu_id = &"shop"
 open_on_proximity_and_button = true
 close_on_exit_proximity = true
 close_on_toggle_button = true
 close_on_cancel = true
 close_on_click_away = true
+close_on_combat_phase = true
 metadata/_custom_type_script = "uid://chr2ddbgj1iim"
 
 [node name="TurretExclusionZone" type="Node2D" parent="." unique_id=1004110152]

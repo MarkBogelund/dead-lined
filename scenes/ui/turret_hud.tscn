@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cturretinfo01" path="res://scripts/ui/turret_info_panel.gd" id="2_nuabg"]
 [ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="3_jrbl1"]
 [ext_resource type="Script" uid="uid://dohma355t64w7" path="res://scripts/ui/upgrade_panel.gd" id="4_ykdch"]
+[ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="5_toggle"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pm3rh"]
 content_margin_left = 0.0
@@ -151,3 +152,16 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_repair_pressed")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_repair_normal")
 theme_override_styles/focus = SubResource("StyleBoxFlat_repair_normal")
 text = "Hold to repair"
+
+[node name="ToggleMenuUpgrade" type="Node" parent="." unique_id=488267466]
+script = ExtResource("5_toggle")
+open_on_proximity_and_button = true
+close_on_exit_proximity = true
+close_on_toggle_button = true
+close_on_click_away = true
+close_on_combat_phase = true
+
+[node name="ToggleMenuInfo" type="Node" parent="." unique_id=1034362014]
+script = ExtResource("5_toggle")
+open_on_proximity = true
+close_on_exit_proximity = true

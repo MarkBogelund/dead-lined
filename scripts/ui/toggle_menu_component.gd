@@ -1,13 +1,12 @@
 extends Node
 class_name ToggleMenuComponent
 
-## Attach as a child of any entity that triggers a menu.
-## Handles proximity and input triggers; delegates all state to MenuManager.
-## Works for both static stations (shop) and dynamic entities (turrets).
+## Self-contained menu toggle component.
+## Attach as a child of any entity that drives a menu.
+## Set open_fn / close_fn from the owning system to drive the actual menu.
 
-@export_group("Menu")
-## Must match the id used when registering with MenuManager.
-@export var menu_id: StringName
+signal opened
+signal closed
 
 @export_group("Open Triggers")
 @export var open_on_proximity: bool = false
@@ -20,32 +19,67 @@ class_name ToggleMenuComponent
 @export var close_on_toggle_button: bool = false
 @export var close_on_cancel: bool = false
 @export var close_on_click_away: bool = false
+@export var close_on_combat_phase: bool = false
 @export var cancel_action: StringName = &"cancel"
 
 ## Area2D with InteractionZone script — used for proximity detection.
-## Set in code by the owning entity's _ready().
 var interaction_zone: InteractionZone:
 	set(value):
 		_disconnect_interaction_zone()
 		interaction_zone = value
 		if is_node_ready():
 			_connect_interaction_zone()
+
 ## Root Control of the menu — used for click-away hit testing.
-## Set in code by the owning system's _ready().
 var menu_control: Control
 
 ## Set to false to block all triggers (e.g. during combat phase).
 var enabled: bool = true
 
+## Callables set by the owning system to drive the actual menu.
+var open_fn: Callable
+var close_fn: Callable
+
+var is_open: bool = false
+
 
 func _ready() -> void:
 	_connect_interaction_zone()
+	if close_on_combat_phase:
+		var wave_manager := get_tree().get_first_node_in_group("wave_manager") as WaveManager
+		if wave_manager:
+			wave_manager.combat_phase_started.connect(func(_i): close())
+
+
+func open() -> void:
+	if is_open:
+		return
+	is_open = true
+	if open_fn.is_valid():
+		open_fn.call()
+	opened.emit()
+
+
+func close() -> void:
+	if not is_open:
+		return
+	is_open = false
+	if close_fn.is_valid():
+		close_fn.call()
+	closed.emit()
+
+
+func toggle() -> void:
+	if is_open:
+		close()
+	else:
+		open()
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not enabled:
 		return
-	if MenuManager.is_open(menu_id):
+	if is_open:
 		_handle_close_triggers(event)
 	else:
 		_handle_open_triggers(event)
@@ -53,45 +87,41 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _handle_open_triggers(event: InputEvent) -> void:
 	if open_on_button and event.is_action_pressed(open_action):
-		_request_open()
+		open()
 		get_viewport().set_input_as_handled()
 		return
 	if open_on_proximity_and_button and event.is_action_pressed(open_action):
 		if interaction_zone and interaction_zone.is_player_in_range():
-			_request_open()
+			open()
 			get_viewport().set_input_as_handled()
 
 
 func _handle_close_triggers(event: InputEvent) -> void:
 	if close_on_toggle_button and event.is_action_pressed(open_action):
-		MenuManager.request_close(menu_id)
+		close()
 		get_viewport().set_input_as_handled()
 		return
 	if close_on_cancel and event.is_action_pressed(cancel_action):
-		MenuManager.request_close(menu_id)
+		close()
 		get_viewport().set_input_as_handled()
 		return
 	if close_on_click_away and event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
 			if menu_control and not menu_control.get_global_rect().has_point(mb.global_position):
-				MenuManager.request_close(menu_id)
+				close()
 				get_viewport().set_input_as_handled()
 
 
 func _on_player_entered() -> void:
 	if not enabled:
 		return
-	_request_open()
+	open()
 
 
 func _on_player_exited() -> void:
-	if close_on_exit_proximity and MenuManager.is_open(menu_id):
-		MenuManager.request_close(menu_id)
-
-
-func _request_open() -> void:
-	MenuManager.request_open(menu_id, get_parent())
+	if close_on_exit_proximity and is_open:
+		close()
 
 
 func _connect_interaction_zone() -> void:

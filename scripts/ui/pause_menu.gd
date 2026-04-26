@@ -3,33 +3,27 @@ class_name PauseMenu
 
 ## SYSTEM-layer menu. Overlays everything without closing world menus.
 ## Requires process_mode = ALWAYS so it works while the tree is paused.
-## Registers itself with MenuManager on _ready.
 
 @onready var resume_button: Button = $Panel/VBox/ResumeButton
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+var toggle_menu: ToggleMenuComponent
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
-	MenuManager.register(
-		&"pause",
-		MenuManager.Layer.SYSTEM,
-		_do_open,
-		_do_close,
-		&"",
-		[]
-	)
-	resume_button.pressed.connect(func(): MenuManager.request_close(&"pause"))
 
+	toggle_menu = ToggleMenuComponent.new()
+	toggle_menu.process_mode = Node.PROCESS_MODE_ALWAYS
+	toggle_menu.open_on_button = true
+	toggle_menu.close_on_toggle_button = true
+	toggle_menu.open_action = &"pause"
+	toggle_menu.open_fn = _do_open
+	toggle_menu.close_fn = _do_close
+	add_child(toggle_menu)
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed(&"pause"):
-		if MenuManager.is_open(&"pause"):
-			MenuManager.request_close(&"pause")
-		else:
-			MenuManager.request_open(&"pause")
-		get_viewport().set_input_as_handled()
+	resume_button.pressed.connect(func(): toggle_menu.close())
 
 
 func _do_open() -> void:
@@ -40,8 +34,6 @@ func _do_open() -> void:
 
 
 func _do_close() -> void:
-	# Unpause immediately so close animation plays at normal speed
-	# and the game world can be seen resuming behind the fading overlay.
 	get_tree().paused = false
 	animation_player.play(&"disappear")
 	await animation_player.animation_finished

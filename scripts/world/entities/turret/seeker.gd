@@ -73,10 +73,6 @@ func _on_game_over() -> void:
 	_active = false
 	enabled = false
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("open") and interaction_range.is_player_in_range():
-		hud.toggle_upgrade_panel()
-
 func _process(delta: float) -> void:
 	if not _active or not enabled or is_dead():
 		return

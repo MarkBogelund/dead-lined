@@ -27,20 +27,12 @@ func _ready() -> void:
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 
-	# Register shop menu with MenuManager.
-	MenuManager.register(
-		&"shop",
-		MenuManager.Layer.WORLD,
-		func(_ctx): shop_panel.open(turret_entries, player.can_afford),
-		func(): shop_panel.close(),
-		&"shop",
-		[]
-	)
-
 	_configure_shop_toggle.call_deferred()
 
 
 func _configure_shop_toggle() -> void:
+	shop_station.toggle_menu.open_fn = func(): shop_panel.open(turret_entries, player.can_afford)
+	shop_station.toggle_menu.close_fn = func(): shop_panel.close()
 	shop_station.toggle_menu.menu_control = shop_panel
 
 
@@ -51,7 +43,7 @@ func _on_turret_selected(turret_entry: TurretEntry):
 		return
 
 	turret_placer.start_placement(turret_entry)
-	MenuManager.request_close(&"shop")
+	shop_station.toggle_menu.close()
 
 func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
 	turrets_placed += 1
@@ -75,4 +67,3 @@ func _on_build_phase_started() -> void:
 func _on_combat_phase_started(_wave: int) -> void:
 	emit_signal("shop_system_disabled")
 	turret_placer.cancel()
-	MenuManager.request_close(&"shop")
