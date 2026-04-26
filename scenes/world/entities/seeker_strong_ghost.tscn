@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/world/entities/turret/ghost_turret.gd" id="1_c0yox"]
 [ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/ui/seeker-icon.png" id="2_16pqk"]
 [ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="3_c0yox"]
+[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="4_mldvj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_exqsx"]
 atlas = ExtResource("2_16pqk")
@@ -27,3 +28,7 @@ shape = SubResource("CircleShape2D_collision")
 
 [node name="TurretExclusionZone" type="Node2D" parent="." unique_id=365649622]
 script = ExtResource("3_c0yox")
+
+[node name="RangeIndicator" type="Node2D" parent="." unique_id=165021551]
+script = ExtResource("4_mldvj")
+metadata/_custom_type_script = "uid://1mnnabq5lck3"
