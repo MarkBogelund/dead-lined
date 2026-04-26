@@ -19,8 +19,8 @@
 [ext_resource type="Script" uid="uid://crnamexhvkfv7" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="18_upgrade"]
 [ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="19_repair"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="19_s6fyr"]
-[ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="20_toggle"]
 [ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="21_exclusion"]
+[ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="22_hud"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("11_target_config")
@@ -537,20 +537,6 @@ script = ExtResource("18_upgrade")
 [node name="RepairComponent" type="Node" parent="." unique_id=1823740004]
 script = ExtResource("19_repair")
 
-[node name="TurretInfoToggle" type="Node" parent="." unique_id=1823740010]
-script = ExtResource("20_toggle")
-menu_id = &"turret_info"
-open_on_proximity = true
-close_on_exit_proximity = true
-metadata/_custom_type_script = "uid://chr2ddbgj1iim"
-
-[node name="TurretUpgradeToggle" type="Node" parent="." unique_id=1823740011]
-script = ExtResource("20_toggle")
-menu_id = &"upgrade"
-open_on_proximity = true
-close_on_exit_proximity = true
-metadata/_custom_type_script = "uid://chr2ddbgj1iim"
-
 [node name="FlashSprite" type="Sprite2D" parent="." unique_id=1958461362]
 visible = false
 z_index = 10
@@ -561,3 +547,5 @@ texture = SubResource("AtlasTexture_v6o1g")
 script = ExtResource("21_exclusion")
 exclusion_color = Color(1, 0.39999998, 0.19999999, 0.14901961)
 invalid_color = Color(1, 0.100000024, 0.100000024, 0.21176471)
+
+[node name="TurretHUD" parent="." unique_id=1823740030 instance=ExtResource("22_hud")]

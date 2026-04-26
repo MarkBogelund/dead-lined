@@ -14,9 +14,8 @@ signal died
 @onready var health_ui: HealthUIComponent = $HealthUIComponent
 @onready var upgrader: TurretUpgradeComponent = $TurretUpgradeComponent
 @onready var repair: RepairComponent = $RepairComponent
-@onready var turret_info_toggle: ToggleMenuComponent = $TurretInfoToggle
-@onready var turret_upgrade_toggle: ToggleMenuComponent = $TurretUpgradeToggle
 @onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
+@onready var hud: TurretHUD = $TurretHUD
 
 ## Stats
 @export var stats: SeekerStats
@@ -52,9 +51,7 @@ func _ready() -> void:
 	repair.repaired.connect(health.heal)
 	repair.capacity_drained.connect(player.capacity.spend)
 
-	turret_info_toggle.interaction_zone = interaction_range
-	turret_upgrade_toggle.interaction_zone = interaction_range
-	upgrader.upgrade_toggle = turret_upgrade_toggle
+	hud.setup(self , player, wave_manager)
 func _initialize() -> void:
 	if not stats:
 		return

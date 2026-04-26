@@ -12,8 +12,6 @@ signal turret_lost
 @onready var player: Player = %Player
 @export var shop_panel: ShopPanel
 @export var shop_station: ShopStation
-@export var turret_info_panel: TurretInfoPanel
-@export var upgrade_panel: UpgradePanel
 @export var turret_entries: Array[TurretEntry] = []
 @onready var turret_placer: TurretPlacer = $"./TurretPlacer"
 @export var max_turrets: int = 6
@@ -29,36 +27,15 @@ func _ready() -> void:
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 
-	# Register menus with MenuManager.
-	# shop group:       opening shop closes turret_ui (turret_info + upgrade)
-	# turret_ui group:  opening turret_info or upgrade closes shop
-	# turret_info and upgrade share turret_ui so they coexist freely.
+	# Register shop menu with MenuManager.
 	MenuManager.register(
 		&"shop",
 		MenuManager.Layer.WORLD,
 		func(_ctx): shop_panel.open(turret_entries, player.can_afford),
 		func(): shop_panel.close(),
 		&"shop",
-		[&"turret_ui"]
+		[]
 	)
-	if turret_info_panel:
-		MenuManager.register(
-			&"turret_info",
-			MenuManager.Layer.WORLD,
-			func(ctx): turret_info_panel.open(ctx),
-			turret_info_panel.close,
-			&"turret_ui",
-			[&"shop"]
-		)
-	if upgrade_panel:
-		MenuManager.register(
-			&"upgrade",
-			MenuManager.Layer.WORLD,
-			func(ctx): upgrade_panel.open(ctx, player, wave_manager, turret_info_panel),
-			upgrade_panel.close,
-			&"turret_ui",
-			[&"shop"]
-		)
 
 	_configure_shop_toggle.call_deferred()
 
@@ -99,4 +76,3 @@ func _on_combat_phase_started(_wave: int) -> void:
 	emit_signal("shop_system_disabled")
 	turret_placer.cancel()
 	MenuManager.request_close(&"shop")
-	MenuManager.request_close(&"upgrade")

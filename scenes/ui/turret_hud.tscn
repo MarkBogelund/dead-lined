@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ctsmflabw1lo7"]
+
+[ext_resource type="Script" uid="uid://dpi7tvafhwm14" path="res://scripts/world/entities/turret/turret_hud.gd" id="1_jrbl1"]
+[ext_resource type="PackedScene" uid="uid://cturretinfo02" path="res://scenes/ui/turret_info_panel.tscn" id="2_nuabg"]
+[ext_resource type="PackedScene" uid="uid://dohma355t64w8" path="res://scenes/ui/upgrade_panel.tscn" id="3_ykdch"]
+
+[node name="TurretHUD" type="Node" unique_id=1583887513]
+script = ExtResource("1_jrbl1")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1650106890]
+
+[node name="TurretInfoPanel" parent="CanvasLayer" unique_id=1123377055 instance=ExtResource("2_nuabg")]
+
+[node name="UpgradePanel" parent="CanvasLayer" unique_id=1469987097 instance=ExtResource("3_ykdch")]

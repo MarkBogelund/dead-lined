@@ -22,6 +22,9 @@ var current_wave: int:
 func get_current_wave() -> int:
 	return _wave_index
 
+func is_build_phase() -> bool:
+	return _current_phase == Phase.BUILD
+
 func _ready() -> void:
 	await get_tree().process_frame
 	_enter_build_phase()
