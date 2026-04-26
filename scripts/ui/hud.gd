@@ -89,8 +89,8 @@ func _on_combat_phase_started(_wave_index: int) -> void:
 func _on_build_phase_tick(time_left: float) -> void:
 	build_phase_timer.text = str(ceili(time_left))
 
-func _on_score_earned(points: int, world_position: Vector2) -> void:
-	floating_score_text.spawn("+%d" % points, Color.WHITE, world_position)
+func _on_score_earned(points: int, world_position: Vector2, color: Color) -> void:
+	floating_score_text.spawn("+%d" % points, color, world_position)
 
 func _on_floating_text_arrived() -> void:
 	score_label.text = "$%d" % score_manager.calculate_score()

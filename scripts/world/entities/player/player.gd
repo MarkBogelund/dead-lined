@@ -261,7 +261,7 @@ func _on_crunch_time_started(buffs: Dictionary) -> void:
 	melee_weapon.slash_cooldown *= buffs["cooldown"]
 	animated_sprite.modulate = Color(1.5, 0.5, 0.5, 1.0)
 
-func _on_crunch_time_ended(buffs: Dictionary) -> void:
+func _on_crunch_time_ended(buffs: Dictionary, _duration: float) -> void:
 	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage / buffs["damage"])
 	melee_weapon.slash_radius /= buffs["radius"]
 	movement.speed /= buffs["speed"]

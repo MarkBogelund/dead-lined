@@ -5,7 +5,7 @@ class_name CrunchTimeComponent
 ## Emits signals for Player to apply/remove buffs
 
 signal crunch_time_started(buffs: Dictionary)
-signal crunch_time_ended(buffs: Dictionary)
+signal crunch_time_ended(buffs: Dictionary, duration: float)
 signal drain_tick
 
 ## Buff multipliers (configurable in inspector)
@@ -26,6 +26,7 @@ signal drain_tick
 var is_active := false
 var _is_build_phase := true
 var _drain_timer: float = 0.0
+var _active_duration: float = 0.0
 
 func initialize(p_activation_cost: float, p_deactivation_threshold: float, p_drain_seconds: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float) -> void:
 	activation_cost = p_activation_cost
@@ -42,6 +43,7 @@ func _process(delta: float) -> void:
 	if not is_active:
 		_drain_timer = 0.0
 		return
+	_active_duration += delta
 	_drain_timer -= delta
 	if _drain_timer <= 0.0:
 		_drain_timer = drain_seconds_per_unit
@@ -65,6 +67,7 @@ func activate() -> void:
 		return # Already active or in build phase
 	
 	is_active = true
+	_active_duration = 0.0
 		
 	# Build buff dictionary and emit for Player to apply
 	var buffs := {
@@ -93,7 +96,7 @@ func deactivate() -> void:
 		"weapon_size": weapon_size_multiplier,
 		"cooldown": cooldown_multiplier
 	}
-	crunch_time_ended.emit(buffs)
+	crunch_time_ended.emit(buffs, _active_duration)
 
 ## Public API for checking if crunch time is active
 func is_crunch_time_active() -> bool:
