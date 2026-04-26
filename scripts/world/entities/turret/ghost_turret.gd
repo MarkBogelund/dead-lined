@@ -10,10 +10,9 @@ class_name GhostTurret
 var range_radius: float = -1.0
 var exclusion_radius: float = -1.0
 
-@export var exclusion_color := Color(1.0, 0.4, 0.2, 0.12)
-
 ## Component references
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 
 ## State
 var is_valid := true
@@ -27,6 +26,9 @@ func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 	area_exited.connect(_on_area_exited)
 	
+	if exclusion_radius > 0.0:
+		exclusion_zone.initialize(exclusion_radius)
+	
 	# Initial visual update
 	_update_visual_feedback()
 
@@ -37,7 +39,7 @@ func _check_turret_proximity() -> void:
 	var was_in_zone := _in_exclusion_zone
 	_in_exclusion_zone = false
 	for zone in get_tree().get_nodes_in_group("turret_exclusion_zones"):
-		if zone is Node2D:
+		if zone is Node2D and zone.get_parent() != self:
 			if global_position.distance_to(zone.global_position) < zone.exclusion_radius:
 				_in_exclusion_zone = true
 				break
@@ -70,11 +72,10 @@ func _update_visual_feedback() -> void:
 	# Update sprite color
 	if sprite:
 		sprite.modulate = target_color
+	exclusion_zone.set_invalid(not is_valid)
 	queue_redraw()
 
 func _draw() -> void:
-	if exclusion_radius > 0.0:
-		draw_circle(Vector2.ZERO, exclusion_radius, exclusion_color)
 	if range_radius > 0.0:
 		draw_arc(Vector2.ZERO, range_radius, 0.0, TAU, 64, range_color, 1.0)
 

@@ -559,3 +559,5 @@ texture = SubResource("AtlasTexture_v6o1g")
 
 [node name="TurretExclusionZone" type="Node2D" parent="." unique_id=1823740020]
 script = ExtResource("21_exclusion")
+exclusion_color = Color(1, 0.39999998, 0.19999999, 0.14901961)
+invalid_color = Color(1, 0.100000024, 0.100000024, 0.21176471)
