@@ -17,6 +17,7 @@ signal died
 @onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 @onready var hud: TurretHUD = $TurretHUD
 @onready var range_indicator: RangeIndicator = $RangeIndicator
+@onready var windup_particles: GPUParticles2D = $WindupParticles
 
 ## Stats
 @export var stats: SeekerStats
@@ -52,6 +53,8 @@ func _ready() -> void:
 	interaction_range.player_exited.connect(func(): health_ui.set_player_in_range(false); range_indicator.hide_indicator())
 	repair.repaired.connect(health.heal)
 	repair.capacity_drained.connect(player.capacity.spend)
+	repair.healing_started.connect(func(): windup_particles.emitting = true)
+	repair.healing_stopped.connect(func(): windup_particles.emitting = false)
 
 	hud.setup(self , player, wave_manager)
 func _initialize() -> void:

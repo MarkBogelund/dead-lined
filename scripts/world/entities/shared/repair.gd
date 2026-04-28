@@ -8,6 +8,8 @@ class_name RepairComponent
 
 signal repaired(amount: int)
 signal capacity_drained(amount: float)
+signal healing_started
+signal healing_stopped
 
 var _capacity_drain_rate := 0.0
 var _health_restore_rate := 0.0
@@ -36,3 +38,10 @@ func receive_repair_shot() -> void:
 
 func reset() -> void:
 	_accumulator = 0.0
+
+func activate() -> void:
+	healing_started.emit()
+
+func deactivate() -> void:
+	reset()
+	healing_stopped.emit()

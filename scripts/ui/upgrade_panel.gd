@@ -9,14 +9,13 @@ var _turret: Node = null
 var _player: Player = null
 var _wave_manager: WaveManager = null
 var _repairing := false
-var _repair_accumulator := 0.0
 
 func _ready() -> void:
 	visible = false
 	upgrade_health_button.pressed.connect(_on_upgrade_health_pressed)
 	upgrade_damage_button.pressed.connect(_on_upgrade_damage_pressed)
-	repair_button.button_down.connect(func(): _repairing = true)
-	repair_button.button_up.connect(func(): _repairing = false; _repair_accumulator = 0.0)
+	repair_button.button_down.connect(func(): _repairing = true; _turret.repair.activate())
+	repair_button.button_up.connect(func(): _repairing = false; _turret.repair.deactivate())
 
 func _process(delta: float) -> void:
 	if not visible or not is_instance_valid(_turret):
@@ -36,8 +35,9 @@ func open(turret: Node, player: Player, wave_manager: WaveManager) -> void:
 	visible = true
 
 func close() -> void:
+	if _repairing and is_instance_valid(_turret):
+		_turret.repair.deactivate()
 	_repairing = false
-	_repair_accumulator = 0.0
 	_disconnect_turret()
 	visible = false
 
@@ -80,21 +80,11 @@ func _update_button_states(delta: float) -> void:
 func _handle_repair(delta: float) -> void:
 	if not _repairing:
 		return
-	if _turret.health.is_full():
+	if _turret.health.is_full() or not _player.capacity.can_afford(_turret.stats.capacity_drain_rate * delta):
 		_repairing = false
-		_repair_accumulator = 0.0
+		_turret.repair.deactivate()
 		return
-	var drain = _turret.stats.capacity_drain_rate * delta
-	if not _player.capacity.can_afford(drain):
-		_repairing = false
-		_repair_accumulator = 0.0
-		return
-	_player.capacity.spend(drain)
-	_repair_accumulator += _turret.stats.health_restore_rate * delta
-	var to_heal := int(_repair_accumulator)
-	if to_heal > 0:
-		_turret.health.heal(to_heal)
-		_repair_accumulator -= float(to_heal)
+	_turret.repair.try_repair(delta, _player.capacity.current_capacity)
 
 func _on_upgrade_health_pressed() -> void:
 	if not _turret or not _player:
