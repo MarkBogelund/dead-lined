@@ -95,8 +95,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _begin_telegraph() -> void:
+	if not animation.play_animation("shoot"):
+		return
 	_telegraphing = true
-	animation.play_animation("shoot")
 
 ## Called by AnimationPlayer Call Method track at the fire keyframe
 func _execute_shot() -> void:

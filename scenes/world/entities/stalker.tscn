@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="17_mcjbk"]
 [ext_resource type="Texture2D" uid="uid://bioitf2isi5uq" path="res://assets/sprites/enemies/stalker.png" id="17_wkm5l"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="19_wkm5l"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="20_rqd04"]
 
 [sub_resource type="Resource" id="Resource_36hmg"]
 script = ExtResource("16_mcjbk")
@@ -129,6 +130,54 @@ tracks/7/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("WindupParticles:emitting")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("AimCenter/Muzzle/ShootParticles:emitting")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("AimCenter/Muzzle:position")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(19, 0)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("AimCenter/Muzzle:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
 }
 
 [sub_resource type="Animation" id="Animation_damage"]
@@ -275,6 +324,18 @@ tracks/10/keys = {
 "update": 1,
 "values": [true]
 }
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("AimCenter/Muzzle:scale")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1e-05, 1e-05)]
+}
 
 [sub_resource type="Animation" id="Animation_ag4mk"]
 resource_name = "idle"
@@ -296,7 +357,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_wkm5l"]
 resource_name = "shoot"
-length = 0.3
+length = 0.6
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -305,21 +366,74 @@ tracks/0/path = NodePath("Body:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
-"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.5),
+"transitions": PackedFloat32Array(1, 0.5, 0.5, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.8, 0.8), Vector2(1, 1)]
+"values": [Vector2(1, 1), Vector2(1.3, 1.3), Vector2(0.8, 0.8), Vector2(1, 1)]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ShootComponent")
+tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"values": []
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_execute_shot"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AimCenter/Muzzle/ShootParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_execute_shot"
+}]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AimCenter/Muzzle:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(0.39229217, 2.219139, 1),
+"update": 0,
+"values": [Vector2(19, 0), Vector2(18, 0), Vector2(19, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_die"]
@@ -424,6 +538,50 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_gbqtd"]
+atlas = ExtResource("20_rqd04")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Curve" id="Curve_26iul"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_j6h5e"]
+curve = SubResource("Curve_26iul")
+
+[sub_resource type="Gradient" id="Gradient_0juef"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.5996433, 0.27610233, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_uhdj6"]
+gradient = SubResource("Gradient_0juef")
+
+[sub_resource type="Curve" id="Curve_iwnrm"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_38riw"]
+curve = SubResource("Curve_iwnrm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h2hrh"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_j6h5e")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.39999998
+scale_curve = SubResource("CurveTexture_38riw")
+color_ramp = SubResource("GradientTexture1D_uhdj6")
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_iwnrm"]
 atlas = ExtResource("17_wkm5l")
 region = Rect2(0, 0, 24, 24)
@@ -508,6 +666,50 @@ scale_max = 0.59999996
 scale_curve = SubResource("CurveTexture_0juef")
 color_ramp = SubResource("GradientTexture1D_26iul")
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhdj6"]
+atlas = ExtResource("20_rqd04")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Curve" id="Curve_rqd04"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_n8pd0"]
+curve = SubResource("Curve_rqd04")
+
+[sub_resource type="Gradient" id="Gradient_26iul"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.5996433, 0.27610233, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jnfwi"]
+gradient = SubResource("Gradient_26iul")
+
+[sub_resource type="Curve" id="Curve_h2hrh"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_windup_scale"]
+curve = SubResource("Curve_h2hrh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qwnb1"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 10, 10)
+emission_shape = 2
+emission_sphere_radius = 2.2
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_n8pd0")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -300.0
+radial_accel_max = -200.0
+scale_min = 0.19999999
+scale_max = 0.29999998
+scale_curve = SubResource("CurveTexture_windup_scale")
+color_ramp = SubResource("GradientTexture1D_jnfwi")
+
 [node name="Stalker" type="CharacterBody2D" unique_id=942424531 groups=["enemies"]]
 collision_layer = 8
 motion_mode = 1
@@ -515,8 +717,10 @@ wall_min_slide_angle = 0.0
 script = ExtResource("1_stalker")
 stats = ExtResource("1_stalkerstats")
 
-[node name="AimingComponent" type="Node" parent="." unique_id=1729909200]
+[node name="AimingComponent" type="Node" parent="." unique_id=1729909200 node_paths=PackedStringArray("visual_node", "muzzle")]
 script = ExtResource("2_mcjbk")
+visual_node = NodePath("../AimCenter")
+muzzle = NodePath("../AimCenter/Muzzle")
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=486870823]
 script = ExtResource("15_jqj1v")
@@ -572,6 +776,19 @@ shape = SubResource("CircleShape2D_collision")
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uhdj6")
 
+[node name="AimCenter" type="Node2D" parent="." unique_id=1830255728]
+
+[node name="Muzzle" type="Sprite2D" parent="AimCenter" unique_id=1366521328]
+self_modulate = Color(0, 0, 0, 0.46666667)
+position = Vector2(19, 0)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_gbqtd")
+
+[node name="ShootParticles" parent="AimCenter/Muzzle" unique_id=106591860 instance=ExtResource("17_mcjbk")]
+scale = Vector2(2, 2)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_h2hrh")
+
 [node name="Body" type="AnimatedSprite2D" parent="." unique_id=909493684]
 z_index = 5
 sprite_frames = SubResource("SpriteFrames_gbqtd")
@@ -586,3 +803,12 @@ process_material = SubResource("ParticleProcessMaterial_uhdj6")
 
 [node name="FlashVfx" parent="." unique_id=1756477109 instance=ExtResource("19_wkm5l")]
 scale = Vector2(2, 2)
+
+[node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=2118097210]
+z_index = 14
+emitting = false
+amount = 30
+texture = SubResource("AtlasTexture_uhdj6")
+lifetime = 0.5
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_qwnb1")

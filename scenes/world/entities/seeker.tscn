@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="3_p0iej"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/turrets/seeker.png" id="3_pp6j5"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_pp6j5"]
-[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="5_6fjxm"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_e28e4"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="8_6yfjj"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="9_jm6wr"]
@@ -370,63 +369,49 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0, 0), Vector2(0, -3), Vector2(0, 0)]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Canon/Graphics/Muzzle/ExplosionVFX")
+tracks/1/path = NodePath("Canon/Graphics:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"start"
-}]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Canon/Graphics:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.19999999, 0.25),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1.4, 1.4), Vector2(1, 1)]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("WindupParticles:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.24999999),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Canon/Graphics/Muzzle/ShootParticles:emitting")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Canon/Graphics/Muzzle/ShootParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0.24999999),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
 }
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath(".")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0.25),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -485,26 +470,26 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
 radius = 7.0
 
-[sub_resource type="Curve" id="Curve_ghnks"]
+[sub_resource type="Curve" id="Curve_iwnrm"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_n8pd0"]
-curve = SubResource("Curve_ghnks")
+[sub_resource type="CurveTexture" id="CurveTexture_v6o1g"]
+curve = SubResource("Curve_iwnrm")
 
-[sub_resource type="Gradient" id="Gradient_s6fyr"]
+[sub_resource type="Gradient" id="Gradient_38riw"]
 offsets = PackedFloat32Array(0.31566265, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1.7808378e-06, 0.43724295, 0.45293546, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0.37108207, 0.7371826, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_jnfwi"]
-gradient = SubResource("Gradient_s6fyr")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_si8s4"]
+gradient = SubResource("Gradient_38riw")
 
 [sub_resource type="Curve" id="Curve_v6o1g"]
 _data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_si8s4"]
+[sub_resource type="CurveTexture" id="CurveTexture_3wv22"]
 curve = SubResource("Curve_v6o1g")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_si8s4"]
@@ -514,7 +499,7 @@ emission_shape = 1
 emission_sphere_radius = 8.0
 angle_min = 1.0728835e-05
 angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_n8pd0")
+angle_curve = SubResource("CurveTexture_v6o1g")
 direction = Vector3(0, 0, 0)
 spread = 180.0
 initial_velocity_min = 50.0
@@ -522,8 +507,30 @@ initial_velocity_max = 100.0
 gravity = Vector3(0, 0, 0)
 scale_min = 0.19999999
 scale_max = 0.39999998
-scale_curve = SubResource("CurveTexture_si8s4")
-color_ramp = SubResource("GradientTexture1D_jnfwi")
+scale_curve = SubResource("CurveTexture_3wv22")
+color_ramp = SubResource("GradientTexture1D_si8s4")
+
+[sub_resource type="Curve" id="Curve_rqd04"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_n8pd0"]
+curve = SubResource("Curve_rqd04")
+
+[sub_resource type="Gradient" id="Gradient_26iul"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.5996433, 0.27610233, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jnfwi"]
+gradient = SubResource("Gradient_26iul")
+
+[sub_resource type="Curve" id="Curve_0juef"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_si8s4"]
+curve = SubResource("Curve_0juef")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3wv22"]
 particle_flag_disable_z = true
@@ -554,11 +561,26 @@ region = Rect2(0, 0, 16, 16)
 atlas = ExtResource("19_s6fyr")
 region = Rect2(16, 0, 16, 16)
 
+[sub_resource type="Curve" id="Curve_ghnks"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_g4h2w"]
+curve = SubResource("Curve_ghnks")
+
+[sub_resource type="Gradient" id="Gradient_s6fyr"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1.7808378e-06, 0.43724295, 0.45293546, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_iipw4"]
+gradient = SubResource("Gradient_s6fyr")
+
 [sub_resource type="Curve" id="Curve_windup_scale"]
 _data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_windup_scale"]
+[sub_resource type="CurveTexture" id="CurveTexture_jpptt"]
 curve = SubResource("Curve_windup_scale")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_windup"]
@@ -568,7 +590,7 @@ emission_shape = 2
 emission_sphere_radius = 2.2
 angle_min = 1.0728835e-05
 angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_n8pd0")
+angle_curve = SubResource("CurveTexture_g4h2w")
 direction = Vector3(0, 0, 0)
 spread = 180.0
 gravity = Vector3(0, 0, 0)
@@ -576,8 +598,8 @@ radial_accel_min = -300.0
 radial_accel_max = -200.0
 scale_min = 0.19999999
 scale_max = 0.29999998
-scale_curve = SubResource("CurveTexture_windup_scale")
-color_ramp = SubResource("GradientTexture1D_jnfwi")
+scale_curve = SubResource("CurveTexture_jpptt")
+color_ramp = SubResource("GradientTexture1D_iipw4")
 
 [node name="Seeker" type="StaticBody2D" unique_id=909576845 groups=["turrets"]]
 z_index = 1
@@ -649,8 +671,6 @@ region_rect = Rect2(7, 14, 22, 28)
 
 [node name="Muzzle" type="Marker2D" parent="Canon/Graphics" unique_id=838233975]
 position = Vector2(0, 15)
-
-[node name="ExplosionVFX" parent="Canon/Graphics/Muzzle" unique_id=-1447576240 instance=ExtResource("5_6fjxm")]
 
 [node name="ShootParticles" parent="Canon/Graphics/Muzzle" unique_id=1586402119 instance=ExtResource("14_u0oon")]
 amount = 20

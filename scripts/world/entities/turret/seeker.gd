@@ -17,7 +17,6 @@ signal died
 @onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 @onready var hud: TurretHUD = $TurretHUD
 @onready var range_indicator: RangeIndicator = $RangeIndicator
-@onready var windup_particles: GPUParticles2D = $WindupParticles
 
 ## Stats
 @export var stats: SeekerStats
@@ -75,7 +74,6 @@ func _on_game_over() -> void:
 	_active = false
 	enabled = false
 	_telegraphing = false
-	windup_particles.emitting = false
 
 func _process(delta: float) -> void:
 	if not _active or not enabled or is_dead():
@@ -101,11 +99,9 @@ func _begin_telegraph() -> void:
 	if not animation.play_animation("shoot"):
 		return
 	_telegraphing = true
-	windup_particles.emitting = true
 
 ## Called by AnimationPlayer Call Method track at the fire keyframe
 func _execute_shot() -> void:
-	windup_particles.emitting = false
 	shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction())
 	_telegraphing = false
 
@@ -123,12 +119,10 @@ func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> v
 
 func _handle_damage() -> void:
 	_telegraphing = false
-	windup_particles.emitting = false
 	animation.play_animation("take_damage")
 
 func _handle_death() -> void:
 	_telegraphing = false
-	windup_particles.emitting = false
 	remove_from_group("turrets")
 	
 	# Disable turret functionality

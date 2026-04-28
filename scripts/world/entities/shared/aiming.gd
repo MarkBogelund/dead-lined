@@ -14,7 +14,7 @@ class_name AimingComponent
 @export var visual_node: Node2D = null
 
 ## Optional spawn point for projectiles. Falls back to pivot if not set.
-@export var muzzle: Marker2D = null
+@export var muzzle: Node2D = null
 
 ## Rotation offset for visual node (e.g., -PI/2 for sprites facing up)
 @export var visual_offset := 0.0

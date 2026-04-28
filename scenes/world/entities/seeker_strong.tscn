@@ -12,7 +12,6 @@
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="10_l8tlw"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="11_ueevv"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/turrets/seeker.png" id="12_bpgv7"]
-[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="13_ijvlu"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="14_c1j4u"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="15_x313w"]
 [ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="16_o5113"]
@@ -269,20 +268,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0, 0), Vector2(0, -2), Vector2(0, 0)]
 }
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Canon/Graphics/Muzzle/ExplosionVFX")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"start"
-}]
-}
 
 [sub_resource type="Animation" id="Animation_jnfwi"]
 resource_name = "repair"
@@ -399,6 +384,46 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
 radius = 7.0
 
+[sub_resource type="Curve" id="Curve_u6sfu"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3wv22"]
+curve = SubResource("Curve_u6sfu")
+
+[sub_resource type="Gradient" id="Gradient_0qpe8"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0.37108207, 0.7371826, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g4h2w"]
+gradient = SubResource("Gradient_0qpe8")
+
+[sub_resource type="Curve" id="Curve_3epxf"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_iipw4"]
+curve = SubResource("Curve_3epxf")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_08kqp"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_3wv22")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.39999998
+scale_curve = SubResource("CurveTexture_iipw4")
+color_ramp = SubResource("GradientTexture1D_g4h2w")
+
 [sub_resource type="Curve" id="Curve_ghnks"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
@@ -445,6 +470,50 @@ radius = 64.070274
 [sub_resource type="AtlasTexture" id="AtlasTexture_v6o1g"]
 atlas = ExtResource("19_idv2j")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dwgnj"]
+atlas = ExtResource("19_idv2j")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Curve" id="Curve_dm3pf"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_jpptt"]
+curve = SubResource("Curve_dm3pf")
+
+[sub_resource type="Gradient" id="Gradient_7j7sd"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1.7808378e-06, 0.43724295, 0.45293546, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7vwgd"]
+gradient = SubResource("Gradient_7j7sd")
+
+[sub_resource type="Curve" id="Curve_l8tlw"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ygspn"]
+curve = SubResource("Curve_l8tlw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ueevv"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 10, 10)
+emission_shape = 2
+emission_sphere_radius = 2.2
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_jpptt")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -300.0
+radial_accel_max = -200.0
+scale_min = 0.19999999
+scale_max = 0.29999998
+scale_curve = SubResource("CurveTexture_ygspn")
+color_ramp = SubResource("GradientTexture1D_7vwgd")
 
 [node name="Seeker" type="StaticBody2D" unique_id=909576845 groups=["turrets"]]
 z_index = 1
@@ -516,12 +585,15 @@ region_rect = Rect2(7, 14, 22, 28)
 [node name="Muzzle" type="Marker2D" parent="Canon/Graphics" unique_id=838233975]
 position = Vector2(0, 15)
 
-[node name="ExplosionVFX" parent="Canon/Graphics/Muzzle" unique_id=-1447576240 instance=ExtResource("13_ijvlu")]
+[node name="ShootParticles" parent="Canon/Graphics/Muzzle" unique_id=1586402119 instance=ExtResource("15_x313w")]
+position = Vector2(0, -11)
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_08kqp")
 
 [node name="FlashVfx" parent="." unique_id=1645924480 instance=ExtResource("14_c1j4u")]
 scale = Vector2(2, 2)
 
-[node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("15_x313w")]
+[node name="HitParticles" parent="." unique_id=597869890 instance=ExtResource("15_x313w")]
 process_material = SubResource("ParticleProcessMaterial_3wv22")
 
 [node name="InteractionZone" type="Area2D" parent="." unique_id=1823740001]
@@ -552,3 +624,12 @@ script = ExtResource("21_exclusion")
 [node name="RangeIndicator" type="Node2D" parent="." unique_id=1322504253]
 script = ExtResource("22_0qpe8")
 metadata/_custom_type_script = "uid://1mnnabq5lck3"
+
+[node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=877585368]
+z_index = 14
+emitting = false
+amount = 30
+texture = SubResource("AtlasTexture_dwgnj")
+lifetime = 0.5
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_ueevv")
