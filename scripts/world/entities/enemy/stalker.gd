@@ -22,6 +22,7 @@ var _ideal_distance := 100.0
 var _distance_tolerance := 20.0
 var _max_shoot_distance := 120.0
 var _shoot_delay := 0.0
+var _telegraphing := false
 
 func _ready() -> void:
 	_initialize()
@@ -82,17 +83,25 @@ func _physics_process(delta: float) -> void:
 			if has_line_of_sight:
 				aiming.aim_at(target.global_position, delta)
 				
-				# Shoot if within distance and aim is accurate
-				if distance <= _max_shoot_distance and _shoot_delay <= 0.0:
-					if aiming.is_aimed_at(target.global_position):
-						if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-							animation.play_animation("shoot")
+# Telegraph and shoot if within distance and aim is accurate
+			if distance <= _max_shoot_distance and _shoot_delay <= 0.0 and not _telegraphing and shoot.is_ready():
+				if aiming.is_aimed_at(target.global_position):
+					_begin_telegraph()
 
 		# Play idle animation when moving
 		animation.play_animation("idle")
 	
 	knockback.process(delta)
 	move_and_slide()
+
+func _begin_telegraph() -> void:
+	_telegraphing = true
+	animation.play_animation("shoot")
+
+## Called by AnimationPlayer Call Method track at the fire keyframe
+func _execute_shot() -> void:
+	shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction())
+	_telegraphing = false
 
 func buff_health(multiplier: float) -> void:
 	health.buff_max_health(multiplier)
@@ -112,11 +121,12 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 		_handle_damage(from_position, knockback_force)
 
 func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
+	_telegraphing = false
 	knockback.apply(from_position, knockback_force)
-	
 	animation.play_animation("take_damage")
 
 func _handle_death(from_position: Vector2, knockback_force: float) -> void:
+	_telegraphing = false
 	remove_from_group("enemies")
 	knockback.apply(from_position, knockback_force)
 	died.emit()

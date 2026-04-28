@@ -23,6 +23,9 @@ func initialize(p_shoot_cooldown: float, p_damage: int, p_knockback: int, p_spee
 func set_enabled(enabled: bool):
 	shooting_activated = enabled
 
+func is_ready() -> bool:
+	return _shoot_timer <= 0.0 and shooting_activated
+
 func try_shoot(from_pos: Vector2, direction: Vector2) -> bool:
 	if _shoot_timer > 0.0 or not shooting_activated:
 		return false

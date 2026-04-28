@@ -20,8 +20,8 @@
 [ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="19_repair"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="19_s6fyr"]
 [ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="21_exclusion"]
-[ext_resource type="Script" uid="uid://crangeind001" path="res://scripts/world/entities/turret/range_indicator.gd" id="23_range"]
 [ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="22_hud"]
+[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="23_range"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("11_target_config")
@@ -156,6 +156,42 @@ tracks/9/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Canon/Graphics:scale")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("WindupParticles:emitting")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Canon/Graphics/Muzzle/ShootParticles:emitting")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_jm6wr"]
 resource_name = "die"
@@ -253,37 +289,6 @@ tracks/6/keys = {
 "values": [true]
 }
 
-[sub_resource type="Animation" id="Animation_dirdf"]
-resource_name = "recoil"
-length = 0.1
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Canon/Graphics:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, -2), Vector2(0, 0)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Canon/Graphics/Muzzle/ExplosionVFX")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"start"
-}]
-}
-
 [sub_resource type="Animation" id="Animation_jnfwi"]
 resource_name = "repair"
 length = 0.3
@@ -349,6 +354,87 @@ tracks/4/keys = {
 "values": [Color(9.62615e-08, 0.6466281, 0.20816076, 1), Color(0, 0.64965105, 0.08456034, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_dirdf"]
+resource_name = "shoot"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Canon/Graphics:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.25, 0.3, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -3), Vector2(0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Canon/Graphics/Muzzle/ExplosionVFX")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Canon/Graphics:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.19999999, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.4, 1.4), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("WindupParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.24999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Canon/Graphics/Muzzle/ShootParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.24999999),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_execute_shot"
+}]
+}
+
 [sub_resource type="Animation" id="Animation_v4l8l"]
 resource_name = "take_damage"
 length = 0.2
@@ -382,8 +468,8 @@ tracks/1/keys = {
 _data = {
 &"RESET": SubResource("Animation_6fjxm"),
 &"die": SubResource("Animation_jm6wr"),
-&"recoil": SubResource("Animation_dirdf"),
 &"repair": SubResource("Animation_jnfwi"),
+&"shoot": SubResource("Animation_dirdf"),
 &"take_damage": SubResource("Animation_v4l8l")
 }
 
@@ -421,6 +507,24 @@ point_count = 2
 [sub_resource type="CurveTexture" id="CurveTexture_si8s4"]
 curve = SubResource("Curve_v6o1g")
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_si8s4"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_n8pd0")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.39999998
+scale_curve = SubResource("CurveTexture_si8s4")
+color_ramp = SubResource("GradientTexture1D_jnfwi")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3wv22"]
 particle_flag_disable_z = true
 emission_shape_scale = Vector3(0, 0, 0)
@@ -445,6 +549,35 @@ radius = 64.070274
 [sub_resource type="AtlasTexture" id="AtlasTexture_v6o1g"]
 atlas = ExtResource("19_s6fyr")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_windup"]
+atlas = ExtResource("19_s6fyr")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Curve" id="Curve_windup_scale"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_windup_scale"]
+curve = SubResource("Curve_windup_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_windup"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 10, 10)
+emission_shape = 2
+emission_sphere_radius = 2.2
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_n8pd0")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -300.0
+radial_accel_max = -200.0
+scale_min = 0.19999999
+scale_max = 0.29999998
+scale_curve = SubResource("CurveTexture_windup_scale")
+color_ramp = SubResource("GradientTexture1D_jnfwi")
 
 [node name="Seeker" type="StaticBody2D" unique_id=909576845 groups=["turrets"]]
 z_index = 1
@@ -519,10 +652,14 @@ position = Vector2(0, 15)
 
 [node name="ExplosionVFX" parent="Canon/Graphics/Muzzle" unique_id=-1447576240 instance=ExtResource("5_6fjxm")]
 
+[node name="ShootParticles" parent="Canon/Graphics/Muzzle" unique_id=1586402119 instance=ExtResource("14_u0oon")]
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_si8s4")
+
 [node name="FlashVfx" parent="." unique_id=1645924480 instance=ExtResource("14_6yfjj")]
 scale = Vector2(2, 2)
 
-[node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("14_u0oon")]
+[node name="HitParticles" parent="." unique_id=1796691100 instance=ExtResource("14_u0oon")]
 process_material = SubResource("ParticleProcessMaterial_3wv22")
 
 [node name="InteractionZone" type="Area2D" parent="." unique_id=1823740001]
@@ -550,7 +687,16 @@ script = ExtResource("21_exclusion")
 exclusion_color = Color(0.78, 0.57199997, 0, 0.21176471)
 invalid_color = Color(1, 0.100000024, 0.100000024, 0.21176471)
 
-[node name="RangeIndicator" type="Node2D" parent="."]
+[node name="RangeIndicator" type="Node2D" parent="." unique_id=939124417]
 script = ExtResource("23_range")
 
 [node name="TurretHUD" parent="." unique_id=1823740030 instance=ExtResource("22_hud")]
+
+[node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=742638291]
+z_index = 14
+emitting = false
+amount = 30
+texture = SubResource("AtlasTexture_windup")
+lifetime = 0.5
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_windup")

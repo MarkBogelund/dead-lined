@@ -17,6 +17,7 @@ signal died
 @onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 @onready var hud: TurretHUD = $TurretHUD
 @onready var range_indicator: RangeIndicator = $RangeIndicator
+@onready var windup_particles: GPUParticles2D = $WindupParticles
 
 ## Stats
 @export var stats: SeekerStats
@@ -26,6 +27,7 @@ const UP_FACING_OFFSET := -PI / 2
 var _active := false
 var enabled := true
 var _shoot_delay := 0.0
+var _telegraphing := false
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
@@ -37,7 +39,7 @@ func _ready() -> void:
 	_initialize()
 	
 	animation.configure_animation("idle", 0, false)
-	animation.configure_animation("recoil", 1, false)
+	animation.configure_animation("shoot", 1, true)
 	animation.configure_animation("repair", 3, true)
 	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 4, true)
@@ -72,6 +74,8 @@ func receive_repair_shot() -> void:
 func _on_game_over() -> void:
 	_active = false
 	enabled = false
+	_telegraphing = false
+	windup_particles.emitting = false
 
 func _process(delta: float) -> void:
 	if not _active or not enabled or is_dead():
@@ -90,12 +94,20 @@ func _process(delta: float) -> void:
 	
 	aiming.aim_at(target.global_position, delta)
 	
-	if aiming.is_aimed_at(target.global_position) and _shoot_delay <= 0.0:
-		_fire_at()
+	if aiming.is_aimed_at(target.global_position) and _shoot_delay <= 0.0 and not _telegraphing and shoot.is_ready():
+		_begin_telegraph()
 
-func _fire_at() -> void:
-	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-		animation.play_animation("recoil")
+func _begin_telegraph() -> void:
+	if not animation.play_animation("shoot"):
+		return
+	_telegraphing = true
+	windup_particles.emitting = true
+
+## Called by AnimationPlayer Call Method track at the fire keyframe
+func _execute_shot() -> void:
+	windup_particles.emitting = false
+	shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction())
+	_telegraphing = false
 
 ## Damage handling - called by enemy hitboxes
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
@@ -110,9 +122,13 @@ func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> v
 		_handle_damage()
 
 func _handle_damage() -> void:
+	_telegraphing = false
+	windup_particles.emitting = false
 	animation.play_animation("take_damage")
 
 func _handle_death() -> void:
+	_telegraphing = false
+	windup_particles.emitting = false
 	remove_from_group("turrets")
 	
 	# Disable turret functionality
