@@ -12,6 +12,7 @@ signal died
 @onready var navigation: NavigationComponent = $NavigationComponent
 @onready var hitbox: HitboxComponent = $HitboxComponent
 @onready var targeting: TargetingComponent = $TargetingComponent
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 @export var stats: ChaserStats
 
@@ -54,6 +55,7 @@ func _physics_process(delta: float) -> void:
 			var converging := global_position.distance_to(target.global_position) <= _converge_distance
 			navigation.avoidance_mask = 0 if converging else 1
 			velocity = navigation.get_safe_velocity(_get_nav_target(target.global_position), _speed)
+			animated_sprite.flip_h = target.global_position.x < global_position.x
 			# Play idle animation when moving
 			animation.play_animation("idle")
 		else:

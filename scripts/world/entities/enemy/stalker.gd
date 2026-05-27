@@ -14,6 +14,7 @@ signal died
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
+@onready var body_sprite: AnimatedSprite2D = $Body
 
 @export var stats: StalkerStats
 
@@ -90,6 +91,8 @@ func _physics_process(delta: float) -> void:
 
 		# Play idle animation when moving
 		animation.play_animation("idle")
+		if target:
+			body_sprite.flip_h = target.global_position.x < global_position.x
 	
 	knockback.process(delta)
 	move_and_slide()
