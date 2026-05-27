@@ -177,7 +177,7 @@ tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0.5, 0.5)]
+"values": [Vector2(0.25, 0.25)]
 }
 
 [sub_resource type="Animation" id="Animation_damage"]
@@ -334,7 +334,7 @@ tracks/11/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0.5, 0.5), Vector2(1e-05, 1e-05)]
+"values": [Vector2(0.25, 0.25), Vector2(1e-05, 1e-05)]
 }
 
 [sub_resource type="Animation" id="Animation_ag4mk"]
@@ -781,11 +781,11 @@ sprite_frames = SubResource("SpriteFrames_uhdj6")
 [node name="Muzzle" type="Sprite2D" parent="AimCenter" unique_id=1366521328]
 self_modulate = Color(0, 0, 0, 0.46666667)
 position = Vector2(19, 0)
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.25, 0.25)
 texture = SubResource("AtlasTexture_gbqtd")
 
 [node name="ShootParticles" parent="AimCenter/Muzzle" unique_id=106591860 instance=ExtResource("17_mcjbk")]
-scale = Vector2(2, 2)
+scale = Vector2(4, 4)
 amount = 20
 process_material = SubResource("ParticleProcessMaterial_h2hrh")
 
