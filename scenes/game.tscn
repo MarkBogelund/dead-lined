@@ -21,6 +21,7 @@
 [ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/spawner/chaser_spawn_details.tres" id="15_5newe"]
 [ext_resource type="Resource" uid="uid://cq5r8y2nwx7ih" path="res://resources/spawner/stalker_spawn_details.tres" id="16_5newe"]
 [ext_resource type="PackedScene" uid="uid://da6ouw6b58hpr" path="res://scenes/ui/game_over_ui.tscn" id="16_ca42v"]
+[ext_resource type="Resource" uid="uid://cx3hxt45w3uit" path="res://resources/spawner/kamikazer_spawn_details.tres" id="17_kamikaze"]
 [ext_resource type="Script" uid="uid://8f5c4ell2tmr" path="res://scripts/ui/capacity_overlay.gd" id="24_e1j6l"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="25_tentry"]
 [ext_resource type="Resource" uid="uid://clop50yhbqa44" path="res://resources/shop/seeker_strong_shop_details.tres" id="26_sstrsh"]
@@ -493,12 +494,12 @@ position_smoothing_enabled = true
 
 [node name="EnemySpawner2" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(-136, 56)
-spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe")])
+spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe"), ExtResource("17_kamikaze")])
 health_growth = 0.0
 
 [node name="EnemySpawner3" parent="World" unique_id=271277418 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(168, -128)
-spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe")])
+spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe"), ExtResource("17_kamikaze")])
 health_growth = 0.0
 
 [node name="ShopStation" parent="World" unique_id=1270538854 groups=["shop_stations"] instance=ExtResource("6_p57ef")]
