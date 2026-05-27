@@ -1,17 +1,7 @@
-extends CharacterBody2D
+extends EnemyBase
 class_name Chaser
 
-signal died
-
-@onready var animation: AnimationHandler = $AnimationHandler
-@onready var knockback: KnockbackComponent = $KnockbackComponent
-@onready var health: HealthComponent = $HealthComponent
-@onready var drop_scrap: DropScrapComponent = $DropScrapComponent
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var hit_particles: GPUParticles2D = $HitParticles
-@onready var navigation: NavigationComponent = $NavigationComponent
 @onready var hitbox: HitboxComponent = $HitboxComponent
-@onready var targeting: TargetingComponent = $TargetingComponent
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 @export var stats: ChaserStats
@@ -35,9 +25,8 @@ func _ready() -> void:
 func _initialize() -> void:
 	if not stats:
 		return
-	health.initialize(stats.max_health)
+	_initialize_base(stats.max_health, stats.scrap_drop_amount)
 	hitbox.initialize(stats.hitbox_damage, stats.hitbox_knockback)
-	drop_scrap.initialize(stats.scrap_drop_amount)
 	_speed = stats.speed
 	_self_knockback = stats.self_knockback
 	_spread_radius = stats.spread_radius
@@ -63,48 +52,15 @@ func _physics_process(delta: float) -> void:
 	
 	knockback.process(delta)
 	move_and_slide()
-
-func buff_health(multiplier: float) -> void:
-	health.buff_max_health(multiplier)
-
 func buff_damage(multiplier: float) -> void:
 	hitbox.damage = int(hitbox.damage * multiplier)
-
-func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
-	if is_dead():
-		return
-	
-	var was_fatal = health.take_damage(amount)
-	
-	if was_fatal:
-		_handle_death(from_position, knockback_force)
-	else:
-		_handle_damage(from_position, knockback_force)
-
-func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
-	knockback.apply(from_position, knockback_force)
-	
-	if hit_particles:
-		hit_particles.restart()
-	
-	animation.play_animation("take_damage")
-
-func _handle_death(from_position: Vector2, knockback_force: float) -> void:
-	knockback.apply(from_position, knockback_force)
-	remove_from_group("enemies")
-	died.emit()
-	animation.play_animation("die")
 
 func _on_hit_target(target: Node) -> void:
 	if target and _self_knockback > 0:
 		knockback.apply(target.global_position, _self_knockback)
 
-func despawn() -> void:
-	drop_scrap.drop()
-	queue_free()
-
-func is_dead() -> bool:
-	return health.is_dead()
+func _should_restart_hit_particles_on_damage() -> bool:
+	return true
 
 func _get_nav_target(player_pos: Vector2) -> Vector2:
 	# Within melee range, ignore spread and go straight for the player

@@ -1,18 +1,8 @@
-extends CharacterBody2D
+extends EnemyBase
 class_name Stalker
 
-signal died
-
-@onready var animation: AnimationHandler = $AnimationHandler
-@onready var knockback: KnockbackComponent = $KnockbackComponent
-@onready var health: HealthComponent = $HealthComponent
-@onready var drop_scrap: DropScrapComponent = $DropScrapComponent
-@onready var navigation: NavigationComponent = $NavigationComponent
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 @onready var shoot: ShootComponent = $ShootComponent
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var hit_particles: GPUParticles2D = $HitParticles
-@onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
 @onready var body_sprite: AnimatedSprite2D = $Body
 
@@ -36,10 +26,9 @@ func _ready() -> void:
 func _initialize() -> void:
 	if not stats:
 		return
-	health.initialize(stats.max_health)
+	_initialize_base(stats.max_health, stats.scrap_drop_amount)
 	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
-	drop_scrap.initialize(stats.scrap_drop_amount)
 	_speed = stats.speed
 	_ideal_distance = stats.ideal_distance
 	_distance_tolerance = stats.distance_tolerance
@@ -92,7 +81,7 @@ func _physics_process(delta: float) -> void:
 		# Play idle animation when moving
 		animation.play_animation("idle")
 		if target:
-			body_sprite.flip_h = target.global_position.x < global_position.x
+			_face_target(body_sprite, target.global_position)
 	
 	knockback.process(delta)
 	move_and_slide()
@@ -106,35 +95,11 @@ func _begin_telegraph() -> void:
 func _execute_shot() -> void:
 	shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction())
 	_telegraphing = false
-
-func buff_health(multiplier: float) -> void:
-	health.buff_max_health(multiplier)
-
 func buff_damage(multiplier: float) -> void:
 	shoot.projectile_damage = int(shoot.projectile_damage * multiplier)
 
-func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
-	if is_dead():
-		return
-	
-	var was_fatal = health.take_damage(amount)
-	
-	if was_fatal:
-		_handle_death(from_position, knockback_force)
-	else:
-		_handle_damage(from_position, knockback_force)
-
-func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
+func _before_handle_damage() -> void:
 	_telegraphing = false
-	knockback.apply(from_position, knockback_force)
-	animation.play_animation("take_damage")
 
-func _handle_death(from_position: Vector2, knockback_force: float) -> void:
+func _before_handle_death() -> void:
 	_telegraphing = false
-	remove_from_group("enemies")
-	knockback.apply(from_position, knockback_force)
-	died.emit()
-	animation.play_animation("die")
-	
-func is_dead() -> bool:
-	return health.is_dead()
