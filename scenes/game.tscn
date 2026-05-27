@@ -23,7 +23,6 @@
 [ext_resource type="PackedScene" uid="uid://da6ouw6b58hpr" path="res://scenes/ui/game_over_ui.tscn" id="16_ca42v"]
 [ext_resource type="Script" uid="uid://8f5c4ell2tmr" path="res://scripts/ui/capacity_overlay.gd" id="24_e1j6l"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="25_tentry"]
-[ext_resource type="PackedScene" uid="uid://bvk8hf7vr3pqi" path="res://scenes/world/entities/stalker.tscn" id="26_bhx41"]
 [ext_resource type="Resource" uid="uid://clop50yhbqa44" path="res://resources/shop/seeker_strong_shop_details.tres" id="26_sstrsh"]
 [ext_resource type="PackedScene" uid="uid://c3pausemenu01" path="res://scenes/ui/pause_menu.tscn" id="27_qnb83"]
 
@@ -513,9 +512,6 @@ scale = Vector2(1, 0.5794932)
 color = Color(0.6248413, 1, 0.6617397, 1)
 energy = 0.3
 texture = SubResource("GradientTexture2D_vtaks")
-
-[node name="Stalker" parent="World" unique_id=942424531 instance=ExtResource("26_bhx41")]
-position = Vector2(-80, -56)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
 

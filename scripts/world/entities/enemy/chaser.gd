@@ -17,6 +17,9 @@ signal died
 
 var _speed := 30.0
 var _self_knockback := 150.0
+var _spread_radius := 48.0
+var _spread_strength := 24.0
+var _converge_distance := 40.0
 
 
 func _ready() -> void:
@@ -36,6 +39,9 @@ func _initialize() -> void:
 	drop_scrap.initialize(stats.scrap_drop_amount)
 	_speed = stats.speed
 	_self_knockback = stats.self_knockback
+	_spread_radius = stats.spread_radius
+	_spread_strength = stats.spread_strength
+	_converge_distance = stats.converge_distance
 
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
@@ -45,7 +51,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		var target := targeting.get_best_target(global_position)
 		if target:
-			velocity = navigation.get_safe_velocity(target.global_position, _speed)
+			var converging := global_position.distance_to(target.global_position) <= _converge_distance
+			navigation.avoidance_mask = 0 if converging else 1
+			velocity = navigation.get_safe_velocity(_get_nav_target(target.global_position), _speed)
 			# Play idle animation when moving
 			animation.play_animation("idle")
 		else:
@@ -95,3 +103,25 @@ func despawn() -> void:
 
 func is_dead() -> bool:
 	return health.is_dead()
+
+func _get_nav_target(player_pos: Vector2) -> Vector2:
+	# Within melee range, ignore spread and go straight for the player
+	if global_position.distance_to(player_pos) <= _converge_distance:
+		return player_pos
+	
+	# Accumulate a separation vector away from nearby chasers
+	var separation := Vector2.ZERO
+	for chaser in get_tree().get_nodes_in_group("enemies"):
+		if chaser == self or not chaser is Chaser:
+			continue
+		var offset := global_position - (chaser as Chaser).global_position
+		var dist := offset.length()
+		if dist > 0.0 and dist < _spread_radius:
+			# Weight by proximity: closer chasers push harder
+			separation += offset.normalized() * (1.0 - dist / _spread_radius)
+	
+	# If no nearby chasers, head straight for the player
+	if separation.length_squared() == 0.0:
+		return player_pos
+	
+	return player_pos + separation.normalized() * _spread_strength
