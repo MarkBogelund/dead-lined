@@ -70,8 +70,8 @@ func get_score_breakdown() -> Dictionary:
 		"drones_score": drones_destroyed * DRONE_VALUE,
 		"crunch_time_spent": crunch_time_spent,
 		"crunch_time_score": int(crunch_time_spent * CRUNCH_TIME_VALUE),
-		"current_wave": last_wave_survived,
-		"wave_score": last_wave_survived * WAVE_VALUE,
+		"waves_survived": last_wave_survived,
+		"waves_score": last_wave_survived * WAVE_VALUE,
 		"total_score": calculate_score()
 	}
 

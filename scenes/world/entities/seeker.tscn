@@ -658,6 +658,7 @@ region_rect = Rect2(35, 14, 28, 25)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=464062235]
 shape = SubResource("CircleShape2D_el7wl")
+debug_color = Color(2.887845e-06, 0.6003642, 0.6998646, 0.41960785)
 
 [node name="Canon" type="Node2D" parent="." unique_id=850792081]
 position = Vector2(0, -4)

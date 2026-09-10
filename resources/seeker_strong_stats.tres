@@ -3,33 +3,23 @@
 [ext_resource type="Script" uid="uid://cseekerstat01" path="res://scripts/data/seeker_stats.gd" id="1_ou7rm"]
 [ext_resource type="Script" uid="uid://d0774ofuob1o8" path="res://scripts/data/turret_upgrade_level.gd" id="2_74yky"]
 
-[sub_resource type="Resource" id="Resource_1eg34"]
-script = ExtResource("2_74yky")
-health_cost = 20.0
-health_amount = 15
-damage_cost = 25.0
-damage_amount = 10
-
-[sub_resource type="Resource" id="Resource_40wov"]
-script = ExtResource("2_74yky")
-health_cost = 30.0
-health_amount = 15
-damage_cost = 35.0
-damage_amount = 10
-
 [sub_resource type="Resource" id="Resource_5nvvu"]
 script = ExtResource("2_74yky")
-health_cost = 40.0
-health_amount = 15
-damage_cost = 45.0
-damage_amount = 10
+cost = 25.0
 
 [sub_resource type="Resource" id="Resource_4lqh1"]
 script = ExtResource("2_74yky")
-health_cost = 50.0
-health_amount = 15
-damage_cost = 55.0
-damage_amount = 10
+cost = 35.0
+
+[sub_resource type="Resource" id="Resource_1eg34"]
+script = ExtResource("2_74yky")
+cost = 20.0
+value = 15
+
+[sub_resource type="Resource" id="Resource_40wov"]
+script = ExtResource("2_74yky")
+cost = 30.0
+value = 15
 
 [resource]
 script = ExtResource("1_ou7rm")
@@ -38,6 +28,7 @@ max_range = 190.0
 exclusion_radius = 120.0
 aim_speed = 4.0
 accuracy_angle = 0.3
-upgrade_levels = Array[ExtResource("2_74yky")]([SubResource("Resource_1eg34"), SubResource("Resource_40wov"), SubResource("Resource_5nvvu"), SubResource("Resource_4lqh1")])
+health_upgrades = Array[ExtResource("2_74yky")]([SubResource("Resource_1eg34"), SubResource("Resource_40wov")])
+damage_upgrades = Array[ExtResource("2_74yky")]([SubResource("Resource_5nvvu"), SubResource("Resource_4lqh1")])
 health_restore_rate = 20.0
 projectile_damage = 20
