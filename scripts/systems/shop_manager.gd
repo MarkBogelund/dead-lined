@@ -36,7 +36,7 @@ func _configure_shop_toggle() -> void:
 	shop_station.toggle_menu.menu_control = shop_panel
 
 
-func _on_turret_selected(turret_entry: TurretEntry):
+func _on_turret_selected(turret_entry: TurretEntry) -> void:
 	if not player.can_afford(turret_entry.price):
 		return
 	if turrets_placed >= max_turrets:
@@ -45,7 +45,7 @@ func _on_turret_selected(turret_entry: TurretEntry):
 	turret_placer.start_placement(turret_entry)
 	shop_station.toggle_menu.close()
 
-func _on_turret_placed(turret: Node, turret_entry: TurretEntry):
+func _on_turret_placed(turret: Node, turret_entry: TurretEntry) -> void:
 	turrets_placed += 1
 	turret_bought.emit(turret_entry.price)
 	if turret.has_signal("died"):
@@ -56,14 +56,14 @@ func _on_turret_destroyed() -> void:
 	turret_lost.emit()
 
 func _on_placement_started() -> void:
-	emit_signal("turret_placement_started")
+	turret_placement_started.emit()
 
 func _on_placement_ended() -> void:
-	emit_signal("turret_placement_ended")
+	turret_placement_ended.emit()
 
 func _on_build_phase_started() -> void:
-	emit_signal("shop_system_enabled")
+	shop_system_enabled.emit()
 
 func _on_combat_phase_started(_wave: int) -> void:
-	emit_signal("shop_system_disabled")
+	shop_system_disabled.emit()
 	turret_placer.cancel()

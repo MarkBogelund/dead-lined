@@ -30,6 +30,10 @@ var _time := 0.0
 var _start_angle := 0.0
 var _direction := 1
 var _slashing := false
+var _base_damage := damage
+var _base_slash_radius := slash_radius
+var _base_arc_angle := arc_angle
+var _base_slash_cooldown := slash_cooldown
 
 func _ready() -> void:
 	hitbox.damage = damage
@@ -39,14 +43,25 @@ func _ready() -> void:
 
 func initialize(p_damage: int, p_knockback: float, p_self_knockback: float, p_radius: float, p_arc_angle: float, p_duration: float, p_cooldown: float) -> void:
 	damage = p_damage
+	_base_damage = p_damage
 	knockback = p_knockback
 	self_knockback = p_self_knockback
 	slash_radius = p_radius
+	_base_slash_radius = p_radius
 	arc_angle = p_arc_angle
+	_base_arc_angle = p_arc_angle
 	slash_duration = p_duration
 	slash_cooldown = p_cooldown
+	_base_slash_cooldown = p_cooldown
 	hitbox.damage = p_damage
 	hitbox.knockback = p_knockback
+
+func set_crunch_time_active(active: bool, buffs: Dictionary) -> void:
+	damage = _base_damage * buffs["damage"] if active else _base_damage
+	slash_radius = _base_slash_radius * buffs["radius"] if active else _base_slash_radius
+	arc_angle = _base_arc_angle * buffs["arc_angle"] if active else _base_arc_angle
+	slash_cooldown = _base_slash_cooldown * buffs["cooldown"] if active else _base_slash_cooldown
+	hitbox.damage = damage
 
 func _reset() -> void:
 	_time = 0.0
@@ -122,4 +137,4 @@ func _update_slash(delta: float) -> void:
 func _on_hit_target(target: Node) -> void:
 	camera_shake_manager.shake_screen(camera_shake_duration, camera_shake_intensity)
 	if not target.has_method("was_hit"):
-		emit_signal("hit_obstacle", hitbox.global_position, self_knockback)
+		hit_obstacle.emit(hitbox.global_position, self_knockback)

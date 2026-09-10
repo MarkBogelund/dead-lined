@@ -47,7 +47,7 @@ func _process(delta: float) -> void:
 	_drain_timer -= delta
 	if _drain_timer <= 0.0:
 		_drain_timer = drain_seconds_per_unit
-		emit_signal("drain_tick")
+		drain_tick.emit()
 
 func set_build_phase(is_build: bool) -> void:
 	_is_build_phase = is_build

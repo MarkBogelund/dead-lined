@@ -367,7 +367,7 @@ tracks/1/keys = {
 _data = {
 &"RESET": SubResource("Animation_6fjxm"),
 &"die": SubResource("Animation_jm6wr"),
-&"recoil": SubResource("Animation_dirdf"),
+&"shoot": SubResource("Animation_dirdf"),
 &"repair": SubResource("Animation_jnfwi"),
 &"take_damage": SubResource("Animation_v4l8l")
 }

@@ -36,7 +36,7 @@ func _ready() -> void:
 				push_error("Trail: ANCHOR_PARENT_LEVEL mode requires parent_levels > 0!")
 				return
 			
-			var current = self
+			var current: Node = self
 			for i in range(parent_levels):
 				if current:
 					current = current.get_parent()
@@ -66,7 +66,7 @@ func _process(_delta: float) -> void:
 				# Store in anchor's local space
 				if not _resolved_anchor:
 					return
-				var anchor_local_pos = _resolved_anchor.to_local(global_position)
+				var anchor_local_pos := _resolved_anchor.to_local(global_position)
 				queue.push_front(anchor_local_pos)
 		
 		if queue.size() > max_length:
@@ -90,7 +90,7 @@ func _process(_delta: float) -> void:
 				# Convert from anchor's local space to Trail's local space
 				if not _resolved_anchor:
 					continue
-				var global_point = _resolved_anchor.to_global(point)
+				var global_point := _resolved_anchor.to_global(point)
 				trail_local_point = to_local(global_point)
 		
 		add_point(trail_local_point)
