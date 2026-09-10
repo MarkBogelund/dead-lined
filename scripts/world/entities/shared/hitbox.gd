@@ -23,7 +23,7 @@ func _on_body_entered(body: Node2D) -> void:
 	var should_damage := no_damage_group.is_empty() or not body.is_in_group(no_damage_group)
 	if should_damage and body.has_method("was_hit"):
 		body.was_hit(damage, knockback, global_position)
-	emit_signal("hit_target", body)
+	hit_target.emit(body)
 
 func get_damage() -> int:
 	return damage

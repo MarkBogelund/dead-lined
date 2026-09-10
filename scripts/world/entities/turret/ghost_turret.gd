@@ -19,6 +19,10 @@ var is_valid := true
 var overlapping_count := 0
 var _in_exclusion_zone := false
 
+func initialize(p_range_radius: float, p_exclusion_radius: float) -> void:
+	range_radius = p_range_radius
+	exclusion_radius = p_exclusion_radius
+
 func _ready() -> void:
 	# Connect signals directly to self
 	body_entered.connect(_on_body_entered)

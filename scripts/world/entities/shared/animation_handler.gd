@@ -34,7 +34,7 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	if _current_animation == anim_name and is_playing():
 		return true
 	
-	var anim_config = _animations[anim_name]
+	var anim_config: Dictionary = _animations[anim_name]
 	var priority: int = anim_config["priority"]
 	
 	# Check if current animation is locked and has higher/equal priority
@@ -47,7 +47,7 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	_locked = anim_config["locks"]
 	
 	if _locked:
-		emit_signal("animation_locked")
+		animation_locked.emit()
 	
 	# Defer actual play calls to avoid issues when called during physics callbacks
 	var custom_blend_captured := custom_blend
@@ -66,7 +66,7 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 func _on_animation_finished(_anim_name: StringName) -> void:
 	if _locked:
 		_locked = false
-		emit_signal("animation_unlocked")
+		animation_unlocked.emit()
 
 ## Query current state
 func is_locked() -> bool:

@@ -18,8 +18,8 @@ func _ready() -> void:
 	mat.set_shader_parameter("intensity", 0.0)
 	material = mat
 
-func update_capacity(capacity: float) -> void:
-	var fraction := capacity / 100.0
+func update_capacity(capacity: float, maximum: float) -> void:
+	var fraction := capacity / maximum if maximum > 0.0 else 0.0
 	if fraction <= 0.5:
 		var p := 1.0 - (fraction / 0.5) # 0 at 50%, 1 at 0%
 		var intensity := danger_curve.sample(p) if danger_curve else p

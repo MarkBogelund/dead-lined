@@ -26,7 +26,7 @@ func drop() -> void:
 	var drop_position := parent.global_position
 	
 	for i in scrap_drop_amount:
-		var scrap = scrap_scene.instantiate()
+		var scrap: Node2D = scrap_scene.instantiate()
 		get_tree().current_scene.add_child(scrap)
 		
 		scrap.global_position = drop_position

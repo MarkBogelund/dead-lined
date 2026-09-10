@@ -15,6 +15,12 @@ class_name TargetingComponent
 ## Maximum distance to consider targets in this group (-1 = unlimited)
 @export var max_range: float = -1.0
 
+var _sorted_configs: Array[TargetConfig] = []
+
+func _ready() -> void:
+	_sorted_configs = target_configs.duplicate()
+	_sorted_configs.sort_custom(func(a: TargetConfig, b: TargetConfig): return a.priority > b.priority)
+
 func initialize(s_max_range: float) -> void:
 	max_range = s_max_range
 
@@ -25,16 +31,12 @@ func get_best_target(from_position: Vector2, filter: Callable = Callable()) -> N
 	if target_configs.is_empty():
 		return null
 	
-	# Sort configs by priority (highest first) if not already sorted
-	var sorted_configs := target_configs.duplicate()
-	sorted_configs.sort_custom(func(a, b): return a.priority > b.priority)
-	
 	var best_target: Node2D = null
 	var best_distance_sq := INF
 	var best_priority := -1
 	
 	# Scan through all priority groups
-	for config in sorted_configs:
+	for config in _sorted_configs:
 		if config.group_name.is_empty():
 			continue
 		

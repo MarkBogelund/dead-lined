@@ -102,7 +102,7 @@ func _start_dash(direction: Vector2) -> void:
 	if flash_vfx:
 		flash_vfx.start()
 	
-	emit_signal("dash_started", direction)
+	dash_started.emit(direction)
 
 func _end_dash() -> void:
 	_state = State.COOLDOWN
@@ -116,4 +116,4 @@ func _end_dash() -> void:
 	if trail:
 		trail.stop_tracking()
 	
-	emit_signal("dash_ended")
+	dash_ended.emit()

@@ -1,11 +1,13 @@
 extends Node
 class_name HealthComponent
 
+signal health_changed(current: int, maximum: int)
+
 @export var max_health: int
 var current_health: int
-var _is_dead = false
+var _is_dead := false
 
-func _ready():
+func _ready() -> void:
 	current_health = max_health
 	if current_health <= 0:
 		current_health = 0
@@ -21,8 +23,10 @@ func take_damage(amount: int) -> bool:
 	if current_health <= 0:
 		current_health = 0
 		_is_dead = true
+		health_changed.emit(current_health, max_health)
 		return true
 	
+	health_changed.emit(current_health, max_health)
 	return false
 
 ## Public API for querying health
@@ -34,6 +38,7 @@ func initialize(new_max_health: int) -> void:
 	max_health = new_max_health
 	current_health = new_max_health
 	_is_dead = false
+	health_changed.emit(current_health, max_health)
 
 func is_dead() -> bool:
 	return _is_dead
@@ -42,6 +47,7 @@ func is_dead() -> bool:
 func restore_to_max() -> void:
 	current_health = max_health
 	_is_dead = false
+	health_changed.emit(current_health, max_health)
 
 func buff_max_health(multiplier: float) -> void:
 	max_health = int(max_health * multiplier)
@@ -50,11 +56,13 @@ func buff_max_health(multiplier: float) -> void:
 func increase_max_health(amount: int) -> void:
 	max_health += amount
 	current_health = mini(current_health + amount, max_health)
+	health_changed.emit(current_health, max_health)
 
 func heal(amount: int) -> void:
 	if _is_dead:
 		return
 	current_health = mini(current_health + amount, max_health)
+	health_changed.emit(current_health, max_health)
 
 func is_full() -> bool:
 	return current_health >= max_health

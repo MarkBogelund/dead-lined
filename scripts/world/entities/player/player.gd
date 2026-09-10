@@ -225,7 +225,7 @@ func can_afford(price: float) -> bool:
 	return capacity.can_afford(price)
 
 var can_pickup: bool:
-	get: return not _is_dead and not crunch_time.is_crunch_time_active() and capacity.current_capacity < 100.0
+	get: return not _is_dead and not crunch_time.is_crunch_time_active() and capacity.get_current() < capacity.get_max()
 
 func pickup(amount: int) -> void:
 	capacity.gain(float(amount))
@@ -236,11 +236,11 @@ func _on_crunch_drain_tick() -> void:
 	if capacity.current_capacity <= crunch_time.deactivation_threshold:
 		crunch_time.deactivate()
 
-func _on_turret_placement_started():
+func _on_turret_placement_started() -> void:
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
 
-func _on_turret_placement_ended():
+func _on_turret_placement_ended() -> void:
 	shoot.set_enabled(true)
 	melee_weapon.set_enabled(true)
 
@@ -253,19 +253,13 @@ func _on_turret_lost() -> void:
 
 func _on_crunch_time_started(buffs: Dictionary) -> void:
 	capacity.spend(crunch_time.activation_cost)
-	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage * buffs["damage"])
-	melee_weapon.slash_radius *= buffs["radius"]
-	movement.speed *= buffs["speed"]
-	melee_weapon.arc_angle *= buffs["arc_angle"]
+	melee_weapon.set_crunch_time_active(true, buffs)
+	movement.set_crunch_time_active(true, buffs["speed"])
 	melee_weapon.scale *= buffs["weapon_size"]
-	melee_weapon.slash_cooldown *= buffs["cooldown"]
 	animated_sprite.modulate = Color(1.5, 0.5, 0.5, 1.0)
 
 func _on_crunch_time_ended(buffs: Dictionary, _duration: float) -> void:
-	melee_weapon.hitbox.damage = int(melee_weapon.hitbox.damage / buffs["damage"])
-	melee_weapon.slash_radius /= buffs["radius"]
-	movement.speed /= buffs["speed"]
-	melee_weapon.arc_angle /= buffs["arc_angle"]
+	melee_weapon.set_crunch_time_active(false, buffs)
+	movement.set_crunch_time_active(false, buffs["speed"])
 	melee_weapon.scale /= buffs["weapon_size"]
-	melee_weapon.slash_cooldown /= buffs["cooldown"]
 	animated_sprite.modulate = Color.WHITE

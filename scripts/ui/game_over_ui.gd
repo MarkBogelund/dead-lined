@@ -46,4 +46,4 @@ func _format_time(seconds: float) -> String:
 	return "%d:%02d" % [minutes, secs]
 
 func _on_restart_pressed() -> void:
-	emit_signal("restart_game")
+	restart_game.emit()

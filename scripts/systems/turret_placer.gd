@@ -29,26 +29,27 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("cancel"):
 		cancel()
 
-func start_placement(turret_entry: TurretEntry):
+func start_placement(turret_entry: TurretEntry) -> void:
 	_cleanup()
 	
 	current_turret_entry = turret_entry
 	ghost_turret = current_turret_entry.ghost_scene.instantiate()
-	ghost_turret.range_radius = current_turret_entry.stats.max_range if current_turret_entry.stats else -1.0
-	ghost_turret.exclusion_radius = current_turret_entry.stats.exclusion_radius if current_turret_entry.stats else -1.0
+	ghost_turret.initialize(
+		current_turret_entry.stats.max_range if current_turret_entry.stats else -1.0,
+		current_turret_entry.stats.exclusion_radius if current_turret_entry.stats else -1.0)
 	get_tree().current_scene.add_child(ghost_turret)
 	
 	get_tree().call_group("turret_exclusion_zones", "show")
 	
 	active = true
-	emit_signal("placement_started")
+	placement_started.emit()
 
-func cancel():
+func cancel() -> void:
 	_cleanup()
-	emit_signal("turret_placement_cancelled")
-	emit_signal("placement_ended")
+	turret_placement_cancelled.emit()
+	placement_ended.emit()
 
-func _place():
+func _place() -> void:
 	# Check if placement is valid
 	if ghost_turret and not ghost_turret.is_placement_valid():
 		# Invalid placement - do not place turret
@@ -59,11 +60,10 @@ func _place():
 	var placed_turret := current_turret_entry.turret_scene.instantiate()
 	placed_turret.position = ghost_turret.position
 	get_tree().current_scene.add_child(placed_turret)
-	placed_turret.add_to_group("turrets")
 	
 	_cleanup()
-	emit_signal("turret_placed", placed_turret, current_turret_entry)
-	emit_signal("placement_ended")
+	turret_placed.emit(placed_turret, current_turret_entry)
+	placement_ended.emit()
 
 func _cleanup() -> void:
 	if ghost_turret:

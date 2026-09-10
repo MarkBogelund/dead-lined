@@ -36,21 +36,27 @@ func can_afford(cost: float) -> bool:
 func can_crunch_time() -> bool:
 	return current_capacity >= crunch_time_threshold
 
+func get_current() -> float:
+	return current_capacity
+
+func get_max() -> float:
+	return max_capacity
+
 func lower_threshold() -> void:
 	crunch_time_threshold = maxf(min_crunch_threshold, crunch_time_threshold - threshold_step)
-	emit_signal("crunch_time_threshold_changed", crunch_time_threshold)
+	crunch_time_threshold_changed.emit(crunch_time_threshold)
 
 func raise_threshold() -> void:
 	crunch_time_threshold = minf(crunch_threshold, crunch_time_threshold + threshold_step)
-	emit_signal("crunch_time_threshold_changed", crunch_time_threshold)
+	crunch_time_threshold_changed.emit(crunch_time_threshold)
 
 func spend(cost: float) -> void:
 	current_capacity = maxf(0.0, current_capacity - cost)
-	emit_signal("capacity_changed", current_capacity)
+	capacity_changed.emit(current_capacity)
 
 func gain(amount: float) -> void:
 	var was_below_threshold := not can_crunch_time()
 	current_capacity = minf(max_capacity, current_capacity + amount)
-	emit_signal("capacity_changed", current_capacity)
+	capacity_changed.emit(current_capacity)
 	if was_below_threshold and can_crunch_time():
-		emit_signal("crunch_time_unlocked")
+		crunch_time_unlocked.emit()
