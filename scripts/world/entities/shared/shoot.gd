@@ -10,7 +10,7 @@ class_name ShootComponent
 var _shoot_timer := 0.0
 var shooting_activated := true
 
-func _process(delta: float):
+func _process(delta: float) -> void:
 	if _shoot_timer > 0.0:
 		_shoot_timer -= delta
 
@@ -20,7 +20,7 @@ func initialize(p_shoot_cooldown: float, p_damage: int, p_knockback: int, p_spee
 	projectile_knockback = p_knockback
 	projectile_speed = p_speed
 
-func set_enabled(enabled: bool):
+func set_enabled(enabled: bool) -> void:
 	shooting_activated = enabled
 
 func is_ready() -> bool:

@@ -14,8 +14,8 @@ func _ready() -> void:
 	visible = false
 	upgrade_health_button.pressed.connect(_on_upgrade_health_pressed)
 	upgrade_damage_button.pressed.connect(_on_upgrade_damage_pressed)
-	repair_button.button_down.connect(func(): _repairing = true; _turret.repair.activate())
-	repair_button.button_up.connect(func(): _repairing = false; _turret.repair.deactivate())
+	repair_button.button_down.connect(_on_repair_button_down)
+	repair_button.button_up.connect(_on_repair_button_up)
 
 func _process(delta: float) -> void:
 	if not visible or not is_instance_valid(_turret):
@@ -56,6 +56,17 @@ func _disconnect_turret() -> void:
 	_player = null
 	_wave_manager = null
 
+func _on_repair_button_down() -> void:
+	if not is_instance_valid(_turret):
+		return
+	_repairing = true
+	_turret.repair.activate()
+
+func _on_repair_button_up() -> void:
+	_repairing = false
+	if is_instance_valid(_turret):
+		_turret.repair.deactivate()
+
 func _refresh() -> void:
 	if not _turret or not _wave_manager:
 		return
@@ -67,7 +78,7 @@ func _refresh() -> void:
 func _update_button_states(delta: float) -> void:
 	var hp_data: TurretUpgrade = _turret.upgrader.health_upgrade_data()
 	var dmg_data: TurretUpgrade = _turret.upgrader.damage_upgrade_data()
-	var level_ok = _turret.upgrader.level < _wave_manager.current_wave
+	var level_ok: bool = _turret.upgrader.level < _wave_manager.current_wave
 	upgrade_health_button.disabled = hp_data == null \
 		or not level_ok \
 		or not _player.capacity.can_afford(hp_data.cost)
@@ -84,7 +95,7 @@ func _handle_repair(delta: float) -> void:
 		_repairing = false
 		_turret.repair.deactivate()
 		return
-	_turret.repair.try_repair(delta, _player.capacity.current_capacity)
+	_turret.repair.try_repair(delta, _player.capacity.get_current())
 
 func _on_upgrade_health_pressed() -> void:
 	if not _turret or not _player:

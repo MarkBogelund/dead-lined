@@ -7,7 +7,7 @@ var can_collect := false
 @onready var detection_area: Area2D = $DetectionArea
 @onready var animation_handler: AnimationHandler = $AnimationHandler
 
-func _ready():
+func _ready() -> void:
 	add_to_group("scrap")
 	detection_area.body_entered.connect(_on_body_entered)
 	animation_handler.configure_animation("pick_up", 1, true)
@@ -37,7 +37,7 @@ func _on_animation_finished(anim_name: String) -> void:
 	if anim_name == "despawn" or anim_name == "pick_up":
 		queue_free()
 
-func _on_body_entered(body: Node2D):
+func _on_body_entered(body: Node2D) -> void:
 	if not can_collect:
 		return
 	if body.is_in_group("player") and body.can_pickup:

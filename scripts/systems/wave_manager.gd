@@ -42,7 +42,7 @@ func _process(delta: float) -> void:
 		return
 	
 	_phase_timer -= delta
-	emit_signal("build_phase_tick", _phase_timer)
+	build_phase_tick.emit(_phase_timer)
 	
 	if _phase_timer <= 0.0:
 		_enter_combat_phase()
@@ -50,13 +50,13 @@ func _process(delta: float) -> void:
 func _enter_build_phase() -> void:
 	_current_phase = Phase.BUILD
 	_phase_timer = time_between_waves
-	emit_signal("build_phase_started")
+	build_phase_started.emit()
 
 func _enter_combat_phase() -> void:
 	_current_phase = Phase.COMBAT
 	_wave_index += 1
 	get_tree().call_group("scrap", "despawn_on_combat")
-	emit_signal("combat_phase_started", _wave_index)
+	combat_phase_started.emit(_wave_index)
 
 func _on_enemy_died() -> void:
 	if _current_phase != Phase.COMBAT:

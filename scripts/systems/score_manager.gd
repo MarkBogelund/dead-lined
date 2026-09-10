@@ -43,8 +43,8 @@ func _on_enemy_spawned(enemy: Node) -> void:
 
 func _on_drone_destroyed(enemy: Node) -> void:
 	drones_destroyed += 1
-	var world_pos = enemy.global_position if is_instance_valid(enemy) else Vector2.ZERO
-	emit_signal("score_earned", DRONE_VALUE, world_pos, Color.WHITE)
+	var world_pos: Vector2 = enemy.global_position if is_instance_valid(enemy) else Vector2.ZERO
+	score_earned.emit(DRONE_VALUE, world_pos, Color.WHITE)
 
 ## Called each frame while player is in crunch time
 func add_crunch_time(seconds: float) -> void:
@@ -54,7 +54,7 @@ func _on_crunch_time_ended(_buffs: Dictionary, duration: float) -> void:
 	crunch_time_spent += duration
 	var session_score := int(duration * CRUNCH_TIME_VALUE)
 	if session_score > 0:
-		emit_signal("score_earned", session_score, _player.global_position, Color.ORANGE)
+		score_earned.emit(session_score, _player.global_position, Color.ORANGE)
 
 ## Calculate total score based on formula
 func calculate_score() -> int:
@@ -70,8 +70,8 @@ func get_score_breakdown() -> Dictionary:
 		"drones_score": drones_destroyed * DRONE_VALUE,
 		"crunch_time_spent": crunch_time_spent,
 		"crunch_time_score": int(crunch_time_spent * CRUNCH_TIME_VALUE),
-		"current_wave": last_wave_survived,
-		"wave_score": last_wave_survived * WAVE_VALUE,
+		"waves_survived": last_wave_survived,
+		"waves_score": last_wave_survived * WAVE_VALUE,
 		"total_score": calculate_score()
 	}
 

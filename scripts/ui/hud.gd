@@ -52,22 +52,27 @@ func _connect_signals() -> void:
 func _update_indicator(capacity: float) -> void:
 	var bar_x := bar_track.position.x
 	var bar_width := bar_track.size.x
-	var center_x := bar_x + (capacity / 100.0) * bar_width
+	var maximum := player.capacity.get_max()
+	var center_x := bar_x + (capacity / maximum if maximum > 0.0 else 0.0) * bar_width
 	indicator.position.x = center_x - indicator.size.x / 2.0
 	capacity_label.text = "%d" % int(capacity)
 	capacity_label.position.x = center_x - capacity_label.size.x / 2.0
 	indicator.color = INDICATOR_CRUNCH_COLOR if player.capacity.can_crunch_time() else INDICATOR_DEFAULT_COLOR
-	_capacity_overlay.update_capacity(capacity)
+	_capacity_overlay.update_capacity(capacity, maximum)
 
 func _set_threshold_line_position(threshold: float) -> void:
 	var bar_x := bar_track.position.x
 	var bar_width := bar_track.size.x
-	crunch_time_threshold_line.position.x = bar_x + (threshold / 100.0) * bar_width - crunch_time_threshold_line.size.x / 2.0
+	var maximum := player.capacity.get_max()
+	var fraction := threshold / maximum if maximum > 0.0 else 0.0
+	crunch_time_threshold_line.position.x = bar_x + fraction * bar_width - crunch_time_threshold_line.size.x / 2.0
 
 func _tween_threshold_line(threshold: float) -> void:
 	var bar_x := bar_track.position.x
 	var bar_width := bar_track.size.x
-	var target_x := bar_x + (threshold / 100.0) * bar_width - crunch_time_threshold_line.size.x / 2.0
+	var maximum := player.capacity.get_max()
+	var fraction := threshold / maximum if maximum > 0.0 else 0.0
+	var target_x := bar_x + fraction * bar_width - crunch_time_threshold_line.size.x / 2.0
 	var tween := create_tween()
 	tween.tween_property(crunch_time_threshold_line, "position:x", target_x, 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 

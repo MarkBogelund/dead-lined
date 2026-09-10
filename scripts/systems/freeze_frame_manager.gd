@@ -11,7 +11,7 @@ func _ready() -> void:
 
 ## Freeze the game for impact
 func freeze(duration: float = -1.0) -> void:
-	var freeze_time = duration if duration > 0 else default_duration
+	var freeze_time := duration if duration > 0 else default_duration
 	Engine.time_scale = 0.0
 	await get_tree().create_timer(freeze_time, true, false, true).timeout
 	Engine.time_scale = 1.0

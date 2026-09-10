@@ -15,7 +15,7 @@ func _ready() -> void:
 	hitbox.damage = _damage
 	hitbox.knockback = _knockback
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	position += direction * projectile_speed * delta
 
 func _on_hit_target(target: Node) -> void:
@@ -25,12 +25,12 @@ func _on_hit_target(target: Node) -> void:
 		target.receive_repair_shot()
 	_animation_player.play("hit")
 
-func set_orientation(pos, rot, dir):
+func set_orientation(pos: Vector2, rot: float, dir: Vector2) -> void:
 	global_position = pos
 	rotation = rot
 	direction = dir
 	
-func set_parameters(speed, damage, knockback):
+func set_parameters(speed: float, damage: int, knockback: int) -> void:
 	projectile_speed = speed
 	_damage = damage
 	_knockback = knockback
