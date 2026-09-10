@@ -14,7 +14,7 @@ func apply(from_position: Vector2, strength: float) -> void:
 	if parent == null:
 		return
 
-	var dir = (parent.global_position - from_position).normalized()
+	var dir := (parent.global_position - from_position).normalized()
 	velocity = dir * strength
 	
 	# Clamp to max velocity to prevent tunneling

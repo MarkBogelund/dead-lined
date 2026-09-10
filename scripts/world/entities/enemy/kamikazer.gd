@@ -17,6 +17,13 @@ var _charging := false
 var _exploding := false
 var _charge_direction := Vector2.ZERO
 
+var _charge_timer := 0.0
+var _stuck_timer := 0.0
+var _stuck_check_position := Vector2.ZERO
+const MAX_CHARGE_DURATION := 1.5 ## Safety timeout in case the charge direction points into a wall
+const STUCK_CHECK_INTERVAL := 0.25
+const STUCK_DISTANCE_THRESHOLD := 6.0 ## Minimum progress required per interval while charging
+
 func _ready() -> void:
 	_initialize()
 	animation.configure_animation("idle", 0, false)
@@ -43,17 +50,19 @@ func _physics_process(delta: float) -> void:
 		var target := targeting.get_best_target(global_position)
 		if target:
 			_face_target(animated_sprite, target.global_position)
-			_update_chase_state(target)
+			_update_chase_state(target, delta)
 			animation.play_animation("idle")
 		else:
-			_charging = false
-			navigation.avoidance_mask = _default_avoidance_mask
+			_cancel_charge()
 			velocity = Vector2.ZERO
 
 	knockback.process(delta)
 	move_and_slide()
 
-func _update_chase_state(target: Node2D) -> void:
+	if _charging and get_slide_collision_count() > 0:
+		_cancel_charge()
+
+func _update_chase_state(target: Node2D, delta: float) -> void:
 	if not _charging:
 		navigation.avoidance_mask = _default_avoidance_mask
 		if line_of_sight.can_see(global_position, target.global_position):
@@ -63,13 +72,37 @@ func _update_chase_state(target: Node2D) -> void:
 			return
 
 	if not line_of_sight.can_see(global_position, target.global_position):
-		_charging = false
-		navigation.avoidance_mask = _default_avoidance_mask
+		_cancel_charge()
+		velocity = navigation.get_safe_velocity(target.global_position, _speed)
+		return
+
+	if _charging and _is_charge_stuck(delta):
+		_cancel_charge()
 		velocity = navigation.get_safe_velocity(target.global_position, _speed)
 		return
 
 	navigation.avoidance_mask = 0
 	velocity = _charge_direction * _charge_speed
+
+func _is_charge_stuck(delta: float) -> bool:
+	_charge_timer += delta
+	if _charge_timer >= MAX_CHARGE_DURATION:
+		return true
+
+	_stuck_timer += delta
+	if _stuck_timer < STUCK_CHECK_INTERVAL:
+		return false
+
+	var progressed := global_position.distance_to(_stuck_check_position) >= STUCK_DISTANCE_THRESHOLD
+	_stuck_timer = 0.0
+	_stuck_check_position = global_position
+	return not progressed
+
+func _cancel_charge() -> void:
+	_charging = false
+	_charge_timer = 0.0
+	_stuck_timer = 0.0
+	navigation.avoidance_mask = _default_avoidance_mask
 
 func _start_charge(target_position: Vector2) -> void:
 	var dir := (target_position - global_position).normalized()
@@ -78,6 +111,9 @@ func _start_charge(target_position: Vector2) -> void:
 		return
 	_charge_direction = dir
 	_charging = true
+	_charge_timer = 0.0
+	_stuck_timer = 0.0
+	_stuck_check_position = global_position
 
 func _on_hit_target(target: Node) -> void:
 	if _exploding or is_dead() or not target:
@@ -88,8 +124,7 @@ func _on_hit_target(target: Node) -> void:
 
 func _trigger_explosion(from_position: Vector2) -> void:
 	_exploding = true
-	_charging = false
-	navigation.avoidance_mask = _default_avoidance_mask
+	_cancel_charge()
 	if camera_shake_manager:
 		camera_shake_manager.shake_screen(_explosion_screen_shake_intensity, 0.25)
 	if hit_particles:

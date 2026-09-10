@@ -7,8 +7,8 @@ signal died
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
-@onready var camera_shake_manager = %CameraShakeManager
-@onready var freeze_frame_manager = %FreezeFrameManager
+@onready var camera_shake_manager: CameraShakeManager = %CameraShakeManager
+@onready var freeze_frame_manager: FreezeFrameManager = %FreezeFrameManager
 
 @onready var capacity: CapacityComponent = $CapacityComponent
 @onready var knockback: KnockbackComponent = $KnockbackComponent
