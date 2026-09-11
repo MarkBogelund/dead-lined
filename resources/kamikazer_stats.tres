@@ -1,13 +1,11 @@
-[gd_resource type="Resource" script_class="KamikazerStats" format=3]
+[gd_resource type="Resource" script_class="KamikazerStats" format=3 uid="uid://dfmgppjmpi2ej"]
 
-[ext_resource type="Script" path="res://scripts/data/kamikazer_stats.gd" id="1_kamikazerstats"]
+[ext_resource type="Script" uid="uid://wp2jn3tx866t" path="res://scripts/data/kamikazer_stats.gd" id="1_kamikazerstats"]
 
 [resource]
 script = ExtResource("1_kamikazerstats")
-max_health = 10
-speed = 34.0
-charge_speed = 110.0
-explosion_damage = 30
-explosion_knockback = 260.0
-explosion_screen_shake_intensity = 0.35
+speed = 60.0
+charge_speed = 170.0
+max_charge_duration = 3.0
+stuck_check_interval = 0.5
 scrap_drop_amount = 4

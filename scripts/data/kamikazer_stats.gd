@@ -11,6 +11,12 @@ class_name KamikazerStats
 ## Straight-line speed while charging
 @export var charge_speed: float = 110.0
 
+@export_group("Charge Behavior")
+## Maximum seconds to charge in a straight line before giving up and re-routing (safety net)
+@export var max_charge_duration: float = 1.5
+## Seconds between progress checks while charging; if stuck, it re-routes early
+@export var stuck_check_interval: float = 0.25
+
 @export_group("Combat")
 ## Damage dealt to the player on explosion trigger
 @export var explosion_damage: int = 30

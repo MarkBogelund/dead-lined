@@ -20,8 +20,8 @@ var _charge_direction := Vector2.ZERO
 var _charge_timer := 0.0
 var _stuck_timer := 0.0
 var _stuck_check_position := Vector2.ZERO
-const MAX_CHARGE_DURATION := 1.5 ## Safety timeout in case the charge direction points into a wall
-const STUCK_CHECK_INTERVAL := 0.25
+var _max_charge_duration := 1.5 ## Safety timeout in case the charge direction points into a wall
+var _stuck_check_interval := 0.25
 const STUCK_DISTANCE_THRESHOLD := 6.0 ## Minimum progress required per interval while charging
 
 func _ready() -> void:
@@ -39,6 +39,8 @@ func _initialize() -> void:
 	_speed = stats.speed
 	_charge_speed = stats.charge_speed
 	_explosion_screen_shake_intensity = stats.explosion_screen_shake_intensity
+	_max_charge_duration = stats.max_charge_duration
+	_stuck_check_interval = stats.stuck_check_interval
 	_default_avoidance_mask = navigation.avoidance_mask
 
 func _physics_process(delta: float) -> void:
@@ -86,11 +88,11 @@ func _update_chase_state(target: Node2D, delta: float) -> void:
 
 func _is_charge_stuck(delta: float) -> bool:
 	_charge_timer += delta
-	if _charge_timer >= MAX_CHARGE_DURATION:
+	if _charge_timer >= _max_charge_duration:
 		return true
 
 	_stuck_timer += delta
-	if _stuck_timer < STUCK_CHECK_INTERVAL:
+	if _stuck_timer < _stuck_check_interval:
 		return false
 
 	var progressed := global_position.distance_to(_stuck_check_position) >= STUCK_DISTANCE_THRESHOLD
