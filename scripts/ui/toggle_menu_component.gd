@@ -48,11 +48,11 @@ func _ready() -> void:
 	if close_on_combat_phase:
 		var wave_manager := get_tree().get_first_node_in_group("wave_manager") as WaveManager
 		if wave_manager:
-			wave_manager.combat_phase_started.connect(func(_i):
+			wave_manager.combat_phase_started.connect(func(_i: int) -> void:
 				close()
 				enabled = false
 			)
-			wave_manager.build_phase_started.connect(func():
+			wave_manager.build_phase_started.connect(func() -> void:
 				enabled = true
 			)
 

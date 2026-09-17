@@ -18,7 +18,7 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	if Engine.is_editor_hint():
 		return
-	for rider in _riders.values():
+	for rider: Node in _riders.values():
 		if is_instance_valid(rider) and rider.has_method("clear_conveyor_velocity"):
 			rider.clear_conveyor_velocity()
 
@@ -36,7 +36,7 @@ func _on_body_exited(body: Node) -> void:
 func _update_riders() -> void:
 	if Engine.is_editor_hint():
 		return
-	for rider in _riders.values():
+	for rider: Node in _riders.values():
 		if is_instance_valid(rider):
 			rider.set_conveyor_velocity(_get_movement_velocity(rider))
 

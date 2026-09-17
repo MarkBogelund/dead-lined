@@ -106,8 +106,8 @@ func _connect_signals() -> void:
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
 	shop_manager.turret_bought.connect(_on_turret_bought)
 	shop_manager.turret_lost.connect(_on_turret_lost)
-	wave_manager.build_phase_started.connect(func(): crunch_time.set_build_phase(true))
-	wave_manager.combat_phase_started.connect(func(_i: int): crunch_time.set_build_phase(false))
+	wave_manager.build_phase_started.connect(func() -> void: crunch_time.set_build_phase(true))
+	wave_manager.combat_phase_started.connect(func(_i: int) -> void: crunch_time.set_build_phase(false))
 	dash.dash_ended.connect(_on_dash_ended)
 
 func _physics_process(delta: float) -> void:

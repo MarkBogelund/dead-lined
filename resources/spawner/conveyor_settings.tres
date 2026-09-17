@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_settings")
-enemy_movement_speed = 80.0
-player_movement_speed = 180.0
+enemy_movement_speed = 100.0
+player_movement_speed = 140.0

@@ -186,7 +186,7 @@ atlas = ExtResource("13_bt5mj")
 region = Rect2(16, 16, 18, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_spl43"]
-size = Vector2(18, 320)
+size = Vector2(18, 256)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sgl2t"]
 atlas = ExtResource("16_sww3w")
@@ -384,7 +384,7 @@ script = ExtResource("27_conveyor_script")
 settings = ExtResource("28_conveyor_settings")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/ConveyorBeltLeft" unique_id=1457802000]
-position = Vector2(-1, 0)
+position = Vector2(-1, -32)
 shape = SubResource("RectangleShape2D_spl43")
 
 [node name="ConveyorBeltVisual" parent="World/Environment/ConveyorBeltLeft" unique_id=1646066894 instance=ExtResource("17_sgl2t")]
@@ -398,11 +398,8 @@ position = Vector2(1.8189894e-12, -64)
 [node name="ConveyorBeltVisual4" parent="World/Environment/ConveyorBeltLeft" unique_id=228426090 instance=ExtResource("17_sgl2t")]
 position = Vector2(-1.8189894e-12, 64)
 
-[node name="ConveyorBeltVisual5" parent="World/Environment/ConveyorBeltLeft" unique_id=1773801154 instance=ExtResource("17_sgl2t")]
-position = Vector2(-3.637979e-12, 128)
-
 [node name="EndCap" type="Sprite2D" parent="World/Environment/ConveyorBeltLeft" unique_id=1811418434]
-position = Vector2(0, 144)
+position = Vector2(0, 80)
 texture = SubResource("AtlasTexture_sgl2t")
 
 [node name="ConveyorCover" type="Sprite2D" parent="World/Environment/ConveyorBeltLeft" unique_id=1314033146]
@@ -418,9 +415,9 @@ texture = ExtResource("20_v2yb1")
 [node name="ConveyorShadow2" type="Sprite2D" parent="World/Environment/ConveyorBeltLeft" unique_id=1165762427]
 modulate = Color(0, 0, 0, 0.19607843)
 z_index = -1
-position = Vector2(0, -9.822543e-11)
+position = Vector2(2.3334255e-06, -47.45358)
 rotation = -3.1415925
-scale = Vector2(0.5726495, 4.999933)
+scale = Vector2(0.5726495, 4.5170083)
 texture = SubResource("DrawableTexture2D_spl43")
 
 [node name="ConveyorBeltRight" type="Area2D" parent="World/Environment" unique_id=1326348322]
@@ -434,7 +431,7 @@ settings = ExtResource("28_conveyor_settings")
 movement_direction = Vector2(0, -1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/ConveyorBeltRight" unique_id=1173306367]
-position = Vector2(-1, 0)
+position = Vector2(-1, -32)
 shape = SubResource("RectangleShape2D_spl43")
 
 [node name="ConveyorBeltVisual" parent="World/Environment/ConveyorBeltRight" unique_id=2080888300 instance=ExtResource("17_sgl2t")]
@@ -448,11 +445,8 @@ position = Vector2(1.8189894e-12, -64)
 [node name="ConveyorBeltVisual4" parent="World/Environment/ConveyorBeltRight" unique_id=692683492 instance=ExtResource("17_sgl2t")]
 position = Vector2(-1.8189894e-12, 64)
 
-[node name="ConveyorBeltVisual5" parent="World/Environment/ConveyorBeltRight" unique_id=1975557502 instance=ExtResource("17_sgl2t")]
-position = Vector2(-3.637979e-12, 128)
-
 [node name="Cap2" type="Sprite2D" parent="World/Environment/ConveyorBeltRight" unique_id=1043708520]
-position = Vector2(0, 144)
+position = Vector2(9.663731e-06, 80)
 texture = SubResource("AtlasTexture_sgl2t")
 
 [node name="ConveyorCover" type="Sprite2D" parent="World/Environment/ConveyorBeltRight" unique_id=978968894]
@@ -468,8 +462,8 @@ texture = ExtResource("20_v2yb1")
 [node name="ConveyorShadow" type="Sprite2D" parent="World/Environment/ConveyorBeltRight" unique_id=2125923225]
 modulate = Color(0, 0, 0, 0.19607843)
 z_index = -1
-position = Vector2(1.1190115e-05, 0.0021365806)
-scale = Vector2(0.5726495, 4.999933)
+position = Vector2(-4.9556365e-06, -36.548126)
+scale = Vector2(0.5726495, 4.1747885)
 texture = SubResource("DrawableTexture2D_spl43")
 
 [node name="Player" parent="World" unique_id=244036277 instance=ExtResource("1_uwrxv")]
@@ -490,6 +484,7 @@ position_smoothing_enabled = true
 [node name="EnemySpawnerNorthwest" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(-240, -208)
 spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe"), ExtResource("17_kamikaze")])
+spawn_intro_distance = 60.0
 health_growth = 0.0
 
 [node name="EnemySpawnerSoutheast" parent="World" unique_id=113296114 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]

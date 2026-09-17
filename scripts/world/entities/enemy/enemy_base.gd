@@ -42,10 +42,7 @@ func play_spawn_intro(target_position: Vector2, duration: float) -> void:
 	contact_hitbox.disable()
 	set_physics_process(false)
 	velocity = Vector2.ZERO
-	animation.stop()
-	for sprite in find_children("*", "AnimatedSprite2D", true, false):
-		(sprite as AnimatedSprite2D).frame = 0
-		(sprite as AnimatedSprite2D).pause()
+	animation.play_animation("spawn_sleep")
 
 	var intro_tween := create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	intro_tween.tween_property(self, "global_position", target_position, maxf(0.0, duration))
@@ -58,7 +55,7 @@ func _finish_spawn_intro() -> void:
 	collision_shape.set_deferred("disabled", false)
 	contact_hitbox.enable()
 	set_physics_process(true)
-	animation.play_animation("idle")
+	animation.play_animation("spawn_wake")
 
 func buff_health(multiplier: float) -> void:
 	health.buff_max_health(multiplier)
