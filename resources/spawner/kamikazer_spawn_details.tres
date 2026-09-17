@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EnemySpawnEntry" format=3 uid="uid://cx3hxt45w3uit"]
+
+[ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="1_spawnentry"]
+[ext_resource type="PackedScene" uid="uid://b5q32ahcm78j2" path="res://scenes/world/entities/kamikazer.tscn" id="2_kamikazer"]
+
+[resource]
+script = ExtResource("1_spawnentry")
+enemy_scene = ExtResource("2_kamikazer")
+metadata/_custom_type_script = "uid://du0rvecuvnlry"

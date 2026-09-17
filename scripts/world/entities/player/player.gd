@@ -7,8 +7,8 @@ signal died
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
-@onready var camera_shake_manager = %CameraShakeManager
-@onready var freeze_frame_manager = %FreezeFrameManager
+@onready var camera_shake_manager: CameraShakeManager = %CameraShakeManager
+@onready var freeze_frame_manager: FreezeFrameManager = %FreezeFrameManager
 
 @onready var capacity: CapacityComponent = $CapacityComponent
 @onready var knockback: KnockbackComponent = $KnockbackComponent
@@ -40,6 +40,7 @@ var _facing_right := true
 var _is_dead := false
 
 const MIN_MOVE_SPEED := 10.0
+const PLAYER_BODY_LAYER := 2 ## Matches project.godot 2d_physics layer_2 ("PlayerBody")
 
 func _ready() -> void:
 	_initialize()
@@ -95,6 +96,7 @@ func _connect_signals() -> void:
 	shop_manager.turret_lost.connect(_on_turret_lost)
 	wave_manager.build_phase_started.connect(func(): crunch_time.set_build_phase(true))
 	wave_manager.combat_phase_started.connect(func(_i: int): crunch_time.set_build_phase(false))
+	dash.dash_ended.connect(_on_dash_ended)
 
 func _physics_process(delta: float) -> void:
 	_process_movement(delta)
@@ -169,6 +171,10 @@ func _handle_dash_started(direction: Vector2) -> void:
 	_set_facing(direction.x)
 	animation.play_animation("dash")
 	camera_shake_manager.shake_screen(0.15, 0.15)
+	set_collision_layer_value(PLAYER_BODY_LAYER, false)
+
+func _on_dash_ended() -> void:
+	set_collision_layer_value(PLAYER_BODY_LAYER, true)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if _is_dead or _is_invincible():

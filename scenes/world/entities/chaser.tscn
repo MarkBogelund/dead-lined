@@ -594,6 +594,8 @@ target_desired_distance = 2.0
 path_postprocessing = 1
 avoidance_enabled = true
 radius = 8.0
+neighbor_distance = 40.0
+max_neighbors = 3
 script = ExtResource("11_uqckg")
 metadata/_custom_type_script = "uid://bfdfe71wkym8b"
 

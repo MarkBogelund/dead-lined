@@ -2,6 +2,7 @@ extends Node2D
 class_name LineOfSightComponent
 
 @export var ray_offset := 6.0 ## Perpendicular offset for left/right raycasts (should be >= projectile radius)
+@export var ray_collision_mask := 1 ## Physics layers that can block line of sight
 @export var debug_draw := false ## Visualize raycasts in-game
 
 var ray_cast_center: RayCast2D
@@ -20,7 +21,7 @@ func _ready() -> void:
 	ray_cast_center.hit_from_inside = false
 	ray_cast_center.collide_with_areas = false
 	ray_cast_center.collide_with_bodies = true
-	ray_cast_center.collision_mask = 1
+	ray_cast_center.collision_mask = ray_collision_mask
 	add_child(ray_cast_center)
 	
 	# Create left raycast
@@ -29,7 +30,7 @@ func _ready() -> void:
 	ray_cast_left.hit_from_inside = false
 	ray_cast_left.collide_with_areas = false
 	ray_cast_left.collide_with_bodies = true
-	ray_cast_left.collision_mask = 1
+	ray_cast_left.collision_mask = ray_collision_mask
 	add_child(ray_cast_left)
 	
 	# Create right raycast
@@ -38,7 +39,7 @@ func _ready() -> void:
 	ray_cast_right.hit_from_inside = false
 	ray_cast_right.collide_with_areas = false
 	ray_cast_right.collide_with_bodies = true
-	ray_cast_right.collision_mask = 1
+	ray_cast_right.collision_mask = ray_collision_mask
 	add_child(ray_cast_right)
 
 func can_see(from_position: Vector2, target_position: Vector2) -> bool:

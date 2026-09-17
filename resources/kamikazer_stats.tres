@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="KamikazerStats" format=3 uid="uid://dfmgppjmpi2ej"]
+
+[ext_resource type="Script" uid="uid://wp2jn3tx866t" path="res://scripts/data/kamikazer_stats.gd" id="1_kamikazerstats"]
+
+[resource]
+script = ExtResource("1_kamikazerstats")
+speed = 60.0
+charge_speed = 170.0
+scrap_drop_amount = 4
