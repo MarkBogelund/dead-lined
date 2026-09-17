@@ -2,6 +2,10 @@ extends Area2D
 class_name ConveyorBelt
 
 @export var settings: ConveyorSettings
+@export var movement_direction := Vector2.DOWN:
+	set(value):
+		movement_direction = value
+		_update_riders()
 
 var _riders: Dictionary[int, Node] = {}
 
@@ -22,7 +26,7 @@ func _on_body_entered(body: Node) -> void:
 	if not body.has_method("set_conveyor_velocity"):
 		return
 	_riders[body.get_instance_id()] = body
-	body.set_conveyor_velocity(Vector2.DOWN * _get_movement_speed())
+	body.set_conveyor_velocity(_get_movement_velocity())
 
 func _on_body_exited(body: Node) -> void:
 	_riders.erase(body.get_instance_id())
@@ -34,7 +38,12 @@ func _update_riders() -> void:
 		return
 	for rider in _riders.values():
 		if is_instance_valid(rider):
-			rider.set_conveyor_velocity(Vector2.DOWN * _get_movement_speed())
+			rider.set_conveyor_velocity(_get_movement_velocity())
 
 func _get_movement_speed() -> float:
 	return settings.movement_speed if settings else 120.0
+
+func _get_movement_velocity() -> Vector2:
+	if not movement_direction.is_finite() or movement_direction.is_zero_approx():
+		return Vector2.DOWN * _get_movement_speed()
+	return movement_direction.normalized() * _get_movement_speed()

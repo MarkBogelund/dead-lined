@@ -12,7 +12,9 @@ signal enemy_spawned(enemy: Node)
 @export var spawn_delay_decay := 0.97
 
 @export_group("Spawn Intro")
-## Downward distance from the outside spawn position to the point where the enemy becomes active.
+## Direction from the outside spawn position to the point where the enemy becomes active.
+@export var spawn_intro_direction := Vector2.DOWN
+## Distance from the outside spawn position to the point where the enemy becomes active.
 @export var spawn_intro_distance := 96.0
 @export var conveyor_settings: ConveyorSettings
 
@@ -53,7 +55,8 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	enemy.global_position = spawn_position
 	get_tree().current_scene.add_child(enemy)
 	if enemy is EnemyBase:
-		var release_position := spawn_position + Vector2.DOWN * spawn_intro_distance
+		var intro_direction := _get_spawn_intro_direction()
+		var release_position := spawn_position + intro_direction * spawn_intro_distance
 		var intro_speed := conveyor_settings.movement_speed if conveyor_settings else 120.0
 		var intro_duration := spawn_intro_distance / intro_speed
 		(enemy as EnemyBase).play_spawn_intro(release_position, intro_duration)
@@ -106,3 +109,8 @@ func _calculate_spawn_delay(wave_index: int) -> float:
 		base_spawn_delay * pow(spawn_delay_decay, wave_index - 1),
 		min_spawn_delay
 	)
+
+func _get_spawn_intro_direction() -> Vector2:
+	if not spawn_intro_direction.is_finite() or spawn_intro_direction.is_zero_approx():
+		return Vector2.DOWN
+	return spawn_intro_direction.normalized()
