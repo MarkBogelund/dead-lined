@@ -8,12 +8,10 @@ class_name ChaserStats
 @export_group("Movement")
 ## Movement speed in pixels/second
 @export var speed: float = 30.0
-## Radius within which nearby chasers influence this chaser's approach angle
-@export var spread_radius: float = 48.0
-## How far to offset the navigation target away from the local crowd
-@export var spread_strength: float = 24.0
-## Distance to player at which spread is dropped and the chaser converges to melee
-@export var converge_distance: float = 40.0
+## Distance from the player: inside it, chasers attack directly; outside it, they head to a point on this circle
+@export var attack_radius: float = 60.0
+## Extra distance beyond attack_radius required before an attacking chaser gives up and returns to its circle point (prevents boundary flicker)
+@export var attack_exit_margin: float = 20.0
 
 @export_group("Combat")
 ## Damage dealt on contact with the player

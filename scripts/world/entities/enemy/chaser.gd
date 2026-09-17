@@ -8,9 +8,11 @@ class_name Chaser
 
 var _speed := 30.0
 var _self_knockback := 150.0
-var _spread_radius := 48.0
-var _spread_strength := 24.0
-var _converge_distance := 40.0
+var _attack_radius := 60.0
+var _attack_exit_margin := 20.0
+
+var _circle_direction := Vector2.ZERO ## Random approach angle; ZERO means not yet chosen
+var _is_attacking := false ## Hysteresis latch: avoids flicker when resting right at attack_radius
 
 
 func _ready() -> void:
@@ -29,9 +31,8 @@ func _initialize() -> void:
 	hitbox.initialize(stats.hitbox_damage, stats.hitbox_knockback)
 	_speed = stats.speed
 	_self_knockback = stats.self_knockback
-	_spread_radius = stats.spread_radius
-	_spread_strength = stats.spread_strength
-	_converge_distance = stats.converge_distance
+	_attack_radius = stats.attack_radius
+	_attack_exit_margin = stats.attack_exit_margin
 
 func _physics_process(delta: float) -> void:
 	if knockback.is_active():
@@ -41,8 +42,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		var target := targeting.get_best_target(global_position)
 		if target:
-			var converging := global_position.distance_to(target.global_position) <= _converge_distance
-			navigation.avoidance_mask = 0 if converging else 1
+			if _circle_direction == Vector2.ZERO:
+				_circle_direction = Vector2.RIGHT.rotated(randf() * TAU)
+			_update_attack_latch(global_position.distance_to(target.global_position))
+			navigation.avoidance_mask = 0 if _is_attacking else 1
 			velocity = navigation.get_safe_velocity(_get_nav_target(target.global_position), _speed)
 			animated_sprite.flip_h = target.global_position.x < global_position.x
 			# Play idle animation when moving
@@ -62,24 +65,22 @@ func _on_hit_target(target: Node) -> void:
 func _should_restart_hit_particles_on_damage() -> bool:
 	return true
 
+## Enters attack mode at attack_radius, but only exits it past attack_radius + margin, so resting
+## exactly on the boundary doesn't flip the target/avoidance state every frame.
+func _update_attack_latch(distance_to_target: float) -> void:
+	if _is_attacking:
+		if distance_to_target > _attack_radius + _attack_exit_margin:
+			_is_attacking = false
+	# The nav agent can settle up to target_desired_distance short of the circle waypoint
+	# (which itself sits exactly attack_radius away), so entry must tolerate that same slack
+	# or a chaser can stop just outside attack_radius and never latch in, freezing forever.
+	elif distance_to_target <= _attack_radius + navigation.target_desired_distance:
+		_is_attacking = true
+
 func _get_nav_target(player_pos: Vector2) -> Vector2:
-	# Within melee range, ignore spread and go straight for the player
-	if global_position.distance_to(player_pos) <= _converge_distance:
+	# Inside the attack circle, ignore the approach point and go straight for the player
+	if _is_attacking:
 		return player_pos
-	
-	# Accumulate a separation vector away from nearby chasers
-	var separation := Vector2.ZERO
-	for chaser in get_tree().get_nodes_in_group("enemies"):
-		if chaser == self or not chaser is Chaser:
-			continue
-		var offset := global_position - (chaser as Chaser).global_position
-		var dist := offset.length()
-		if dist > 0.0 and dist < _spread_radius:
-			# Weight by proximity: closer chasers push harder
-			separation += offset.normalized() * (1.0 - dist / _spread_radius)
-	
-	# If no nearby chasers, head straight for the player
-	if separation.length_squared() == 0.0:
-		return player_pos
-	
-	return player_pos + separation.normalized() * _spread_strength
+
+	# Outside it, head for this chaser's own point on the circle; avoidance keeps chasers apart en route
+	return player_pos + _circle_direction * _attack_radius
