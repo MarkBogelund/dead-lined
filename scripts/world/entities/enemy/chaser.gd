@@ -35,6 +35,8 @@ func _initialize() -> void:
 	_attack_exit_margin = stats.attack_exit_margin
 
 func _physics_process(delta: float) -> void:
+	if _apply_conveyor_motion():
+		return
 	if knockback.is_active():
 		velocity = knockback.velocity
 	elif is_dead():

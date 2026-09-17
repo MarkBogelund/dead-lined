@@ -12,6 +12,11 @@ signal enemy_spawned(enemy: Node)
 @export var min_spawn_delay := 0.15
 @export var spawn_delay_decay := 0.97
 
+@export_group("Spawn Intro")
+## Downward distance from the outside spawn position to the point where the enemy becomes active.
+@export var spawn_intro_distance := 96.0
+@export var conveyor_settings: ConveyorSettings
+
 @export var health_growth := 0.15
 @export var damage_growth := 0.1
 
@@ -19,7 +24,7 @@ var _current_wave := 0
 var _is_spawning := false
 
 func _ready() -> void:
-	wave_manager.connect("combat_phase_started", Callable(self , "_on_combat_phase_started"))
+	wave_manager.connect("combat_phase_started", Callable(self, "_on_combat_phase_started"))
 
 func _on_combat_phase_started(wave_index: int) -> void:
 	start_wave_spawn(wave_index)
@@ -45,8 +50,14 @@ func _spawn_wave_queue(spawn_list: Array[PackedScene], spawn_delay: float) -> vo
 
 func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	var enemy := enemy_scene.instantiate()
-	enemy.global_position = global_position + _get_random_spawn_offset()
+	var spawn_position := global_position + _get_random_spawn_offset()
+	enemy.global_position = spawn_position
 	get_tree().current_scene.add_child(enemy)
+	if enemy is EnemyBase:
+		var release_position := spawn_position + Vector2.DOWN * spawn_intro_distance
+		var intro_speed := conveyor_settings.movement_speed if conveyor_settings else 120.0
+		var intro_duration := spawn_intro_distance / intro_speed
+		(enemy as EnemyBase).play_spawn_intro(release_position, intro_duration)
 	enemy.add_to_group("enemies")
 	_apply_wave_scaling(enemy)
 	

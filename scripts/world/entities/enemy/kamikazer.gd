@@ -51,6 +51,8 @@ func _initialize() -> void:
 	_default_avoidance_mask = navigation.avoidance_mask
 
 func _physics_process(delta: float) -> void:
+	if _apply_conveyor_motion():
+		return
 	if knockback.is_active():
 		velocity = knockback.velocity
 	elif is_dead() or _exploding:

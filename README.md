@@ -87,6 +87,12 @@ A few places intentionally cross the strict ownership boundary because the added
 
 These are acceptable trade-offs, not bugs — revisit only if the game grows multiple scenes or needs pooling/threading.
 
+### Enemy spawn intro
+
+`EnemySpawner` instances can sit above the playable area and expose `spawn_intro_distance`. A spawned `EnemyBase` is initially non-colliding, invulnerable, AI-disabled, and visually held on the first idle frame while its root is tweened straight down from the spawner position to the release position. On arrival, `EnemyBase` restores collision, contact damage, animation, and normal physics processing. The tween duration is derived as `spawn_intro_distance / ConveyorSettings.movement_speed`, so its world-space speed matches the belt exactly. This is presentation owned by the spawner and shared enemy base; individual enemy AI scripts do not contain spawn-entry behavior.
+
+`ConveyorBelt` ([scripts/world/spawners/conveyor_belt.gd](scripts/world/spawners/conveyor_belt.gd)) is a visual-free `Area2D` that detects only EnemyBody layer 4. Its exported `belt_size` updates a local `RectangleShape2D` in the editor. Both the belt and spawner reference [resources/spawner/conveyor_settings.tres](resources/spawner/conveyor_settings.tres), the single source of truth for `movement_speed`. The belt talks to enemies only through `set_conveyor_velocity()` / `clear_conveyor_velocity()`; enemy AI gives that movement priority while overlapping. The spawn tween remains responsible for crossing the outer wall while collision is disabled; once the enemy becomes active inside an overlapping belt zone, the belt carries it farther downward until it exits.
+
 ---
 
 ## Testing

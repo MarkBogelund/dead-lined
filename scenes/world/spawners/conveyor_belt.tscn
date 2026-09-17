@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b410q03nuo8ed"]
+
+[ext_resource type="Script" path="res://scripts/world/spawners/conveyor_belt.gd" id="1_belt"]
+[ext_resource type="Resource" path="res://resources/spawner/conveyor_settings.tres" id="2_settings"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_belt"]
+resource_local_to_scene = true
+size = Vector2(64, 160)
+
+[node name="ConveyorBelt" type="Area2D" unique_id=1907824948]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_belt")
+settings = ExtResource("2_settings")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=986280]
+shape = SubResource("RectangleShape2D_belt")
