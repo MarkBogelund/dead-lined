@@ -51,8 +51,6 @@ func _initialize() -> void:
 	_default_avoidance_mask = navigation.avoidance_mask
 
 func _physics_process(delta: float) -> void:
-	if _apply_conveyor_motion():
-		return
 	if knockback.is_active():
 		velocity = knockback.velocity
 	elif is_dead() or _exploding:
@@ -72,6 +70,7 @@ func _physics_process(delta: float) -> void:
 			charge_particles.emitting = false
 
 	knockback.process(delta)
+	_add_conveyor_velocity()
 	move_and_slide()
 
 	if _state == State.CHARGE and get_slide_collision_count() > 0:

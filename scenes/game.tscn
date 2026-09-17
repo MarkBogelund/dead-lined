@@ -479,8 +479,8 @@ position = Vector2(-256, 136)
 texture = SubResource("AtlasTexture_e1j6l")
 
 [node name="ConveyorBelt" parent="World/Environment" unique_id=1907824948 instance=ExtResource("27_sww3w")]
-position = Vector2(-208, 0)
-scale = Vector2(0.9999975, 1.9816674)
+position = Vector2(-224, 0)
+scale = Vector2(0.47999752, 1.9816674)
 
 [node name="Player" parent="World" unique_id=244036277 instance=ExtResource("1_uwrxv")]
 unique_name_in_owner = true

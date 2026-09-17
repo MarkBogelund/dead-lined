@@ -29,12 +29,8 @@ func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
 func clear_conveyor_velocity() -> void:
 	_conveyor_velocity = Vector2.ZERO
 
-func _apply_conveyor_motion() -> bool:
-	if _conveyor_velocity == Vector2.ZERO:
-		return false
-	velocity = _conveyor_velocity
-	move_and_slide()
-	return true
+func _add_conveyor_velocity() -> void:
+	velocity += _conveyor_velocity
 
 func play_spawn_intro(target_position: Vector2, duration: float) -> void:
 	_spawn_intro_active = true

@@ -36,8 +36,6 @@ func _initialize() -> void:
 	_shoot_delay = stats.shoot_start_delay
 
 func _physics_process(delta: float) -> void:
-	if _apply_conveyor_motion():
-		return
 	_shoot_delay -= delta
 	if knockback.is_active():
 		velocity = knockback.velocity
@@ -86,6 +84,7 @@ func _physics_process(delta: float) -> void:
 			_face_target(body_sprite, target.global_position)
 	
 	knockback.process(delta)
+	_add_conveyor_velocity()
 	move_and_slide()
 
 func _begin_telegraph() -> void:
