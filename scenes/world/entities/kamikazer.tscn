@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="13_wuiwp"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="14_wuiwp"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="15_los"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="16_chargefx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1no88"]
 
@@ -207,6 +208,36 @@ tracks/8/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_charge"]
+resource_name = "charge"
+length = 0.26666668
+loop_mode = 1
+step = 0.06666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06666667, 0.13333334, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShadowSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
 }
 
 [sub_resource type="Animation" id="Animation_wtq4b"]
@@ -415,6 +446,7 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_j0cyh"]
 _data = {
 &"RESET": SubResource("Animation_otmr2"),
+&"charge": SubResource("Animation_charge"),
 &"die": SubResource("Animation_wtq4b"),
 &"idle": SubResource("Animation_uqckg"),
 &"take_damage": SubResource("Animation_5uy6h")
@@ -473,6 +505,38 @@ scale_min = 0.29999998
 scale_max = 0.59999996
 scale_curve = SubResource("CurveTexture_cpaoe")
 color_ramp = SubResource("GradientTexture1D_ifhfr")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_charge"]
+atlas = ExtResource("16_chargefx")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Gradient" id="Gradient_charge"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.972549, 0.2784314, 0.6156863, 0.7, 0.972549, 0.2784314, 0.6156863, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_charge"]
+gradient = SubResource("Gradient_charge")
+
+[sub_resource type="Curve" id="Curve_charge_scale"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_charge_scale"]
+curve = SubResource("Curve_charge_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_charge"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 12.0
+spread = 180.0
+initial_velocity_min = 10.0
+initial_velocity_max = 40.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 0.9
+scale_curve = SubResource("CurveTexture_charge_scale")
+color_ramp = SubResource("GradientTexture1D_charge")
 
 [node name="Kamikazer" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
 collision_layer = 8
@@ -548,10 +612,17 @@ priority_distance_threshold = 40.0
 [node name="LineOfSightComponent" type="Node2D" parent="." unique_id=392499215]
 script = ExtResource("15_los")
 ray_collision_mask = 9
-debug_draw = true
 
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("13_by6ef")]
 process_material = SubResource("ParticleProcessMaterial_lei18")
+
+[node name="ChargeParticles" type="GPUParticles2D" parent="." unique_id=84107375]
+z_index = 5
+emitting = false
+amount = 24
+texture = SubResource("AtlasTexture_charge")
+lifetime = 0.35
+process_material = SubResource("ParticleProcessMaterial_charge")
 
 [node name="FlashVfx" parent="." unique_id=1756477109 instance=ExtResource("14_wuiwp")]
 scale = Vector2(2, 2)

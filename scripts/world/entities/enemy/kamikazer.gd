@@ -4,6 +4,7 @@ class_name Kamikazer
 @onready var hitbox: HitboxComponent = $HitboxComponent
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var charge_particles: GPUParticles2D = $ChargeParticles
 @onready var camera_shake_manager: CameraShakeManager = get_tree().get_first_node_in_group("camera_shake_manager")
 
 @export var stats: KamikazerStats
@@ -30,6 +31,7 @@ var _collision_cooldown_duration := 1.0
 func _ready() -> void:
 	_initialize()
 	animation.configure_animation("idle", 0, false)
+	animation.configure_animation("charge", 0, false)
 	animation.configure_animation("take_damage", 1, true)
 	animation.configure_animation("die", 2, true)
 	hitbox.hit_target.connect(_on_hit_target)
@@ -53,15 +55,19 @@ func _physics_process(delta: float) -> void:
 		velocity = knockback.velocity
 	elif is_dead() or _exploding:
 		velocity = Vector2.ZERO
+		charge_particles.emitting = false
 	else:
 		var target := targeting.get_best_target(global_position)
 		if target:
 			_face_target(animated_sprite, target.global_position)
 			_update_state(target, delta)
-			animation.play_animation("idle")
+			var is_charging_visual := _state == State.CHARGE
+			animation.play_animation("charge" if is_charging_visual else "idle")
+			charge_particles.emitting = is_charging_visual
 		else:
 			_reset_to_seek()
 			velocity = Vector2.ZERO
+			charge_particles.emitting = false
 
 	knockback.process(delta)
 	move_and_slide()
