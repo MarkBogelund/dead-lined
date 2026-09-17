@@ -38,9 +38,21 @@ enum MoveState {NORMAL, DASHING, KNOCKED, FROZEN}
 var can_move := true
 var _facing_right := true
 var _is_dead := false
+var _base_velocity := Vector2.ZERO
 
 const MIN_MOVE_SPEED := 10.0
 const PLAYER_BODY_LAYER := 2 ## Matches project.godot 2d_physics layer_2 ("PlayerBody")
+
+var _conveyor_velocity := Vector2.ZERO
+
+func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
+	_conveyor_velocity = conveyor_velocity
+
+func clear_conveyor_velocity() -> void:
+	_conveyor_velocity = Vector2.ZERO
+
+func _add_conveyor_velocity() -> void:
+	velocity += _conveyor_velocity
 
 func _ready() -> void:
 	_initialize()
@@ -113,16 +125,22 @@ func _process_movement(delta: float) -> void:
 	knockback.process(delta)
 	match _get_move_state():
 		MoveState.DASHING:
+			_base_velocity = Vector2.ZERO
 			velocity = dash.get_dash_velocity()
+			_add_conveyor_velocity()
 			move_and_slide()
 		MoveState.KNOCKED:
+			_base_velocity = Vector2.ZERO
 			velocity = knockback.velocity
+			_add_conveyor_velocity()
 			move_and_slide()
 		MoveState.FROZEN:
+			_base_velocity = Vector2.ZERO
 			velocity = Vector2.ZERO
 			move_and_slide()
 		MoveState.NORMAL:
-			velocity = movement.calculate_velocity(velocity, input_dir, delta)
+			_base_velocity = movement.calculate_velocity(_base_velocity, input_dir, delta)
+			velocity = _base_velocity + _conveyor_velocity
 			move_and_slide()
 
 func _process_locomotion() -> void:

@@ -83,6 +83,7 @@ script = ExtResource("1_softn")
 is_player_projectile = true
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=442925662]
+z_index = 5
 scale = Vector2(0.49915063, 0.5)
 texture = SubResource("AtlasTexture_o1bpx")
 

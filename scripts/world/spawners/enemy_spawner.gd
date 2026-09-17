@@ -57,7 +57,7 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	if enemy is EnemyBase:
 		var intro_direction := _get_spawn_intro_direction()
 		var release_position := spawn_position + intro_direction * spawn_intro_distance
-		var intro_speed := conveyor_settings.movement_speed if conveyor_settings else 120.0
+		var intro_speed := conveyor_settings.enemy_movement_speed if conveyor_settings else 120.0
 		var intro_duration := spawn_intro_distance / intro_speed
 		(enemy as EnemyBase).play_spawn_intro(release_position, intro_duration)
 	enemy.add_to_group("enemies")

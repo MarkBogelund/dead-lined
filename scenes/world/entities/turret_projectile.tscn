@@ -109,6 +109,8 @@ _data = {
 script = ExtResource("1_f5wuv")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=699264040]
+visible = false
+z_index = 5
 texture = SubResource("AtlasTexture_x0bxo")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=769139471]
