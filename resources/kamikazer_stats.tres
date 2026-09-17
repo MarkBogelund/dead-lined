@@ -6,6 +6,4 @@
 script = ExtResource("1_kamikazerstats")
 speed = 60.0
 charge_speed = 170.0
-max_charge_duration = 3.0
-stuck_check_interval = 0.5
 scrap_drop_amount = 4
