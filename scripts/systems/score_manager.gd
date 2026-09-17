@@ -39,7 +39,7 @@ func _on_build_phase_started() -> void:
 func _on_enemy_spawned(enemy: Node) -> void:
 	# Connect to enemy's death signal, capturing the enemy reference for position
 	if enemy.has_signal("died"):
-		enemy.died.connect(func(): _on_drone_destroyed(enemy))
+		enemy.died.connect(func() -> void: _on_drone_destroyed(enemy))
 
 func _on_drone_destroyed(enemy: Node) -> void:
 	drones_destroyed += 1

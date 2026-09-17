@@ -87,6 +87,16 @@ A few places intentionally cross the strict ownership boundary because the added
 
 These are acceptable trade-offs, not bugs — revisit only if the game grows multiple scenes or needs pooling/threading.
 
+### Enemy spawn intro
+
+`EnemySpawner` instances can sit outside the playable area and expose `spawn_intro_direction` plus `spawn_intro_distance`. A spawned `EnemyBase` is initially non-colliding, invulnerable, AI-disabled, and visually held on the first idle frame while its root is tweened from the spawner position to the release position. Sleep/wake visuals are editable `spawn_sleep` and `spawn_wake` animations on each enemy scene: sleep tints the body grey, and wake fades it back to normal. On arrival, `EnemyBase` restores collision, contact damage, animation, and normal physics processing, then plays `spawn_wake`. The tween duration is derived as `spawn_intro_distance / ConveyorSettings.enemy_movement_speed`, so its world-space speed matches enemy conveyor movement exactly. This is presentation owned by the spawner and shared enemy base; individual enemy AI scripts do not contain spawn-entry behavior.
+
+Conveyor belts are inline `Area2D` components in the level scene, not standalone scenes. Each uses [scripts/world/spawners/conveyor_belt.gd](scripts/world/spawners/conveyor_belt.gd), detects PlayerBody and EnemyBody layers, and owns a child `CollisionShape2D` whose dimensions are currently authored in the level scene. Both the belt and spawner reference [resources/spawner/conveyor_settings.tres](resources/spawner/conveyor_settings.tres), the single source of truth for `enemy_movement_speed` and `player_movement_speed`. The belt talks to bodies only through `set_conveyor_velocity()` / `clear_conveyor_velocity()`; while overlapping, the matching conveyor velocity is added to normal player/enemy movement so they can steer off the belt. The spawn tween remains responsible for crossing the outer wall while collision is disabled.
+
+### Type-safety standard
+
+This project uses strict GDScript typing for signal callbacks and loops. Any anonymous function passed to `connect()` must either declare its parameter type(s) or include an explicit `-> void` return type. Any `for` loop variable that is not inference-safe should be explicitly typed, e.g. `for rider: Node in _riders.values():` and `for config: TargetConfig in _sorted_configs:`. If a value can be ambiguous, declare its type explicitly (`var intro_speed: float = ...`). This is not style-only; it keeps Godot diagnostics clean and prevents silent type drift.
+
 ---
 
 ## Testing

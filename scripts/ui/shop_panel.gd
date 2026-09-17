@@ -17,9 +17,9 @@ func open(entries: Array[TurretEntry], can_afford_fn: Callable) -> void:
 			var entry := entries[i]
 			slot.visible = true
 			slot.populate(entry, can_afford_fn.call(entry.price))
-			for conn in slot.selected.get_connections():
+			for conn: Dictionary in slot.selected.get_connections():
 				slot.selected.disconnect(conn.callable)
-			slot.selected.connect(func(): turret_selected.emit(entry))
+			slot.selected.connect(func() -> void: turret_selected.emit(entry))
 		else:
 			slot.visible = false
 	visible = true

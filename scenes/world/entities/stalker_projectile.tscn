@@ -45,7 +45,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_fghcc"]
@@ -109,6 +109,7 @@ _data = {
 script = ExtResource("2_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=743767304]
+z_index = 5
 texture = SubResource("AtlasTexture_hynvp")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=1256077360]

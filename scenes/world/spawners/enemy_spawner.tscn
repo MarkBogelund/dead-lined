@@ -3,7 +3,9 @@
 [ext_resource type="Script" uid="uid://c1bkq85cl4uv4" path="res://scripts/world/spawners/enemy_spawner.gd" id="1_ks1gq"]
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="2_xl0gr"]
 [ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/spawner/chaser_spawn_details.tres" id="3_ih16b"]
+[ext_resource type="Resource" path="res://resources/spawner/conveyor_settings.tres" id="4_conveyor"]
 
 [node name="EnemySpawner" type="Marker2D" unique_id=271277418]
 script = ExtResource("1_ks1gq")
 spawn_entries = Array[ExtResource("2_xl0gr")]([ExtResource("3_ih16b")])
+conveyor_settings = ExtResource("4_conveyor")

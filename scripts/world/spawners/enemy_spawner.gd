@@ -6,11 +6,17 @@ signal enemy_spawned(enemy: Node)
 @onready var wave_manager: WaveManager = %WaveManager
 
 @export var spawn_entries: Array[EnemySpawnEntry] = []
-@export var spawn_radius := 24.0
 
 @export var base_spawn_delay := 0.6
 @export var min_spawn_delay := 0.15
 @export var spawn_delay_decay := 0.97
+
+@export_group("Spawn Intro")
+## Direction from the outside spawn position to the point where the enemy becomes active.
+@export var spawn_intro_direction := Vector2.DOWN
+## Distance from the outside spawn position to the point where the enemy becomes active.
+@export var spawn_intro_distance := 96.0
+@export var conveyor_settings: ConveyorSettings
 
 @export var health_growth := 0.15
 @export var damage_growth := 0.1
@@ -19,7 +25,7 @@ var _current_wave := 0
 var _is_spawning := false
 
 func _ready() -> void:
-	wave_manager.connect("combat_phase_started", Callable(self , "_on_combat_phase_started"))
+	wave_manager.connect("combat_phase_started", Callable(self, "_on_combat_phase_started"))
 
 func _on_combat_phase_started(wave_index: int) -> void:
 	start_wave_spawn(wave_index)
@@ -39,14 +45,21 @@ func start_wave_spawn(wave_index: int) -> void:
 	_is_spawning = false
 
 func _spawn_wave_queue(spawn_list: Array[PackedScene], spawn_delay: float) -> void:
-	for enemy_scene in spawn_list:
+	for enemy_scene: PackedScene in spawn_list:
 		_spawn_single_enemy(enemy_scene)
 		await get_tree().create_timer(spawn_delay).timeout
 
 func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	var enemy := enemy_scene.instantiate()
-	enemy.global_position = global_position + _get_random_spawn_offset()
+	var spawn_position := global_position
+	enemy.global_position = spawn_position
 	get_tree().current_scene.add_child(enemy)
+	if enemy is EnemyBase:
+		var intro_direction := _get_spawn_intro_direction()
+		var release_position := spawn_position + intro_direction * spawn_intro_distance
+		var intro_speed: float = conveyor_settings.enemy_movement_speed if conveyor_settings else 120.0
+		var intro_duration: float = spawn_intro_distance / intro_speed
+		(enemy as EnemyBase).play_spawn_intro(release_position, intro_duration)
 	enemy.add_to_group("enemies")
 	_apply_wave_scaling(enemy)
 	
@@ -59,7 +72,7 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 func _build_spawn_queue_for_wave(wave_index: int) -> Array[PackedScene]:
 	var queue: Array[PackedScene] = []
 
-	for entry in spawn_entries:
+	for entry: EnemySpawnEntry in spawn_entries:
 		if entry.enemy_scene == null:
 			continue
 
@@ -72,7 +85,7 @@ func _build_spawn_queue_for_wave(wave_index: int) -> Array[PackedScene]:
 		if entry.max_per_wave > 0:
 			count = min(count, entry.max_per_wave)
 
-		for i in count:
+		for i: int in range(count):
 			queue.append(entry.enemy_scene)
 
 	queue.shuffle()
@@ -97,8 +110,7 @@ func _calculate_spawn_delay(wave_index: int) -> float:
 		min_spawn_delay
 	)
 
-func _get_random_spawn_offset() -> Vector2:
-	return Vector2(
-		randf_range(-spawn_radius, spawn_radius),
-		randf_range(-spawn_radius, spawn_radius)
-	)
+func _get_spawn_intro_direction() -> Vector2:
+	if not spawn_intro_direction.is_finite() or spawn_intro_direction.is_zero_approx():
+		return Vector2.DOWN
+	return spawn_intro_direction.normalized()

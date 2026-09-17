@@ -44,19 +44,19 @@ func _ready() -> void:
 	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 4, true)
 	
-	wave_manager.combat_phase_started.connect(func(_i): _active = true; _shoot_delay = stats.shoot_start_delay)
-	wave_manager.build_phase_started.connect(func(): _active = false)
+	wave_manager.combat_phase_started.connect(func(_i: int) -> void: _active = true; _shoot_delay = stats.shoot_start_delay)
+	wave_manager.build_phase_started.connect(func() -> void: _active = false)
 
 	game_over_manager.game_over.connect(_on_game_over)
 
-	interaction_range.player_entered.connect(func(): health_ui.set_player_in_range(true); range_indicator.show_indicator())
-	interaction_range.player_exited.connect(func(): health_ui.set_player_in_range(false); range_indicator.hide_indicator())
+	interaction_range.player_entered.connect(func() -> void: health_ui.set_player_in_range(true); range_indicator.show_indicator())
+	interaction_range.player_exited.connect(func() -> void: health_ui.set_player_in_range(false); range_indicator.hide_indicator())
 	repair.repaired.connect(health.heal)
 	repair.capacity_drained.connect(player.capacity.spend)
-	repair.healing_started.connect(func(): windup_particles.emitting = true)
-	repair.healing_stopped.connect(func(): windup_particles.emitting = false)
+	repair.healing_started.connect(func() -> void: windup_particles.emitting = true)
+	repair.healing_stopped.connect(func() -> void: windup_particles.emitting = false)
 
-	hud.setup(self , player, wave_manager)
+	hud.setup(self, player, wave_manager)
 func _initialize() -> void:
 	if not stats:
 		return
@@ -84,7 +84,7 @@ func _process(delta: float) -> void:
 	
 	_shoot_delay -= delta
 	
-	var target := targeting.get_best_target(global_position, func(node: Node2D):
+	var target := targeting.get_best_target(global_position, func(node: Node2D) -> bool:
 			return node != self and line_of_sight.can_see(global_position, node.global_position))
 	if not target:
 		return

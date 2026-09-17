@@ -4,5 +4,6 @@
 
 [resource]
 script = ExtResource("1_chaserstats")
+speed = 35.0
 attack_radius = 90.0
 scrap_drop_amount = 3

@@ -32,6 +32,8 @@ func _ready() -> void:
 	_initialize()
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("charge", 0, false)
+	animation.configure_animation("spawn_sleep", 0, false)
+	animation.configure_animation("spawn_wake", 0, true)
 	animation.configure_animation("take_damage", 1, true)
 	animation.configure_animation("die", 2, true)
 	hitbox.hit_target.connect(_on_hit_target)
@@ -70,6 +72,7 @@ func _physics_process(delta: float) -> void:
 			charge_particles.emitting = false
 
 	knockback.process(delta)
+	_add_conveyor_velocity()
 	move_and_slide()
 
 	if _state == State.CHARGE and get_slide_collision_count() > 0:

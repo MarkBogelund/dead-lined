@@ -10,5 +10,5 @@ aim_speed = 4.0
 max_shoot_distance = 100.0
 shoot_cooldown = 1.0
 projectile_damage = 5
-projectile_speed = 120.0
+projectile_speed = 110.0
 scrap_drop_amount = 5

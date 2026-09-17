@@ -19,7 +19,7 @@ var _sorted_configs: Array[TargetConfig] = []
 
 func _ready() -> void:
 	_sorted_configs = target_configs.duplicate()
-	_sorted_configs.sort_custom(func(a: TargetConfig, b: TargetConfig): return a.priority > b.priority)
+	_sorted_configs.sort_custom(func(a: TargetConfig, b: TargetConfig) -> bool: return a.priority > b.priority)
 
 func initialize(s_max_range: float) -> void:
 	max_range = s_max_range
@@ -36,13 +36,13 @@ func get_best_target(from_position: Vector2, filter: Callable = Callable()) -> N
 	var best_priority := -1
 	
 	# Scan through all priority groups
-	for config in _sorted_configs:
+	for config: TargetConfig in _sorted_configs:
 		if config.group_name.is_empty():
 			continue
 		
-		var nodes := get_tree().get_nodes_in_group(config.group_name)
+		var nodes: Array[Node] = get_tree().get_nodes_in_group(config.group_name)
 		
-		for node in nodes:
+		for node: Node in nodes:
 			# Skip invalid nodes
 			if not is_instance_valid(node) or not node is Node2D:
 				continue

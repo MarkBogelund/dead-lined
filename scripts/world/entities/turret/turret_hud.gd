@@ -22,14 +22,14 @@ func setup(turret: Node, player: Player, wave_manager: WaveManager) -> void:
 	_wave_manager = wave_manager
 	_build_phase = wave_manager.is_build_phase()
 
-	toggle_menu.open_fn = func(): upgrade_panel.open(_turret, _player, _wave_manager)
-	toggle_menu.close_fn = func(): upgrade_panel.close()
+	toggle_menu.open_fn = func() -> void: upgrade_panel.open(_turret, _player, _wave_manager)
+	toggle_menu.close_fn = func() -> void: upgrade_panel.close()
 	toggle_menu.interaction_zone = turret.interaction_range
 	toggle_menu.menu_control = upgrade_panel
 	toggle_menu.enabled = _build_phase
 
-	_toggle_info.open_fn = func(): info_panel.open(_turret)
-	_toggle_info.close_fn = func(): info_panel.close()
+	_toggle_info.open_fn = func() -> void: info_panel.open(_turret)
+	_toggle_info.close_fn = func() -> void: info_panel.close()
 	_toggle_info.interaction_zone = turret.interaction_range
 
 	wave_manager.build_phase_started.connect(_on_build_phase_started)

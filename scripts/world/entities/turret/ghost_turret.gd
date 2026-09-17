@@ -48,7 +48,7 @@ func _process(_delta: float) -> void:
 func _check_turret_proximity() -> void:
 	var was_in_zone := _in_exclusion_zone
 	_in_exclusion_zone = false
-	for zone in get_tree().get_nodes_in_group("turret_exclusion_zones"):
+	for zone: Node in get_tree().get_nodes_in_group("turret_exclusion_zones"):
 		if zone is Node2D and zone.get_parent() != self:
 			if global_position.distance_to(zone.global_position) < zone.exclusion_radius:
 				_in_exclusion_zone = true

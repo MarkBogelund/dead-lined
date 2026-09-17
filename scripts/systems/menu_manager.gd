@@ -103,7 +103,7 @@ func _is_blocked_by_higher_layer(layer: int) -> bool:
 
 
 func _close_groups(groups: Array[StringName]) -> void:
-	for group in groups:
+	for group: StringName in groups:
 		if group.is_empty():
 			continue
 		for e: _Entry in _entries.values():
