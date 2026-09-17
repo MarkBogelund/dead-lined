@@ -319,7 +319,7 @@ tracks/10/path = NodePath("CollisionShape2D:disabled")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.2),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
@@ -533,7 +533,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0juef")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
@@ -613,7 +613,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qwnb1")
 }],
-"loop": true,
+"loop": 1,
 "name": &"default",
 "speed": 10.0
 }]
@@ -773,6 +773,7 @@ script = ExtResource("7_ag4mk")
 shape = SubResource("CircleShape2D_collision")
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=1725397380]
+modulate = Color(0, 0, 0, 0.19607843)
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uhdj6")
 

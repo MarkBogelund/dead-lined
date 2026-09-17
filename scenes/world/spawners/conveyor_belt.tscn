@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://b410q03nuo8ed"]
+[gd_scene format=3 uid="uid://dlo773i8a4ftw"]
 
-[ext_resource type="Script" path="res://scripts/world/spawners/conveyor_belt.gd" id="1_belt"]
-[ext_resource type="Resource" path="res://resources/spawner/conveyor_settings.tres" id="2_settings"]
+[ext_resource type="Script" uid="uid://blje0nqklvqls" path="res://scripts/world/spawners/conveyor_belt.gd" id="1_belt"]
+[ext_resource type="Resource" uid="uid://dfqqng3tkvdcl" path="res://resources/spawner/conveyor_settings.tres" id="2_settings"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_belt"]
 resource_local_to_scene = true

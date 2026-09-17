@@ -21,12 +21,15 @@
 [ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/spawner/chaser_spawn_details.tres" id="15_5newe"]
 [ext_resource type="Resource" uid="uid://cq5r8y2nwx7ih" path="res://resources/spawner/stalker_spawn_details.tres" id="16_5newe"]
 [ext_resource type="PackedScene" uid="uid://da6ouw6b58hpr" path="res://scenes/ui/game_over_ui.tscn" id="16_ca42v"]
+[ext_resource type="Texture2D" uid="uid://bldg33eco6nyp" path="res://assets/sprites/environment/conveyor-belt.png" id="16_sww3w"]
 [ext_resource type="Resource" uid="uid://cx3hxt45w3uit" path="res://resources/spawner/kamikazer_spawn_details.tres" id="17_kamikaze"]
+[ext_resource type="PackedScene" uid="uid://bgw388qgo3ujn" path="res://scenes/world/environment/conveyor_belt_visual.tscn" id="17_sgl2t"]
 [ext_resource type="Script" uid="uid://8f5c4ell2tmr" path="res://scripts/ui/capacity_overlay.gd" id="24_e1j6l"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="25_tentry"]
 [ext_resource type="Resource" uid="uid://clop50yhbqa44" path="res://resources/shop/seeker_strong_shop_details.tres" id="26_sstrsh"]
+[ext_resource type="Script" uid="uid://blje0nqklvqls" path="res://scripts/world/spawners/conveyor_belt.gd" id="27_conveyor_script"]
 [ext_resource type="PackedScene" uid="uid://c3pausemenu01" path="res://scenes/ui/pause_menu.tscn" id="27_qnb83"]
-[ext_resource type="PackedScene" uid="uid://b410q03nuo8ed" path="res://scenes/world/spawners/conveyor_belt.tscn" id="27_sww3w"]
+[ext_resource type="Resource" uid="uid://dfqqng3tkvdcl" path="res://resources/spawner/conveyor_settings.tres" id="28_conveyor_settings"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -308,6 +311,13 @@ sources/0 = SubResource("TileSetAtlasSource_pl11u")
 atlas = ExtResource("13_bt5mj")
 region = Rect2(16, 16, 18, 48)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spl43"]
+size = Vector2(18, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgl2t"]
+atlas = ExtResource("16_sww3w")
+region = Rect2(32, 32, 32, 32)
+
 [sub_resource type="Curve" id="Curve_e1j6l"]
 _data = [Vector2(0.49607846, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 3.4410524, 0.0, 0, 0]
 point_count = 2
@@ -451,36 +461,101 @@ frame = 4
 frame_progress = 0.0
 
 [node name="Grade" type="Sprite2D" parent="World/Environment/Props" unique_id=1793599175]
-position = Vector2(-256, -136)
+position = Vector2(-191, -136)
 texture = SubResource("AtlasTexture_e1j6l")
 
 [node name="Grade2" type="Sprite2D" parent="World/Environment/Props" unique_id=562996097]
-position = Vector2(-256, -88)
+position = Vector2(-191, -88)
 texture = SubResource("AtlasTexture_e1j6l")
 
 [node name="Grade3" type="Sprite2D" parent="World/Environment/Props" unique_id=1194358042]
-position = Vector2(-256, -40)
+position = Vector2(-191, -40)
 texture = SubResource("AtlasTexture_e1j6l")
 
 [node name="Grade4" type="Sprite2D" parent="World/Environment/Props" unique_id=1041475309]
-position = Vector2(-256, -8)
+position = Vector2(-191, -8)
 texture = SubResource("AtlasTexture_e1j6l")
 
 [node name="Grade5" type="Sprite2D" parent="World/Environment/Props" unique_id=1190228928]
-position = Vector2(-256, 40)
+position = Vector2(-191, 40)
 texture = SubResource("AtlasTexture_e1j6l")
 
 [node name="Grade6" type="Sprite2D" parent="World/Environment/Props" unique_id=1522701295]
-position = Vector2(-256, 88)
+position = Vector2(-191, 88)
 texture = SubResource("AtlasTexture_e1j6l")
 
 [node name="Grade7" type="Sprite2D" parent="World/Environment/Props" unique_id=1742564061]
-position = Vector2(-256, 136)
+position = Vector2(-191, 136)
 texture = SubResource("AtlasTexture_e1j6l")
 
-[node name="ConveyorBelt" parent="World/Environment" unique_id=1907824948 instance=ExtResource("27_sww3w")]
-position = Vector2(-224, 0)
-scale = Vector2(0.47999752, 1.9816674)
+[node name="ConveyorBelt" type="Area2D" parent="World/Environment" unique_id=1907824948]
+position = Vector2(-248, 0)
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("27_conveyor_script")
+settings = ExtResource("28_conveyor_settings")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/ConveyorBelt" unique_id=1457802000]
+position = Vector2(-1, 0)
+shape = SubResource("RectangleShape2D_spl43")
+
+[node name="ConveyorBeltVisual" parent="World/Environment/ConveyorBelt" unique_id=1646066894 instance=ExtResource("17_sgl2t")]
+position = Vector2(3.637979e-12, -128)
+
+[node name="ConveyorBeltVisual2" parent="World/Environment/ConveyorBelt" unique_id=3772997 instance=ExtResource("17_sgl2t")]
+position = Vector2(1.8189894e-12, -64)
+
+[node name="ConveyorBeltVisual3" parent="World/Environment/ConveyorBelt" unique_id=443274477 instance=ExtResource("17_sgl2t")]
+
+[node name="ConveyorBeltVisual4" parent="World/Environment/ConveyorBelt" unique_id=228426090 instance=ExtResource("17_sgl2t")]
+position = Vector2(-1.8189894e-12, 64)
+
+[node name="ConveyorBeltVisual5" parent="World/Environment/ConveyorBelt" unique_id=1773801154 instance=ExtResource("17_sgl2t")]
+position = Vector2(-3.637979e-12, 128)
+
+[node name="Cap" type="Sprite2D" parent="World/Environment/ConveyorBelt" unique_id=919654631]
+position = Vector2(0, -144)
+rotation = 3.1415927
+texture = SubResource("AtlasTexture_sgl2t")
+
+[node name="Cap2" type="Sprite2D" parent="World/Environment/ConveyorBelt" unique_id=1811418434]
+position = Vector2(0, 144)
+texture = SubResource("AtlasTexture_sgl2t")
+
+[node name="ConveyorBelt2" type="Area2D" parent="World/Environment" unique_id=1326348322]
+position = Vector2(248, 0)
+rotation = 3.1415927
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("27_conveyor_script")
+settings = ExtResource("28_conveyor_settings")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Environment/ConveyorBelt2" unique_id=1173306367]
+position = Vector2(-1, 0)
+shape = SubResource("RectangleShape2D_spl43")
+
+[node name="ConveyorBeltVisual" parent="World/Environment/ConveyorBelt2" unique_id=2080888300 instance=ExtResource("17_sgl2t")]
+position = Vector2(3.637979e-12, -128)
+
+[node name="ConveyorBeltVisual2" parent="World/Environment/ConveyorBelt2" unique_id=15600460 instance=ExtResource("17_sgl2t")]
+position = Vector2(1.8189894e-12, -64)
+
+[node name="ConveyorBeltVisual3" parent="World/Environment/ConveyorBelt2" unique_id=601969231 instance=ExtResource("17_sgl2t")]
+
+[node name="ConveyorBeltVisual4" parent="World/Environment/ConveyorBelt2" unique_id=692683492 instance=ExtResource("17_sgl2t")]
+position = Vector2(-1.8189894e-12, 64)
+
+[node name="ConveyorBeltVisual5" parent="World/Environment/ConveyorBelt2" unique_id=1975557502 instance=ExtResource("17_sgl2t")]
+position = Vector2(-3.637979e-12, 128)
+
+[node name="Cap" type="Sprite2D" parent="World/Environment/ConveyorBelt2" unique_id=1937058440]
+position = Vector2(0, -144)
+rotation = 3.1415927
+texture = SubResource("AtlasTexture_sgl2t")
+
+[node name="Cap2" type="Sprite2D" parent="World/Environment/ConveyorBelt2" unique_id=1043708520]
+position = Vector2(0, 144)
+texture = SubResource("AtlasTexture_sgl2t")
 
 [node name="Player" parent="World" unique_id=244036277 instance=ExtResource("1_uwrxv")]
 unique_name_in_owner = true
@@ -498,7 +573,7 @@ limit_smoothed = true
 position_smoothing_enabled = true
 
 [node name="EnemySpawner2" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
-position = Vector2(-224, -216)
+position = Vector2(-248, -208)
 spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe"), ExtResource("17_kamikaze")])
 health_growth = 0.0
 
@@ -517,16 +592,20 @@ texture = SubResource("GradientTexture2D_vtaks")
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
 
 [node name="HUD" parent="UI" unique_id=1136343478 instance=ExtResource("1_kvpfn")]
+visible = false
 metadata/_edit_lock_ = true
 
 [node name="ShopPanel" parent="UI" unique_id=507885227 groups=["shop_panel"] instance=ExtResource("11_kvuet")]
+visible = false
 metadata/_edit_lock_ = true
 
 [node name="GameOverUI" parent="UI" unique_id=921297923 instance=ExtResource("16_ca42v")]
+visible = false
 z_index = 1
 metadata/_edit_lock_ = true
 
 [node name="CapacityOverlay" type="ColorRect" parent="UI" unique_id=1519067538]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -537,3 +616,4 @@ danger_curve = SubResource("Curve_e1j6l")
 good_curve = SubResource("Curve_pl11u")
 
 [node name="PauseMenu" parent="UI" unique_id=48360480 instance=ExtResource("27_qnb83")]
+visible = false

@@ -1,18 +1,11 @@
-@tool
 extends Area2D
 class_name ConveyorBelt
-
-@export var belt_size := Vector2(64.0, 160.0):
-	set(value):
-		belt_size = Vector2(maxf(1.0, value.x), maxf(1.0, value.y))
-		_update_collision_shape()
 
 @export var settings: ConveyorSettings
 
 var _riders: Dictionary[int, Node] = {}
 
 func _ready() -> void:
-	_update_collision_shape()
 	if Engine.is_editor_hint():
 		return
 	body_entered.connect(_on_body_entered)
@@ -45,11 +38,3 @@ func _update_riders() -> void:
 
 func _get_movement_speed() -> float:
 	return settings.movement_speed if settings else 120.0
-
-func _update_collision_shape() -> void:
-	var collision_shape := get_node_or_null("CollisionShape2D") as CollisionShape2D
-	if not collision_shape:
-		return
-	var rectangle := collision_shape.shape as RectangleShape2D
-	if rectangle:
-		rectangle.size = belt_size

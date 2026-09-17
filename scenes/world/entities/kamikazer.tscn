@@ -390,7 +390,7 @@ tracks/11/path = NodePath("CollisionShape2D:disabled")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0.2),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
@@ -562,6 +562,7 @@ sprite_frames = SubResource("SpriteFrames_xwavj")
 animation = &"idle"
 
 [node name="ShadowSprite" type="AnimatedSprite2D" parent="." unique_id=1589682499]
+modulate = Color(0, 0, 0, 0.19607843)
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_wp5nv")
 animation = &"idle"

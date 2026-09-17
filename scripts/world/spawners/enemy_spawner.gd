@@ -6,7 +6,6 @@ signal enemy_spawned(enemy: Node)
 @onready var wave_manager: WaveManager = %WaveManager
 
 @export var spawn_entries: Array[EnemySpawnEntry] = []
-@export var spawn_radius := 24.0
 
 @export var base_spawn_delay := 0.6
 @export var min_spawn_delay := 0.15
@@ -50,7 +49,7 @@ func _spawn_wave_queue(spawn_list: Array[PackedScene], spawn_delay: float) -> vo
 
 func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	var enemy := enemy_scene.instantiate()
-	var spawn_position := global_position + _get_random_spawn_offset()
+	var spawn_position := global_position
 	enemy.global_position = spawn_position
 	get_tree().current_scene.add_child(enemy)
 	if enemy is EnemyBase:
@@ -106,10 +105,4 @@ func _calculate_spawn_delay(wave_index: int) -> float:
 	return max(
 		base_spawn_delay * pow(spawn_delay_decay, wave_index - 1),
 		min_spawn_delay
-	)
-
-func _get_random_spawn_offset() -> Vector2:
-	return Vector2(
-		randf_range(-spawn_radius, spawn_radius),
-		randf_range(-spawn_radius, spawn_radius)
 	)
