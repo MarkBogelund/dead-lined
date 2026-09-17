@@ -528,7 +528,7 @@ fill_from = Vector2(0.5, 0.5)
 
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 z_index = 2
-collision_layer = 2
+collision_layer = 66
 collision_mask = 33
 script = ExtResource("1_g2els")
 stats = ExtResource("1_playerstats")

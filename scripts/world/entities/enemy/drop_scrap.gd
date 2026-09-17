@@ -22,7 +22,11 @@ func _ready() -> void:
 func drop() -> void:
 	if not parent or not scrap_scene:
 		return
-	
+
+	var player := get_tree().get_first_node_in_group("player") as Player
+	if player and player.crunch_time.is_crunch_time_active():
+		return
+
 	var drop_position := parent.global_position
 	
 	for i in scrap_drop_amount:

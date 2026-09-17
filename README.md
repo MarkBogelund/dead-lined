@@ -83,6 +83,7 @@ A few places intentionally cross the strict ownership boundary because the added
 
 - Turret repair drains player capacity directly (`repair.capacity_drained.connect(player.capacity.spend)`) rather than going through an event/coordinator layer.
 - Spawners and factories (`ShootComponent`, `EnemySpawner`, `TurretPlacer`) call `get_tree().current_scene.add_child(...)` directly instead of routing through a dedicated spawn coordinator.
+- `DropScrapComponent.drop()` looks up the player via `get_tree().get_first_node_in_group("player")` and reads `player.crunch_time.is_crunch_time_active()` directly to skip scrap drops during crunch time, instead of the player broadcasting a "no drops" event enemies subscribe to.
 
 These are acceptable trade-offs, not bugs — revisit only if the game grows multiple scenes or needs pooling/threading.
 

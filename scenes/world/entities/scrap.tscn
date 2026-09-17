@@ -289,7 +289,7 @@ shape = SubResource("CircleShape2D_sd2yw")
 
 [node name="DetectionArea" type="Area2D" parent="." unique_id=612364774]
 collision_layer = 512
-collision_mask = 2
+collision_mask = 64
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=45020708]
 shape = SubResource("CircleShape2D_m4e56")

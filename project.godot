@@ -119,6 +119,7 @@ skip_build_phase={
 2d_physics/layer_4="EnemyBody"
 2d_physics/layer_5="EnemyAttack"
 2d_physics/layer_6="TurretBody"
+2d_physics/layer_7="PlayerPickup"
 2d_physics/layer_10="Scrap"
 
 [physics]
