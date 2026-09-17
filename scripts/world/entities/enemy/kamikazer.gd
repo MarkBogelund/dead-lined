@@ -162,6 +162,7 @@ func _trigger_explosion(from_position: Vector2) -> void:
 		camera_shake_manager.shake_screen(_explosion_screen_shake_intensity, 0.25)
 	if hit_particles:
 		hit_particles.restart()
+	health.take_damage(health.get_current_health())
 	_handle_death(from_position, 0.0)
 
 func buff_damage(multiplier: float) -> void:
