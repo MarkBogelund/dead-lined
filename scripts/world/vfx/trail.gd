@@ -14,7 +14,7 @@ enum CoordinateMode {
 @export var coordinate_anchor: Node2D ## Used in ANCHOR_LOCAL_SPACE mode - manually assign the anchor node
 @export var parent_levels: int = 2 ## Used in ANCHOR_PARENT_LEVEL mode - number of levels to traverse up from Trail
 
-var queue: Array = []
+var queue: Array[Vector2] = []
 var is_tracking: bool = false
 var _resolved_anchor: Node2D ## The actual anchor node being used (resolved in _ready)
 
@@ -78,7 +78,7 @@ func _process(_delta: float) -> void:
 	
 	# Draw points by converting to Trail's local space
 	clear_points()
-	for point in queue:
+	for point: Vector2 in queue:
 		var trail_local_point: Vector2
 		
 		match coordinate_mode:

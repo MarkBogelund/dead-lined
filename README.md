@@ -93,6 +93,10 @@ These are acceptable trade-offs, not bugs — revisit only if the game grows mul
 
 Conveyor belts are inline `Area2D` components in the level scene, not standalone scenes. Each uses [scripts/world/spawners/conveyor_belt.gd](scripts/world/spawners/conveyor_belt.gd), detects PlayerBody and EnemyBody layers, and owns a child `CollisionShape2D`. Its exported `belt_size` updates the local `RectangleShape2D` in the editor. Both the belt and spawner reference [resources/spawner/conveyor_settings.tres](resources/spawner/conveyor_settings.tres), the single source of truth for `enemy_movement_speed` and `player_movement_speed`. The belt talks to bodies only through `set_conveyor_velocity()` / `clear_conveyor_velocity()`; while overlapping, the matching conveyor velocity is added to normal player/enemy movement so they can steer off the belt. The spawn tween remains responsible for crossing the outer wall while collision is disabled.
 
+### Type-safety standard
+
+This project uses strict GDScript typing for signal callbacks and loops. Any anonymous function passed to `connect()` must either declare its parameter type(s) or include an explicit `-> void` return type. Any `for` loop variable that is not inference-safe should be explicitly typed, e.g. `for rider: Node in _riders.values():` and `for config: TargetConfig in _sorted_configs:`. If a value can be ambiguous, declare its type explicitly (`var intro_speed: float = ...`). This is not style-only; it keeps Godot diagnostics clean and prevents silent type drift.
+
 ---
 
 ## Testing

@@ -53,7 +53,7 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	var custom_blend_captured := custom_blend
 	var custom_speed_captured := custom_speed
 	var from_end_captured := from_end
-	(func():
+	(func() -> void:
 		if not is_inside_tree():
 			return
 		if has_animation("RESET"):

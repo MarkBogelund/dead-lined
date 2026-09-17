@@ -23,7 +23,7 @@ func _ready() -> void:
 	toggle_menu.close_fn = _do_close
 	add_child(toggle_menu)
 
-	resume_button.pressed.connect(func(): toggle_menu.close())
+	resume_button.pressed.connect(func() -> void: toggle_menu.close())
 
 
 func _do_open() -> void:

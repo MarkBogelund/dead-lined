@@ -31,8 +31,8 @@ func _ready() -> void:
 
 
 func _configure_shop_toggle() -> void:
-	shop_station.toggle_menu.open_fn = func(): shop_panel.open(turret_entries, player.can_afford)
-	shop_station.toggle_menu.close_fn = func(): shop_panel.close()
+	shop_station.toggle_menu.open_fn = func() -> void: shop_panel.open(turret_entries, player.can_afford)
+	shop_station.toggle_menu.close_fn = func() -> void: shop_panel.close()
 	shop_station.toggle_menu.menu_control = shop_panel
 
 

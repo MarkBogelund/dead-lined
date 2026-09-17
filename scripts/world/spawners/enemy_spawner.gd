@@ -45,7 +45,7 @@ func start_wave_spawn(wave_index: int) -> void:
 	_is_spawning = false
 
 func _spawn_wave_queue(spawn_list: Array[PackedScene], spawn_delay: float) -> void:
-	for enemy_scene in spawn_list:
+	for enemy_scene: PackedScene in spawn_list:
 		_spawn_single_enemy(enemy_scene)
 		await get_tree().create_timer(spawn_delay).timeout
 
@@ -72,7 +72,7 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 func _build_spawn_queue_for_wave(wave_index: int) -> Array[PackedScene]:
 	var queue: Array[PackedScene] = []
 
-	for entry in spawn_entries:
+	for entry: EnemySpawnEntry in spawn_entries:
 		if entry.enemy_scene == null:
 			continue
 
@@ -85,7 +85,7 @@ func _build_spawn_queue_for_wave(wave_index: int) -> Array[PackedScene]:
 		if entry.max_per_wave > 0:
 			count = min(count, entry.max_per_wave)
 
-		for i in count:
+		for i: int in range(count):
 			queue.append(entry.enemy_scene)
 
 	queue.shuffle()

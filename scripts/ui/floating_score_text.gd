@@ -35,7 +35,7 @@ func spawn(text: String, color: Color, world_position: Vector2) -> void:
 	var tween := create_tween().set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(label, "position", float_target, float_duration).set_ease(Tween.EASE_OUT)
 	tween.tween_property(label, "position", fly_target, fly_duration).set_ease(Tween.EASE_IN)
-	tween.tween_callback(func():
+	tween.tween_callback(func() -> void:
 		arrived.emit()
 		label.queue_free()
 	)

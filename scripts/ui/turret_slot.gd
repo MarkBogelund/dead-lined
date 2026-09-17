@@ -15,7 +15,7 @@ const COLOR_PRESSED := Color(0.8, 0.8, 0.75, 1.0)
 const COLOR_DIMMED := Color(0.5, 0.5, 0.5, 0.8)
 
 func _ready() -> void:
-	buy_button.pressed.connect(func(): selected.emit())
+	buy_button.pressed.connect(func() -> void: selected.emit())
 	buy_button.mouse_entered.connect(_on_hover_enter)
 	buy_button.mouse_exited.connect(_on_hover_exit)
 	buy_button.button_down.connect(_on_press_down)
