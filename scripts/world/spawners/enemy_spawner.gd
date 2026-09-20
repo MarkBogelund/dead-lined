@@ -2,6 +2,7 @@ extends Marker2D
 class_name EnemySpawner
 
 signal enemy_spawned(enemy: Node)
+signal wave_spawning_finished
 
 @onready var wave_manager: WaveManager = %WaveManager
 
@@ -14,7 +15,6 @@ signal enemy_spawned(enemy: Node)
 @export var spawn_intro_distance := 96.0
 @export var conveyor_settings: ConveyorSettings
 
-@export var health_growth := 0.15
 @export var damage_growth := 0.1
 
 var _current_wave := 0
@@ -37,25 +37,32 @@ func start_wave_spawn(wave_index: int) -> void:
 	_spawn_generation += 1
 	var generation := _spawn_generation
 
-	await _spawn_until_wave_ends(generation)
+	var spawn_queue := _build_spawn_queue(wave_index)
+	await _spawn_wave_queue(spawn_queue, generation)
 
 	if generation == _spawn_generation:
 		_is_spawning = false
+		wave_spawning_finished.emit()
 
-func _spawn_until_wave_ends(generation: int) -> void:
-	while generation == _spawn_generation and wave_manager.is_combat_phase():
-		var enemy_scene := _pick_enemy_scene()
-		if enemy_scene:
-			_spawn_single_enemy(enemy_scene)
-		var spawn_interval := maxf(spawn_stats.time_between_spawns if spawn_stats else 1.0, 0.05)
-		await get_tree().create_timer(spawn_interval).timeout
+func _spawn_wave_queue(spawn_queue: Array[EnemySpawnEntry], generation: int) -> void:
+	for index: int in range(spawn_queue.size()):
+		if generation != _spawn_generation or not wave_manager.is_combat_phase():
+			return
+		var entry: EnemySpawnEntry = spawn_queue[index]
+		_spawn_single_enemy(entry)
+		if index < spawn_queue.size() - 1:
+			var spawn_interval := maxf(spawn_stats.time_between_spawns if spawn_stats else 1.0, 0.05)
+			await get_tree().create_timer(spawn_interval).timeout
 
 func _on_build_phase_started() -> void:
 	_is_spawning = false
 	_spawn_generation += 1
 
-func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
-	var enemy := enemy_scene.instantiate()
+func is_spawning() -> bool:
+	return _is_spawning
+
+func _spawn_single_enemy(entry: EnemySpawnEntry) -> void:
+	var enemy := entry.enemy_scene.instantiate()
 	var spawn_position := global_position
 	enemy.global_position = spawn_position
 	get_tree().current_scene.add_child(enemy)
@@ -66,39 +73,34 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 		var intro_duration: float = spawn_intro_distance / intro_speed
 		(enemy as EnemyBase).play_spawn_intro(release_position, intro_duration)
 	enemy.add_to_group("enemies")
-	_apply_wave_scaling(enemy)
+	_apply_wave_scaling(enemy, entry)
+	enemy.died.connect(wave_manager._on_enemy_died)
 	
 	# Emit signal for systems that need to track enemy spawns (ScoreManager)
 	enemy_spawned.emit(enemy)
 
-func _pick_enemy_scene() -> PackedScene:
+func _build_spawn_queue(wave_index: int) -> Array[EnemySpawnEntry]:
+	var queue: Array[EnemySpawnEntry] = []
 	if not spawn_stats:
-		return null
-	var total_weight := 0.0
+		return queue
 	for entry: EnemySpawnEntry in spawn_stats.entries:
-		if entry and entry.enemy_scene and entry.spawn_weight > 0.0:
-			total_weight += entry.spawn_weight
-	if total_weight <= 0.0:
-		return null
-
-	var roll := randf() * total_weight
-	for entry: EnemySpawnEntry in spawn_stats.entries:
-		if not entry or not entry.enemy_scene or entry.spawn_weight <= 0.0:
+		if not entry or not entry.enabled or not entry.enemy_scene:
 			continue
-		roll -= entry.spawn_weight
-		if roll <= 0.0:
-			return entry.enemy_scene
-	return null
+		if wave_index < entry.introduction_wave:
+			continue
+		var waves_since_introduction := wave_index - entry.introduction_wave
+		var amount := int(floor(float(entry.base_amount) * pow(entry.amount_multiplier_per_wave, waves_since_introduction)))
+		for _spawn_index: int in range(maxi(amount, 0)):
+			queue.append(entry)
+	queue.shuffle()
+	return queue
 
-func _apply_wave_scaling(enemy: Node) -> void:
-	var health_multiplier := 1.0 + wave_index_to_health_multiplier(_current_wave)
-	enemy.buff_health(health_multiplier)
-	
+func _apply_wave_scaling(enemy: Node, entry: EnemySpawnEntry) -> void:
+	if entry.health_multiplier_every_n_waves > 0:
+		var health_steps := _current_wave / entry.health_multiplier_every_n_waves
+		enemy.buff_health(pow(entry.health_multiplier, health_steps))
 	var damage_multiplier := 1.0 + wave_index_to_damage_multiplier(_current_wave)
 	enemy.buff_damage(damage_multiplier)
-
-func wave_index_to_health_multiplier(wave_index: int) -> float:
-	return wave_index * health_growth
 
 func wave_index_to_damage_multiplier(wave_index: int) -> float:
 	return wave_index * damage_growth

@@ -487,12 +487,10 @@ position_smoothing_enabled = true
 [node name="EnemySpawnerNorthwest" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(-296, -264)
 spawn_intro_distance = 60.0
-health_growth = 0.0
 
 [node name="EnemySpawnerSoutheast" parent="World" unique_id=113296114 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(296, 256)
 spawn_intro_direction = Vector2(0, -1)
-health_growth = 0.0
 
 [node name="ShopStation" parent="World" unique_id=1270538854 groups=["shop_stations"] instance=ExtResource("6_p57ef")]
 position = Vector2(0, -96)
