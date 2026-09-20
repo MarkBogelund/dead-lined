@@ -27,7 +27,6 @@ signal died
 @export var stats: PlayerStats
 @export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
 
-var shoot_cost: float = 2.0
 var damage_knockback_force := 200.0
 var damage_freeze_duration := 0.1
 var damage_screen_shake_intensity := 0.2
@@ -80,7 +79,6 @@ func _initialize() -> void:
 		stats.weapon_size_multiplier,
 		stats.cooldown_multiplier,
 		camera)
-	shoot_cost = stats.shoot_cost
 	damage_knockback_force = stats.damage_knockback_force
 	damage_freeze_duration = stats.damage_freeze_duration
 	damage_screen_shake_intensity = stats.damage_screen_shake_intensity
@@ -164,11 +162,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		var can_activate := capacity.can_crunch_time() and capacity.can_afford(crunch_time.activation_cost)
 		crunch_time.toggle(can_activate)
 	
-	if event.is_action_pressed("shoot") and capacity.can_afford(shoot_cost):
+	if event.is_action_pressed("shoot"):
 		var mouse_pos := get_global_mouse_position()
 		aiming.aim_at(mouse_pos, 0.0)
 		if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-			capacity.spend(shoot_cost)
 			animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	
 	if event.is_action_pressed("slash"):
