@@ -16,4 +16,3 @@ class_name CrunchTimeEffects
 @export var ready_tint: Color = Color(1.0, 0.82, 0.82, 1.0)
 @export var active_tint: Color = Color(1.0, 0.72, 0.16, 1.0)
 @export var tint_transition_duration: float = 0.2
-

@@ -18,11 +18,26 @@ class_name TargetingComponent
 var _sorted_configs: Array[TargetConfig] = []
 
 func _ready() -> void:
-	_sorted_configs = target_configs.duplicate()
-	_sorted_configs.sort_custom(func(a: TargetConfig, b: TargetConfig) -> bool: return a.priority > b.priority)
+	_create_runtime_configs()
 
 func initialize(s_max_range: float) -> void:
 	max_range = s_max_range
+
+func configure_priorities(priorities: Dictionary, distance_threshold: float) -> void:
+	priority_distance_threshold = distance_threshold
+	_create_runtime_configs()
+	for config: TargetConfig in _sorted_configs:
+		config.priority = int(priorities.get(config.group_name, config.priority))
+	_sort_configs()
+
+func _create_runtime_configs() -> void:
+	_sorted_configs.clear()
+	for config: TargetConfig in target_configs:
+		_sorted_configs.append(config.duplicate() as TargetConfig)
+	_sort_configs()
+
+func _sort_configs() -> void:
+	_sorted_configs.sort_custom(func(a: TargetConfig, b: TargetConfig) -> bool: return a.priority > b.priority)
 
 ## Get the best target based on configured priorities and proximity
 ## filter: optional callable(Node2D) -> bool; return false to exclude a candidate

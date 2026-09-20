@@ -77,6 +77,8 @@ Fallible actions return `bool` (`try_shoot()`, `try_slash()`, `try_dash()`) — 
 
 Balancing values live in one `Resource` subclass per entity type ([scripts/data/](scripts/data/)), instantiated as `.tres` variants ([resources/](resources/)). Entities read from `@export var stats: XStats` in `_initialize()` and push values into components — components never hold the resource directly. Variants (e.g. `SeekerStrong`) are the same script with a different `.tres`, not a subclass.
 
+Stalker and Seeker target priorities are authored in their stats resources. Their orchestrators pass group priorities and the lower-priority distance-switch threshold into `TargetingComponent`, which duplicates scene-authored `TargetConfig` resources before applying runtime values.
+
 ### Known deliberate deviations from a "pure" component model
 
 A few places intentionally cross the strict ownership boundary because the added indirection isn't worth it for a single-scene game:

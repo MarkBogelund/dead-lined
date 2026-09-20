@@ -18,6 +18,12 @@ class_name StalkerStats
 @export var aim_speed: float = 3.0
 ## Angle tolerance in radians within which the stalker will fire
 @export var accuracy_angle: float = 0.25
+## Priority assigned to the player target group
+@export var player_target_priority: int = 1
+## Priority assigned to the turret target group
+@export var turret_target_priority: int = 0
+## Distance advantage required before switching to a lower-priority target
+@export var priority_distance_threshold: float = 40.0
 
 @export_group("Shooting")
 ## Seconds after acquiring line-of-sight before the first shot is fired

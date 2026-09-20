@@ -20,6 +20,12 @@ class_name SeekerStats
 @export var aim_speed: float = 6.0
 ## Angle tolerance in radians within which the seeker will fire
 @export var accuracy_angle: float = 0.1
+## Priority assigned to the enemy target group
+@export var enemy_target_priority: int = 1
+## Priority assigned to the player target group
+@export var player_target_priority: int = 0
+## Distance advantage required before switching to a lower-priority target
+@export var priority_distance_threshold: float = 20.0
 
 @export_group("Upgrades")
 ## Each entry is one purchasable health upgrade, in order.

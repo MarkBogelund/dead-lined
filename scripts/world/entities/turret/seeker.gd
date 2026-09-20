@@ -63,6 +63,10 @@ func _initialize() -> void:
 	health.initialize(stats.max_health)
 	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_wrench_hit)
 	targeting.initialize(stats.max_range)
+	targeting.configure_priorities({
+		"enemies": stats.enemy_target_priority,
+		"player": stats.player_target_priority,
+	}, stats.priority_distance_threshold)
 	exclusion_zone.initialize(stats.exclusion_radius)
 	range_indicator.initialize(stats.max_range)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
