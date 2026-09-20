@@ -23,9 +23,11 @@ signal enemy_spawned(enemy: Node)
 
 var _current_wave := 0
 var _is_spawning := false
+var _spawn_generation := 0
 
 func _ready() -> void:
-	wave_manager.connect("combat_phase_started", Callable(self, "_on_combat_phase_started"))
+	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
+	wave_manager.build_phase_started.connect(_on_build_phase_started)
 
 func _on_combat_phase_started(wave_index: int) -> void:
 	start_wave_spawn(wave_index)
@@ -36,18 +38,27 @@ func start_wave_spawn(wave_index: int) -> void:
 
 	_current_wave = wave_index
 	_is_spawning = true
+	_spawn_generation += 1
+	var generation := _spawn_generation
 
 	var spawn_list := _build_spawn_queue_for_wave(_current_wave)
 	var spawn_delay := _calculate_spawn_delay(_current_wave)
 
-	await _spawn_wave_queue(spawn_list, spawn_delay)
+	await _spawn_wave_queue(spawn_list, spawn_delay, generation)
 
-	_is_spawning = false
+	if generation == _spawn_generation:
+		_is_spawning = false
 
-func _spawn_wave_queue(spawn_list: Array[PackedScene], spawn_delay: float) -> void:
+func _spawn_wave_queue(spawn_list: Array[PackedScene], spawn_delay: float, generation: int) -> void:
 	for enemy_scene: PackedScene in spawn_list:
+		if generation != _spawn_generation or not wave_manager.is_combat_phase():
+			return
 		_spawn_single_enemy(enemy_scene)
 		await get_tree().create_timer(spawn_delay).timeout
+
+func _on_build_phase_started() -> void:
+	_is_spawning = false
+	_spawn_generation += 1
 
 func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	var enemy := enemy_scene.instantiate()
@@ -62,9 +73,6 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 		(enemy as EnemyBase).play_spawn_intro(release_position, intro_duration)
 	enemy.add_to_group("enemies")
 	_apply_wave_scaling(enemy)
-	
-	# Connect to wave manager for wave completion tracking
-	enemy.died.connect(wave_manager._on_enemy_died)
 	
 	# Emit signal for systems that need to track enemy spawns (ScoreManager)
 	enemy_spawned.emit(enemy)

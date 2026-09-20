@@ -503,7 +503,8 @@ spawn_intro_direction = Vector2(0, -1)
 health_growth = 0.0
 
 [node name="ShopStation" parent="World" unique_id=1270538854 groups=["shop_stations"] instance=ExtResource("6_p57ef")]
-position = Vector2(0, -216)
+position = Vector2(0, 216)
+rotation = 3.1415927
 
 [node name="Pointlight2D3" type="PointLight2D" parent="World/ShopStation" unique_id=572091188]
 show_behind_parent = true

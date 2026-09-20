@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="WaveSettings" format=3 uid="uid://bomuvf4stnxjw"]
+
+[ext_resource type="Script" uid="uid://j8g2iopng5j6" path="res://scripts/data/wave_settings.gd" id="1_wave_settings"]
+
+[resource]
+script = ExtResource("1_wave_settings")
+build_phase_duration = 30.0
+base_combat_duration = 40.0

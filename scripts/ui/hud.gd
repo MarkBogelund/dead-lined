@@ -64,6 +64,7 @@ func _connect_signals() -> void:
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
 	wave_manager.build_phase_tick.connect(_on_build_phase_tick)
+	wave_manager.combat_phase_tick.connect(_on_combat_phase_tick)
 	score_manager.score_earned.connect(_on_score_earned)
 	floating_score_text.arrived.connect(_on_floating_text_arrived)
 	capacity_fill.resized.connect(_update_capacity_fill_shader_width)
@@ -189,13 +190,17 @@ func _on_build_phase_started() -> void:
 	combat_phase_texture.visible = false
 
 func _on_combat_phase_started(_wave_index: int) -> void:
-	build_phase_timer.visible = false
+	build_phase_timer.visible = true
 	# build_phase_timer_container.visible = false
 	build_phase_texture.visible = false
 	combat_phase_texture.visible = true
 
 func _on_build_phase_tick(time_left: float) -> void:
 	build_phase_timer.text = str(ceili(time_left))
+
+func _on_combat_phase_tick(time_left: float) -> void:
+	var total_seconds := ceili(time_left)
+	build_phase_timer.text = "%d:%02d" % [total_seconds / 60, total_seconds % 60]
 
 func _on_score_earned(points: int, world_position: Vector2, color: Color) -> void:
 	floating_score_text.spawn("+%d" % points, color, world_position)

@@ -4,8 +4,9 @@ class_name WaveManager
 signal build_phase_started
 signal combat_phase_started(wave_index: int)
 signal build_phase_tick(time_left: float)
+signal combat_phase_tick(time_left: float)
 
-@export var time_between_waves := 10
+@export var settings: WaveSettings = preload("res://resources/wave_settings.tres")
 
 var _current_phase: Phase = Phase.BUILD
 var _phase_timer := 0.0
@@ -25,6 +26,9 @@ func get_current_wave() -> int:
 func is_build_phase() -> bool:
 	return _current_phase == Phase.BUILD
 
+func is_combat_phase() -> bool:
+	return _current_phase == Phase.COMBAT
+
 func skip_build_phase() -> void:
 	if _current_phase == Phase.BUILD:
 		_phase_timer = 0.0
@@ -38,29 +42,29 @@ func _ready() -> void:
 	_enter_build_phase()
 
 func _process(delta: float) -> void:
-	if _current_phase != Phase.BUILD:
-		return
-	
-	_phase_timer -= delta
-	build_phase_tick.emit(_phase_timer)
-	
-	if _phase_timer <= 0.0:
-		_enter_combat_phase()
+	_phase_timer = maxf(0.0, _phase_timer - delta)
+	match _current_phase:
+		Phase.BUILD:
+			build_phase_tick.emit(_phase_timer)
+			if _phase_timer <= 0.0:
+				_enter_combat_phase()
+		Phase.COMBAT:
+			combat_phase_tick.emit(_phase_timer)
+			if _phase_timer <= 0.0:
+				_end_combat_phase()
 
 func _enter_build_phase() -> void:
 	_current_phase = Phase.BUILD
-	_phase_timer = time_between_waves
+	_phase_timer = maxf(0.0, settings.build_phase_duration)
 	build_phase_started.emit()
 
 func _enter_combat_phase() -> void:
 	_current_phase = Phase.COMBAT
 	_wave_index += 1
+	_phase_timer = maxf(0.0, settings.base_combat_duration + settings.combat_duration_growth * float(_wave_index - 1))
 	get_tree().call_group("scrap", "despawn_on_combat")
 	combat_phase_started.emit(_wave_index)
 
-func _on_enemy_died() -> void:
-	if _current_phase != Phase.COMBAT:
-		return
-	
-	if get_tree().get_nodes_in_group("enemies").is_empty():
-		_enter_build_phase()
+func _end_combat_phase() -> void:
+	get_tree().call_group("enemies", "despawn")
+	_enter_build_phase()
