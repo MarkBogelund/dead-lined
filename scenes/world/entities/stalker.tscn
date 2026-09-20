@@ -24,7 +24,6 @@
 [sub_resource type="Resource" id="Resource_36hmg"]
 script = ExtResource("16_mcjbk")
 group_name = "player"
-priority = 1
 
 [sub_resource type="Resource" id="Resource_wkm5l"]
 script = ExtResource("16_mcjbk")
@@ -783,7 +782,6 @@ muzzle = NodePath("../AimCenter/Muzzle")
 [node name="TargetingComponent" type="Node" parent="." unique_id=486870823]
 script = ExtResource("15_jqj1v")
 target_configs = Array[ExtResource("16_mcjbk")]([SubResource("Resource_36hmg"), SubResource("Resource_wkm5l")])
-priority_distance_threshold = 40.0
 
 [node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
 script = ExtResource("13_shoot")

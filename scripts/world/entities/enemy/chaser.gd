@@ -31,6 +31,10 @@ func _initialize() -> void:
 		return
 	_initialize_base(stats.max_health, stats.scrap_drop_amount)
 	hitbox.initialize(stats.hitbox_damage, stats.hitbox_knockback)
+	targeting.configure_priorities({
+		"player": stats.player_target_priority,
+		"turrets": stats.turret_target_priority,
+	}, stats.priority_distance_threshold)
 	_speed = stats.speed
 	_self_knockback = stats.self_knockback
 	_attack_radius = stats.attack_radius

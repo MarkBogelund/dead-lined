@@ -77,7 +77,7 @@ Fallible actions return `bool` (`try_shoot()`, `try_slash()`, `try_dash()`) — 
 
 Balancing values live in one `Resource` subclass per entity type ([scripts/data/](scripts/data/)), instantiated as `.tres` variants ([resources/](resources/)). Entities read from `@export var stats: XStats` in `_initialize()` and push values into components — components never hold the resource directly. Variants (e.g. `SeekerStrong`) are the same script with a different `.tres`, not a subclass.
 
-Stalker and Seeker target priorities are authored in their stats resources. Their orchestrators pass group priorities and distance-switch thresholds into `TargetingComponent`, which duplicates scene-authored `TargetConfig` resources before applying runtime values. Seekers also configure same-priority hysteresis so nearby enemy movement does not make turrets continually abandon their current aim target.
+Chaser, Stalker, and Seeker target priorities are authored only in their stats resources. Their scenes retain `TargetConfig` resources solely to declare target groups; orchestrators pass priorities and distance-switch thresholds into `TargetingComponent` at initialization. For enemies, a larger `priority_distance_threshold` strengthens player preference by requiring a lower-priority turret to be that much closer before taking focus. Seekers also configure same-priority hysteresis so nearby enemy movement does not make turrets continually abandon their current aim target.
 
 ### Known deliberate deviations from a "pure" component model
 

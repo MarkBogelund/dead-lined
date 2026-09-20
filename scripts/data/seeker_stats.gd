@@ -1,8 +1,6 @@
 extends Resource
 class_name SeekerStats
 
-@export var display_name: String = "Seeker"
-
 @export_group("Health")
 ## Maximum hit points
 @export var max_health: int = 100
