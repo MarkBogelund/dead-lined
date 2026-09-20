@@ -22,7 +22,7 @@ signal died
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var camera: Camera2D = get_parent().get_node_or_null("Camera2D") as Camera2D
+@onready var camera: Camera2D = $"Camera2D"
 
 @export var stats: PlayerStats
 @export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
@@ -46,7 +46,7 @@ const MIN_MOVE_SPEED := 10.0
 const PLAYER_BODY_LAYER := 2 ## Matches project.godot 2d_physics layer_2 ("PlayerBody")
 
 var _conveyor_velocity := Vector2.ZERO
-var _camera_zoom_tween: Tween
+var _crunch_tint_tween: Tween
 
 func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
 	_conveyor_velocity = conveyor_velocity
@@ -72,14 +72,14 @@ func _initialize() -> void:
 	capacity.initialize(stats.initial_capacity, stats.max_capacity, stats.crunch_threshold, stats.threshold_step, stats.min_crunch_threshold)
 	crunch_time.initialize(
 		stats.crunch_activation_cost,
-		stats.crunch_deactivation_threshold,
-		stats.drain_seconds_per_unit,
+		stats.crunch_duration,
 		stats.damage_multiplier,
 		stats.radius_multiplier,
 		stats.speed_multiplier,
 		stats.arc_angle_multiplier,
 		stats.weapon_size_multiplier,
-		stats.cooldown_multiplier)
+		stats.cooldown_multiplier,
+		camera)
 	shoot_cost = stats.shoot_cost
 	damage_knockback_force = stats.damage_knockback_force
 	damage_freeze_duration = stats.damage_freeze_duration
@@ -102,8 +102,6 @@ func _connect_signals() -> void:
 	aiming.muzzle = $Muzzle
 	crunch_time.crunch_time_started.connect(_on_crunch_time_started)
 	crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
-	crunch_time.drain_tick.connect(_on_crunch_drain_tick)
-	capacity.capacity_changed.connect(_on_capacity_changed)
 	# Systems
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
 	shop_manager.turret_bought.connect(_on_turret_bought)
@@ -114,8 +112,11 @@ func _connect_signals() -> void:
 
 func _apply_crunch_tint(target_tint: Color) -> void:
 	if is_instance_valid(animated_sprite):
-		var tween := create_tween()
-		tween.tween_property(animated_sprite, "modulate", target_tint, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		if _crunch_tint_tween:
+			_crunch_tint_tween.kill()
+		_crunch_tint_tween = create_tween()
+		var duration := crunch_time_effects.tint_transition_duration if crunch_time_effects else 0.2
+		_crunch_tint_tween.tween_property(animated_sprite, "self_modulate", target_tint, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _physics_process(delta: float) -> void:
 	_process_movement(delta)
@@ -261,12 +262,6 @@ var can_pickup: bool:
 func pickup(amount: int) -> void:
 	capacity.gain(float(amount))
 
-func _on_crunch_drain_tick() -> void:
-	var max_drain := maxf(0.0, capacity.current_capacity - crunch_time.deactivation_threshold)
-	capacity.spend(minf(1.0, max_drain))
-	if capacity.current_capacity <= crunch_time.deactivation_threshold:
-		crunch_time.deactivate()
-
 func _on_turret_placement_started() -> void:
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
@@ -282,34 +277,15 @@ func _on_turret_bought(price: float) -> void:
 func _on_turret_lost() -> void:
 	capacity.raise_threshold()
 
-func _apply_camera_zoom(target_zoom: Vector2, duration: float) -> void:
-	if not camera:
-		return
-	if _camera_zoom_tween:
-		_camera_zoom_tween.kill()
-	_camera_zoom_tween = create_tween()
-	_camera_zoom_tween.tween_property(camera, "zoom", target_zoom, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-
-func _on_capacity_changed(capacity: float) -> void:
-	if capacity >= self.capacity.crunch_time_threshold and not crunch_time.is_crunch_time_active():
-		_apply_camera_zoom(crunch_time_effects.camera_zoom_ready if crunch_time_effects else Vector2(2, 2), crunch_time_effects.camera_zoom_duration if crunch_time_effects else 0.35)
-	elif not crunch_time.is_crunch_time_active():
-		_apply_camera_zoom(crunch_time_effects.base_camera_zoom if crunch_time_effects else Vector2(1.5, 1.5), crunch_time_effects.camera_zoom_duration if crunch_time_effects else 0.35)
-
 func _on_crunch_time_started(buffs: Dictionary) -> void:
 	capacity.spend(crunch_time.activation_cost)
 	melee_weapon.set_crunch_time_active(true, buffs)
 	movement.set_crunch_time_active(true, buffs["speed"])
 	melee_weapon.scale *= buffs["weapon_size"]
-	_apply_camera_zoom(crunch_time_effects.camera_zoom_active if crunch_time_effects else Vector2(3, 3), crunch_time_effects.camera_zoom_duration if crunch_time_effects else 0.35)
-	_apply_crunch_tint(crunch_time_effects.active_tint if crunch_time_effects else Color(1.0, 0.65, 0.65, 1.0))
+	_apply_crunch_tint(crunch_time_effects.active_tint if crunch_time_effects else Color(1.0, 0.72, 0.16, 1.0))
 
 func _on_crunch_time_ended(buffs: Dictionary, _duration: float) -> void:
 	melee_weapon.set_crunch_time_active(false, buffs)
 	movement.set_crunch_time_active(false, buffs["speed"])
 	melee_weapon.scale /= buffs["weapon_size"]
-	var target_zoom: Vector2 = crunch_time_effects.base_camera_zoom if crunch_time_effects else Vector2(1.5, 1.5)
-	if capacity.can_crunch_time() and crunch_time_effects:
-		target_zoom = crunch_time_effects.camera_zoom_ready
-	_apply_camera_zoom(target_zoom, crunch_time_effects.camera_zoom_duration if crunch_time_effects else 0.35)
 	_apply_crunch_tint(Color.WHITE)

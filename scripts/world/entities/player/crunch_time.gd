@@ -6,7 +6,6 @@ class_name CrunchTimeComponent
 
 signal crunch_time_started(buffs: Dictionary)
 signal crunch_time_ended(buffs: Dictionary, duration: float)
-signal drain_tick
 
 ## Buff multipliers (configurable in inspector)
 @export_group("Buff Multipliers")
@@ -17,37 +16,37 @@ signal drain_tick
 @export var weapon_size_multiplier := 2.0
 @export var cooldown_multiplier := 0.5 # 0.5 = half cooldown (faster)
 
-@export_group("Deactivation")
-@export var activation_cost: float = 10.0
-@export var deactivation_threshold: float = 1.0
-@export var drain_seconds_per_unit: float = 0.2
+@export_group("Activation")
+@export var activation_cost: float = 50.0
+@export var duration: float = 5.0
+
+@export_group("Camera")
+@export var effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
 
 ## State
 var is_active := false
 var _is_build_phase := true
-var _drain_timer: float = 0.0
 var _active_duration: float = 0.0
+var _camera: Camera2D
+var _camera_zoom_tween: Tween
 
-func initialize(p_activation_cost: float, p_deactivation_threshold: float, p_drain_seconds: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float) -> void:
+func initialize(p_activation_cost: float, p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float, p_camera: Camera2D) -> void:
 	activation_cost = p_activation_cost
-	deactivation_threshold = p_deactivation_threshold
-	drain_seconds_per_unit = p_drain_seconds
+	duration = p_duration
 	damage_multiplier = p_damage
 	radius_multiplier = p_radius
 	speed_multiplier = p_speed
 	arc_angle_multiplier = p_arc_angle
 	weapon_size_multiplier = p_weapon_size
 	cooldown_multiplier = p_cooldown
+	_camera = p_camera
 
 func _process(delta: float) -> void:
 	if not is_active:
-		_drain_timer = 0.0
 		return
 	_active_duration += delta
-	_drain_timer -= delta
-	if _drain_timer <= 0.0:
-		_drain_timer = drain_seconds_per_unit
-		drain_tick.emit()
+	if _active_duration >= duration:
+		deactivate()
 
 func set_build_phase(is_build: bool) -> void:
 	_is_build_phase = is_build
@@ -56,9 +55,7 @@ func set_build_phase(is_build: bool) -> void:
 
 ## Toggle crunch time — activates if can_activate is true, deactivates if already active
 func toggle(can_activate: bool) -> void:
-	if is_active:
-		deactivate()
-	elif can_activate:
+	if not is_active and can_activate:
 		activate()
 
 ## Activate crunch time with buffs
@@ -68,6 +65,7 @@ func activate() -> void:
 	
 	is_active = true
 	_active_duration = 0.0
+	_apply_camera_zoom(effects.camera_zoom_active if effects else Vector2(1.75, 1.75))
 		
 	# Build buff dictionary and emit for Player to apply
 	var buffs := {
@@ -86,6 +84,7 @@ func deactivate() -> void:
 		return # Already inactive
 	
 	is_active = false
+	_apply_camera_zoom(effects.base_camera_zoom if effects else Vector2(1.5, 1.5))
 		
 	# Build buff dictionary and emit for Player to reverse buffs
 	var buffs := {
@@ -101,3 +100,12 @@ func deactivate() -> void:
 ## Public API for checking if crunch time is active
 func is_crunch_time_active() -> bool:
 	return is_active
+
+func _apply_camera_zoom(target_zoom: Vector2) -> void:
+	if not _camera:
+		return
+	if _camera_zoom_tween:
+		_camera_zoom_tween.kill()
+	_camera_zoom_tween = create_tween()
+	var duration := effects.camera_zoom_duration if effects else 0.35
+	_camera_zoom_tween.tween_property(_camera, "zoom", target_zoom, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)

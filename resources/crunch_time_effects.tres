@@ -4,3 +4,6 @@
 
 [resource]
 script = ExtResource("1_4hg2w")
+active_overlay_color = Color(1, 0.72, 0.16, 1)
+active_overlay_intensity = 0.98
+camera_zoom_active = Vector2(1.875, 1.875)

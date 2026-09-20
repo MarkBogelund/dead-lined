@@ -59,11 +59,9 @@ class_name PlayerStats
 
 @export_group("Crunch Time")
 ## Capacity spent on crunch time activation
-@export var crunch_activation_cost: float = 10.0
-## Capacity level at which crunch time auto-deactivates
-@export var crunch_deactivation_threshold: float = 1.0
-## Seconds of crunch time lost per one unit of capacity drained
-@export var drain_seconds_per_unit: float = 0.05
+@export var crunch_activation_cost: float = 50.0
+## Duration of crunch time in seconds
+@export var crunch_duration: float = 5.0
 ## Slash damage multiplier while crunch time is active
 @export var damage_multiplier: float = 2.0
 ## Slash radius multiplier while crunch time is active

@@ -12,6 +12,8 @@ class_name CapacityOverlay
 @export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
 
 var _active_crunch_time := false
+var _last_capacity := 0.0
+var _last_maximum := 1.0
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -37,15 +39,17 @@ func set_crunch_time_active(active: bool) -> void:
 		material.set_shader_parameter("overlay_color", crunch_time_effects.active_overlay_color if crunch_time_effects else Color(1.0, 0.68, 0.12, 1.0))
 		material.set_shader_parameter("intensity", crunch_time_effects.active_overlay_intensity if crunch_time_effects else 0.95)
 	else:
-		_update_capacity_from_value(0.0, 1.0)
+		_update_capacity_from_value(_last_capacity / _last_maximum if _last_maximum > 0.0 else 0.0)
 
 func update_capacity(capacity: float, maximum: float) -> void:
+	_last_capacity = capacity
+	_last_maximum = maximum
 	if _active_crunch_time:
 		return
 	var fraction := capacity / maximum if maximum > 0.0 else 0.0
-	_update_capacity_from_value(fraction, fraction)
+	_update_capacity_from_value(fraction)
 
-func _update_capacity_from_value(fraction: float, _unused: float) -> void:
+func _update_capacity_from_value(fraction: float) -> void:
 	if _active_crunch_time:
 		return
 	if fraction <= 0.5:
