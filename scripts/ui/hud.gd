@@ -72,7 +72,7 @@ func _connect_signals() -> void:
 func _initialize_capacity_fill_layout() -> void:
 	_capacity_fill_clip_left_inset = capacity_fill_clip.position.x
 	_capacity_fill_clip_right_inset = capacity_bar.size.x - capacity_fill_clip.position.x - capacity_fill_clip.size.x
-	_capacity_fill_left_overhang = -capacity_fill.position.x
+	_capacity_fill_left_overhang = - capacity_fill.position.x
 	_capacity_fill_right_overhang = capacity_fill.position.x + capacity_fill.size.x - capacity_fill_clip.size.x
 	_capacity_fill_layout_initialized = true
 	_update_capacity_fill(player.capacity.current_capacity)

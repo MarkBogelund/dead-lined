@@ -8,10 +8,54 @@
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="5_136eg"]
 [ext_resource type="Shader" uid="uid://c32ev47kxnpp4" path="res://shaders/pixelated_gradient.gdshader" id="6_pixel_gradient"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_veohx"]
+atlas = ExtResource("4_oj5la")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gss2c"]
+shader = ExtResource("6_pixel_gradient")
+shader_parameter/start_color = Color(0.34831196, 0.76620585, 0, 1)
+shader_parameter/end_color = Color(0.7656923, 0.5025054, 0.14076969, 1)
+shader_parameter/gradient_steps = 6.0
+shader_parameter/control_width = 46.0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_h022r"]
+load_path = "res://.godot/imported/capacity-bar-ui.png-708795802a008814138db8386794ccad.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0h1do"]
+atlas = SubResource("CompressedTexture2D_h022r")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4d46k"]
+load_path = "res://.godot/imported/capacity-bar-ui.png-708795802a008814138db8386794ccad.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_erw67"]
+atlas = SubResource("CompressedTexture2D_4d46k")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="LabelSettings" id="LabelSettings_136eg"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_136eg"]
 bg_color = Color(0.28485027, 0.28485027, 0.2848502, 0.9647059)
 
-[sub_resource type="LabelSettings" id="LabelSettings_136eg"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lqoh"]
+atlas = ExtResource("4_oj5la")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bb1o0"]
+shader = ExtResource("6_pixel_gradient")
+shader_parameter/start_color = Color(0.96328455, 0.5166018, 0, 1)
+shader_parameter/end_color = Color(0.95, 0.32, 0.24, 1)
+shader_parameter/gradient_steps = 6.0
+shader_parameter/control_width = 46.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_00di2"]
+atlas = ExtResource("4_oj5la")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb1o0"]
+atlas = ExtResource("4_oj5la")
+region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hqnrr"]
 atlas = ExtResource("2_8qguk")
@@ -27,8 +71,8 @@ region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h022r"]
 shader = ExtResource("6_pixel_gradient")
-shader_parameter/start_color = Color(0.40320003, 0.66719997, 0.72, 1)
-shader_parameter/end_color = Color(0.6384583, 0.77, 0.45430002, 1)
+shader_parameter/start_color = Color(0.4392157, 0.64705884, 0.81960785, 1)
+shader_parameter/end_color = Color(0.60784316, 0.84705883, 0.7176471, 1)
 shader_parameter/gradient_steps = 12.0
 shader_parameter/control_width = 264.0
 
@@ -42,8 +86,8 @@ region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4jqwt"]
 shader = ExtResource("6_pixel_gradient")
-shader_parameter/start_color = Color(0.18, 0.75, 0.65, 1)
-shader_parameter/end_color = Color(0.536516, 0.5984055, 0.3794585, 1)
+shader_parameter/start_color = Color(0.28268802, 0.6998668, 0.6713415, 1)
+shader_parameter/end_color = Color(0.60784316, 0.84705883, 0.7176471, 1)
 shader_parameter/gradient_steps = 12.0
 shader_parameter/control_width = 264.0
 
@@ -171,32 +215,60 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_bo48s")
 
-[node name="ScoreContainer" type="PanelContainer" parent="." unique_id=1261836232]
+[node name="ScoreContainer" type="MarginContainer" parent="." unique_id=1324534430]
+z_index = 5
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -36.0
-offset_top = -35.0
-offset_right = -6.0
+offset_left = 5.0
+offset_top = -41.0
+offset_right = 41.0
 offset_bottom = -5.0
-grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_136eg")
+
+[node name="Base" type="NinePatchRect" parent="ScoreContainer" unique_id=88506592]
+modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+layout_mode = 2
+texture = SubResource("AtlasTexture_veohx")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="ColorOutline" type="NinePatchRect" parent="ScoreContainer" unique_id=1838743051]
+material = SubResource("ShaderMaterial_gss2c")
+layout_mode = 2
+texture = SubResource("AtlasTexture_0h1do")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="DarkBG" type="NinePatchRect" parent="ScoreContainer" unique_id=320738837]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+layout_mode = 2
+texture = SubResource("AtlasTexture_erw67")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="ScoreContainer" unique_id=1884218529]
 layout_mode = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="ScoreLabel" type="Label" parent="ScoreContainer/MarginContainer" unique_id=391607876]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
 theme_override_fonts/font = ExtResource("3_bo48s")
 theme_override_font_sizes/font_size = 16
 text = "$0"
@@ -238,34 +310,75 @@ text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="WaveContainer" type="PanelContainer" parent="." unique_id=627865544]
+[node name="WaveContainer" type="NinePatchRect" parent="." unique_id=2072429710]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+z_index = 5
 layout_mode = 1
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = -35.0
-offset_right = 51.0
+offset_left = -53.0
+offset_top = -41.0
+offset_right = -5.0
 offset_bottom = -5.0
+grow_horizontal = 0
 grow_vertical = 0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_136eg")
+texture = SubResource("AtlasTexture_0lqoh")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="WaveContainer" unique_id=547987404]
-layout_mode = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
+[node name="ColorOutline" type="NinePatchRect" parent="WaveContainer" unique_id=1330208843]
+material = SubResource("ShaderMaterial_bb1o0")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_00di2")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="WaveContainer/MarginContainer" unique_id=1581491902]
+[node name="DarkBG" type="NinePatchRect" parent="WaveContainer/ColorOutline" unique_id=265056568]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_bb1o0")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="WaveContainer/ColorOutline/DarkBG" unique_id=547987404]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WaveContainer/ColorOutline/DarkBG/MarginContainer" unique_id=1581491902]
 layout_mode = 2
 alignment = 1
 
-[node name="CenterContainer" type="CenterContainer" parent="WaveContainer/MarginContainer/HBoxContainer" unique_id=1528504938]
+[node name="CenterContainer" type="CenterContainer" parent="WaveContainer/ColorOutline/DarkBG/MarginContainer/HBoxContainer" unique_id=1528504938]
 layout_mode = 2
 
-[node name="BuildPhaseTexture" type="TextureRect" parent="WaveContainer/MarginContainer/HBoxContainer/CenterContainer" unique_id=1702312051]
+[node name="BuildPhaseTexture" type="TextureRect" parent="WaveContainer/ColorOutline/DarkBG/MarginContainer/HBoxContainer/CenterContainer" unique_id=1702312051]
 unique_name_in_owner = true
 z_index = 5
 custom_minimum_size = Vector2(16, 16)
@@ -273,7 +386,7 @@ layout_mode = 2
 texture = SubResource("AtlasTexture_hqnrr")
 stretch_mode = 5
 
-[node name="CombatPhaseTexture" type="TextureRect" parent="WaveContainer/MarginContainer/HBoxContainer/CenterContainer" unique_id=176029873]
+[node name="CombatPhaseTexture" type="TextureRect" parent="WaveContainer/ColorOutline/DarkBG/MarginContainer/HBoxContainer/CenterContainer" unique_id=176029873]
 unique_name_in_owner = true
 z_index = 5
 custom_minimum_size = Vector2(16, 16)
@@ -281,7 +394,7 @@ layout_mode = 2
 texture = SubResource("AtlasTexture_bo48s")
 stretch_mode = 5
 
-[node name="WaveLabel" type="Label" parent="WaveContainer/MarginContainer/HBoxContainer" unique_id=2050066302]
+[node name="WaveLabel" type="Label" parent="WaveContainer/ColorOutline/DarkBG/MarginContainer/HBoxContainer" unique_id=2050066302]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
