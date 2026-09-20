@@ -8,7 +8,7 @@ extends Control
 
 @onready var wave_label: Label = %WaveLabel
 @onready var build_phase_timer: Label = %BuildPhaseTimer
-@onready var build_phase_timer_container: PanelContainer = %BuildPhaseTimerContainer
+# @onready var build_phase_timer_container: PanelContainer = %BuildPhaseTimerContainer
 @onready var build_phase_texture: TextureRect = %BuildPhaseTexture
 @onready var combat_phase_texture: TextureRect = %CombatPhaseTexture
 
@@ -47,7 +47,7 @@ func _initialize_values() -> void:
 	set_wave(wave_manager.get_current_wave())
 	call_deferred("_initialize_capacity_fill_layout")
 	build_phase_timer.visible = false
-	build_phase_timer_container.visible = false
+	# build_phase_timer_container.visible = false
 	build_phase_texture.visible = true
 	combat_phase_texture.visible = false
 	crunch_time_label.visible = false
@@ -184,13 +184,13 @@ func set_wave(wave_index: int) -> void:
 
 func _on_build_phase_started() -> void:
 	build_phase_timer.visible = true
-	build_phase_timer_container.visible = true
+	# build_phase_timer_container.visible = true
 	build_phase_texture.visible = true
 	combat_phase_texture.visible = false
 
 func _on_combat_phase_started(_wave_index: int) -> void:
 	build_phase_timer.visible = false
-	build_phase_timer_container.visible = false
+	# build_phase_timer_container.visible = false
 	build_phase_texture.visible = false
 	combat_phase_texture.visible = true
 

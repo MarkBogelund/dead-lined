@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://ppcskmuwki6w" path="res://scenes/ui/floating_score_text.tscn" id="4_8qguk"]
 [ext_resource type="Texture2D" uid="uid://bnps2a01crbv8" path="res://assets/sprites/ui/capacity-bar-ui.png" id="4_oj5la"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="5_136eg"]
+[ext_resource type="Material" uid="uid://ddxubrx1shcgk" path="res://shaders/gradient_blue.tres" id="6_4jqwt"]
+[ext_resource type="Material" uid="uid://lecq77tvhlrt" path="res://shaders/circulating_gradient_blue.tres" id="6_h022r"]
 [ext_resource type="Shader" uid="uid://c32ev47kxnpp4" path="res://shaders/pixelated_gradient.gdshader" id="6_pixel_gradient"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_veohx"]
@@ -35,8 +37,10 @@ region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="LabelSettings" id="LabelSettings_136eg"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_136eg"]
-bg_color = Color(0.28485027, 0.28485027, 0.2848502, 0.9647059)
+[sub_resource type="LabelSettings" id="LabelSettings_4jqwt"]
+font_size = 24
+outline_size = 12
+outline_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0lqoh"]
 atlas = ExtResource("4_oj5la")
@@ -69,13 +73,6 @@ region = Rect2(48, 0, 16, 16)
 atlas = ExtResource("4_oj5la")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_h022r"]
-shader = ExtResource("6_pixel_gradient")
-shader_parameter/start_color = Color(0.4392157, 0.64705884, 0.81960785, 1)
-shader_parameter/end_color = Color(0.60784316, 0.84705883, 0.7176471, 1)
-shader_parameter/gradient_steps = 12.0
-shader_parameter/control_width = 264.0
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_kicr4"]
 atlas = ExtResource("4_oj5la")
 region = Rect2(32, 0, 32, 32)
@@ -84,19 +81,12 @@ region = Rect2(32, 0, 32, 32)
 atlas = ExtResource("4_oj5la")
 region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4jqwt"]
-shader = ExtResource("6_pixel_gradient")
-shader_parameter/start_color = Color(0.28268802, 0.6998668, 0.6713415, 1)
-shader_parameter/end_color = Color(0.60784316, 0.84705883, 0.7176471, 1)
-shader_parameter/gradient_steps = 12.0
-shader_parameter/control_width = 264.0
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
 atlas = ExtResource("4_oj5la")
 region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="LabelSettings" id="LabelSettings_0lqoh"]
-font_size = 14
+font_size = 18
 outline_size = 4
 outline_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
@@ -276,25 +266,24 @@ label_settings = SubResource("LabelSettings_136eg")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BuildPhaseTimerContainer" type="PanelContainer" parent="." unique_id=357868585]
+[node name="BuildPhaseTimerContainer" type="Control" parent="." unique_id=1889815972]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -15.0
-offset_top = -35.0
-offset_right = 15.0
-offset_bottom = -5.0
+offset_left = -16.0
+offset_top = 42.0
+offset_right = 16.0
+offset_bottom = 77.0
 grow_horizontal = 2
-grow_vertical = 0
+pivot_offset_ratio = Vector2(0.5, 0)
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_136eg")
 
 [node name="MarginContainer" type="MarginContainer" parent="BuildPhaseTimerContainer" unique_id=6763074]
-layout_mode = 2
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 35.0
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
@@ -307,6 +296,7 @@ size_flags_vertical = 1
 theme_override_fonts/font = ExtResource("3_bo48s")
 theme_override_font_sizes/font_size = 16
 text = "10"
+label_settings = SubResource("LabelSettings_4jqwt")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -447,7 +437,7 @@ patch_margin_bottom = 4
 [node name="ColorOutline" type="NinePatchRect" parent="CapacityBar" unique_id=327001497]
 modulate = Color(0.324, 0.6, 0.5126, 1)
 z_index = -2
-material = SubResource("ShaderMaterial_h022r")
+material = ExtResource("6_4jqwt")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -492,7 +482,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="CapacityFill" type="NinePatchRect" parent="CapacityBar/CapacityFillClip" unique_id=788569789]
-material = SubResource("ShaderMaterial_4jqwt")
+material = ExtResource("6_h022r")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -526,17 +516,14 @@ mouse_filter = 2
 
 [node name="CapacityLabel" type="Label" parent="CapacityBar" unique_id=564834147]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.85
-offset_right = 20.0
-offset_bottom = 11.15
+offset_left = -19.636612
+offset_right = 20.363388
+offset_bottom = 24.0
 grow_horizontal = 2
-grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0)
 theme_override_fonts/font = ExtResource("3_bo48s")
 theme_override_font_sizes/font_size = 14
 text = "50"
