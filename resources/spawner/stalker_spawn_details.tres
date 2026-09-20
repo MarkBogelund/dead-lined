@@ -6,5 +6,8 @@
 [resource]
 script = ExtResource("1_185mx")
 enemy_scene = ExtResource("2_stalker")
+base_count = 2
 count_growth = 0.5
+spawn_every_n_waves = 2
+max_per_wave = 6
 metadata/_custom_type_script = "uid://du0rvecuvnlry"

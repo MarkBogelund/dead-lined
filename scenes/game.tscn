@@ -484,6 +484,8 @@ position_smoothing_enabled = true
 [node name="EnemySpawnerNorthwest" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(-240, -208)
 spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe"), ExtResource("17_kamikaze")])
+min_spawn_delay = 1.0
+spawn_delay_decay = 0.0
 spawn_intro_distance = 60.0
 health_growth = 0.0
 
