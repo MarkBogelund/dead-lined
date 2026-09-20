@@ -14,8 +14,11 @@ class_name TargetingComponent
 
 ## Maximum distance to consider targets in this group (-1 = unlimited)
 @export var max_range: float = -1.0
+## A same-priority challenger must be this many pixels closer before replacing the current target.
+@export var same_priority_switch_distance: float = 0.0
 
 var _sorted_configs: Array[TargetConfig] = []
+var _current_target: Node2D
 
 func _ready() -> void:
 	_create_runtime_configs()
@@ -23,8 +26,9 @@ func _ready() -> void:
 func initialize(s_max_range: float) -> void:
 	max_range = s_max_range
 
-func configure_priorities(priorities: Dictionary, distance_threshold: float) -> void:
+func configure_priorities(priorities: Dictionary, distance_threshold: float, same_priority_distance: float = 0.0) -> void:
 	priority_distance_threshold = distance_threshold
+	same_priority_switch_distance = maxf(0.0, same_priority_distance)
 	_create_runtime_configs()
 	for config: TargetConfig in _sorted_configs:
 		config.priority = int(priorities.get(config.group_name, config.priority))
@@ -104,4 +108,33 @@ func get_best_target(from_position: Vector2, filter: Callable = Callable()) -> N
 					best_distance_sq = distance_sq
 					best_priority = config.priority
 	
-	return best_target
+	if best_target == null:
+		_current_target = null
+		return null
+
+	if _is_valid_target(_current_target, from_position, filter) and best_target != _current_target:
+		var current_priority := _get_target_priority(_current_target)
+		var best_candidate_priority := _get_target_priority(best_target)
+		if current_priority == best_candidate_priority:
+			var current_distance := from_position.distance_to(_current_target.global_position)
+			var challenger_distance := from_position.distance_to(best_target.global_position)
+			if current_distance - challenger_distance < same_priority_switch_distance:
+				return _current_target
+
+	_current_target = best_target
+	return _current_target
+
+func _is_valid_target(target: Node2D, from_position: Vector2, filter: Callable) -> bool:
+	if not is_instance_valid(target) or not target.is_inside_tree():
+		return false
+	if target.has_method("is_dead") and target.is_dead():
+		return false
+	if max_range >= 0.0 and from_position.distance_squared_to(target.global_position) > max_range * max_range:
+		return false
+	return not filter.is_valid() or filter.call(target)
+
+func _get_target_priority(target: Node2D) -> int:
+	for config: TargetConfig in _sorted_configs:
+		if target.is_in_group(config.group_name):
+			return config.priority
+	return -1

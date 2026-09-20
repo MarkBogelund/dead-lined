@@ -26,6 +26,8 @@ class_name SeekerStats
 @export var player_target_priority: int = 0
 ## Distance advantage required before switching to a lower-priority target
 @export var priority_distance_threshold: float = 20.0
+## Distance advantage required before switching between equal-priority targets
+@export var same_priority_switch_distance: float = 24.0
 
 @export_group("Upgrades")
 ## Each entry is one purchasable health upgrade, in order.

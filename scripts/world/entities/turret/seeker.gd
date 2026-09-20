@@ -66,7 +66,7 @@ func _initialize() -> void:
 	targeting.configure_priorities({
 		"enemies": stats.enemy_target_priority,
 		"player": stats.player_target_priority,
-	}, stats.priority_distance_threshold)
+	}, stats.priority_distance_threshold, stats.same_priority_switch_distance)
 	exclusion_zone.initialize(stats.exclusion_radius)
 	range_indicator.initialize(stats.max_range)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
