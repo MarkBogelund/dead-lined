@@ -66,5 +66,5 @@ func _enter_combat_phase() -> void:
 	combat_phase_started.emit(_wave_index)
 
 func _end_combat_phase() -> void:
-	get_tree().call_group("enemies", "despawn")
+	get_tree().call_group("enemies", "despawn_without_drop")
 	_enter_build_phase()

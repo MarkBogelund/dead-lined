@@ -6,7 +6,5 @@
 [resource]
 script = ExtResource("1_185mx")
 enemy_scene = ExtResource("1_t316x")
-base_count = 3
-count_growth = 0.5
-max_per_wave = 10
+spawn_weight = 5.0
 metadata/_custom_type_script = "uid://du0rvecuvnlry"

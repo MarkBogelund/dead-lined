@@ -5,11 +5,7 @@ signal enemy_spawned(enemy: Node)
 
 @onready var wave_manager: WaveManager = %WaveManager
 
-@export var spawn_entries: Array[EnemySpawnEntry] = []
-
-@export var base_spawn_delay := 0.6
-@export var min_spawn_delay := 0.15
-@export var spawn_delay_decay := 0.97
+@export var spawn_stats: EnemySpawnStats
 
 @export_group("Spawn Intro")
 ## Direction from the outside spawn position to the point where the enemy becomes active.
@@ -41,20 +37,18 @@ func start_wave_spawn(wave_index: int) -> void:
 	_spawn_generation += 1
 	var generation := _spawn_generation
 
-	var spawn_list := _build_spawn_queue_for_wave(_current_wave)
-	var spawn_delay := _calculate_spawn_delay(_current_wave)
-
-	await _spawn_wave_queue(spawn_list, spawn_delay, generation)
+	await _spawn_until_wave_ends(generation)
 
 	if generation == _spawn_generation:
 		_is_spawning = false
 
-func _spawn_wave_queue(spawn_list: Array[PackedScene], spawn_delay: float, generation: int) -> void:
-	for enemy_scene: PackedScene in spawn_list:
-		if generation != _spawn_generation or not wave_manager.is_combat_phase():
-			return
-		_spawn_single_enemy(enemy_scene)
-		await get_tree().create_timer(spawn_delay).timeout
+func _spawn_until_wave_ends(generation: int) -> void:
+	while generation == _spawn_generation and wave_manager.is_combat_phase():
+		var enemy_scene := _pick_enemy_scene()
+		if enemy_scene:
+			_spawn_single_enemy(enemy_scene)
+		var spawn_interval := maxf(spawn_stats.time_between_spawns if spawn_stats else 1.0, 0.05)
+		await get_tree().create_timer(spawn_interval).timeout
 
 func _on_build_phase_started() -> void:
 	_is_spawning = false
@@ -77,27 +71,24 @@ func _spawn_single_enemy(enemy_scene: PackedScene) -> void:
 	# Emit signal for systems that need to track enemy spawns (ScoreManager)
 	enemy_spawned.emit(enemy)
 
-func _build_spawn_queue_for_wave(wave_index: int) -> Array[PackedScene]:
-	var queue: Array[PackedScene] = []
+func _pick_enemy_scene() -> PackedScene:
+	if not spawn_stats:
+		return null
+	var total_weight := 0.0
+	for entry: EnemySpawnEntry in spawn_stats.entries:
+		if entry and entry.enemy_scene and entry.spawn_weight > 0.0:
+			total_weight += entry.spawn_weight
+	if total_weight <= 0.0:
+		return null
 
-	for entry: EnemySpawnEntry in spawn_entries:
-		if entry.enemy_scene == null:
+	var roll := randf() * total_weight
+	for entry: EnemySpawnEntry in spawn_stats.entries:
+		if not entry or not entry.enemy_scene or entry.spawn_weight <= 0.0:
 			continue
-
-		if entry.spawn_every_n_waves > 1 and wave_index % entry.spawn_every_n_waves != 0:
-			continue
-
-		var count := entry.base_count + entry.count_growth * (wave_index - 1)
-		count = int(floor(count))
-
-		if entry.max_per_wave > 0:
-			count = min(count, entry.max_per_wave)
-
-		for i: int in range(count):
-			queue.append(entry.enemy_scene)
-
-	queue.shuffle()
-	return queue
+		roll -= entry.spawn_weight
+		if roll <= 0.0:
+			return entry.enemy_scene
+	return null
 
 func _apply_wave_scaling(enemy: Node) -> void:
 	var health_multiplier := 1.0 + wave_index_to_health_multiplier(_current_wave)
@@ -111,12 +102,6 @@ func wave_index_to_health_multiplier(wave_index: int) -> float:
 
 func wave_index_to_damage_multiplier(wave_index: int) -> float:
 	return wave_index * damage_growth
-
-func _calculate_spawn_delay(wave_index: int) -> float:
-	return max(
-		base_spawn_delay * pow(spawn_delay_decay, wave_index - 1),
-		min_spawn_delay
-	)
 
 func _get_spawn_intro_direction() -> Vector2:
 	if not spawn_intro_direction.is_finite() or spawn_intro_direction.is_zero_approx():

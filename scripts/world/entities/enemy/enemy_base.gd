@@ -101,6 +101,10 @@ func despawn() -> void:
 	drop_scrap.drop()
 	queue_free()
 
+func despawn_without_drop() -> void:
+	remove_from_group("enemies")
+	queue_free()
+
 func is_dead() -> bool:
 	return health.is_dead()
 

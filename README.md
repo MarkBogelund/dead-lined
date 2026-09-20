@@ -97,7 +97,7 @@ Conveyor belts are inline `Area2D` components in the level scene, not standalone
 
 ### Wave timing
 
-[resources/wave_settings.tres](resources/wave_settings.tres) owns build-phase duration, wave-one combat duration, and additional combat seconds per wave. `WaveManager` emits separate build/combat countdown ticks; combat ends when its timer reaches zero, despawns remaining enemies, and enters build phase. `EnemySpawner` cancels any pending spawn queue when build phase begins so timed waves cannot overlap.
+[resources/wave_settings.tres](resources/wave_settings.tres) owns build-phase duration, wave-one combat duration, and additional combat seconds per wave. `WaveManager` emits separate build/combat countdown ticks; combat ends when its timer reaches zero, removes remaining enemies without dropping pickups, and enters build phase. During combat, each `EnemySpawner` continuously performs weighted enemy selections from [resources/spawner/enemy_spawn_stats.tres](resources/spawner/enemy_spawn_stats.tres) at its configured interval. Build phase cancels pending spawn loops so timed waves cannot overlap.
 
 ### Type-safety standard
 

@@ -5,4 +5,4 @@
 [resource]
 script = ExtResource("1_wave_settings")
 build_phase_duration = 30.0
-base_combat_duration = 40.0
+base_combat_duration = 20.0

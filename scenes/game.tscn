@@ -15,13 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://dq6se5v2fekwy" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 [ext_resource type="PackedScene" uid="uid://cgem2dpa2ox1r" path="res://scenes/world/environment/props/arm_prop.tscn" id="12_37s47"]
 [ext_resource type="Texture2D" uid="uid://dlgs16i2yhqmx" path="res://assets/sprites/environment/props/grading-prop.png" id="13_bt5mj"]
-[ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="14_1kice"]
 [ext_resource type="Resource" uid="uid://bbi5f87py8cnr" path="res://resources/shop/seeker_shop_details.tres" id="14_trtic"]
-[ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/spawner/chaser_spawn_details.tres" id="15_5newe"]
-[ext_resource type="Resource" uid="uid://cq5r8y2nwx7ih" path="res://resources/spawner/stalker_spawn_details.tres" id="16_5newe"]
 [ext_resource type="PackedScene" uid="uid://da6ouw6b58hpr" path="res://scenes/ui/game_over_ui.tscn" id="16_ca42v"]
 [ext_resource type="Texture2D" uid="uid://bldg33eco6nyp" path="res://assets/sprites/environment/conveyor-belt.png" id="16_sww3w"]
-[ext_resource type="Resource" uid="uid://cx3hxt45w3uit" path="res://resources/spawner/kamikazer_spawn_details.tres" id="17_kamikaze"]
 [ext_resource type="PackedScene" uid="uid://bgw388qgo3ujn" path="res://scenes/world/environment/conveyor_belt_visual.tscn" id="17_sgl2t"]
 [ext_resource type="Texture2D" uid="uid://dchdr15xarbu2" path="res://assets/sprites/environment/conveyor-cover.png" id="19_wljb1"]
 [ext_resource type="Texture2D" uid="uid://deyg0p6ycgkoa" path="res://assets/sprites/environment/conveyor-cover-shadow.png" id="20_v2yb1"]
@@ -490,21 +486,16 @@ position_smoothing_enabled = true
 
 [node name="EnemySpawnerNorthwest" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(-296, -264)
-spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe"), ExtResource("17_kamikaze")])
-min_spawn_delay = 1.0
-spawn_delay_decay = 0.0
 spawn_intro_distance = 60.0
 health_growth = 0.0
 
 [node name="EnemySpawnerSoutheast" parent="World" unique_id=113296114 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(296, 256)
-spawn_entries = Array[ExtResource("14_1kice")]([ExtResource("15_5newe"), ExtResource("16_5newe"), ExtResource("17_kamikaze")])
 spawn_intro_direction = Vector2(0, -1)
 health_growth = 0.0
 
 [node name="ShopStation" parent="World" unique_id=1270538854 groups=["shop_stations"] instance=ExtResource("6_p57ef")]
-position = Vector2(0, 216)
-rotation = 3.1415927
+position = Vector2(0, -96)
 
 [node name="Pointlight2D3" type="PointLight2D" parent="World/ShopStation" unique_id=572091188]
 show_behind_parent = true

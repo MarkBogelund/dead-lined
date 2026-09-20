@@ -2,9 +2,5 @@ extends Resource
 class_name EnemySpawnEntry
 
 @export var enemy_scene: PackedScene
-
-@export var base_count := 1
-@export var count_growth := 0.0   # added per wave
-
-@export var spawn_every_n_waves := 1  # e.g. 3 → every 3 waves
-@export var max_per_wave := -1        # -1 = no cap
+## Relative chance of this enemy being selected. Zero disables it.
+@export_range(0.0, 100.0, 0.1) var spawn_weight: float = 1.0
