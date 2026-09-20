@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="CrunchTimeEffects" format=3 uid="uid://bmmhd4brbjp5u"]
+
+[ext_resource type="Script" uid="uid://dxyj3txg54cme" path="res://scripts/data/crunch_time_effects.gd" id="1_4hg2w"]
+
+[resource]
+script = ExtResource("1_4hg2w")

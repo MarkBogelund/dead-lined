@@ -97,6 +97,10 @@ Conveyor belts are inline `Area2D` components in the level scene, not standalone
 
 This project uses strict GDScript typing for signal callbacks and loops. Any anonymous function passed to `connect()` must either declare its parameter type(s) or include an explicit `-> void` return type. Any `for` loop variable that is not inference-safe should be explicitly typed, e.g. `for rider: Node in _riders.values():` and `for config: TargetConfig in _sorted_configs:`. If a value can be ambiguous, declare its type explicitly (`var intro_speed: float = ...`). This is not style-only; it keeps Godot diagnostics clean and prevents silent type drift.
 
+### Crunch-time visual effects system
+
+Crunch-time presentation is split between [scripts/data/crunch_time_effects.gd](scripts/data/crunch_time_effects.gd) / [resources/crunch_time_effects.tres](resources/crunch_time_effects.tres) and the HUD's editable AnimationPlayer clips in [scenes/ui/hud.tscn](scenes/ui/hud.tscn). The HUD scene owns editor-facing presentation details such as the ready label text and layout. The resource owns state-dependent tuning such as overlay intensity, camera zoom, and sprite tint. The HUD AnimationPlayer owns the capacity bar's `capacity_ready`, `capacity_active`, and `capacity_change` motion; the ready label's size pulse is a track inside `capacity_ready`. These clips use integer-pixel vertical movement and no scale/rotation on the pixel-art bar, so timing and keyframes can be adjusted directly in the scene editor without subpixel distortion. UI and camera logic react to the player's `capacity` / `crunch_time` state via signals; scripts select animations but do not hardcode their motion.
+
 ---
 
 ## Testing
