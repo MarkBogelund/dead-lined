@@ -29,6 +29,7 @@ var _is_build_phase := true
 var _active_duration: float = 0.0
 var _camera: Camera2D
 var _camera_zoom_tween: Tween
+var _camera_zoom_before_activation := Vector2.ONE
 
 func initialize(p_activation_cost: float, p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float, p_camera: Camera2D) -> void:
 	activation_cost = p_activation_cost
@@ -65,6 +66,10 @@ func activate() -> void:
 	
 	is_active = true
 	_active_duration = 0.0
+	if _camera:
+		if _camera_zoom_tween:
+			_camera_zoom_tween.kill()
+		_camera_zoom_before_activation = _camera.zoom
 	_apply_camera_zoom(effects.camera_zoom_active if effects else Vector2(1.75, 1.75))
 		
 	# Build buff dictionary and emit for Player to apply
@@ -84,7 +89,7 @@ func deactivate() -> void:
 		return # Already inactive
 	
 	is_active = false
-	_apply_camera_zoom(effects.base_camera_zoom if effects else Vector2(1.5, 1.5))
+	_apply_camera_zoom(_camera_zoom_before_activation)
 		
 	# Build buff dictionary and emit for Player to reverse buffs
 	var buffs := {

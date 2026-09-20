@@ -61,17 +61,19 @@ func _initialize() -> void:
 	if not stats:
 		return
 	health.initialize(stats.max_health)
-	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_player_shot)
+	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_wrench_hit)
 	targeting.initialize(stats.max_range)
 	exclusion_zone.initialize(stats.exclusion_radius)
 	range_indicator.initialize(stats.max_range)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
 	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
 
-func receive_repair_shot() -> void:
+func receive_wrench_hit() -> bool:
 	if not health.is_full():
-		repair.receive_repair_shot()
+		repair.repair_once()
 		animation.play_animation("repair")
+		return true
+	return false
 
 func _on_game_over() -> void:
 	_active = false

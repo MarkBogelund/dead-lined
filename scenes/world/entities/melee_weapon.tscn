@@ -71,8 +71,10 @@ max_length = 15
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=454126189]
 collision_layer = 4
-collision_mask = 9
+collision_mask = 25
 script = ExtResource("5_7p1yo")
+damage = 20
+no_damage_group = &"turrets"
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1953014388]

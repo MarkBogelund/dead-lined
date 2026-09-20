@@ -24,7 +24,7 @@ signal hit_obstacle(hit_position: Vector2, self_knockback: float)
 @export var camera_shake_intensity := 0.2
 @export var camera_shake_duration := 0.15
 
-var _enabled := true
+var _enabled := false
 var _cooldown_timer := 0.0
 var _time := 0.0
 var _start_angle := 0.0
@@ -40,6 +40,7 @@ func _ready() -> void:
 	hitbox.knockback = knockback
 	_reset()
 	hitbox.hit_target.connect(_on_hit_target)
+	hitbox.hit_area_target.connect(_on_hit_area_target)
 
 func initialize(p_damage: int, p_knockback: float, p_self_knockback: float, p_radius: float, p_arc_angle: float, p_duration: float, p_cooldown: float) -> void:
 	damage = p_damage
@@ -75,6 +76,8 @@ func _reset() -> void:
 
 func set_enabled(enabled: bool) -> void:
 	_enabled = enabled
+	if not enabled:
+		_reset()
 
 func try_slash(target_pos: Vector2) -> bool:
 	if _cooldown_timer > 0.0 or not _enabled:
@@ -135,6 +138,12 @@ func _update_slash(delta: float) -> void:
 	position = Vector2.RIGHT.rotated(angle) * slash_radius
 
 func _on_hit_target(target: Node) -> void:
+	if target.has_method("receive_wrench_hit"):
+		target.call(&"receive_wrench_hit")
 	camera_shake_manager.shake_screen(camera_shake_duration, camera_shake_intensity)
 	if not target.has_method("was_hit"):
 		hit_obstacle.emit(hitbox.global_position, self_knockback)
+
+func _on_hit_area_target(target: Node) -> void:
+	if target.has_method("receive_wrench_hit") and bool(target.call(&"receive_wrench_hit")):
+		camera_shake_manager.shake_screen(camera_shake_duration, camera_shake_intensity)
