@@ -6,6 +6,5 @@
 [resource]
 script = ExtResource("1_spawnentry")
 enemy_scene = ExtResource("2_kamikazer")
-count_growth = 0.75
-max_per_wave = 8
+base_amount = 6
 metadata/_custom_type_script = "uid://du0rvecuvnlry"

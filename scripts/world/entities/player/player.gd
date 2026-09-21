@@ -27,7 +27,6 @@ signal died
 @export var stats: PlayerStats
 @export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
 
-var shoot_cost: float = 2.0
 var damage_knockback_force := 200.0
 var damage_freeze_duration := 0.1
 var damage_screen_shake_intensity := 0.2
@@ -80,7 +79,6 @@ func _initialize() -> void:
 		stats.weapon_size_multiplier,
 		stats.cooldown_multiplier,
 		camera)
-	shoot_cost = stats.shoot_cost
 	damage_knockback_force = stats.damage_knockback_force
 	damage_freeze_duration = stats.damage_freeze_duration
 	damage_screen_shake_intensity = stats.damage_screen_shake_intensity
@@ -164,18 +162,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		var can_activate := capacity.can_crunch_time() and capacity.can_afford(crunch_time.activation_cost)
 		crunch_time.toggle(can_activate)
 	
-	if event.is_action_pressed("shoot") and capacity.can_afford(shoot_cost):
+	if event.is_action_pressed("shoot"):
 		var mouse_pos := get_global_mouse_position()
-		aiming.aim_at(mouse_pos, 0.0)
-		if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-			capacity.spend(shoot_cost)
-			animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
-	
-	if event.is_action_pressed("slash"):
-		var mouse_pos := get_global_mouse_position()
-		if melee_weapon.try_slash(mouse_pos):
-			_set_facing(mouse_pos.x - global_position.x)
-			animation.play_animation("slash")
+		if crunch_time.is_crunch_time_active():
+			if melee_weapon.try_slash(mouse_pos):
+				_set_facing(mouse_pos.x - global_position.x)
+				animation.play_animation("slash")
+		else:
+			aiming.aim_at(mouse_pos, 0.0)
+			if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
+				animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	
 	if event.is_action_pressed("dash"):
 		var dash_dir := _get_dash_direction()
@@ -268,7 +264,7 @@ func _on_turret_placement_started() -> void:
 
 func _on_turret_placement_ended() -> void:
 	shoot.set_enabled(true)
-	melee_weapon.set_enabled(true)
+	melee_weapon.set_enabled(crunch_time.is_crunch_time_active())
 
 func _on_turret_bought(price: float) -> void:
 	capacity.spend(price)
@@ -280,11 +276,13 @@ func _on_turret_lost() -> void:
 func _on_crunch_time_started(buffs: Dictionary) -> void:
 	capacity.spend(crunch_time.activation_cost)
 	melee_weapon.set_crunch_time_active(true, buffs)
+	melee_weapon.set_enabled(true)
 	movement.set_crunch_time_active(true, buffs["speed"])
 	melee_weapon.scale *= buffs["weapon_size"]
 	_apply_crunch_tint(crunch_time_effects.active_tint if crunch_time_effects else Color(1.0, 0.72, 0.16, 1.0))
 
 func _on_crunch_time_ended(buffs: Dictionary, _duration: float) -> void:
+	melee_weapon.set_enabled(false)
 	melee_weapon.set_crunch_time_active(false, buffs)
 	movement.set_crunch_time_active(false, buffs["speed"])
 	melee_weapon.scale /= buffs["weapon_size"]

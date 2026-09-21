@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_kamikazerstats")
+max_health = 3
 speed = 60.0
 charge_speed = 170.0
 scrap_drop_amount = 4

@@ -4,11 +4,13 @@
 
 [resource]
 script = ExtResource("1_stalkerstats")
+max_health = 5
 ideal_distance = 80.0
 distance_tolerance = 25.0
 aim_speed = 4.0
-max_shoot_distance = 100.0
+priority_distance_threshold = 30.0
+max_shoot_distance = 150.0
 shoot_cooldown = 1.0
 projectile_damage = 5
-projectile_speed = 110.0
+projectile_speed = 90.0
 scrap_drop_amount = 5

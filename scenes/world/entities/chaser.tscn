@@ -545,7 +545,6 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="Resource" id="Resource_0qpcb"]
 script = ExtResource("13_wuiwp")
 group_name = "player"
-priority = 1
 
 [sub_resource type="Resource" id="Resource_85msy"]
 script = ExtResource("13_wuiwp")
@@ -661,7 +660,6 @@ metadata/_custom_type_script = "uid://bfdfe71wkym8b"
 [node name="TargetingComponent" type="Node" parent="." unique_id=37251209]
 script = ExtResource("12_by6ef")
 target_configs = Array[ExtResource("13_wuiwp")]([SubResource("Resource_0qpcb"), SubResource("Resource_85msy")])
-priority_distance_threshold = 40.0
 
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("13_by6ef")]
 process_material = SubResource("ParticleProcessMaterial_lei18")

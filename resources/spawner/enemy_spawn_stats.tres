@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemySpawnStats" format=3 uid="uid://d314a6fcq4k66"]
+
+[ext_resource type="Script" uid="uid://cij678d51rire" path="res://scripts/data/enemy_spawn_stats.gd" id="1_spawn_stats"]
+[ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="2_spawn_entry"]
+[ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/spawner/chaser_spawn_details.tres" id="3_chaser"]
+[ext_resource type="Resource" uid="uid://cq5r8y2nwx7ih" path="res://resources/spawner/stalker_spawn_details.tres" id="4_stalker"]
+[ext_resource type="Resource" uid="uid://cx3hxt45w3uit" path="res://resources/spawner/kamikazer_spawn_details.tres" id="5_kamikazer"]
+
+[resource]
+script = ExtResource("1_spawn_stats")
+entries = Array[ExtResource("2_spawn_entry")]([ExtResource("3_chaser"), ExtResource("4_stalker"), ExtResource("5_kamikazer")])
+time_between_spawns = 1.5

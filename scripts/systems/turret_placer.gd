@@ -20,13 +20,15 @@ func _process(_delta: float) -> void:
 			direction = direction.normalized() * max_place_distance
 		ghost_turret.global_position = player.position + direction
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if not active:
 		return
 	
 	if event.is_action_pressed("interact"):
+		get_viewport().set_input_as_handled()
 		_place()
 	elif event.is_action_pressed("cancel"):
+		get_viewport().set_input_as_handled()
 		cancel()
 
 func start_placement(turret_entry: TurretEntry) -> void:

@@ -34,10 +34,8 @@ class_name PlayerStats
 @export var slash_cooldown: float = 0.3
 
 @export_group("Shooting")
-## Capacity cost per shot
-@export var shoot_cost: float = 2.0
 ## Seconds between shots
-@export var shoot_cooldown: float = 0.5
+@export var shoot_cooldown: float = 0.25
 ## Damage dealt per projectile
 @export var projectile_damage: int = 20
 ## Knockback force applied to targets hit by projectiles

@@ -30,7 +30,6 @@ metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 [sub_resource type="Resource" id="Resource_flmdm"]
 script = ExtResource("7_dwgnj")
 group_name = "enemies"
-priority = 1
 metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 
 [sub_resource type="Animation" id="Animation_6fjxm"]

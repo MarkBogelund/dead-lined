@@ -1,12 +1,10 @@
-# Dead-Lined
+# Dead-Lined Codebase
 
-A Godot 4.7 2D wave-defense game: survive enemy waves, place/upgrade turrets between waves, and use "Crunch Time" (a risky temporary buff) to push through combat.
+Godot 4.7.2 project written in GDScript using the Forward+ renderer.
 
-Engine: **Godot 4.7.2**, GDScript only (no C#), Forward+ renderer.
+This README covers development setup, architecture, implementation contracts, validation, and repository structure. For gameplay rules, balance intent, theme, and player experience, see [GAMEDESIGNDOCUMENT.md](GAMEDESIGNDOCUMENT.md).
 
----
-
-## Environment setup (read this first, every session)
+## Environment Setup
 
 Godot is **not on a system-wide `godot` command** in this workspace. Use the full paths below.
 
@@ -77,6 +75,8 @@ Fallible actions return `bool` (`try_shoot()`, `try_slash()`, `try_dash()`) — 
 
 Balancing values live in one `Resource` subclass per entity type ([scripts/data/](scripts/data/)), instantiated as `.tres` variants ([resources/](resources/)). Entities read from `@export var stats: XStats` in `_initialize()` and push values into components — components never hold the resource directly. Variants (e.g. `SeekerStrong`) are the same script with a different `.tres`, not a subclass.
 
+Chaser, Stalker, and Seeker target priorities are authored only in their stats resources. Their scenes retain `TargetConfig` resources solely to declare target groups; orchestrators pass priorities and distance-switch thresholds into `TargetingComponent` at initialization. For enemies, a larger `priority_distance_threshold` strengthens player preference by requiring a lower-priority turret to be that much closer before taking focus. Seekers also configure same-priority hysteresis so nearby enemy movement does not make turrets continually abandon their current aim target.
+
 ### Known deliberate deviations from a "pure" component model
 
 A few places intentionally cross the strict ownership boundary because the added indirection isn't worth it for a single-scene game:
@@ -93,13 +93,25 @@ These are acceptable trade-offs, not bugs — revisit only if the game grows mul
 
 Conveyor belts are inline `Area2D` components in the level scene, not standalone scenes. Each uses [scripts/world/spawners/conveyor_belt.gd](scripts/world/spawners/conveyor_belt.gd), detects PlayerBody and EnemyBody layers, and owns a child `CollisionShape2D` whose dimensions are currently authored in the level scene. Both the belt and spawner reference [resources/spawner/conveyor_settings.tres](resources/spawner/conveyor_settings.tres), the single source of truth for `enemy_movement_speed` and `player_movement_speed`. The belt talks to bodies only through `set_conveyor_velocity()` / `clear_conveyor_velocity()`; while overlapping, the matching conveyor velocity is added to normal player/enemy movement so they can steer off the belt. The spawn tween remains responsible for crossing the outer wall while collision is disabled.
 
+### Wave System
+
+Build-phase duration is configured in [resources/wave_settings.tres](resources/wave_settings.tres) as `build_phase_duration`.
+
+Each `EnemySpawner` builds a finite shuffled queue from [resources/spawner/enemy_spawn_stats.tres](resources/spawner/enemy_spawn_stats.tres) and spawns it at the configured interval. Each enemy entry owns its enabled state, introduction wave, base amount, multiplicative per-wave amount growth, and cumulative health multiplier interval. Counts are per spawner.
+
+Combat ends only after every spawner finishes its queue and all spawned enemies are dead (not on a timer—victory requires clearing enemies). Pickups remain during build phase and are cleared when the next combat phase begins.
+
 ### Type-safety standard
 
 This project uses strict GDScript typing for signal callbacks and loops. Any anonymous function passed to `connect()` must either declare its parameter type(s) or include an explicit `-> void` return type. Any `for` loop variable that is not inference-safe should be explicitly typed, e.g. `for rider: Node in _riders.values():` and `for config: TargetConfig in _sorted_configs:`. If a value can be ambiguous, declare its type explicitly (`var intro_speed: float = ...`). This is not style-only; it keeps Godot diagnostics clean and prevents silent type drift.
 
 ### Crunch-time visual effects system
 
-Crunch-time presentation is split between [scripts/data/crunch_time_effects.gd](scripts/data/crunch_time_effects.gd) / [resources/crunch_time_effects.tres](resources/crunch_time_effects.tres) and the HUD's editable AnimationPlayer clips in [scenes/ui/hud.tscn](scenes/ui/hud.tscn). The HUD scene owns editor-facing presentation details such as the ready label text and layout. The resource owns state-dependent tuning such as overlay intensity, camera zoom, and sprite tint. `CrunchTimeComponent` owns the fixed-duration lifecycle and active/base camera zoom transition through a camera reference injected by `Player`; `Player` spends the configured capacity cost once when activation is signaled, then coordinates gameplay buffs and sprite tint until the component ends the mode. Cost and duration are authored in [resources/player_stats.tres](resources/player_stats.tres). The HUD AnimationPlayer owns the capacity bar's `capacity_ready`, `capacity_active`, and `capacity_change` motion; the ready label's size pulse is a track inside `capacity_ready`. These clips use integer-pixel vertical movement and no scale/rotation on the pixel-art bar, so timing and keyframes can be adjusted directly in the scene editor without subpixel distortion.
+Crunch-time presentation is split between [scripts/data/crunch_time_effects.gd](scripts/data/crunch_time_effects.gd) / [resources/crunch_time_effects.tres](resources/crunch_time_effects.tres) and the HUD's editable AnimationPlayer clips in [scenes/ui/hud.tscn](scenes/ui/hud.tscn). The HUD scene owns editor-facing presentation details such as the ready label text and layout. The resource owns state-dependent tuning such as overlay intensity, active camera zoom, and sprite tint. `CrunchTimeComponent` owns the fixed-duration lifecycle and camera transition through a camera reference injected by `Player`; it captures the camera's current zoom on activation and restores that value when crunch time ends. `Player` spends the configured capacity cost once when activation is signaled, then coordinates gameplay buffs and sprite tint until the component ends the mode. Cost and duration are authored in [resources/player_stats.tres](resources/player_stats.tres). The HUD AnimationPlayer owns the capacity bar's `capacity_ready`, `capacity_active`, and `capacity_change` motion; the ready label's size pulse is a track inside `capacity_ready`. These clips use integer-pixel vertical movement and no scale/rotation on the pixel-art bar, so timing and keyframes can be adjusted directly in the scene editor without subpixel distortion.
+
+### Primary Attack Routing
+
+`Player` routes the primary attack action to `ShootComponent` normally and `MeleeWeapon` during Crunch Time. `MeleeWeapon` handles enemy bodies through `HitboxComponent` and projectile areas through the generic `receive_wrench_hit()` contract. Turret repair support remains implemented behind that contract, but the current wrench collision mask excludes turret bodies.
 
 ---
 

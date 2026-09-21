@@ -13,6 +13,14 @@ class_name ChaserStats
 ## Extra distance beyond attack_radius required before an attacking chaser gives up and returns to its circle point (prevents boundary flicker)
 @export var attack_exit_margin: float = 20.0
 
+@export_group("Targeting")
+## Priority assigned to the player target group
+@export var player_target_priority: int = 1
+## Priority assigned to the turret target group
+@export var turret_target_priority: int = 0
+## Distance advantage required before switching to a lower-priority target
+@export var priority_distance_threshold: float = 40.0
+
 @export_group("Combat")
 ## Damage dealt on contact with the player
 @export var hitbox_damage: int = 10

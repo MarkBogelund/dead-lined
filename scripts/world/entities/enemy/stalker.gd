@@ -30,6 +30,10 @@ func _initialize() -> void:
 		return
 	_initialize_base(stats.max_health, stats.scrap_drop_amount)
 	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
+	targeting.configure_priorities({
+		"player": stats.player_target_priority,
+		"turrets": stats.turret_target_priority,
+	}, stats.priority_distance_threshold)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
 	_speed = stats.speed
 	_ideal_distance = stats.ideal_distance
