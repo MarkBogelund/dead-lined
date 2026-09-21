@@ -1,9 +1,11 @@
 extends Control
 class_name UpgradePanel
 
-@onready var upgrade_health_button: Button = %UpgradeHealthButton
-@onready var upgrade_damage_button: Button = %UpgradeDamageButton
-@onready var repair_button: Button = %RepairButton
+@onready var upgrade_health_button: BaseButton = %UpgradeHealthButton
+@onready var upgrade_damage_button: BaseButton = %UpgradeDamageButton
+@onready var repair_button: BaseButton = %RepairButton
+@onready var upgrade_health_label: Label = %UpgradeHealthLabel
+@onready var upgrade_damage_label: Label = %UpgradeDamageLabel
 
 var _turret: Node = null
 var _player: Player = null
@@ -72,13 +74,13 @@ func _refresh() -> void:
 		return
 	var hp_data: TurretUpgrade = _turret.upgrader.health_upgrade_data()
 	var dmg_data: TurretUpgrade = _turret.upgrader.damage_upgrade_data()
-	upgrade_health_button.text = "+%d HP (%d cap)" % [hp_data.value, int(hp_data.cost)] if hp_data else "Max HP"
-	upgrade_damage_button.text = "+%d DMG (%d cap)" % [dmg_data.value, int(dmg_data.cost)] if dmg_data else "Max DMG"
+	upgrade_health_label.text = "%d" % int(hp_data.cost) if hp_data else "MAX"
+	upgrade_damage_label.text = "%d" % int(dmg_data.cost) if dmg_data else "MAX"
 
 func _update_button_states(delta: float) -> void:
 	var hp_data: TurretUpgrade = _turret.upgrader.health_upgrade_data()
 	var dmg_data: TurretUpgrade = _turret.upgrader.damage_upgrade_data()
-	var level_ok: bool = _turret.upgrader.level < _wave_manager.current_wave
+	var level_ok: bool = _turret.upgrader.level <= _wave_manager.current_wave
 	upgrade_health_button.disabled = hp_data == null \
 		or not level_ok \
 		or not _player.capacity.can_afford(hp_data.cost)

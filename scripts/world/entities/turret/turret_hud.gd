@@ -27,6 +27,8 @@ func setup(turret: Node, player: Player, wave_manager: WaveManager) -> void:
 	toggle_menu.interaction_zone = turret.interaction_range
 	toggle_menu.menu_control = upgrade_panel
 	toggle_menu.enabled = _build_phase
+	if _build_phase and turret.interaction_range.is_player_in_range():
+		toggle_menu.open()
 
 	_toggle_info.open_fn = func() -> void: info_panel.open(_turret)
 	_toggle_info.close_fn = func() -> void: info_panel.close()
@@ -44,9 +46,12 @@ func _process(_delta: float) -> void:
 func _on_build_phase_started() -> void:
 	_build_phase = true
 	toggle_menu.enabled = true
+	if _turret.interaction_range.is_player_in_range():
+		toggle_menu.open()
 
 func _on_combat_phase_started(_wave: int) -> void:
 	_build_phase = false
+	toggle_menu.close()
 	toggle_menu.enabled = false
 
 func _on_turret_died() -> void:

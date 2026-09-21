@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dohma355t64w7" path="res://scripts/ui/upgrade_panel.gd" id="4_ykdch"]
 [ext_resource type="Texture2D" uid="uid://2dx8sc4766ai" path="res://assets/sprites/ui/turret-upgrade-icons.png" id="5_pm3rh"]
 [ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="5_toggle"]
+[ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="6_ign1u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pm3rh"]
 content_margin_left = 0.0
@@ -15,39 +16,27 @@ content_margin_bottom = 0.0
 bg_color = Color(0.24313726, 0.24313726, 0.24313726, 0.57254905)
 corner_detail = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nuabg"]
-bg_color = Color(0.24477634, 0.24477643, 0.24477628, 0.57254905)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_normal"]
-bg_color = Color(0.15, 0.15, 0.15, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_pressed"]
-bg_color = Color(0.08, 0.08, 0.08, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_hover"]
-bg_color = Color(0.25, 0.25, 0.25, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_normal"]
-bg_color = Color(0.15, 0.15, 0.15, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_pressed"]
-bg_color = Color(0.08, 0.08, 0.08, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmg_hover"]
-bg_color = Color(0.25, 0.25, 0.25, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_normal"]
-bg_color = Color(0.15, 0.15, 0.15, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_pressed"]
-bg_color = Color(0.08, 0.08, 0.08, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_repair_hover"]
-bg_color = Color(0.25, 0.25, 0.25, 1)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ykdch"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
 atlas = ExtResource("5_pm3rh")
 region = Rect2(34, 10, 12, 12)
+
+[sub_resource type="LabelSettings" id="LabelSettings_spl43"]
+font = ExtResource("6_ign1u")
+font_size = 8
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ign1u"]
+load_path = "res://.godot/imported/turret-upgrade-icons.png-d5dce7cfba7cd781ac94d4ee18a848f9.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3jpqe"]
+atlas = SubResource("CompressedTexture2D_ign1u")
+region = Rect2(18, 10, 12, 12)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3jpqe"]
+load_path = "res://.godot/imported/turret-upgrade-icons.png-d5dce7cfba7cd781ac94d4ee18a848f9.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nhigd"]
+atlas = SubResource("CompressedTexture2D_3jpqe")
+region = Rect2(2, 10, 12, 12)
 
 [node name="TurretHUD" type="Node" unique_id=1583887513]
 script = ExtResource("1_jrbl1")
@@ -96,78 +85,140 @@ text = "DMG: 20"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="UpgradePanel" type="PanelContainer" parent="CanvasLayer" unique_id=1632633299]
+[node name="UpgradePanel" type="Control" parent="CanvasLayer" unique_id=1743102423]
 unique_name_in_owner = true
-offset_left = -52.0
-offset_top = 15.0
-offset_right = 54.0
-offset_bottom = 71.0
+layout_mode = 3
+anchors_preset = 0
+offset_left = -32.0
+offset_right = 33.142868
+offset_bottom = 50.0
 pivot_offset_ratio = Vector2(0.5, 0.5)
-theme_override_styles/panel = SubResource("StyleBoxFlat_nuabg")
 script = ExtResource("4_ykdch")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UpgradePanel" unique_id=816033217]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_right = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 5
 
-[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer" unique_id=265804257]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer" unique_id=1867402857]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 0
 alignment = 1
 
-[node name="UpgradeHealthButton" type="Button" parent="CanvasLayer/UpgradePanel/MarginContainer/VBox" unique_id=1424632460]
+[node name="UpgradeHealthButton" type="TextureButton" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer" unique_id=1903084934]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 10)
+custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_jrbl1")
-theme_override_font_sizes/font_size = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_hp_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_hp_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hp_hover")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_hp_pressed")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_hp_normal")
-theme_override_styles/focus = SubResource("StyleBoxFlat_hp_normal")
-text = "+10 HP (-15 cap)"
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="UpgradeDamageButton" type="Button" parent="CanvasLayer/UpgradePanel/MarginContainer/VBox" unique_id=1573084624]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeHealthButton" unique_id=1068676192]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeHealthButton/VBoxContainer" unique_id=42369551]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("AtlasTexture_spl43")
+
+[node name="UpgradeHealthLabel" type="Label" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeHealthButton/VBoxContainer" unique_id=1832294696]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_jrbl1")
-theme_override_font_sizes/font_size = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_dmg_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dmg_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_dmg_hover")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_dmg_pressed")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_dmg_normal")
-theme_override_styles/focus = SubResource("StyleBoxFlat_dmg_normal")
-text = "+5 DMG (-20 cap)"
+text = "15"
+label_settings = SubResource("LabelSettings_spl43")
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="RepairButton" type="Button" parent="CanvasLayer/UpgradePanel/MarginContainer/VBox" unique_id=590112515]
+[node name="UpgradeDamageButton" type="TextureButton" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer" unique_id=1549581212]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 10)
+custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_jrbl1")
-theme_override_font_sizes/font_size = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_repair_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_repair_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_repair_hover")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_repair_pressed")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_repair_normal")
-theme_override_styles/focus = SubResource("StyleBoxFlat_repair_normal")
-text = "Hold to repair"
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="TextureButton" type="TextureButton" parent="CanvasLayer/UpgradePanel/MarginContainer/VBox" unique_id=2075377870]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton" unique_id=1159413202]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton/VBoxContainer" unique_id=2131484792]
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_ykdch")
+theme_override_constants/separation = 5
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton/VBoxContainer" unique_id=1836151854]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("AtlasTexture_3jpqe")
+
+[node name="UpgradeDamageLabel" type="Label" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton/VBoxContainer" unique_id=1568251803]
+unique_name_in_owner = true
+layout_mode = 2
+text = "15"
+label_settings = SubResource("LabelSettings_spl43")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RepairButton" type="TextureButton" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer" unique_id=93129478]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/RepairButton" unique_id=1718780121]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/RepairButton/VBoxContainer" unique_id=1943922275]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("AtlasTexture_nhigd")
+
+[node name="RepairLabel" type="Label" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/RepairButton/VBoxContainer" unique_id=1196444681]
+unique_name_in_owner = true
+layout_mode = 2
+text = "15"
+label_settings = SubResource("LabelSettings_spl43")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ToggleMenuUpgrade" type="Node" parent="." unique_id=488267466]
 script = ExtResource("5_toggle")
-open_on_proximity_and_button = true
+open_on_proximity = true
 close_on_exit_proximity = true
-close_on_toggle_button = true
-close_on_click_away = true
 close_on_combat_phase = true
 
 [node name="ToggleMenuInfo" type="Node" parent="." unique_id=1034362014]
