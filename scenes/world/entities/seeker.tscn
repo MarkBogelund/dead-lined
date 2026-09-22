@@ -96,7 +96,6 @@ group_name = "enemies"
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
 hit_flash_duration = 0.48
-hit_flash_shader = null
 
 [node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
 health_component = NodePath("../HealthComponent")

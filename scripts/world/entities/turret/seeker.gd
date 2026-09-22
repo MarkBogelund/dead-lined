@@ -69,9 +69,6 @@ func _execute_shot() -> void:
 	shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction())
 	_telegraphing = false
 
-func _before_damage_animation() -> void:
-	_telegraphing = false
-
 func _before_death_animation() -> void:
 	_telegraphing = false
 

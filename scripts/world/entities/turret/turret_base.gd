@@ -64,9 +64,7 @@ func initialize_base(max_health: int, capacity_drain_rate: float, health_restore
 	range_indicator.initialize(display_range)
 
 func _configure_base_animations() -> void:
-	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("repair", 3, true)
-	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 4, true)
 
 func _on_combat_phase_started(_wave: int) -> void:
@@ -121,7 +119,6 @@ func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> v
 	if was_fatal:
 		_handle_death()
 	else:
-		_before_damage_animation()
 		_play_hit_flash()
 
 func _play_hit_flash() -> void:
@@ -163,9 +160,6 @@ func _add_hit_flash_material(visual: CanvasItem, flash_materials: Array[ShaderMa
 	var shader_material := visual.material as ShaderMaterial if visual else null
 	if shader_material:
 		flash_materials.append(shader_material)
-
-func _before_damage_animation() -> void:
-	pass
 
 func _before_death_animation() -> void:
 	pass

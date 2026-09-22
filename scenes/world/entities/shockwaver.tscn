@@ -6,11 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="4_sprite"]
 [ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="6_shockwave"]
-[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="7_particles"]
 
 [sub_resource type="Animation" id="Shock"]
 resource_name = "shock"
-length = 0.45
+length = 0.3
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -18,7 +17,7 @@ tracks/0/path = NodePath("ShockwaveComponent")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.45),
+"times": PackedFloat32Array(0.26666668),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -32,10 +31,34 @@ tracks/1/path = NodePath("Visuals/AnimatedSprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(0, 0.033333335, 0.06666667, 0.10000001, 0.13333334, 0.16666667, 0.20000002, 0.23333335, 0.26666668),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.26666668),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HitParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.26666668),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0]
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="ShockLibrary"]
@@ -46,15 +69,71 @@ _data = {
 [sub_resource type="CircleShape2D" id="DetectionShape"]
 radius = 124.0
 
-[sub_resource type="AtlasTexture" id="Frame0"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_8xtx4"]
 atlas = ExtResource("4_sprite")
 region = Rect2(0, 0, 24, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5x0bc"]
+atlas = ExtResource("4_sprite")
+region = Rect2(24, 0, 24, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8xcv"]
+atlas = ExtResource("4_sprite")
+region = Rect2(48, 0, 24, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7d8vd"]
+atlas = ExtResource("4_sprite")
+region = Rect2(72, 0, 24, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdw73"]
+atlas = ExtResource("4_sprite")
+region = Rect2(96, 0, 24, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_djv0i"]
+atlas = ExtResource("4_sprite")
+region = Rect2(120, 0, 24, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wrm1a"]
+atlas = ExtResource("4_sprite")
+region = Rect2(144, 0, 24, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mbm07"]
+atlas = ExtResource("4_sprite")
+region = Rect2(168, 0, 24, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8scai"]
+atlas = ExtResource("4_sprite")
+region = Rect2(192, 0, 24, 26)
 
 [sub_resource type="SpriteFrames" id="Frames"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("Frame0")
+"texture": SubResource("AtlasTexture_8xtx4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5x0bc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e8xcv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7d8vd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdw73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_djv0i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wrm1a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mbm07")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8scai")
 }],
 "loop": 1,
 "name": &"default",
@@ -65,7 +144,6 @@ animations = [{
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
 hit_flash_duration = 0.48
-hit_flash_shader = null
 
 [node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
 health_component = NodePath("../HealthComponent")
@@ -86,9 +164,6 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ShockwaveComponent/DetectionArea" index="0" unique_id=325788917]
 shape = SubResource("DetectionShape")
-
-[node name="ShockParticles" parent="." index="14" unique_id=360686635 instance=ExtResource("7_particles")]
-amount = 20
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="0" unique_id=1298088136]
 z_index = 1
