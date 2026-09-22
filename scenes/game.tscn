@@ -27,8 +27,8 @@
 [ext_resource type="Script" uid="uid://blje0nqklvqls" path="res://scripts/world/spawners/conveyor_belt.gd" id="27_conveyor_script"]
 [ext_resource type="PackedScene" uid="uid://c3pausemenu01" path="res://scenes/ui/pause_menu.tscn" id="27_qnb83"]
 [ext_resource type="Resource" uid="uid://dfqqng3tkvdcl" path="res://resources/spawner/conveyor_settings.tres" id="28_conveyor_settings"]
-[ext_resource type="PackedScene" path="res://scenes/world/entities/shockwaver.tscn" id="28_sww3w"]
-[ext_resource type="Resource" path="res://resources/shop/shockwaver_shop_details.tres" id="29_shockwaver_shop"]
+[ext_resource type="PackedScene" uid="uid://dg727qsoqbra2" path="res://scenes/world/entities/shockwaver.tscn" id="28_sww3w"]
+[ext_resource type="Resource" uid="uid://cals7t00fcr3i" path="res://resources/shop/shockwaver_shop_details.tres" id="29_shockwaver_shop"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
