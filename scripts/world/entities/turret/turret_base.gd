@@ -1,0 +1,138 @@
+extends StaticBody2D
+class_name TurretBase
+
+signal died
+
+@onready var animation: AnimationHandler = $AnimationHandler
+@onready var health: HealthComponent = $HealthComponent
+@onready var interaction_range: InteractionZone = $InteractionZone
+@onready var health_ui: HealthUIComponent = $HealthUIComponent
+@onready var upgrader: TurretUpgradeComponent = $TurretUpgradeComponent
+@onready var repair: RepairComponent = $RepairComponent
+@onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
+@onready var hud: TurretHUD = $TurretHUD
+@onready var range_indicator: RangeIndicator = $RangeIndicator
+@onready var windup_particles: GPUParticles2D = get_node_or_null("WindupParticles") as GPUParticles2D
+
+@onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
+@onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
+@onready var camera_shake_manager: CameraShakeManager = get_tree().get_first_node_in_group("camera_shake_manager")
+@onready var player: Player = get_tree().get_first_node_in_group("player")
+
+var enabled := true
+var _active := false
+
+func _ready() -> void:
+	add_to_group("turrets")
+	_configure_base_animations()
+	if wave_manager:
+		wave_manager.combat_phase_started.connect(_on_combat_phase_started)
+		wave_manager.build_phase_started.connect(_on_build_phase_started)
+	else:
+		_active = true
+		_on_combat_started()
+	if game_over_manager:
+		game_over_manager.game_over.connect(_on_game_over)
+	interaction_range.player_entered.connect(_on_player_entered)
+	interaction_range.player_exited.connect(_on_player_exited)
+	repair.repaired.connect(health.heal)
+	if player:
+		repair.capacity_drained.connect(player.capacity.spend)
+	repair.healing_started.connect(_on_healing_started)
+	repair.healing_stopped.connect(_on_healing_stopped)
+	if player and wave_manager:
+		hud.setup(self, player, wave_manager)
+
+func initialize_base(max_health: int, capacity_drain_rate: float, health_restore_rate: float, repair_amount_per_wrench_hit: int, exclusion_radius: float, display_range: float) -> void:
+	health.initialize(max_health)
+	repair.initialize(capacity_drain_rate, health_restore_rate, repair_amount_per_wrench_hit)
+	exclusion_zone.initialize(exclusion_radius)
+	range_indicator.initialize(display_range)
+
+func _configure_base_animations() -> void:
+	animation.configure_animation("idle", 0, false)
+	animation.configure_animation("repair", 3, true)
+	animation.configure_animation("take_damage", 2, true)
+	animation.configure_animation("die", 4, true)
+
+func _on_combat_phase_started(_wave: int) -> void:
+	_active = true
+	_on_combat_started()
+
+func _on_build_phase_started() -> void:
+	_active = false
+	_on_combat_stopped()
+
+func _on_game_over() -> void:
+	_active = false
+	enabled = false
+	_on_combat_stopped()
+
+func _on_player_entered() -> void:
+	health_ui.set_player_in_range(true)
+	range_indicator.show_indicator()
+
+func _on_player_exited() -> void:
+	health_ui.set_player_in_range(false)
+	range_indicator.hide_indicator()
+
+func _on_healing_started() -> void:
+	if windup_particles:
+		windup_particles.emitting = true
+
+func _on_healing_stopped() -> void:
+	if windup_particles:
+		windup_particles.emitting = false
+
+func _on_combat_started() -> void:
+	pass
+
+func _on_combat_stopped() -> void:
+	pass
+
+func is_turret_active() -> bool:
+	return _active and enabled and not is_dead()
+
+func receive_wrench_hit() -> bool:
+	if health.is_full():
+		return false
+	repair.repair_once()
+	animation.play_animation("repair")
+	return true
+
+func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
+	if is_dead():
+		return
+	var was_fatal := health.take_damage(amount)
+	if was_fatal:
+		_handle_death()
+	else:
+		_before_damage_animation()
+		animation.play_animation("take_damage")
+
+func _before_damage_animation() -> void:
+	pass
+
+func _before_death_animation() -> void:
+	pass
+
+func _handle_death() -> void:
+	_before_death_animation()
+	remove_from_group("turrets")
+	enabled = false
+	_active = false
+	animation.play_animation("die")
+	died.emit()
+
+func get_damage_value() -> int:
+	push_warning("TurretBase.get_damage_value() should be overridden")
+	return 0
+
+func apply_damage_upgrade(_amount: int) -> void:
+	push_warning("TurretBase.apply_damage_upgrade() should be overridden")
+
+func shake_screen(intensity: float, duration: float) -> void:
+	camera_shake_manager.shake_screen(intensity, duration)
+
+func is_dead() -> bool:
+	return health.is_dead()

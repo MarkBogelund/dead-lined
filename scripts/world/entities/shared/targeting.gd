@@ -124,14 +124,17 @@ func get_best_target(from_position: Vector2, filter: Callable = Callable()) -> N
 	_current_target = best_target
 	return _current_target
 
-func _is_valid_target(target: Node2D, from_position: Vector2, filter: Callable) -> bool:
-	if not is_instance_valid(target) or not target.is_inside_tree():
+func _is_valid_target(target: Variant, from_position: Vector2, filter: Callable) -> bool:
+	if not is_instance_valid(target) or not target is Node2D:
 		return false
-	if target.has_method("is_dead") and target.is_dead():
+	var target_node := target as Node2D
+	if not target_node.is_inside_tree():
 		return false
-	if max_range >= 0.0 and from_position.distance_squared_to(target.global_position) > max_range * max_range:
+	if target_node.has_method("is_dead") and target_node.is_dead():
 		return false
-	return not filter.is_valid() or filter.call(target)
+	if max_range >= 0.0 and from_position.distance_squared_to(target_node.global_position) > max_range * max_range:
+		return false
+	return not filter.is_valid() or filter.call(target_node)
 
 func _get_target_priority(target: Node2D) -> int:
 	for config: TargetConfig in _sorted_configs:

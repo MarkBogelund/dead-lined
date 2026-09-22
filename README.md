@@ -61,6 +61,8 @@ Each entity (Player, Chaser, Stalker, Turret, …) is an **orchestrator**: it co
 
 Fallible actions return `bool` (`try_shoot()`, `try_slash()`, `try_dash()`) — the caller decides what happens on success (animation, sound, camera shake).
 
+Enemies share `EnemyBase` for health, damage/death handling, spawn intro state, conveyor velocity, and common components. Turrets share `TurretBase` for health, repair, upgrades, phase lifecycle, interaction UI, and damage/death handling. Concrete turret scenes compose only their behavior-specific components: Seeker uses targeting/aiming/shooting, while Shockwaver uses `ShockwaveComponent`. Shared turret balancing fields live in `TurretStats`; concrete stats resources add behavior-specific values.
+
 ### Node references
 
 | Pattern | Use for |
@@ -112,6 +114,10 @@ Crunch-time presentation is split between [scripts/data/crunch_time_effects.gd](
 ### Primary Attack Routing
 
 `Player` routes the primary attack action to `ShootComponent` normally and `MeleeWeapon` during Crunch Time. `MeleeWeapon` handles enemy bodies through `HitboxComponent` and projectile areas through the generic `receive_wrench_hit()` contract. Turret repair support remains implemented behind that contract, but the current wrench collision mask excludes turret bodies.
+
+### Shockwaver Prototype
+
+[scenes/world/entities/shockwaver.tscn](scenes/world/entities/shockwaver.tscn) is a functional standalone turret prototype and is intentionally not registered in the game scene or shop yet. `ShockwaveComponent` owns contact detection, windup, expanding annulus rendering, one-hit-per-target tracking, multi-target damage, and cooldown. The broad-phase `Area2D` detects player/enemy bodies; radial swept-ring math determines when the moving doughnut reaches each target without scaling collision shapes.
 
 ---
 

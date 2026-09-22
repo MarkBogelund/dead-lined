@@ -40,4 +40,4 @@ func _update_labels() -> void:
 		return
 	level_label.text = "%d" % _turret.upgrader.level
 	health_label.text = "HP: %d/%d" % [_turret.health.get_current_health(), _turret.health.max_health]
-	damage_label.text = "DMG: %d" % _turret.shoot.projectile_damage
+	damage_label.text = "DMG: %d" % _turret.get_damage_value()

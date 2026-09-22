@@ -51,13 +51,13 @@ metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [resource]
 script = ExtResource("1_seekerstats")
-max_health = 200
 max_range = 200.0
 aim_speed = 7.0
 accuracy_angle = 0.15
 priority_distance_threshold = 30.0
+projectile_damage = 5
+projectile_speed = 170.0
+max_health = 200
 health_upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Resource_nh28m"), SubResource("Resource_jw1wh"), SubResource("Resource_5qqth"), SubResource("Resource_nuvq8")])
 damage_upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Resource_nmlpx"), SubResource("Resource_qtbxs"), SubResource("Resource_2gvxv"), SubResource("Resource_faxe0")])
 health_restore_rate = 20.0
-projectile_damage = 5
-projectile_speed = 170.0

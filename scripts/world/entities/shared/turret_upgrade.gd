@@ -44,4 +44,4 @@ func apply_damage_upgrade() -> void:
 	var turret := get_parent()
 	level += 1
 	_damage_index += 1
-	turret.shoot.projectile_damage += data.value
+	turret.apply_damage_upgrade(data.value)

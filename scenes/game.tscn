@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://blje0nqklvqls" path="res://scripts/world/spawners/conveyor_belt.gd" id="27_conveyor_script"]
 [ext_resource type="PackedScene" uid="uid://c3pausemenu01" path="res://scenes/ui/pause_menu.tscn" id="27_qnb83"]
 [ext_resource type="Resource" uid="uid://dfqqng3tkvdcl" path="res://resources/spawner/conveyor_settings.tres" id="28_conveyor_settings"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/shockwaver.tscn" id="28_sww3w"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -527,3 +528,6 @@ danger_curve = SubResource("Curve_e1j6l")
 good_curve = SubResource("Curve_pl11u")
 
 [node name="PauseMenu" parent="UI" unique_id=48360480 instance=ExtResource("27_qnb83")]
+
+[node name="Shockwaver" parent="." unique_id=1070921610 instance=ExtResource("28_sww3w")]
+position = Vector2(-168, 64)
