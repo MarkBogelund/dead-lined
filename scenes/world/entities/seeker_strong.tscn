@@ -21,6 +21,7 @@
 [ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="21_exclusion"]
 [ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="22_0qpe8"]
 [ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="22_hud"]
+[ext_resource type="Shader" path="res://shaders/hit_flash.gdshader" id="23_hit_flash"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("7_dwgnj")
@@ -31,6 +32,9 @@ metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 script = ExtResource("7_dwgnj")
 group_name = "enemies"
 metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hit_flash"]
+shader = ExtResource("23_hit_flash")
 
 [sub_resource type="Animation" id="Animation_6fjxm"]
 length = 0.001
@@ -614,6 +618,7 @@ texture = SubResource("GradientTexture2D_t1nol")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=978640667]
 z_index = 1
+material = SubResource("ShaderMaterial_hit_flash")
 texture = ExtResource("12_bpgv7")
 region_enabled = true
 region_rect = Rect2(35, 14, 28, 25)

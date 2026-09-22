@@ -13,6 +13,7 @@ signal died
 @onready var hud: TurretHUD = $TurretHUD
 @onready var range_indicator: RangeIndicator = $RangeIndicator
 @onready var windup_particles: GPUParticles2D = get_node_or_null("WindupParticles") as GPUParticles2D
+@onready var body_visual: CanvasItem = _get_body_visual()
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
@@ -21,6 +22,16 @@ signal died
 
 var enabled := true
 var _active := false
+var _hit_flash_tween: Tween
+
+@export_group("Presentation")
+@export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
+
+func _get_body_visual() -> CanvasItem:
+	var sprite := get_node_or_null("Sprite2D") as CanvasItem
+	if sprite:
+		return sprite
+	return get_node_or_null("AnimatedSprite2D") as CanvasItem
 
 func _ready() -> void:
 	add_to_group("turrets")
@@ -52,7 +63,6 @@ func initialize_base(max_health: int, capacity_drain_rate: float, health_restore
 func _configure_base_animations() -> void:
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("repair", 3, true)
-	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 4, true)
 
 func _on_combat_phase_started(_wave: int) -> void:
@@ -108,7 +118,17 @@ func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> v
 		_handle_death()
 	else:
 		_before_damage_animation()
-		animation.play_animation("take_damage")
+		_play_hit_flash()
+
+func _play_hit_flash() -> void:
+	var shader_material := body_visual.material as ShaderMaterial if body_visual else null
+	if not shader_material:
+		return
+	if _hit_flash_tween:
+		_hit_flash_tween.kill()
+	shader_material.set_shader_parameter("flash_amount", 1.0)
+	_hit_flash_tween = create_tween()
+	_hit_flash_tween.tween_property(shader_material, "shader_parameter/flash_amount", 0.0, hit_flash_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _before_damage_animation() -> void:
 	pass

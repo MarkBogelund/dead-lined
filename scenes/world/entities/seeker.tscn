@@ -21,6 +21,7 @@
 [ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="21_exclusion"]
 [ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="22_hud"]
 [ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="23_range"]
+[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/hit_flash.gdshader" id="24_hit_flash"]
 
 [sub_resource type="Resource" id="Resource_6yfjj"]
 script = ExtResource("11_target_config")
@@ -466,6 +467,11 @@ gradient = SubResource("Gradient_elrtf")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hit_flash"]
+shader = ExtResource("24_hit_flash")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
 radius = 7.0
 
@@ -474,21 +480,21 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_v6o1g"]
+[sub_resource type="CurveTexture" id="CurveTexture_3wv22"]
 curve = SubResource("Curve_iwnrm")
 
 [sub_resource type="Gradient" id="Gradient_38riw"]
 offsets = PackedFloat32Array(0.31566265, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0.37108207, 0.7371826, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_si8s4"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g4h2w"]
 gradient = SubResource("Gradient_38riw")
 
 [sub_resource type="Curve" id="Curve_v6o1g"]
 _data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_3wv22"]
+[sub_resource type="CurveTexture" id="CurveTexture_iipw4"]
 curve = SubResource("Curve_v6o1g")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_si8s4"]
@@ -498,7 +504,7 @@ emission_shape = 1
 emission_sphere_radius = 8.0
 angle_min = 1.0728835e-05
 angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_v6o1g")
+angle_curve = SubResource("CurveTexture_3wv22")
 direction = Vector3(0, 0, 0)
 spread = 180.0
 initial_velocity_min = 50.0
@@ -506,8 +512,8 @@ initial_velocity_max = 100.0
 gravity = Vector3(0, 0, 0)
 scale_min = 0.19999999
 scale_max = 0.39999998
-scale_curve = SubResource("CurveTexture_3wv22")
-color_ramp = SubResource("GradientTexture1D_si8s4")
+scale_curve = SubResource("CurveTexture_iipw4")
+color_ramp = SubResource("GradientTexture1D_g4h2w")
 
 [sub_resource type="Curve" id="Curve_rqd04"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
@@ -606,6 +612,7 @@ collision_layer = 32
 collision_mask = 19
 script = ExtResource("1_6fjxm")
 stats = ExtResource("16_stats")
+hit_flash_duration = 0.48
 
 [node name="HealthUIComponent" parent="." unique_id=1686314379 node_paths=PackedStringArray("health_component") instance=ExtResource("14_flmdm")]
 position = Vector2(0, -24)
@@ -651,6 +658,7 @@ texture = SubResource("GradientTexture2D_t1nol")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=978640667]
 z_index = 1
+material = SubResource("ShaderMaterial_hit_flash")
 texture = ExtResource("3_pp6j5")
 region_enabled = true
 region_rect = Rect2(35, 14, 28, 25)

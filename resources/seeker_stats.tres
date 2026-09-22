@@ -51,7 +51,7 @@ metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [resource]
 script = ExtResource("1_seekerstats")
-max_range = 200.0
+max_range = 250.0
 aim_speed = 7.0
 accuracy_angle = 0.15
 priority_distance_threshold = 30.0

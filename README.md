@@ -63,6 +63,8 @@ Fallible actions return `bool` (`try_shoot()`, `try_slash()`, `try_dash()`) — 
 
 Enemies share `EnemyBase` for health, damage/death handling, spawn intro state, conveyor velocity, and common components. Turrets share `TurretBase` for health, repair, upgrades, phase lifecycle, interaction UI, and damage/death handling. Concrete turret scenes compose only their behavior-specific components: Seeker uses targeting/aiming/shooting, while Shockwaver uses `ShockwaveComponent`. Shared turret balancing fields live in `TurretStats`; concrete stats resources add behavior-specific values.
 
+Turret hit feedback uses [shaders/hit_flash.gdshader](shaders/hit_flash.gdshader) on each body visual. `TurretBase` pulses its material uniform with a short tween instead of playing a damage animation, so taking damage never interrupts firing or shockwave telegraph animations.
+
 ### Node references
 
 | Pattern | Use for |
