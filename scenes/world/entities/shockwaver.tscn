@@ -156,7 +156,7 @@ radius = 124.0
 [node name="Shockwaver" unique_id=732088838 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
-hit_flash_duration = 0.48
+hit_flash_duration = 0.5
 
 [node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
 health_component = NodePath("../HealthComponent")
