@@ -121,14 +121,27 @@ func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> v
 		_play_hit_flash()
 
 func _play_hit_flash() -> void:
-	var shader_material := body_visual.material as ShaderMaterial if body_visual else null
-	if not shader_material:
+	var flash_materials := _get_hit_flash_materials()
+	if flash_materials.is_empty():
 		return
 	if _hit_flash_tween:
 		_hit_flash_tween.kill()
-	shader_material.set_shader_parameter("flash_amount", 1.0)
+	for shader_material: ShaderMaterial in flash_materials:
+		shader_material.set_shader_parameter("flash_amount", 1.0)
 	_hit_flash_tween = create_tween()
-	_hit_flash_tween.tween_property(shader_material, "shader_parameter/flash_amount", 0.0, hit_flash_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	for shader_material: ShaderMaterial in flash_materials:
+		_hit_flash_tween.parallel().tween_property(shader_material, "shader_parameter/flash_amount", 0.0, hit_flash_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func _get_hit_flash_materials() -> Array[ShaderMaterial]:
+	var flash_materials: Array[ShaderMaterial] = []
+	_add_hit_flash_material(body_visual, flash_materials)
+	_add_hit_flash_material(get_node_or_null("Canon/Graphics") as CanvasItem, flash_materials)
+	return flash_materials
+
+func _add_hit_flash_material(visual: CanvasItem, flash_materials: Array[ShaderMaterial]) -> void:
+	var shader_material := visual.material as ShaderMaterial if visual else null
+	if shader_material:
+		flash_materials.append(shader_material)
 
 func _before_damage_animation() -> void:
 	pass

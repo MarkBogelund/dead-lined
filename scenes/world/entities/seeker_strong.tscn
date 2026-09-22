@@ -36,6 +36,9 @@ metadata/_custom_type_script = "uid://cdfpgr7c2xegu"
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hit_flash"]
 shader = ExtResource("23_hit_flash")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cannon_hit_flash"]
+shader = ExtResource("23_hit_flash")
+
 [sub_resource type="Animation" id="Animation_6fjxm"]
 length = 0.001
 tracks/0/type = "value"
@@ -631,6 +634,7 @@ position = Vector2(0, -4)
 
 [node name="Graphics" type="Sprite2D" parent="Canon" unique_id=1726308093]
 z_index = 5
+material = SubResource("ShaderMaterial_cannon_hit_flash")
 texture = ExtResource("12_bpgv7")
 offset = Vector2(0, 5)
 region_enabled = true

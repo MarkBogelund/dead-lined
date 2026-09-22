@@ -475,6 +475,11 @@ shader_parameter/flash_amount = 0.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_el7wl"]
 radius = 7.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cannon_hit_flash"]
+shader = ExtResource("24_hit_flash")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
+
 [sub_resource type="Curve" id="Curve_iwnrm"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
@@ -672,6 +677,7 @@ position = Vector2(0, -4)
 
 [node name="Graphics" type="Sprite2D" parent="Canon" unique_id=1726308093]
 z_index = 5
+material = SubResource("ShaderMaterial_cannon_hit_flash")
 texture = ExtResource("3_pp6j5")
 offset = Vector2(0, 5)
 region_enabled = true
