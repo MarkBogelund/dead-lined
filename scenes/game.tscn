@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://c3pausemenu01" path="res://scenes/ui/pause_menu.tscn" id="27_qnb83"]
 [ext_resource type="Resource" uid="uid://dfqqng3tkvdcl" path="res://resources/spawner/conveyor_settings.tres" id="28_conveyor_settings"]
 [ext_resource type="PackedScene" path="res://scenes/world/entities/shockwaver.tscn" id="28_sww3w"]
+[ext_resource type="Resource" path="res://resources/shop/shockwaver_shop_details.tres" id="29_shockwaver_shop"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -208,7 +209,7 @@ unique_name_in_owner = true
 script = ExtResource("1_ir15t")
 shop_panel = NodePath("../../UI/ShopPanel")
 shop_station = NodePath("../../World/ShopStation")
-turret_entries = Array[ExtResource("25_tentry")]([ExtResource("14_trtic"), ExtResource("26_sstrsh")])
+turret_entries = Array[ExtResource("25_tentry")]([ExtResource("14_trtic"), ExtResource("26_sstrsh"), ExtResource("29_shockwaver_shop")])
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]

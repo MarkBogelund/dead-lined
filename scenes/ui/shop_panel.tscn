@@ -18,18 +18,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SlotCenter:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
 
 [sub_resource type="Animation" id="Animation_sjk1b"]
 resource_name = "appear"
@@ -46,18 +34,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(0.2588163, 1),
 "update": 0,
 "values": [Vector2(0, 0), Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("SlotCenter:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.1, 0.3),
-"transitions": PackedFloat32Array(0.37892917, 1),
-"update": 0,
-"values": [0.1361356816555579, 0.0]
 }
 
 [sub_resource type="Animation" id="Animation_j21la"]
@@ -100,13 +76,15 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0)
 script = ExtResource("1_j21la")
-_slots = [NodePath("SlotCenter/SlotsContainer/TurretSlot"), NodePath("SlotCenter/SlotsContainer/TurretSlot2")]
+_slots = [NodePath("Background/MarginContainer/SlotsContainer/TurretSlot"), NodePath("Background/MarginContainer/SlotsContainer/TurretSlot2"), NodePath("Background/MarginContainer/SlotsContainer/TurretSlot3")]
 
 [node name="Background" type="NinePatchRect" parent="." unique_id=2130820617]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -8.0
+offset_right = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_j21la")
@@ -116,24 +94,30 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="SlotCenter" type="CenterContainer" parent="." unique_id=600000001]
+[node name="MarginContainer" type="MarginContainer" parent="Background" unique_id=1633142133]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="SlotsContainer" type="HBoxContainer" parent="SlotCenter" unique_id=600000005]
+[node name="SlotsContainer" type="HBoxContainer" parent="Background/MarginContainer" unique_id=600000005]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TurretSlot" parent="SlotCenter/SlotsContainer" unique_id=354999974 instance=ExtResource("6_j21la")]
+[node name="TurretSlot" parent="Background/MarginContainer/SlotsContainer" unique_id=354999974 instance=ExtResource("6_j21la")]
 layout_mode = 2
 
-[node name="TurretSlot2" parent="SlotCenter/SlotsContainer" unique_id=987574273 instance=ExtResource("6_j21la")]
+[node name="TurretSlot2" parent="Background/MarginContainer/SlotsContainer" unique_id=987574273 instance=ExtResource("6_j21la")]
+layout_mode = 2
+
+[node name="TurretSlot3" parent="Background/MarginContainer/SlotsContainer" unique_id=403394087 instance=ExtResource("6_j21la")]
 layout_mode = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1482103946]

@@ -17,12 +17,17 @@ var cooldown := 2.5
 var expansion_duration := 0.6
 var damage := 20
 
+@export_group("Presentation")
+@export var contact_indicator_color := Color(1.0, 0.8, 0.2, 0.45)
+@export_range(1.0, 8.0, 1.0) var contact_indicator_width := 1.0
+
 var _enabled := false
 var _state := State.READY
 var _state_time := 0.0
 var _wave_radius := 0.0
 var _previous_wave_radius := 0.0
 var _hit_targets: Dictionary[int, bool] = {}
+var _show_contact_indicator := false
 
 func configure(p_contact_radius: float, p_shockwave_radius: float, p_ring_thickness: float, p_cooldown: float, p_expansion_duration: float, p_damage: int) -> void:
 	contact_radius = maxf(0.0, p_contact_radius)
@@ -45,6 +50,7 @@ func apply_damage_upgrade(amount: int) -> void:
 	damage += amount
 
 func _physics_process(delta: float) -> void:
+	_update_contact_indicator()
 	if not _enabled:
 		return
 	match _state:
@@ -65,6 +71,16 @@ func _has_trigger_target() -> bool:
 		if _is_damageable(body) and global_position.distance_to(body.global_position) <= contact_radius:
 			return true
 	return false
+
+func _update_contact_indicator() -> void:
+	var player_in_contact_range := false
+	for body: Node2D in detection_area.get_overlapping_bodies():
+		if body.is_in_group("player") and global_position.distance_to(body.global_position) <= contact_radius:
+			player_in_contact_range = true
+			break
+	if player_in_contact_range != _show_contact_indicator:
+		_show_contact_indicator = player_in_contact_range
+		queue_redraw()
 
 func _enter_windup() -> void:
 	_state = State.WINDUP
@@ -118,8 +134,11 @@ func _reset() -> void:
 	_wave_radius = 0.0
 	_previous_wave_radius = 0.0
 	_hit_targets.clear()
+	_show_contact_indicator = false
 	queue_redraw()
 
 func _draw() -> void:
+	if _show_contact_indicator and contact_radius > 0.0:
+		draw_arc(Vector2.ZERO, contact_radius, 0.0, TAU, 64, contact_indicator_color, contact_indicator_width)
 	if _state == State.EXPANDING:
 		draw_arc(Vector2.ZERO, _wave_radius, 0.0, TAU, 96, Color(0.3, 0.9, 1.0, 0.9), ring_thickness)

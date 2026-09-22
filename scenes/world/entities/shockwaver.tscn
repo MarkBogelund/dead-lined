@@ -428,7 +428,6 @@ invalid_color = Color(1, 0.1, 0.1, 0.22)
 
 [node name="RangeIndicator" type="Node2D" parent="." unique_id=2012045983]
 script = ExtResource("10_range")
-color = Color(0.3, 0.9, 1, 0.35)
 
 [node name="ShockwaveComponent" type="Node2D" parent="." unique_id=2021246113]
 z_index = 8

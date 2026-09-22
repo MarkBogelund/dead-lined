@@ -8,3 +8,7 @@ class_name TurretEntry
 @export var turret_scene: PackedScene
 @export var ghost_scene: PackedScene
 @export var stats: Resource
+
+@export_group("Placement Preview")
+@export var preview_range: float = -1.0
+@export var exclusion_radius: float = -1.0

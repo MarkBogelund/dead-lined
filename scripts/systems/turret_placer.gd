@@ -37,8 +37,8 @@ func start_placement(turret_entry: TurretEntry) -> void:
 	current_turret_entry = turret_entry
 	ghost_turret = current_turret_entry.ghost_scene.instantiate()
 	ghost_turret.initialize(
-		current_turret_entry.stats.max_range if current_turret_entry.stats else -1.0,
-		current_turret_entry.stats.exclusion_radius if current_turret_entry.stats else -1.0)
+		current_turret_entry.preview_range,
+		current_turret_entry.exclusion_radius)
 	get_tree().current_scene.add_child(ghost_turret)
 	
 	get_tree().call_group("turret_exclusion_zones", "show")

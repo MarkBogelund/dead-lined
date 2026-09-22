@@ -119,7 +119,7 @@ Crunch-time presentation is split between [scripts/data/crunch_time_effects.gd](
 
 ### Shockwaver Prototype
 
-[scenes/world/entities/shockwaver.tscn](scenes/world/entities/shockwaver.tscn) is a functional standalone turret prototype and is intentionally not registered in the game scene or shop yet. `ShockwaveComponent` owns contact detection, windup, expanding annulus rendering, one-hit-per-target tracking, multi-target damage, and cooldown. The broad-phase `Area2D` detects player/enemy bodies; radial swept-ring math determines when the moving doughnut reaches each target without scaling collision shapes.
+[scenes/world/entities/shockwaver.tscn](scenes/world/entities/shockwaver.tscn) is registered through [resources/shop/shockwaver_shop_details.tres](resources/shop/shockwaver_shop_details.tres), alongside Seeker and Seeker Strong. `ShockwaveComponent` owns contact detection, windup, expanding annulus rendering, one-hit-per-target tracking, multi-target damage, and cooldown. The broad-phase `Area2D` detects player/enemy bodies; radial swept-ring math determines when the moving doughnut reaches each target without scaling collision shapes. `TurretEntry` owns generic shop preview range and exclusion-radius values so placement previews do not depend on a turret-specific stats schema.
 
 ---
 

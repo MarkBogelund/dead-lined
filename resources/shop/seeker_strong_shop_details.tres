@@ -18,3 +18,5 @@ price = 40
 turret_scene = ExtResource("4_sstr")
 ghost_scene = ExtResource("1_sstr")
 stats = ExtResource("5_sstr")
+preview_range = 190.0
+exclusion_radius = 120.0
