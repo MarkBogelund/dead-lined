@@ -19,6 +19,7 @@ var ring_thickness := 8.0
 var cooldown := 2.5
 var expansion_duration := 0.6
 var damage := 20
+var knockback_force := 180.0
 
 @export_group("Presentation")
 @export var windup_indicator_color := Color(0.55, 0.25, 0.9, 0.28)
@@ -38,13 +39,14 @@ var _previous_wave_radius := 0.0
 var _shockwave_fade_time := 0.0
 var _hit_targets: Dictionary[int, bool] = {}
 
-func configure(p_contact_radius: float, p_shockwave_radius: float, p_ring_thickness: float, p_cooldown: float, p_expansion_duration: float, p_damage: int) -> void:
+func configure(p_contact_radius: float, p_shockwave_radius: float, p_ring_thickness: float, p_cooldown: float, p_expansion_duration: float, p_damage: int, p_knockback_force: float) -> void:
 	contact_radius = maxf(0.0, p_contact_radius)
 	shockwave_radius = maxf(contact_radius, p_shockwave_radius)
 	ring_thickness = maxf(1.0, p_ring_thickness)
 	cooldown = maxf(0.0, p_cooldown)
 	expansion_duration = maxf(0.01, p_expansion_duration)
 	damage = maxi(0, p_damage)
+	knockback_force = maxf(0.0, p_knockback_force)
 	var circle := detection_shape.shape as CircleShape2D
 	if circle:
 		circle.radius = shockwave_radius + ring_thickness * 0.5
@@ -155,7 +157,8 @@ func _damage_swept_ring() -> void:
 		var distance := global_position.distance_to(body.global_position)
 		if distance >= inner_radius and distance <= outer_radius:
 			_hit_targets[target_id] = true
-			body.was_hit(damage, 0.0, global_position)
+			var target_knockback := knockback_force if body.is_in_group("enemies") else 0.0
+			body.was_hit(damage, target_knockback, global_position)
 
 func _is_damageable(body: Node2D) -> bool:
 	if not body.has_method("was_hit"):
