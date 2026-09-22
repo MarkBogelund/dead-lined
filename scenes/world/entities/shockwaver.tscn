@@ -176,10 +176,12 @@ texture = ExtResource("5_shadow")
 [node name="ShockwaveComponent" type="Node2D" parent="." index="14" unique_id=1355162550]
 z_index = 8
 script = ExtResource("6_shockwave")
-windup_indicator_color = Color(1, 1, 1, 1)
-windup_indicator_width = 3.0
+windup_indicator_color = Color(0.5647059, 0.96862745, 1, 1)
 shockwave_fade_duration = 0.25
-shockwave_color = Color(0.46984673, 0.46357006, 0.98109883, 1)
+shockwave_color = Color(0.26999998, 0.9513332, 1, 0.9019608)
+pixel_size = 1.0
+center_line_thickness = 6
+center_line_color = Color(0.56, 0.9706666, 1, 0.8901961)
 
 [node name="DetectionArea" type="Area2D" parent="ShockwaveComponent" index="0" unique_id=1476603931]
 collision_layer = 0

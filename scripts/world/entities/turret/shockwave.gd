@@ -27,6 +27,8 @@ var damage := 20
 @export_range(0.01, 2.0, 0.01) var shockwave_fade_duration := 0.12
 @export var shockwave_color := Color(0.3, 0.9, 1.0, 0.9)
 @export_range(1.0, 16.0, 1.0) var pixel_size := 2.0
+@export_range(1, 8, 1) var center_line_thickness := 1
+@export var center_line_color := Color.WHITE
 
 var _enabled := false
 var _state := State.READY
@@ -97,6 +99,8 @@ func _configure_shockwave_visual() -> void:
 	var material := shockwave_visual.material as ShaderMaterial
 	material.set_shader_parameter("canvas_size", shockwave_visual.size)
 	material.set_shader_parameter("pixel_size", pixel_size)
+	material.set_shader_parameter("center_line_thickness", center_line_thickness)
+	material.set_shader_parameter("center_line_color", center_line_color)
 	material.set_shader_parameter("ring_thickness", ring_thickness)
 	material.set_shader_parameter("shockwave_color", shockwave_color)
 	material.set_shader_parameter("current_radius", 0.0)
