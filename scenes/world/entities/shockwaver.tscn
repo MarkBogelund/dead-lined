@@ -432,7 +432,8 @@ script = ExtResource("10_range")
 [node name="ShockwaveComponent" type="Node2D" parent="." unique_id=2021246113]
 z_index = 8
 script = ExtResource("11_shockwave")
-windup_indicator_color = Color(0.51739365, 0.38628092, 0.6768773, 0.4862745)
+windup_indicator_color = Color(0.4855129, 0.44018695, 0.7863147, 1)
+windup_indicator_width = 4.0
 windup_indicator_fade_duration = 1.0
 
 [node name="DetectionArea" type="Area2D" parent="ShockwaveComponent" unique_id=1928072926]
