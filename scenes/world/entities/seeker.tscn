@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cjn5bnbk1raxk"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/entities/turret_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/entities/turret_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://ci6t3dum71ion" path="res://scripts/world/entities/turret/seeker.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://cwq21j4s01byy" path="res://resources/seeker_stats.tres" id="3_stats"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_shoot"]
@@ -96,17 +96,21 @@ group_name = "enemies"
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
 hit_flash_duration = 0.48
+hit_flash_shader = null
 
-[node name="AnimationHandler" parent="." index="9"]
+[node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
+health_component = NodePath("../HealthComponent")
+
+[node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/seeker = SubResource("SeekerLibrary")
 
-[node name="Sprite2D" type="Sprite2D" parent="Visuals" index="0" unique_id=1616948861]
+[node name="Sprite2D" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="0" unique_id=1616948861]
 z_index = 1
 texture = ExtResource("10_sprite")
 region_enabled = true
 region_rect = Rect2(35, 14, 28, 25)
 
-[node name="Canon" type="Node2D" parent="Visuals" index="1" unique_id=1152611148]
+[node name="Canon" type="Node2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="1" unique_id=1152611148]
 position = Vector2(0, -4)
 
 [node name="Graphics" type="Sprite2D" parent="Visuals/Canon" index="0" unique_id=1415741924]

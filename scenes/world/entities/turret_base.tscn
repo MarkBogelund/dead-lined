@@ -1,19 +1,19 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene format=3 uid="uid://bwc8e5jf5vyy1"]
 
-[ext_resource type="Script" path="res://scripts/world/entities/turret/turret_base.gd" id="1_base"]
-[ext_resource type="Script" path="res://scripts/world/entities/shared/health.gd" id="2_health"]
-[ext_resource type="PackedScene" path="res://scenes/ui/health_ui.tscn" id="3_health_ui"]
-[ext_resource type="Script" path="res://scripts/world/entities/shared/interaction_zone.gd" id="4_interaction"]
-[ext_resource type="Script" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="5_upgrade"]
-[ext_resource type="Script" path="res://scripts/world/entities/shared/repair.gd" id="6_repair"]
-[ext_resource type="Script" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="7_exclusion"]
-[ext_resource type="Script" path="res://scripts/world/entities/turret/range_indicator.gd" id="8_range"]
-[ext_resource type="PackedScene" path="res://scenes/ui/turret_hud.tscn" id="9_hud"]
-[ext_resource type="Script" path="res://scripts/world/entities/shared/animation_handler.gd" id="10_animation"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/flash_vfx.tscn" id="11_flash"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/hit_particles.tscn" id="12_hit"]
-[ext_resource type="Texture2D" path="res://assets/sprites/vfx/vfx-shapes.png" id="13_vfx"]
-[ext_resource type="Shader" path="res://shaders/hit_flash.gdshader" id="14_hit_flash"]
+[ext_resource type="Script" uid="uid://ckubhd6ef2yh5" path="res://scripts/world/entities/turret/turret_base.gd" id="1_base"]
+[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="2_health"]
+[ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="3_health_ui"]
+[ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="4_interaction"]
+[ext_resource type="Script" uid="uid://crnamexhvkfv7" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="5_upgrade"]
+[ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="6_repair"]
+[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="7_exclusion"]
+[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="8_range"]
+[ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="9_hud"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="10_animation"]
+[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="11_flash"]
+[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="12_hit"]
+[ext_resource type="Material" uid="uid://dmgkx87u0f2qi" path="res://materials/windup_particle_process_material.tres" id="14_6mmhf"]
+[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/hit_flash.gdshader" id="14_hit_flash"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 9.0
@@ -24,14 +24,100 @@ radius = 64.0
 [sub_resource type="Animation" id="Reset"]
 length = 0.001
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Visuals:visible")
-tracks/0/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 1, "values": [true]}
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
 tracks/1/path = NodePath("HitParticles:emitting")
-tracks/1/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 1, "values": [false]}
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 tracks/2/type = "value"
-tracks/2/path = NodePath("WindupParticles:emitting")
-tracks/2/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 1, "values": [false]}
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Death"]
+resource_name = "die"
+length = 0.7
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FlashVfx")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start"
+}]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [0.2, 0.2],
+"method": &"shake_screen"
+}, {
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HitParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Idle"]
 resource_name = "idle"
@@ -41,93 +127,96 @@ length = 0.1
 resource_name = "repair"
 length = 0.3
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Visuals:modulate")
-tracks/0/keys = {"times": PackedFloat32Array(0, 0.3), "transitions": PackedFloat32Array(1, 1), "update": 0, "values": [Color(0.1, 0.65, 0, 1), Color(1, 1, 1, 1)]}
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.1, 0.65, 0, 1), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Damage"]
 resource_name = "take_damage"
 length = 0.2
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath("Visuals:modulate")
-tracks/0/keys = {"times": PackedFloat32Array(0, 0.1), "transitions": PackedFloat32Array(1, 1), "update": 0, "values": [Color(18.89, 18.89, 18.89, 1), Color(1, 1, 1, 1)]}
-
-[sub_resource type="Animation" id="Death"]
-resource_name = "die"
-length = 0.7
-tracks/0/type = "method"
-tracks/0/path = NodePath("FlashVfx")
-tracks/0/keys = {"times": PackedFloat32Array(0.2), "transitions": PackedFloat32Array(1), "values": [{"args": [], "method": &"start"}]}
-tracks/1/type = "method"
-tracks/1/path = NodePath(".")
-tracks/1/keys = {"times": PackedFloat32Array(0.2, 0.7), "transitions": PackedFloat32Array(1, 1), "values": [{"args": [0.2, 0.2], "method": &"shake_screen"}, {"args": [], "method": &"queue_free"}]}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Visuals:visible")
-tracks/2/keys = {"times": PackedFloat32Array(0, 0.2), "transitions": PackedFloat32Array(1, 1), "update": 1, "values": [true, false]}
-tracks/3/type = "value"
-tracks/3/path = NodePath("HitParticles:emitting")
-tracks/3/keys = {"times": PackedFloat32Array(0.2), "transitions": PackedFloat32Array(1), "update": 1, "values": [true]}
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(18.89, 18.89, 18.89, 1), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="BaseLibrary"]
 _data = {
 &"RESET": SubResource("Reset"),
+&"die": SubResource("Death"),
 &"idle": SubResource("Idle"),
 &"repair": SubResource("Repair"),
-&"take_damage": SubResource("Damage"),
-&"die": SubResource("Death")
+&"take_damage": SubResource("Damage")
 }
 
-[node name="TurretBase" type="StaticBody2D"]
+[node name="TurretBase" type="StaticBody2D" unique_id=973555640]
 z_index = 1
 collision_layer = 32
 collision_mask = 19
 script = ExtResource("1_base")
 hit_flash_shader = ExtResource("14_hit_flash")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=190497504]
 shape = SubResource("BodyShape")
 
-[node name="HealthComponent" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." unique_id=1825631867]
 script = ExtResource("2_health")
 
-[node name="HealthUIComponent" parent="." instance=ExtResource("3_health_ui")]
+[node name="HealthUIComponent" parent="." unique_id=782964572 instance=ExtResource("3_health_ui")]
 position = Vector2(0, -24)
 
-[node name="InteractionZone" type="Area2D" parent="."]
+[node name="InteractionZone" type="Area2D" parent="." unique_id=1944962393]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("4_interaction")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=372159115]
 shape = SubResource("InteractionShape")
 
-[node name="TurretUpgradeComponent" type="Node" parent="."]
+[node name="TurretUpgradeComponent" type="Node" parent="." unique_id=619853979]
 script = ExtResource("5_upgrade")
 
-[node name="RepairComponent" type="Node" parent="."]
+[node name="RepairComponent" type="Node" parent="." unique_id=2130657369]
 script = ExtResource("6_repair")
 
-[node name="TurretExclusionZone" type="Node2D" parent="."]
+[node name="TurretExclusionZone" type="Node2D" parent="." unique_id=2048206458]
 script = ExtResource("7_exclusion")
 
-[node name="RangeIndicator" type="Node2D" parent="."]
+[node name="RangeIndicator" type="Node2D" parent="." unique_id=248886830]
 script = ExtResource("8_range")
 
-[node name="TurretHUD" parent="." instance=ExtResource("9_hud")]
+[node name="TurretHUD" parent="." unique_id=1185209340 instance=ExtResource("9_hud")]
 
-[node name="AnimationHandler" type="AnimationPlayer" parent="."]
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1391262364]
 libraries/ = SubResource("BaseLibrary")
 script = ExtResource("10_animation")
 
-[node name="FlashVfx" parent="." instance=ExtResource("11_flash")]
+[node name="FlashVfx" parent="." unique_id=850017021 instance=ExtResource("11_flash")]
 scale = Vector2(2, 2)
 
-[node name="HitParticles" parent="." instance=ExtResource("12_hit")]
+[node name="HitParticles" parent="." unique_id=567856169 instance=ExtResource("12_hit")]
 
-[node name="WindupParticles" type="GPUParticles2D" parent="."]
+[node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=1488027812]
 z_index = 14
 emitting = false
 amount = 30
 lifetime = 0.5
 speed_scale = 2.0
+process_material = ExtResource("14_6mmhf")
 
-[node name="Visuals" type="Node2D" parent="."]
+[node name="Visuals" type="Node2D" parent="." unique_id=1113068187]

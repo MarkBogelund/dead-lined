@@ -65,6 +65,26 @@ Enemies share `EnemyBase` for health, damage/death handling, spawn intro state, 
 
 Turret hit feedback is part of the [turret_base.tscn](scenes/world/entities/turret_base.tscn) contract: `TurretBase` requires [shaders/hit_flash.gdshader](shaders/hit_flash.gdshader), installs it on the body visual and optional cannon, and reports an error if the shader is missing. It pulses the material uniform with a short tween instead of playing a damage animation, so taking damage never interrupts firing or shockwave telegraph animations.
 
+### Creating a new turret
+
+Use [turret_base.tscn](scenes/world/entities/turret_base.tscn) as the starting template. The base scene already provides common health, repair, upgrade, HUD, interaction, exclusion, range, phase lifecycle, animation, hit particles, death effects, collision, and hit-flash shader setup.
+
+1. Duplicate `turret_base.tscn` and save it as the new turret scene. Keep the common direct-child node names unchanged: `HealthComponent`, `HealthUIComponent`, `InteractionZone`, `TurretUpgradeComponent`, `RepairComponent`, `TurretExclusionZone`, `RangeIndicator`, `TurretHUD`, `AnimationHandler`, `FlashVfx`, `HitParticles`, `WindupParticles`, and `Visuals`.
+2. Replace or add the turret artwork below `Visuals`. Put the main body at `Visuals/Sprite2D` or `Visuals/AnimatedSprite2D`; put a rotating cannon at `Visuals/Canon` and its artwork at `Visuals/Canon/Graphics` when the turret has one. Do not move `Visuals`, because inherited animations target that node.
+3. Assign the hit-flash shader through the base scene's `hit_flash_shader` property. `TurretBase` installs separate materials on the body and cannon visuals at runtime. A missing shader is a configuration error and reports with `push_error`.
+4. Add a turret script extending `TurretBase`. Export a stats resource that extends `TurretStats`, call `initialize_base(...)`, initialize behavior components, and implement the turret's phase hooks (`_on_combat_started()` and `_on_combat_stopped()`) as needed.
+5. Keep individual behavior in child components where practical. The turret script owns orchestration and wires those components together; components own their state and emit signals upward.
+6. Override `get_damage_value()` and `apply_damage_upgrade(amount)` when the turret deals upgradeable damage. These methods are the shared upgrade-panel contract.
+7. Add behavior-specific animations to the inherited `AnimationHandler` library. Configure them in the script with `animation.configure_animation(name, priority, locks)` and use node paths relative to `AnimationHandler`. Keep `RESET`, `repair`, `take_damage`, and `die` from the base library unless the turret has a deliberate replacement.
+8. Add the new turret to its stats/resource files, shop entry, ghost scene, and `ShopManager` entries only after the standalone scene works. Verify placement preview range and exclusion radius are authored in the generic `TurretEntry` resource.
+9. Validate the scene with the editor command, run the scene standalone, and manually verify: health changes on damage, body/cannon flash white, repair and upgrade UI, phase transitions, behavior animation timing, death effects, and placement/shop flow.
+
+### Fail-fast guard policy
+
+Do not use `is_inside_tree()` as a general error-suppression guard around normal calls. If a required node, resource, shader, animation, or component is missing, report it with `push_error` or an assertion so the configuration problem is visible immediately. Early returns are appropriate for expected gameplay state, such as cooldowns, disabled abilities, no target found, unaffordable actions, or a one-shot callback arriving after an object has already been invalidated.
+
+The targeting system retains one explicit tree-membership check because it validates a cached target reference that can outlive or detach from the scene tree during enemy death. That is a stale-reference safety check, not a substitute for required initialization. The scrap despawn timer only checks `can_collect`; its lifecycle is controlled by the node and timer signal rather than silently ignoring a detached node.
+
 ### Node references
 
 | Pattern | Use for |
