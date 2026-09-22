@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="11_shockwave"]
 [ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="12_health_ui"]
 [ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="13_hud"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="14_8scai"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8scai"]
 atlas = ExtResource("3_mbm07")
@@ -102,6 +103,18 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WindupParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="DeathAnimation"]
 resource_name = "die"
@@ -143,8 +156,8 @@ length = 0.2
 
 [sub_resource type="Animation" id="Animation_wrm1a"]
 resource_name = "shock"
-length = 0.9
-step = 0.1
+length = 0.45
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -152,10 +165,36 @@ tracks/0/path = NodePath("AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShockwaveComponent")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.45),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"execute_shockwave"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="Animation" id="DamageAnimation"]
@@ -177,6 +216,50 @@ radius = 48.0
 
 [sub_resource type="CircleShape2D" id="DetectionShape"]
 radius = 124.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hrja"]
+atlas = ExtResource("14_8scai")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Curve" id="Curve_frlyo"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_g4h2w"]
+curve = SubResource("Curve_frlyo")
+
+[sub_resource type="Gradient" id="Gradient_l2iv1"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1.7808378e-06, 0.43724295, 0.45293546, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_iipw4"]
+gradient = SubResource("Gradient_l2iv1")
+
+[sub_resource type="Curve" id="Curve_yq8r2"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_jpptt"]
+curve = SubResource("Curve_yq8r2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wib57"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 10, 10)
+emission_shape = 2
+emission_sphere_radius = 2.2
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_g4h2w")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -300.0
+radial_accel_max = -200.0
+scale_min = 0.19999999
+scale_max = 0.29999998
+scale_curve = SubResource("CurveTexture_jpptt")
+color_ramp = SubResource("GradientTexture1D_iipw4")
 
 [node name="Shockwaver" type="StaticBody2D" unique_id=390851188]
 z_index = 1
@@ -239,3 +322,12 @@ monitorable = false
 shape = SubResource("DetectionShape")
 
 [node name="TurretHUD" parent="." unique_id=755595102 instance=ExtResource("13_hud")]
+
+[node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=2050538972]
+z_index = 14
+emitting = false
+amount = 30
+texture = SubResource("AtlasTexture_0hrja")
+lifetime = 0.5
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_wib57")

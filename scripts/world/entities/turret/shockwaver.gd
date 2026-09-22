@@ -15,7 +15,7 @@ func _initialize() -> void:
 	if not stats:
 		return
 	initialize_base(stats.max_health, stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_wrench_hit, stats.exclusion_radius, stats.shockwave_radius)
-	shockwave.configure(stats.contact_radius, stats.shockwave_radius, stats.ring_thickness, stats.cooldown, stats.windup_duration, stats.expansion_duration, stats.damage)
+	shockwave.configure(stats.contact_radius, stats.shockwave_radius, stats.ring_thickness, stats.cooldown, stats.expansion_duration, stats.damage)
 
 func _on_combat_started() -> void:
 	shockwave.set_enabled(true)

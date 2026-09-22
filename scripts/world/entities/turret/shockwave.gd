@@ -5,7 +5,7 @@ signal windup_started
 signal shockwave_started
 signal shockwave_finished
 
-enum State { READY, WINDUP, EXPANDING, COOLDOWN }
+enum State {READY, WINDUP, EXPANDING, COOLDOWN}
 
 @onready var detection_area: Area2D = $DetectionArea
 @onready var detection_shape: CollisionShape2D = $DetectionArea/CollisionShape2D
@@ -14,7 +14,6 @@ var contact_radius := 48.0
 var shockwave_radius := 120.0
 var ring_thickness := 8.0
 var cooldown := 2.5
-var windup_duration := 0.8
 var expansion_duration := 0.6
 var damage := 20
 
@@ -25,12 +24,11 @@ var _wave_radius := 0.0
 var _previous_wave_radius := 0.0
 var _hit_targets: Dictionary[int, bool] = {}
 
-func configure(p_contact_radius: float, p_shockwave_radius: float, p_ring_thickness: float, p_cooldown: float, p_windup_duration: float, p_expansion_duration: float, p_damage: int) -> void:
+func configure(p_contact_radius: float, p_shockwave_radius: float, p_ring_thickness: float, p_cooldown: float, p_expansion_duration: float, p_damage: int) -> void:
 	contact_radius = maxf(0.0, p_contact_radius)
 	shockwave_radius = maxf(contact_radius, p_shockwave_radius)
 	ring_thickness = maxf(1.0, p_ring_thickness)
 	cooldown = maxf(0.0, p_cooldown)
-	windup_duration = maxf(0.0, p_windup_duration)
 	expansion_duration = maxf(0.01, p_expansion_duration)
 	damage = maxi(0, p_damage)
 	var circle := detection_shape.shape as CircleShape2D
@@ -53,10 +51,6 @@ func _physics_process(delta: float) -> void:
 		State.READY:
 			if _has_trigger_target():
 				_enter_windup()
-		State.WINDUP:
-			_state_time += delta
-			if _state_time >= windup_duration:
-				_enter_expanding()
 		State.EXPANDING:
 			_update_expansion(delta)
 		State.COOLDOWN:
@@ -77,7 +71,9 @@ func _enter_windup() -> void:
 	_state_time = 0.0
 	windup_started.emit()
 
-func _enter_expanding() -> void:
+func execute_shockwave() -> void:
+	if not _enabled or _state != State.WINDUP:
+		return
 	_state = State.EXPANDING
 	_state_time = 0.0
 	_wave_radius = 0.0
@@ -125,8 +121,5 @@ func _reset() -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	if _state == State.WINDUP:
-		var progress := minf(_state_time / maxf(windup_duration, 0.01), 1.0)
-		draw_arc(Vector2.ZERO, contact_radius, 0.0, TAU, 64, Color(1.0, 0.85, 0.2, 0.35 + progress * 0.45), 2.0)
-	elif _state == State.EXPANDING:
+	if _state == State.EXPANDING:
 		draw_arc(Vector2.ZERO, _wave_radius, 0.0, TAU, 96, Color(0.3, 0.9, 1.0, 0.9), ring_thickness)
