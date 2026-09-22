@@ -31,13 +31,6 @@ load_path = "res://.godot/imported/turret-upgrade-icons.png-d5dce7cfba7cd781ac94
 atlas = SubResource("CompressedTexture2D_ign1u")
 region = Rect2(18, 10, 12, 12)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_3jpqe"]
-load_path = "res://.godot/imported/turret-upgrade-icons.png-d5dce7cfba7cd781ac94d4ee18a848f9.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nhigd"]
-atlas = SubResource("CompressedTexture2D_3jpqe")
-region = Rect2(2, 10, 12, 12)
-
 [node name="TurretHUD" type="Node" unique_id=1583887513]
 script = ExtResource("1_jrbl1")
 
@@ -109,14 +102,13 @@ theme_override_constants/margin_bottom = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer" unique_id=1867402857]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 4
 alignment = 1
 
 [node name="UpgradeHealthButton" type="TextureButton" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer" unique_id=1903084934]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeHealthButton" unique_id=1068676192]
@@ -149,7 +141,6 @@ vertical_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton" unique_id=1159413202]
@@ -163,10 +154,6 @@ mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="VSeparator" type="VSeparator" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton/VBoxContainer" unique_id=2131484792]
-layout_mode = 2
-theme_override_constants/separation = 5
-
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton/VBoxContainer" unique_id=1836151854]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -175,39 +162,6 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_3jpqe")
 
 [node name="UpgradeDamageLabel" type="Label" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton/VBoxContainer" unique_id=1568251803]
-unique_name_in_owner = true
-layout_mode = 2
-text = "15"
-label_settings = SubResource("LabelSettings_spl43")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="RepairButton" type="TextureButton" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer" unique_id=93129478]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(12, 12)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/RepairButton" unique_id=1718780121]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/RepairButton/VBoxContainer" unique_id=1943922275]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 2
-texture = SubResource("AtlasTexture_nhigd")
-
-[node name="RepairLabel" type="Label" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/RepairButton/VBoxContainer" unique_id=1196444681]
 unique_name_in_owner = true
 layout_mode = 2
 text = "15"

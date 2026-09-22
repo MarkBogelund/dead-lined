@@ -26,15 +26,18 @@ var _hit_flash_tween: Tween
 
 @export_group("Presentation")
 @export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
+@export var hit_flash_shader: Shader
 
 func _get_body_visual() -> CanvasItem:
-	var sprite := get_node_or_null("Sprite2D") as CanvasItem
+	var sprite := get_node_or_null("Visuals/Sprite2D") as CanvasItem
 	if sprite:
 		return sprite
-	return get_node_or_null("AnimatedSprite2D") as CanvasItem
+	return get_node_or_null("Visuals/AnimatedSprite2D") as CanvasItem
 
 func _ready() -> void:
 	add_to_group("turrets")
+	_configure_hit_flash_materials()
+	health_ui.setup(health)
 	_configure_base_animations()
 	if wave_manager:
 		wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -63,6 +66,7 @@ func initialize_base(max_health: int, capacity_drain_rate: float, health_restore
 func _configure_base_animations() -> void:
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("repair", 3, true)
+	animation.configure_animation("take_damage", 2, true)
 	animation.configure_animation("die", 4, true)
 
 func _on_combat_phase_started(_wave: int) -> void:
@@ -132,10 +136,27 @@ func _play_hit_flash() -> void:
 	for shader_material: ShaderMaterial in flash_materials:
 		_hit_flash_tween.parallel().tween_property(shader_material, "shader_parameter/flash_amount", 0.0, hit_flash_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
+func _configure_hit_flash_materials() -> void:
+	if not hit_flash_shader:
+		push_error("TurretBase requires a hit_flash_shader to flash turret visuals when damaged")
+		return
+	_assign_hit_flash_material(body_visual)
+	_assign_hit_flash_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem)
+
+func _assign_hit_flash_material(visual: CanvasItem) -> void:
+	if not visual:
+		return
+	var material := visual.material as ShaderMaterial
+	if not material:
+		material = ShaderMaterial.new()
+	visual.material = material
+	material.shader = hit_flash_shader
+	material.set_shader_parameter("flash_amount", 0.0)
+
 func _get_hit_flash_materials() -> Array[ShaderMaterial]:
 	var flash_materials: Array[ShaderMaterial] = []
 	_add_hit_flash_material(body_visual, flash_materials)
-	_add_hit_flash_material(get_node_or_null("Canon/Graphics") as CanvasItem, flash_materials)
+	_add_hit_flash_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem, flash_materials)
 	return flash_materials
 
 func _add_hit_flash_material(visual: CanvasItem, flash_materials: Array[ShaderMaterial]) -> void:

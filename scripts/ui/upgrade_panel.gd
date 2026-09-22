@@ -3,7 +3,7 @@ class_name UpgradePanel
 
 @onready var upgrade_health_button: BaseButton = %UpgradeHealthButton
 @onready var upgrade_damage_button: BaseButton = %UpgradeDamageButton
-@onready var repair_button: BaseButton = %RepairButton
+# @onready var repair_button: BaseButton = %RepairButton
 @onready var upgrade_health_label: Label = %UpgradeHealthLabel
 @onready var upgrade_damage_label: Label = %UpgradeDamageLabel
 
@@ -16,8 +16,8 @@ func _ready() -> void:
 	visible = false
 	upgrade_health_button.pressed.connect(_on_upgrade_health_pressed)
 	upgrade_damage_button.pressed.connect(_on_upgrade_damage_pressed)
-	repair_button.button_down.connect(_on_repair_button_down)
-	repair_button.button_up.connect(_on_repair_button_up)
+	# repair_button.button_down.connect(_on_repair_button_down)
+	# repair_button.button_up.connect(_on_repair_button_up)
 
 func _process(delta: float) -> void:
 	if not visible or not is_instance_valid(_turret):
@@ -87,8 +87,8 @@ func _update_button_states(delta: float) -> void:
 	upgrade_damage_button.disabled = dmg_data == null \
 		or not level_ok \
 		or not _player.capacity.can_afford(dmg_data.cost)
-	repair_button.disabled = _turret.health.is_full() \
-		or not _player.capacity.can_afford(_turret.stats.capacity_drain_rate * delta)
+	# repair_button.disabled = _turret.health.is_full() \
+	# 	or not _player.capacity.can_afford(_turret.stats.capacity_drain_rate * delta)
 
 func _handle_repair(delta: float) -> void:
 	if not _repairing:

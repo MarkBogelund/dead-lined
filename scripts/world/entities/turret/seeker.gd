@@ -22,6 +22,8 @@ func _ready() -> void:
 func _initialize() -> void:
 	if not stats:
 		return
+	aiming.visual_node = $Visuals/Canon
+	aiming.muzzle = $Visuals/Canon/Graphics/Muzzle
 	initialize_base(stats.max_health, stats.capacity_drain_rate, stats.health_restore_rate, stats.repair_amount_per_wrench_hit, stats.exclusion_radius, stats.max_range)
 	targeting.initialize(stats.max_range)
 	targeting.configure_priorities({

@@ -12,9 +12,25 @@ var _player_in_range := false
 func _ready() -> void:
 	position = offset
 	visible = true
+	if health_component:
+		_connect_health_component()
+
+func setup(component: HealthComponent) -> void:
+	if health_component == component:
+		if is_node_ready():
+			_update_health_bar(component.get_current_health(), component.max_health)
+		return
+	if health_component and health_component.health_changed.is_connected(_on_health_changed):
+		health_component.health_changed.disconnect(_on_health_changed)
+	health_component = component
+	if is_node_ready():
+		_connect_health_component()
+
+func _connect_health_component() -> void:
 	if not health_component:
 		return
-	health_component.health_changed.connect(_on_health_changed)
+	if not health_component.health_changed.is_connected(_on_health_changed):
+		health_component.health_changed.connect(_on_health_changed)
 	_update_health_bar(health_component.get_current_health(), health_component.max_health)
 
 func set_player_in_range(in_range: bool) -> void:

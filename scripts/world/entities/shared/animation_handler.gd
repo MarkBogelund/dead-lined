@@ -29,6 +29,11 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	if not _animations.has(anim_name):
 		push_warning("AnimationHandler: Animation '%s' not configured" % anim_name)
 		return false
+
+	var animation_path := _resolve_animation_path(anim_name)
+	if animation_path.is_empty():
+		push_warning("AnimationHandler: Animation '%s' is configured but missing from the AnimationPlayer" % anim_name)
+		return false
 	
 	# Don't restart if already playing the same animation
 	if _current_animation == anim_name and is_playing():
@@ -59,9 +64,18 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 		if has_animation("RESET"):
 			super.play("RESET")
 			super.advance(0.0)
-		super.play(anim_name, custom_blend_captured, custom_speed_captured, from_end_captured)
+		super.play(animation_path, custom_blend_captured, custom_speed_captured, from_end_captured)
 	).call_deferred()
 	return true
+
+func _resolve_animation_path(anim_name: String) -> StringName:
+	if has_animation(anim_name):
+		return StringName(anim_name)
+	for library_name in get_animation_library_list():
+		var library := get_animation_library(library_name)
+		if library and library.has_animation(anim_name):
+			return StringName("%s/%s" % [library_name, anim_name])
+	return &""
 
 func _on_animation_finished(_anim_name: StringName) -> void:
 	if _locked:

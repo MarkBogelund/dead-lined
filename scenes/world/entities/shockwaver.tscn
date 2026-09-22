@@ -1,226 +1,16 @@
 [gd_scene format=3 uid="uid://dg727qsoqbra2"]
 
-[ext_resource type="Script" uid="uid://k2yjj1j2ubde" path="res://scripts/world/entities/turret/shockwaver.gd" id="1_shockwaver"]
-[ext_resource type="Resource" uid="uid://ci1dpwdd2x3er" path="res://resources/shockwaver_stats.tres" id="2_stats"]
-[ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="3_sprite"]
-[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="4_health"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="5_animation"]
-[ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_m1l2p"]
-[ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="6_interaction"]
-[ext_resource type="Script" uid="uid://crnamexhvkfv7" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="7_upgrade"]
-[ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="8_repair"]
-[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="9_exclusion"]
-[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="10_range"]
-[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="11_shockwave"]
-[ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="12_health_ui"]
-[ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="13_hud"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="14_8scai"]
-[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/hit_flash.gdshader" id="15_hit_flash"]
-[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="16_flash_vfx"]
-[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="17_4747m"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/turret_base.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://k2yjj1j2ubde" path="res://scripts/world/entities/turret/shockwaver.gd" id="2_script"]
+[ext_resource type="Resource" uid="uid://ci1dpwdd2x3er" path="res://resources/shockwaver_stats.tres" id="3_stats"]
+[ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="4_sprite"]
+[ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
+[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="6_shockwave"]
+[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="7_particles"]
 
-[sub_resource type="ShaderMaterial" id="ShockwaverHitFlash"]
-shader = ExtResource("15_hit_flash")
-shader_parameter/flash_color = Color(1, 1, 1, 1)
-shader_parameter/flash_amount = 0.0
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame0"]
-atlas = ExtResource("3_sprite")
-region = Rect2(0, 0, 24, 26)
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame1"]
-atlas = ExtResource("3_sprite")
-region = Rect2(24, 0, 24, 26)
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame2"]
-atlas = ExtResource("3_sprite")
-region = Rect2(48, 0, 24, 26)
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame3"]
-atlas = ExtResource("3_sprite")
-region = Rect2(72, 0, 24, 26)
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame4"]
-atlas = ExtResource("3_sprite")
-region = Rect2(96, 0, 24, 26)
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame5"]
-atlas = ExtResource("3_sprite")
-region = Rect2(120, 0, 24, 26)
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame6"]
-atlas = ExtResource("3_sprite")
-region = Rect2(144, 0, 24, 26)
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame7"]
-atlas = ExtResource("3_sprite")
-region = Rect2(168, 0, 24, 26)
-
-[sub_resource type="AtlasTexture" id="ShockwaverFrame8"]
-atlas = ExtResource("3_sprite")
-region = Rect2(192, 0, 24, 26)
-
-[sub_resource type="SpriteFrames" id="ShockwaverFrames"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame0")
-}, {
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame1")
-}, {
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame2")
-}, {
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame3")
-}, {
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame4")
-}, {
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame5")
-}, {
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame6")
-}, {
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame7")
-}, {
-"duration": 1.0,
-"texture": SubResource("ShockwaverFrame8")
-}],
-"loop": 0,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="CircleShape2D" id="BodyShape"]
-radius = 9.0
-
-[sub_resource type="Animation" id="ResetAnimation"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("WindupParticles:emitting")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("ShockParticles:emitting")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="Animation" id="DeathAnimation"]
-resource_name = "die"
-length = 0.7
-step = 0.1
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FlashVfx")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"start"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.2, 0.7),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [0.2, 0.2],
-"method": &"shake_screen"
-}, {
-"args": [],
-"method": &"queue_free"
-}]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite2D:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 4),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(18.892157, 18.892157, 18.892157, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("AnimatedSprite2D:visible")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("ShockParticles:emitting")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
-[sub_resource type="Animation" id="IdleAnimation"]
-resource_name = "idle"
-length = 0.1
-
-[sub_resource type="Animation" id="RepairAnimation"]
-resource_name = "repair"
-length = 0.2
-
-[sub_resource type="Animation" id="Animation_wrm1a"]
+[sub_resource type="Animation" id="Shock"]
 resource_name = "shock"
 length = 0.45
-step = 0.05
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -238,226 +28,68 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WindupParticles:emitting")
+tracks/1/path = NodePath("Visuals/AnimatedSprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true, false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite2D:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 4, 5, 6, 7, 8]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("ShockParticles:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.4, 0.45),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
+"values": [0]
 }
 
-[sub_resource type="Animation" id="DamageAnimation"]
-resource_name = "take_damage"
-length = 0.1
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary"]
+[sub_resource type="AnimationLibrary" id="ShockLibrary"]
 _data = {
-&"RESET": SubResource("ResetAnimation"),
-&"die": SubResource("DeathAnimation"),
-&"idle": SubResource("IdleAnimation"),
-&"repair": SubResource("RepairAnimation"),
-&"shock": SubResource("Animation_wrm1a"),
-&"take_damage": SubResource("DamageAnimation")
+&"shock": SubResource("Shock")
 }
 
-[sub_resource type="CircleShape2D" id="InteractionShape"]
-radius = 48.0
+[sub_resource type="AtlasTexture" id="Frame0"]
+atlas = ExtResource("4_sprite")
+region = Rect2(0, 0, 24, 26)
+
+[sub_resource type="SpriteFrames" id="Frames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Frame0")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CircleShape2D" id="DetectionShape"]
 radius = 124.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0hrja"]
-atlas = ExtResource("14_8scai")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="Curve" id="Curve_frlyo"]
-_limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_g4h2w"]
-curve = SubResource("Curve_frlyo")
-
-[sub_resource type="Gradient" id="Gradient_l2iv1"]
-offsets = PackedFloat32Array(0.31566265, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1.7808378e-06, 0.43724295, 0.45293546, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_iipw4"]
-gradient = SubResource("Gradient_l2iv1")
-
-[sub_resource type="Curve" id="Curve_yq8r2"]
-_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="CurveTexture" id="CurveTexture_jpptt"]
-curve = SubResource("Curve_yq8r2")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wib57"]
-particle_flag_disable_z = true
-emission_shape_scale = Vector3(10, 10, 10)
-emission_shape = 2
-emission_sphere_radius = 2.2
-angle_min = 1.0728835e-05
-angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_g4h2w")
-direction = Vector3(0, 0, 0)
-spread = 180.0
-gravity = Vector3(0, 0, 0)
-radial_accel_min = -300.0
-radial_accel_max = -200.0
-scale_min = 0.19999999
-scale_max = 0.29999998
-scale_curve = SubResource("CurveTexture_jpptt")
-color_ramp = SubResource("GradientTexture1D_iipw4")
-
-[sub_resource type="Curve" id="Curve_qhlrl"]
-_limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_v6o1g"]
-curve = SubResource("Curve_qhlrl")
-
-[sub_resource type="Gradient" id="Gradient_savxl"]
-offsets = PackedFloat32Array(0.31566265, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0, 0.37108207, 0.7371826, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_si8s4"]
-gradient = SubResource("Gradient_savxl")
-
-[sub_resource type="Curve" id="Curve_ykpr8"]
-_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_3wv22"]
-curve = SubResource("Curve_ykpr8")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_65dg8"]
-particle_flag_disable_z = true
-emission_shape_scale = Vector3(0, 0, 0)
-emission_shape = 1
-emission_sphere_radius = 8.0
-angle_min = 1.0728835e-05
-angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_v6o1g")
-direction = Vector3(0, 0, 0)
-spread = 180.0
-initial_velocity_min = 50.0
-initial_velocity_max = 100.0
-gravity = Vector3(0, 0, 0)
-scale_min = 0.39999998
-scale_max = 0.59999996
-scale_curve = SubResource("CurveTexture_3wv22")
-color_ramp = SubResource("GradientTexture1D_si8s4")
-
-[node name="Shockwaver" type="StaticBody2D" unique_id=390851188]
-z_index = 1
-collision_layer = 32
-collision_mask = 19
-script = ExtResource("1_shockwaver")
-stats = ExtResource("2_stats")
+[node name="Shockwaver" unique_id=732088838 instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+stats = ExtResource("3_stats")
 hit_flash_duration = 0.48
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=455833445]
+[node name="AnimationHandler" parent="." index="9"]
+libraries/shock = SubResource("ShockLibrary")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1298088136]
 z_index = 1
-material = SubResource("ShockwaverHitFlash")
-sprite_frames = SubResource("ShockwaverFrames")
+sprite_frames = SubResource("Frames")
 
-[node name="Shadow" type="Sprite2D" parent="." unique_id=2147306491]
-modulate = Color(0, 0, 0, 0.4627451)
-texture = ExtResource("5_m1l2p")
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=2051251831]
+modulate = Color(0, 0, 0, 0.46)
+texture = ExtResource("5_shadow")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1251755768]
-shape = SubResource("BodyShape")
-
-[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=2095086698]
-libraries/ = SubResource("AnimationLibrary")
-script = ExtResource("5_animation")
-
-[node name="HealthComponent" type="Node" parent="." unique_id=571709706]
-script = ExtResource("4_health")
-
-[node name="HealthUIComponent" parent="." unique_id=1085621697 node_paths=PackedStringArray("health_component") instance=ExtResource("12_health_ui")]
-position = Vector2(0, -24)
-health_component = NodePath("../HealthComponent")
-
-[node name="InteractionZone" type="Area2D" parent="." unique_id=42933760]
-collision_layer = 0
-collision_mask = 2
-script = ExtResource("6_interaction")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=1427945484]
-shape = SubResource("InteractionShape")
-
-[node name="TurretUpgradeComponent" type="Node" parent="." unique_id=1933120269]
-script = ExtResource("7_upgrade")
-
-[node name="RepairComponent" type="Node" parent="." unique_id=979445494]
-script = ExtResource("8_repair")
-
-[node name="TurretExclusionZone" type="Node2D" parent="." unique_id=1163524966]
-script = ExtResource("9_exclusion")
-exclusion_color = Color(0.2, 0.75, 1, 0.2)
-invalid_color = Color(1, 0.1, 0.1, 0.22)
-
-[node name="RangeIndicator" type="Node2D" parent="." unique_id=2012045983]
-script = ExtResource("10_range")
-
-[node name="ShockwaveComponent" type="Node2D" parent="." unique_id=2021246113]
+[node name="ShockwaveComponent" type="Node2D" parent="." index="14" unique_id=1355162550]
 z_index = 8
-script = ExtResource("11_shockwave")
-windup_indicator_color = Color(0.4855129, 0.44018695, 0.7863147, 1)
+script = ExtResource("6_shockwave")
+windup_indicator_color = Color(0.49, 0.44, 0.79, 1)
 windup_indicator_width = 4.0
-windup_indicator_fade_duration = 1.0
 
-[node name="DetectionArea" type="Area2D" parent="ShockwaveComponent" unique_id=1928072926]
+[node name="DetectionArea" type="Area2D" parent="ShockwaveComponent" index="0" unique_id=1476603931]
 collision_layer = 0
 collision_mask = 10
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ShockwaveComponent/DetectionArea" unique_id=1520676751]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShockwaveComponent/DetectionArea" index="0" unique_id=325788917]
 shape = SubResource("DetectionShape")
 
-[node name="TurretHUD" parent="." unique_id=755595102 instance=ExtResource("13_hud")]
-
-[node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=2050538972]
-z_index = 14
-emitting = false
-amount = 30
-texture = SubResource("AtlasTexture_0hrja")
-lifetime = 0.5
-speed_scale = 2.0
-process_material = SubResource("ParticleProcessMaterial_wib57")
-
-[node name="ShockParticles" parent="." unique_id=1586402119 instance=ExtResource("17_4747m")]
+[node name="ShockParticles" parent="." index="15" unique_id=360686635 instance=ExtResource("7_particles")]
 amount = 20
-process_material = SubResource("ParticleProcessMaterial_65dg8")
-
-[node name="FlashVfx" parent="." unique_id=1645924480 instance=ExtResource("16_flash_vfx")]
-scale = Vector2(2, 2)
