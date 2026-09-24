@@ -435,60 +435,6 @@ tracks/5/keys = {
 "values": [Vector2(19, 0), Vector2(18, 0), Vector2(19, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_die"]
-resource_name = "take_damage"
-length = 0.083333336
-step = 0.083333336
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"values": []
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Body:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.083333336),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("HitParticles:emitting")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("HitParticles")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [false],
-"method": &"restart"
-}]
-}
-
 [sub_resource type="Animation" id="Animation_spawn_sleep"]
 resource_name = "spawn_sleep"
 length = 0.001
@@ -543,6 +489,60 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(0.45, 0.45, 0.45, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_die"]
+resource_name = "take_damage"
+length = 0.083333336
+step = 0.083333336
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Body:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("HitParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HitParticles")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"restart"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_stalker"]
@@ -732,40 +732,40 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_n8pd0"]
+[sub_resource type="CurveTexture" id="CurveTexture_26iul"]
 curve = SubResource("Curve_rqd04")
 
-[sub_resource type="Gradient" id="Gradient_26iul"]
+[sub_resource type="Gradient" id="Gradient_j6h5e"]
 offsets = PackedFloat32Array(0.31566265, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.5996433, 0.27610233, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_jnfwi"]
-gradient = SubResource("Gradient_26iul")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0juef"]
+gradient = SubResource("Gradient_j6h5e")
 
-[sub_resource type="Curve" id="Curve_h2hrh"]
+[sub_resource type="Curve" id="Curve_uhdj6"]
 _data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_windup_scale"]
-curve = SubResource("Curve_h2hrh")
+[sub_resource type="CurveTexture" id="CurveTexture_iwnrm"]
+curve = SubResource("Curve_uhdj6")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qwnb1"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_38riw"]
 particle_flag_disable_z = true
 emission_shape_scale = Vector3(10, 10, 10)
 emission_shape = 2
 emission_sphere_radius = 2.2
 angle_min = 1.0728835e-05
 angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_n8pd0")
+angle_curve = SubResource("CurveTexture_26iul")
 direction = Vector3(0, 0, 0)
 spread = 180.0
 gravity = Vector3(0, 0, 0)
 radial_accel_min = -300.0
 radial_accel_max = -200.0
 scale_min = 0.19999999
-scale_max = 0.29999998
-scale_curve = SubResource("CurveTexture_windup_scale")
-color_ramp = SubResource("GradientTexture1D_jnfwi")
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_iwnrm")
+color_ramp = SubResource("GradientTexture1D_0juef")
 
 [node name="Stalker" type="CharacterBody2D" unique_id=942424531 groups=["enemies"]]
 collision_layer = 8
@@ -868,4 +868,4 @@ amount = 30
 texture = SubResource("AtlasTexture_uhdj6")
 lifetime = 0.5
 speed_scale = 2.0
-process_material = SubResource("ParticleProcessMaterial_qwnb1")
+process_material = SubResource("ParticleProcessMaterial_38riw")

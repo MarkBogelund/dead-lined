@@ -112,5 +112,5 @@ func _apply_camera_zoom(target_zoom: Vector2) -> void:
 	if _camera_zoom_tween:
 		_camera_zoom_tween.kill()
 	_camera_zoom_tween = create_tween()
-	var duration := effects.camera_zoom_duration if effects else 0.35
-	_camera_zoom_tween.tween_property(_camera, "zoom", target_zoom, duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	var zoom_duration := effects.camera_zoom_duration if effects else 0.35
+	_camera_zoom_tween.tween_property(_camera, "zoom", target_zoom, zoom_duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)

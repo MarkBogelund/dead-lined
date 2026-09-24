@@ -23,12 +23,12 @@ value = 15
 
 [resource]
 script = ExtResource("1_ou7rm")
-max_health = 300
 max_range = 190.0
-exclusion_radius = 120.0
 aim_speed = 4.0
 accuracy_angle = 0.3
+projectile_damage = 20
+max_health = 300
+exclusion_radius = 120.0
 health_upgrades = Array[ExtResource("2_74yky")]([SubResource("Resource_1eg34"), SubResource("Resource_40wov")])
 damage_upgrades = Array[ExtResource("2_74yky")]([SubResource("Resource_5nvvu"), SubResource("Resource_4lqh1")])
 health_restore_rate = 20.0
-projectile_damage = 20

@@ -20,7 +20,7 @@ func enable_collection() -> void:
 	get_tree().create_timer(despawn_delay).timeout.connect(_on_despawn_timer)
 
 func _on_despawn_timer() -> void:
-	if not is_inside_tree() or not can_collect:
+	if not can_collect:
 		return
 	_despawn()
 

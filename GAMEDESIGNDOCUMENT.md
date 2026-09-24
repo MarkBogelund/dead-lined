@@ -110,12 +110,21 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 Each wave uses a finite enemy roster. Enemy types can enter on different waves, grow in count independently, and receive type-specific periodic health increases.
 
 ### Turrets
-**Seeker (Only turret type):**
+**Seeker:**
 - Rotates toward target, fires powerful projectiles
 - **Problem:** Shoots both drones AND you (buggy software)
 - **Solution:** Upgrade to max level → becomes safe (only shoots enemies)
 - **Cost:** Building and upgrading cost capacity
 - **Benefit:** Reduces enemy count, multiplies your firepower
+
+**Shockwaver:**
+- Detects enemies or the player entering its contact radius
+- Telegraphs, then emits an expanding doughnut-shaped shockwave
+- Damages every target reached by the ring once per pulse
+- Knocks enemies back from the turret as the ring reaches them
+- Allows the player to dash through the moving wavefront with correct timing
+- Trades directional range for local crowd control around the turret
+- Supports health and damage upgrades
 
 ---
 
