@@ -5,7 +5,7 @@ class_name TurretInfoPanel
 @onready var health_label: Label = %HealthLabel
 @onready var damage_label: Label = %DamageLabel
 
-var _turret: Node = null
+var _turret: TurretBase = null
 
 func _ready() -> void:
 	visible = false
@@ -15,7 +15,7 @@ func _process(_delta: float) -> void:
 		return
 	_update_labels()
 
-func open(turret: Node) -> void:
+func open(turret: TurretBase) -> void:
 	if _turret:
 		_disconnect_turret()
 	_turret = turret

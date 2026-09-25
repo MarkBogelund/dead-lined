@@ -40,6 +40,7 @@ func _ready() -> void:
 
 func _initialize() -> void:
 	if not stats:
+		push_error("%s requires a KamikazerStats resource" % name)
 		return
 	_initialize_base(stats.max_health, stats.scrap_drop_amount)
 	hitbox.initialize(stats.explosion_damage, stats.explosion_knockback)

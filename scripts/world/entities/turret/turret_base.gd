@@ -55,9 +55,9 @@ func _ready() -> void:
 	if player and wave_manager:
 		hud.setup(self, player, wave_manager)
 
-func initialize_base(max_health: int, capacity_drain_rate: float, health_restore_rate: float, repair_amount_per_wrench_hit: int, exclusion_radius: float, display_range: float) -> void:
+func initialize_base(max_health: int, capacity_drain_rate: float, health_restore_rate: float, exclusion_radius: float, display_range: float) -> void:
 	health.initialize(max_health)
-	repair.initialize(capacity_drain_rate, health_restore_rate, repair_amount_per_wrench_hit)
+	repair.initialize(capacity_drain_rate, health_restore_rate)
 	exclusion_zone.initialize(exclusion_radius)
 	range_indicator.initialize(display_range)
 
@@ -94,7 +94,6 @@ func _update_repair(delta: float) -> void:
 	if _can_hold_repair(delta):
 		if not _repairing:
 			_repairing = true
-			repair.activate()
 			# Pauses turret behavior; resumed in _stop_repairing().
 			_on_combat_stopped()
 		repair.try_repair(delta, player.capacity.get_current())
@@ -113,7 +112,7 @@ func _can_hold_repair(delta: float) -> bool:
 
 func _stop_repairing() -> void:
 	_repairing = false
-	repair.deactivate()
+	repair.reset()
 	animation.stop_animation("repair")
 	if is_turret_active():
 		_on_combat_started()
@@ -126,12 +125,6 @@ func _on_combat_stopped() -> void:
 
 func is_turret_active() -> bool:
 	return _active and enabled and not is_dead() and not _repairing
-
-func receive_wrench_hit() -> bool:
-	if health.is_full():
-		return false
-	repair.repair_once()
-	return true
 
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
 	if is_dead():

@@ -11,12 +11,12 @@ class_name TurretHUD
 @onready var toggle_menu: ToggleMenuComponent = $ToggleMenuUpgrade
 @onready var _toggle_info: ToggleMenuComponent = $ToggleMenuInfo
 
-var _turret: Node = null
+var _turret: TurretBase = null
 var _player: Player = null
 var _wave_manager: WaveManager = null
 var _build_phase := false
 
-func setup(turret: Node, player: Player, wave_manager: WaveManager) -> void:
+func setup(turret: TurretBase, player: Player, wave_manager: WaveManager) -> void:
 	_turret = turret
 	_player = player
 	_wave_manager = wave_manager

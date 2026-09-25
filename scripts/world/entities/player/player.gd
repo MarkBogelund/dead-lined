@@ -63,6 +63,7 @@ func _ready() -> void:
 
 func _initialize() -> void:
 	if not stats:
+		push_error("%s requires a PlayerStats resource" % name)
 		return
 	movement.initialize(stats.speed, stats.acceleration, stats.friction)
 	dash.initialize(stats.dash_distance, stats.dash_duration, stats.dash_cooldown)

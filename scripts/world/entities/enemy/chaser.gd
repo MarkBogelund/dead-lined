@@ -28,6 +28,7 @@ func _ready() -> void:
 
 func _initialize() -> void:
 	if not stats:
+		push_error("%s requires a ChaserStats resource" % name)
 		return
 	_initialize_base(stats.max_health, stats.scrap_drop_amount)
 	hitbox.initialize(stats.hitbox_damage, stats.hitbox_knockback)

@@ -14,4 +14,3 @@ class_name TurretStats
 @export_group("Repair")
 @export var capacity_drain_rate: float = 10.0
 @export var health_restore_rate: float = 15.0
-@export var repair_amount_per_wrench_hit: int = 5
