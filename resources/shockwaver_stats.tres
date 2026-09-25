@@ -3,25 +3,17 @@
 [ext_resource type="Script" uid="uid://dc2rutkqh7iqa" path="res://scripts/data/shockwaver_stats.gd" id="1_stats"]
 [ext_resource type="Script" uid="uid://d0774ofuob1o8" path="res://scripts/data/turret_upgrade_level.gd" id="2_upgrade"]
 
-[sub_resource type="Resource" id="DamageUpgrade1"]
+[sub_resource type="Resource" id="Upgrade1"]
 script = ExtResource("2_upgrade")
 cost = 25.0
-value = 5
+max_health_bonus = 25
+damage_bonus = 5
 
-[sub_resource type="Resource" id="DamageUpgrade2"]
+[sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_upgrade")
 cost = 40.0
-value = 5
-
-[sub_resource type="Resource" id="HealthUpgrade1"]
-script = ExtResource("2_upgrade")
-cost = 25.0
-value = 25
-
-[sub_resource type="Resource" id="HealthUpgrade2"]
-script = ExtResource("2_upgrade")
-cost = 40.0
-value = 25
+max_health_bonus = 25
+damage_bonus = 5
 
 [resource]
 script = ExtResource("1_stats")
@@ -33,6 +25,5 @@ expansion_duration = 0.7
 damage = 5
 max_health = 300
 exclusion_radius = 100.0
-health_upgrades = Array[ExtResource("2_upgrade")]([SubResource("HealthUpgrade1"), SubResource("HealthUpgrade2")])
-damage_upgrades = Array[ExtResource("2_upgrade")]([SubResource("DamageUpgrade1"), SubResource("DamageUpgrade2")])
+upgrades = Array[ExtResource("2_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2")])
 health_restore_rate = 50.0

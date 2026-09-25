@@ -1,9 +1,8 @@
 extends Resource
 class_name TurretUpgrade
 
-## A single upgrade step. Add to health_upgrades or damage_upgrades in SeekerStats.
+## One upgrade level. A turret is maxed once every entry in TurretStats.upgrades is applied.
 
-## How much capacity this upgrade costs
 @export var cost: float = 15.0
-## How much to add (HP for health upgrades, damage for damage upgrades)
-@export var value: int = 10
+@export var max_health_bonus: int = 0
+@export var damage_bonus: int = 0

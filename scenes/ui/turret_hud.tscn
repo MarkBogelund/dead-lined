@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://ctsmflabw1lo7"]
 
 [ext_resource type="Script" uid="uid://dpi7tvafhwm14" path="res://scripts/world/entities/turret/turret_hud.gd" id="1_jrbl1"]
-[ext_resource type="Script" uid="uid://cturretinfo01" path="res://scripts/ui/turret_info_panel.gd" id="2_nuabg"]
+[ext_resource type="Script" uid="uid://bhyhranqhcdwr" path="res://scripts/ui/turret_panel.gd" id="2_panel"]
 [ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="3_jrbl1"]
-[ext_resource type="Script" uid="uid://dohma355t64w7" path="res://scripts/ui/upgrade_panel.gd" id="4_ykdch"]
+[ext_resource type="Texture2D" uid="uid://ba14cim744kky" path="res://assets/sprites/ui/turret-health-ui.png" id="3_nhigd"]
+[ext_resource type="Script" uid="uid://bye2qxrtc558s" path="res://scripts/ui/hold_button.gd" id="4_hold"]
+[ext_resource type="FontFile" uid="uid://cq10fg7h4xtfv" path="res://assets/fonts/Satoshi-VariableItalic.ttf" id="5_bxr53"]
 [ext_resource type="Texture2D" uid="uid://2dx8sc4766ai" path="res://assets/sprites/ui/turret-upgrade-icons.png" id="5_pm3rh"]
 [ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="5_toggle"]
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="6_ign1u"]
@@ -15,6 +17,10 @@ content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(0.24313726, 0.24313726, 0.24313726, 0.57254905)
 corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_0lqoh"]
+font = ExtResource("5_bxr53")
+font_size = 9
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
 atlas = ExtResource("5_pm3rh")
@@ -36,82 +42,96 @@ script = ExtResource("1_jrbl1")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1650106890]
 
-[node name="InfoPanel" type="PanelContainer" parent="CanvasLayer" unique_id=1801815046]
+[node name="TurretPanel" type="Control" parent="CanvasLayer" unique_id=1743102423]
 unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("2_panel")
+
+[node name="Info" type="PanelContainer" parent="CanvasLayer/TurretPanel" unique_id=1801815046]
+layout_mode = 0
 offset_left = -35.0
 offset_top = -51.0
 offset_right = 35.0
 offset_bottom = -15.0
 pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pm3rh")
-script = ExtResource("2_nuabg")
 
-[node name="VBox" type="VBoxContainer" parent="CanvasLayer/InfoPanel" unique_id=687781196]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/Info" unique_id=1122449046]
 layout_mode = 2
-theme_override_constants/separation = 2
-alignment = 1
+texture = ExtResource("3_nhigd")
+stretch_mode = 3
 
-[node name="LevelLabel" type="Label" parent="CanvasLayer/InfoPanel/VBox" unique_id=1487526564]
+[node name="LevelLabel" type="Label" parent="CanvasLayer/TurretPanel/Info" unique_id=1487526564]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("3_jrbl1")
 theme_override_font_sizes/font_size = 12
 text = "1"
+label_settings = SubResource("LabelSettings_0lqoh")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HealthLabel" type="Label" parent="CanvasLayer/InfoPanel/VBox" unique_id=1753805009]
-unique_name_in_owner = true
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/TurretPanel/Info" unique_id=687781196]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_jrbl1")
-theme_override_font_sizes/font_size = 4
-text = "HP: 200/200"
-horizontal_alignment = 1
-vertical_alignment = 1
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
 
-[node name="DamageLabel" type="Label" parent="CanvasLayer/InfoPanel/VBox" unique_id=23806639]
+[node name="HealthBar" type="Control" parent="CanvasLayer/TurretPanel/Info/VBox" unique_id=1753805009]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 3)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_jrbl1")
-theme_override_font_sizes/font_size = 4
-text = "DMG: 20"
-horizontal_alignment = 1
-vertical_alignment = 1
+size_flags_horizontal = 4
+mouse_filter = 2
 
-[node name="UpgradePanel" type="Control" parent="CanvasLayer" unique_id=1743102423]
-unique_name_in_owner = true
-layout_mode = 3
-anchors_preset = 0
-offset_left = -32.0
-offset_right = 33.142868
-offset_bottom = 50.0
-pivot_offset_ratio = Vector2(0.5, 0.5)
-script = ExtResource("4_ykdch")
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UpgradePanel" unique_id=816033217]
+[node name="Background" type="ColorRect" parent="CanvasLayer/TurretPanel/Info/VBox/HealthBar" unique_id=269605253]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="HealthFill" type="ColorRect" parent="CanvasLayer/TurretPanel/Info/VBox/HealthBar" unique_id=771398934]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 24.0
+offset_bottom = 3.0
+mouse_filter = 2
+color = Color(0.2, 0.8, 0.2, 1)
+
+[node name="Actions" type="MarginContainer" parent="CanvasLayer/TurretPanel" unique_id=816033217]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -32.0
+offset_right = 33.142868
+offset_bottom = 50.0
+mouse_filter = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer" unique_id=1867402857]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/TurretPanel/Actions" unique_id=1867402857]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 4
 alignment = 1
 
-[node name="UpgradeHealthButton" type="TextureButton" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer" unique_id=1903084934]
+[node name="UpgradeButton" type="TextureButton" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer" unique_id=1903084934]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
 size_flags_vertical = 3
+script = ExtResource("4_hold")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeHealthButton" unique_id=1068676192]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/UpgradeButton" unique_id=1068676192]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -122,14 +142,14 @@ mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeHealthButton/VBoxContainer" unique_id=42369551]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/UpgradeButton/VBoxContainer" unique_id=42369551]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
 texture = SubResource("AtlasTexture_spl43")
 
-[node name="UpgradeHealthLabel" type="Label" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeHealthButton/VBoxContainer" unique_id=1832294696]
+[node name="UpgradeLabel" type="Label" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/UpgradeButton/VBoxContainer" unique_id=1832294696]
 unique_name_in_owner = true
 layout_mode = 2
 text = "15"
@@ -137,13 +157,21 @@ label_settings = SubResource("LabelSettings_spl43")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="UpgradeDamageButton" type="TextureButton" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer" unique_id=1549581212]
+[node name="ProgressFill" type="ColorRect" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/UpgradeButton" unique_id=799649029]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.35)
+
+[node name="SellButton" type="TextureButton" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer" unique_id=1549581212]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
 size_flags_vertical = 3
+script = ExtResource("4_hold")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton" unique_id=1159413202]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/SellButton" unique_id=1159413202]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -154,14 +182,14 @@ mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton/VBoxContainer" unique_id=1836151854]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/SellButton/VBoxContainer" unique_id=1836151854]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
 texture = SubResource("AtlasTexture_3jpqe")
 
-[node name="UpgradeDamageLabel" type="Label" parent="CanvasLayer/UpgradePanel/MarginContainer/HBoxContainer/UpgradeDamageButton/VBoxContainer" unique_id=1568251803]
+[node name="SellLabel" type="Label" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/SellButton/VBoxContainer" unique_id=1568251803]
 unique_name_in_owner = true
 layout_mode = 2
 text = "15"
@@ -169,13 +197,14 @@ label_settings = SubResource("LabelSettings_spl43")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ToggleMenuUpgrade" type="Node" parent="." unique_id=488267466]
-script = ExtResource("5_toggle")
-open_on_proximity = true
-close_on_exit_proximity = true
-close_on_combat_phase = true
+[node name="ProgressFill" type="ColorRect" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/SellButton" unique_id=1928581341]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.35)
 
-[node name="ToggleMenuInfo" type="Node" parent="." unique_id=1034362014]
+[node name="ToggleMenu" type="Node" parent="." unique_id=488267466]
 script = ExtResource("5_toggle")
 open_on_proximity = true
 close_on_exit_proximity = true

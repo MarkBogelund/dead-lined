@@ -20,6 +20,8 @@ var cooldown := 2.5
 var expansion_duration := 0.6
 var damage := 20
 var knockback_force := 180.0
+## False = the player no longer starts a pulse, but pulses still damage the player.
+var trigger_on_player := true
 
 @export_group("Presentation")
 @export var windup_indicator_color := Color(0.55, 0.25, 0.9, 0.28)
@@ -109,6 +111,8 @@ func _configure_shockwave_visual() -> void:
 
 func _has_trigger_target() -> bool:
 	for body: Node2D in detection_area.get_overlapping_bodies():
+		if not trigger_on_player and body.is_in_group("player"):
+			continue
 		if _is_damageable(body) and global_position.distance_to(body.global_position) <= contact_radius:
 			return true
 	return false

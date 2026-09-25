@@ -2,6 +2,8 @@ extends StaticBody2D
 class_name TurretBase
 
 signal died
+signal upgrade_purchased(cost: float)
+signal sold(refund: float)
 
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var health: HealthComponent = $HealthComponent
@@ -12,6 +14,8 @@ signal died
 @onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 @onready var hud: TurretHUD = $TurretHUD
 @onready var range_indicator: RangeIndicator = $RangeIndicator
+@onready var visuals: Node2D = $Visuals
+@onready var body_collision: CollisionShape2D = $CollisionShape2D
 @onready var body_visual: CanvasItem = _get_body_visual()
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
@@ -20,13 +24,18 @@ signal died
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 
 var enabled := true
+var total_invested := 0.0
 var _active := false
 var _repairing := false
+var _selling := false
+var _sell_refund_ratio := 0.0
+var _stops_targeting_player_when_maxed := false
 var _hit_flash_tween: Tween
 
 @export_group("Presentation")
 @export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
 @export var hit_flash_shader: Shader
+@export_range(0.05, 2.0, 0.05) var sell_fade_duration := 0.25
 
 func _get_body_visual() -> CanvasItem:
 	var sprite := get_node_or_null("Visuals/Sprite2D") as CanvasItem
@@ -52,14 +61,91 @@ func _ready() -> void:
 	repair.repaired.connect(health.heal)
 	if player:
 		repair.capacity_drained.connect(player.capacity.spend)
-	if player and wave_manager:
-		hud.setup(self, player, wave_manager)
+	upgrader.upgraded.connect(_on_upgraded)
+	if upgrader.is_max_level():
+		_on_maxed()
+	if wave_manager:
+		hud.setup(self, wave_manager)
 
-func initialize_base(max_health: int, capacity_drain_rate: float, health_restore_rate: float, exclusion_radius: float, display_range: float) -> void:
-	health.initialize(max_health)
-	repair.initialize(capacity_drain_rate, health_restore_rate)
-	exclusion_zone.initialize(exclusion_radius)
+func initialize_base(stats: TurretStats, display_range: float) -> void:
+	health.initialize(stats.max_health)
+	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate)
+	exclusion_zone.initialize(stats.exclusion_radius)
 	range_indicator.initialize(display_range)
+	upgrader.initialize(stats.upgrades)
+	_sell_refund_ratio = stats.sell_refund_ratio
+	_stops_targeting_player_when_maxed = stats.stops_targeting_player_when_maxed
+
+## Called by ShopManager on placement so the sell refund includes the purchase price.
+func set_purchase_price(price: float) -> void:
+	total_invested = price
+
+func get_level() -> int:
+	return upgrader.level
+
+func is_max_level() -> bool:
+	return upgrader.is_max_level()
+
+func get_upgrade_cost() -> float:
+	var upgrade := upgrader.next_upgrade()
+	return upgrade.cost if upgrade else 0.0
+
+func can_upgrade() -> bool:
+	var upgrade := upgrader.next_upgrade()
+	return upgrade != null and _can_manage() and player != null and player.capacity.can_afford(upgrade.cost)
+
+func try_upgrade() -> void:
+	if not can_upgrade():
+		return
+	var cost := get_upgrade_cost()
+	total_invested += cost
+	upgrader.apply_next()
+	upgrade_purchased.emit(cost)
+
+func get_sell_value() -> float:
+	return total_invested * _sell_refund_ratio
+
+func can_sell() -> bool:
+	return _can_manage()
+
+func sell() -> void:
+	if not can_sell():
+		return
+	_selling = true
+	enabled = false
+	_active = false
+	if _repairing:
+		_stop_repairing()
+	_on_combat_stopped()
+	remove_from_group("turrets")
+	body_collision.set_deferred("disabled", true)
+	health_ui.hide()
+	range_indicator.hide_indicator()
+	sold.emit(get_sell_value())
+	var tween := create_tween().set_parallel()
+	tween.tween_property(visuals, "modulate:a", 0.0, sell_fade_duration)
+	tween.tween_property(visuals, "scale", Vector2.ZERO, sell_fade_duration).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tween.chain().tween_callback(queue_free)
+
+## Upgrading and selling are build-phase actions; standalone scenes without a WaveManager allow them.
+func _can_manage() -> bool:
+	return not _selling and not is_dead() and (wave_manager == null or wave_manager.is_build_phase())
+
+func _on_upgraded(upgrade: TurretUpgrade) -> void:
+	if upgrade.max_health_bonus != 0:
+		health.increase_max_health(upgrade.max_health_bonus)
+	if upgrade.damage_bonus != 0:
+		apply_damage_upgrade(upgrade.damage_bonus)
+	if upgrader.is_max_level():
+		_on_maxed()
+
+func _on_maxed() -> void:
+	if _stops_targeting_player_when_maxed:
+		_stop_targeting_player()
+
+## Override: stop selecting the player as a target. Attacks may still hit the player.
+func _stop_targeting_player() -> void:
+	pass
 
 func _configure_base_animations() -> void:
 	animation.configure_animation("repair", 3, true)
@@ -127,7 +213,7 @@ func is_turret_active() -> bool:
 	return _active and enabled and not is_dead() and not _repairing
 
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
-	if is_dead():
+	if is_dead() or _selling:
 		return
 	var was_fatal := health.take_damage(amount)
 	if was_fatal:
