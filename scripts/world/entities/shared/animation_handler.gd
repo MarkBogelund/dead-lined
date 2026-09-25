@@ -66,6 +66,21 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	).call_deferred()
 	return true
 
+## Stops a (typically looping) animation if it is the current one and restores RESET values.
+func stop_animation(anim_name: String) -> void:
+	if _current_animation != anim_name:
+		return
+	_current_animation = ""
+	_current_priority = 0
+	if _locked:
+		_locked = false
+		animation_unlocked.emit()
+	super.stop()
+	if has_animation("RESET"):
+		super.play("RESET")
+		super.advance(0.0)
+		super.stop(true)
+
 func _resolve_animation_path(anim_name: String) -> StringName:
 	if has_animation(anim_name):
 		return StringName(anim_name)

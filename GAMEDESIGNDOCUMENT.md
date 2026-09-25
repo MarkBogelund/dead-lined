@@ -44,7 +44,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 **What you do:**
 - Place new turrets (costs capacity)
 - Upgrade existing turrets (costs capacity, makes them more reliable)
-- Repair damaged turrets (drains capacity while repairing)
+- Repair damaged turrets by holding Left Shift inside their radius, in build or combat phase (drains capacity while repairing)
 - Collect leftover enemy drops
 
 **Risk/Reward:**

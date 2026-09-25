@@ -33,6 +33,9 @@ func try_repair(delta: float, available_capacity: float) -> void:
 		repaired.emit(to_heal)
 		_accumulator -= float(to_heal)
 
+func get_capacity_cost(delta: float) -> float:
+	return _capacity_drain_rate * delta
+
 func repair_once() -> void:
 	repaired.emit(_repair_amount_per_wrench_hit)
 

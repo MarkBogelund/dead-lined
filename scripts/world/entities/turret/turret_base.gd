@@ -12,7 +12,6 @@ signal died
 @onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 @onready var hud: TurretHUD = $TurretHUD
 @onready var range_indicator: RangeIndicator = $RangeIndicator
-@onready var windup_particles: GPUParticles2D = get_node_or_null("WindupParticles") as GPUParticles2D
 @onready var body_visual: CanvasItem = _get_body_visual()
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
@@ -22,6 +21,7 @@ signal died
 
 var enabled := true
 var _active := false
+var _repairing := false
 var _hit_flash_tween: Tween
 
 @export_group("Presentation")
@@ -52,8 +52,6 @@ func _ready() -> void:
 	repair.repaired.connect(health.heal)
 	if player:
 		repair.capacity_drained.connect(player.capacity.spend)
-	repair.healing_started.connect(_on_healing_started)
-	repair.healing_stopped.connect(_on_healing_stopped)
 	if player and wave_manager:
 		hud.setup(self, player, wave_manager)
 
@@ -88,13 +86,37 @@ func _on_player_exited() -> void:
 	health_ui.set_player_in_range(false)
 	range_indicator.hide_indicator()
 
-func _on_healing_started() -> void:
-	if windup_particles:
-		windup_particles.emitting = true
+## Subclasses overriding _physics_process must call super._physics_process(delta).
+func _physics_process(delta: float) -> void:
+	_update_repair(delta)
 
-func _on_healing_stopped() -> void:
-	if windup_particles:
-		windup_particles.emitting = false
+func _update_repair(delta: float) -> void:
+	if _can_hold_repair(delta):
+		if not _repairing:
+			_repairing = true
+			repair.activate()
+			# Pauses turret behavior; resumed in _stop_repairing().
+			_on_combat_stopped()
+		repair.try_repair(delta, player.capacity.get_current())
+		animation.play_animation("repair")
+	elif _repairing:
+		_stop_repairing()
+
+func _can_hold_repair(delta: float) -> bool:
+	return player != null \
+		and enabled \
+		and not is_dead() \
+		and not health.is_full() \
+		and interaction_range.is_player_in_range() \
+		and Input.is_action_pressed("repair") \
+		and player.capacity.can_afford(repair.get_capacity_cost(delta))
+
+func _stop_repairing() -> void:
+	_repairing = false
+	repair.deactivate()
+	animation.stop_animation("repair")
+	if is_turret_active():
+		_on_combat_started()
 
 func _on_combat_started() -> void:
 	pass
@@ -103,13 +125,12 @@ func _on_combat_stopped() -> void:
 	pass
 
 func is_turret_active() -> bool:
-	return _active and enabled and not is_dead()
+	return _active and enabled and not is_dead() and not _repairing
 
 func receive_wrench_hit() -> bool:
 	if health.is_full():
 		return false
 	repair.repair_once()
-	animation.play_animation("repair")
 	return true
 
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
