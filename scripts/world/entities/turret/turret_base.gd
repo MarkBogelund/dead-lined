@@ -62,6 +62,7 @@ func _ready() -> void:
 	if player:
 		repair.capacity_drained.connect(player.capacity.spend)
 	upgrader.upgraded.connect(_on_upgraded)
+	health_ui.set_level(upgrader.level)
 	if upgrader.is_max_level():
 		_on_maxed()
 	if wave_manager:
@@ -136,6 +137,7 @@ func _on_upgraded(upgrade: TurretUpgrade) -> void:
 		health.increase_max_health(upgrade.max_health_bonus)
 	if upgrade.damage_bonus != 0:
 		apply_damage_upgrade(upgrade.damage_bonus)
+	health_ui.set_level(upgrader.level)
 	if upgrader.is_max_level():
 		_on_maxed()
 
@@ -165,11 +167,9 @@ func _on_game_over() -> void:
 	_on_combat_stopped()
 
 func _on_player_entered() -> void:
-	health_ui.set_player_in_range(true)
 	range_indicator.show_indicator()
 
 func _on_player_exited() -> void:
-	health_ui.set_player_in_range(false)
 	range_indicator.hide_indicator()
 
 ## Subclasses overriding _physics_process must call super._physics_process(delta).
