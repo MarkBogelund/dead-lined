@@ -101,6 +101,7 @@ func _setup_animations() -> void:
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("move", 1, false)
 	animation.configure_animation("slash", 2, true)
+	animation.configure_animation("shoot", 2, true)
 	animation.configure_animation("dash_charge", 2, true)
 	animation.configure_animation("dash", 2, true)
 	animation.configure_animation("take_damage", 3, true)
@@ -192,7 +193,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			aiming.aim_at(mouse_pos, 0.0)
 			if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-				animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
+				animation.play_animation("shoot")
 	
 	if event.is_action_pressed("dash"):
 		dash.try_press()

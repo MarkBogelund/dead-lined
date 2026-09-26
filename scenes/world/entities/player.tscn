@@ -315,6 +315,46 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
+[sub_resource type="Animation" id="Animation_6qf0x"]
+resource_name = "shoot"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"shoot"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+
 [sub_resource type="Animation" id="Animation_c5rqy"]
 resource_name = "slash"
 length = 0.3
@@ -329,7 +369,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [&"slash"]
+"values": [&"shoot"]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -406,6 +446,7 @@ _data = {
 &"die": SubResource("Animation_n5sgd"),
 &"idle": SubResource("Animation_b6tgf"),
 &"move": SubResource("Animation_73kkf"),
+&"shoot": SubResource("Animation_6qf0x"),
 &"slash": SubResource("Animation_c5rqy"),
 &"take_damage": SubResource("Animation_tuyoq")
 }
@@ -518,6 +559,18 @@ region = Rect2(240, 0, 24, 24)
 atlas = ExtResource("2_tuyoq")
 region = Rect2(264, 0, 24, 24)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_4gooj"]
+atlas = ExtResource("2_tuyoq")
+region = Rect2(456, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8ewf"]
+atlas = ExtResource("2_tuyoq")
+region = Rect2(480, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0rq8x"]
+atlas = ExtResource("2_tuyoq")
+region = Rect2(504, 0, 24, 24)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_a38lo"]
 animations = [{
 "frames": [{
@@ -624,6 +677,20 @@ animations = [{
 }],
 "loop": 1,
 "name": &"move",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4gooj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e8ewf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0rq8x")
+}],
+"loop": 0,
+"name": &"shoot",
 "speed": 10.0
 }]
 
