@@ -14,7 +14,7 @@ z_index = 20
 script = ExtResource("1_health_ui")
 
 [node name="Frame" type="Sprite2D" parent="." unique_id=324297093]
-modulate = Color(1, 1, 1, 0.78431374)
+modulate = Color(1, 1, 1, 0.88235295)
 texture = ExtResource("2_frame")
 
 [node name="Fill" type="ColorRect" parent="." unique_id=324297094]
@@ -26,11 +26,9 @@ mouse_filter = 2
 color = Color(0.45490196, 0.79607844, 0.49019608, 1)
 
 [node name="LevelLabel" type="Label" parent="." unique_id=324297095]
-offset_left = -11.0
+offset_left = -10.0
 offset_top = -4.0
-offset_right = -7.0
+offset_right = -6.0
 offset_bottom = 4.0
-text = "5"
+text = "2"
 label_settings = SubResource("LevelLabelSettings")
-horizontal_alignment = 1
-vertical_alignment = 1
