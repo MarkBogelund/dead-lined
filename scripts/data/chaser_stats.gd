@@ -10,10 +10,3 @@ class_name ChaserStats
 @export var flank_zero_distance: float = 40.0
 ## Knockback the chaser takes itself when its contact hit lands.
 @export var bounce_back_force: float = 250.0
-
-@export_group("Debug")
-## Draws flank rings, goal, path, next waypoint, velocity and state text above every chaser (toggle live).
-@export var debug_movement := false
-## Prints one diagnostic line whenever a chaser that isn't riding a conveyor barely moves for debug_stuck_seconds.
-@export var debug_log_stuck := false
-@export var debug_stuck_seconds := 1.0

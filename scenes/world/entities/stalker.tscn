@@ -787,12 +787,13 @@ script = ExtResource("7_health")
 script = ExtResource("12_los")
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1238538286]
-path_desired_distance = 25.0
+path_desired_distance = 4.0
 target_desired_distance = 12.0
 avoidance_enabled = true
-radius = 20.0
-neighbor_distance = 50.0
-max_neighbors = 5
+radius = 14.0
+neighbor_distance = 80.0
+max_neighbors = 10
+time_horizon_agents = 1.5
 script = ExtResource("10_nav")
 
 [node name="DropScrapComponent" type="Node" parent="." unique_id=1674501989]

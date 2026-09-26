@@ -652,9 +652,10 @@ linear_damp = 8.0
 path_desired_distance = 4.0
 target_desired_distance = 2.0
 avoidance_enabled = true
-radius = 8.0
-neighbor_distance = 40.0
-max_neighbors = 3
+radius = 14.0
+neighbor_distance = 80.0
+max_neighbors = 10
+time_horizon_agents = 1.5
 script = ExtResource("11_uqckg")
 metadata/_custom_type_script = "uid://bfdfe71wkym8b"
 
