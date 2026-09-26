@@ -448,7 +448,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_saib0")
 }],
-"loop": false,
+"loop": 0,
 "name": &"die",
 "speed": 10.0
 }, {
@@ -465,7 +465,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_b4o2o")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle",
 "speed": 10.0
 }, {
@@ -494,7 +494,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_cwche")
 }],
-"loop": true,
+"loop": 1,
 "name": &"move",
 "speed": 10.0
 }, {
@@ -508,7 +508,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yw3xw")
 }],
-"loop": false,
+"loop": 0,
 "name": &"slash",
 "speed": 10.0
 }]

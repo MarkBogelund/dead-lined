@@ -79,6 +79,9 @@ _data = {
 &"shock": SubResource("Shock")
 }
 
+[sub_resource type="CircleShape2D" id="DetectionShape"]
+radius = 124.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_8xtx4"]
 atlas = ExtResource("4_sprite")
 region = Rect2(0, 0, 24, 26)
@@ -150,9 +153,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="DetectionShape"]
-radius = 124.0
-
 [node name="Shockwaver" unique_id=732088838 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -163,15 +163,6 @@ health_component = NodePath("../HealthComponent")
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/shock = SubResource("ShockLibrary")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="0" unique_id=1298088136]
-z_index = 1
-sprite_frames = SubResource("Frames")
-frame = 8
-
-[node name="Shadow" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="1" unique_id=2051251831]
-modulate = Color(0, 0, 0, 0.46)
-texture = ExtResource("5_shadow")
 
 [node name="ShockwaveComponent" type="Node2D" parent="." index="14" unique_id=1355162550]
 z_index = 8
@@ -194,3 +185,12 @@ shape = SubResource("DetectionShape")
 [node name="ShockwaveVisual" type="ColorRect" parent="ShockwaveComponent" index="1" unique_id=1413759186]
 visible = false
 mouse_filter = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="0" unique_id=1298088136]
+z_index = 1
+sprite_frames = SubResource("Frames")
+frame = 8
+
+[node name="Shadow" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="1" unique_id=2051251831]
+modulate = Color(0, 0, 0, 0.46)
+texture = ExtResource("5_shadow")

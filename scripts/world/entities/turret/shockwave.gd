@@ -13,13 +13,15 @@ enum State {READY, WINDUP, EXPANDING, COOLDOWN}
 @onready var detection_shape: CollisionShape2D = $DetectionArea/CollisionShape2D
 @onready var shockwave_visual: ColorRect = $ShockwaveVisual
 
-var contact_radius := 48.0
-var shockwave_radius := 120.0
+## Trigger distance and blast radius.
+var max_range := 120.0
 var ring_thickness := 8.0
 var cooldown := 2.5
 var expansion_duration := 0.6
 var damage := 20
 var knockback_force := 180.0
+## False = the player no longer starts a pulse, but pulses still damage the player.
+var trigger_on_player := true
 
 @export_group("Presentation")
 @export var windup_indicator_color := Color(0.55, 0.25, 0.9, 0.28)
@@ -39,17 +41,23 @@ var _previous_wave_radius := 0.0
 var _shockwave_fade_time := 0.0
 var _hit_targets: Dictionary[int, bool] = {}
 
-func configure(p_contact_radius: float, p_shockwave_radius: float, p_ring_thickness: float, p_cooldown: float, p_expansion_duration: float, p_damage: int, p_knockback_force: float) -> void:
-	contact_radius = maxf(0.0, p_contact_radius)
-	shockwave_radius = maxf(contact_radius, p_shockwave_radius)
+func configure(p_max_range: float, p_ring_thickness: float, p_cooldown: float, p_expansion_duration: float, p_damage: int, p_knockback_force: float) -> void:
+	max_range = maxf(0.0, p_max_range)
 	ring_thickness = maxf(1.0, p_ring_thickness)
 	cooldown = maxf(0.0, p_cooldown)
 	expansion_duration = maxf(0.01, p_expansion_duration)
 	damage = maxi(0, p_damage)
 	knockback_force = maxf(0.0, p_knockback_force)
+	_apply_radius()
+
+func set_max_range(value: float) -> void:
+	max_range = maxf(0.0, value)
+	_apply_radius()
+
+func _apply_radius() -> void:
 	var circle := detection_shape.shape as CircleShape2D
 	if circle:
-		circle.radius = shockwave_radius + ring_thickness * 0.5
+		circle.radius = max_range + ring_thickness * 0.5
 	_configure_shockwave_visual()
 	queue_redraw()
 
@@ -57,9 +65,6 @@ func set_enabled(value: bool) -> void:
 	_enabled = value
 	if not value:
 		_reset()
-
-func apply_damage_upgrade(amount: int) -> void:
-	damage += amount
 
 func _physics_process(delta: float) -> void:
 	if not _enabled:
@@ -77,7 +82,7 @@ func _physics_process(delta: float) -> void:
 			_state_time += delta
 			if _shockwave_fade_time > 0.0:
 				_shockwave_fade_time = maxf(0.0, _shockwave_fade_time - delta)
-				_update_shockwave_visual(shockwave_radius, shockwave_color.a * _shockwave_fade_time / shockwave_fade_duration)
+				_update_shockwave_visual(max_range, shockwave_color.a * _shockwave_fade_time / shockwave_fade_duration)
 				queue_redraw()
 			if _state_time >= cooldown:
 				_state = State.READY
@@ -87,6 +92,8 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 func _ready() -> void:
+	# The scene's shape is shared by every Shockwaver; per-turret range upgrades need their own.
+	detection_shape.shape = detection_shape.shape.duplicate()
 	var material := ShaderMaterial.new()
 	material.shader = PIXEL_ART_SHADER
 	shockwave_visual.material = material
@@ -95,7 +102,7 @@ func _ready() -> void:
 
 func _configure_shockwave_visual() -> void:
 	var pixel_margin := maxf(pixel_size * 2.0, ring_thickness * 0.5 + pixel_size)
-	var canvas_radius := shockwave_radius + pixel_margin
+	var canvas_radius := max_range + pixel_margin
 	shockwave_visual.position = Vector2(-canvas_radius, -canvas_radius)
 	shockwave_visual.size = Vector2.ONE * canvas_radius * 2.0
 	var material := shockwave_visual.material as ShaderMaterial
@@ -109,7 +116,9 @@ func _configure_shockwave_visual() -> void:
 
 func _has_trigger_target() -> bool:
 	for body: Node2D in detection_area.get_overlapping_bodies():
-		if _is_damageable(body) and global_position.distance_to(body.global_position) <= contact_radius:
+		if not trigger_on_player and body.is_in_group("player"):
+			continue
+		if _is_damageable(body) and global_position.distance_to(body.global_position) <= max_range:
 			return true
 	return false
 
@@ -134,14 +143,14 @@ func execute_shockwave() -> void:
 func _update_expansion(delta: float) -> void:
 	_state_time += delta
 	_previous_wave_radius = _wave_radius
-	_wave_radius = shockwave_radius * minf(_state_time / expansion_duration, 1.0)
+	_wave_radius = max_range * minf(_state_time / expansion_duration, 1.0)
 	_update_shockwave_visual(_wave_radius, shockwave_color.a)
 	_damage_swept_ring()
 	if _state_time >= expansion_duration:
 		_state = State.COOLDOWN
 		_state_time = 0.0
 		_shockwave_fade_time = shockwave_fade_duration
-		_update_shockwave_visual(shockwave_radius, shockwave_color.a)
+		_update_shockwave_visual(max_range, shockwave_color.a)
 		queue_redraw()
 		shockwave_finished.emit()
 
@@ -188,4 +197,4 @@ func _draw() -> void:
 	if _state == State.WINDUP:
 		var telegraph_color := windup_indicator_color
 		telegraph_color.a *= minf(_state_time / windup_indicator_fade_duration, 1.0)
-		draw_arc(Vector2.ZERO, shockwave_radius, 0.0, TAU, 96, telegraph_color, windup_indicator_width)
+		draw_arc(Vector2.ZERO, max_range, 0.0, TAU, 96, telegraph_color, windup_indicator_width)

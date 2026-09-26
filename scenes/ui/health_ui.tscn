@@ -1,20 +1,37 @@
 [gd_scene format=3 uid="uid://dbvhg3xtca5"]
 
 [ext_resource type="Script" uid="uid://5wcqudc7efji" path="res://scripts/world/entities/shared/health_ui.gd" id="1_health_ui"]
+[ext_resource type="Texture2D" uid="uid://ba14cim744kky" path="res://assets/sprites/ui/turret-health-ui.png" id="2_frame"]
+[ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="3_fht25"]
+
+[sub_resource type="LabelSettings" id="LevelLabelSettings"]
+line_spacing = 0.0
+font = ExtResource("3_fht25")
+font_size = 5
 
 [node name="HealthUIComponent" type="Node2D" unique_id=324297092]
+z_index = 20
 script = ExtResource("1_health_ui")
 
-[node name="Background" type="ColorRect" parent="." unique_id=324297093]
-offset_left = -12.0
-offset_top = -1.5
-offset_right = 12.0
-offset_bottom = 1.5
-color = Color(0.2, 0.2, 0.2, 1)
+[node name="Frame" type="Sprite2D" parent="." unique_id=324297093]
+modulate = Color(1, 1, 1, 0.88235295)
+z_index = 9
+texture = ExtResource("2_frame")
 
 [node name="Fill" type="ColorRect" parent="." unique_id=324297094]
-offset_left = -12.0
-offset_top = -1.5
-offset_right = 12.0
-offset_bottom = 1.5
-color = Color(0.2, 0.8, 0.2, 1)
+z_index = 10
+offset_left = -5.0
+offset_top = -1.0
+offset_right = 13.0
+offset_bottom = 1.0
+mouse_filter = 2
+color = Color(0.45490196, 0.79607844, 0.49019608, 1)
+
+[node name="LevelLabel" type="Label" parent="." unique_id=324297095]
+z_index = 10
+offset_left = -10.0
+offset_top = -4.0
+offset_right = -6.0
+offset_bottom = 4.0
+text = "2"
+label_settings = SubResource("LevelLabelSettings")

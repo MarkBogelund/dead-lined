@@ -7,6 +7,8 @@ signal turret_placement_started
 signal turret_placement_ended
 signal turret_bought(price: float)
 signal turret_lost
+signal turret_upgraded(cost: float)
+signal turret_sold(refund: float)
 
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var player: Player = %Player
@@ -45,15 +47,23 @@ func _on_turret_selected(turret_entry: TurretEntry) -> void:
 	turret_placer.start_placement(turret_entry)
 	shop_station.toggle_menu.close()
 
-func _on_turret_placed(turret: Node, turret_entry: TurretEntry) -> void:
+func _on_turret_placed(placed: Node, turret_entry: TurretEntry) -> void:
+	var turret := placed as TurretBase
 	turrets_placed += 1
+	turret.set_purchase_price(turret_entry.price)
+	turret.set_exclusion_radius(turret_entry.exclusion_radius)
 	turret_bought.emit(turret_entry.price)
-	if turret.has_signal("died"):
-		turret.died.connect(_on_turret_destroyed)
+	turret.died.connect(_on_turret_destroyed)
+	turret.sold.connect(_on_turret_sold)
+	turret.upgrade_purchased.connect(turret_upgraded.emit)
 
 func _on_turret_destroyed() -> void:
 	turrets_placed -= 1
 	turret_lost.emit()
+
+func _on_turret_sold(refund: float) -> void:
+	turrets_placed -= 1
+	turret_sold.emit(refund)
 
 func _on_placement_started() -> void:
 	turret_placement_started.emit()

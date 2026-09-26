@@ -25,7 +25,7 @@ func _initialize() -> void:
 		return
 	aiming.visual_node = $Visuals/Canon
 	aiming.muzzle = $Visuals/Canon/Graphics/Muzzle
-	initialize_base(stats.max_health, stats.capacity_drain_rate, stats.health_restore_rate, stats.exclusion_radius, stats.max_range)
+	initialize_base(stats, stats.max_range)
 	targeting.initialize(stats.max_range)
 	targeting.configure_priorities({
 		"enemies": stats.enemy_target_priority,
@@ -39,6 +39,9 @@ func _on_combat_started() -> void:
 
 func _on_combat_stopped() -> void:
 	_telegraphing = false
+
+func _stop_targeting_player() -> void:
+	targeting.set_group_enabled("player", false)
 
 func _process(delta: float) -> void:
 	if not is_turret_active():
@@ -61,6 +64,9 @@ func _process(delta: float) -> void:
 		_begin_telegraph()
 
 func _begin_telegraph() -> void:
+	# A cooldown shorter than the shoot animation would otherwise latch _telegraphing without firing.
+	if animation.get_current_anim_name() == "shoot" and animation.is_playing():
+		return
 	if not animation.play_animation("shoot"):
 		return
 	_telegraphing = true
@@ -76,5 +82,12 @@ func _before_death_animation() -> void:
 func get_damage_value() -> int:
 	return shoot.projectile_damage
 
-func apply_damage_upgrade(amount: int) -> void:
-	shoot.projectile_damage += amount
+func set_damage(value: int) -> void:
+	shoot.projectile_damage = value
+
+func set_attack_range(value: float) -> void:
+	targeting.max_range = value
+	range_indicator.initialize(value)
+
+func set_attack_cooldown(value: float) -> void:
+	shoot.shoot_cooldown = value

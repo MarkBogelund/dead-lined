@@ -43,14 +43,15 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 
 **What you do:**
 - Place new turrets (costs capacity)
-- Upgrade existing turrets (costs capacity, makes them more reliable)
+- Upgrade existing turrets by holding Upgrade on the turret panel (costs capacity; each level applies an unannounced buff)
+- Sell turrets by holding Sell (refunds 75% of everything spent on that turret, capped at max capacity)
 - Repair damaged turrets by holding Left Shift inside their radius, in build or combat phase (drains capacity while repairing)
 - Collect leftover enemy drops
 
 **Risk/Reward:**
 - Building costs capacity but reduces enemy density
 - Too many turrets = friendly fire risk
-- Max-level turrets become safe allies
+- Max-level turrets stop targeting you (their shots and shockwaves can still hit you)
 
 ### Combat Phase
 **Duration:** Ends when all enemies in the wave are destroyed
@@ -86,6 +87,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 | Take damage | 1-20% | Direct deduction |
 | Build turret | 10-20% | Strategy cost |
 | Upgrade turret | Escalates | Reliability cost |
+| Sell turret | Refund | Returns 75% of the turret's total cost |
 | Activate Crunch Time | 50% | Power-up gate |
 | Repair turret | Continuous | Restores turret health while held |
 | Enemy defeated | +5-10% | Resource generation |
@@ -113,18 +115,18 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 **Seeker:**
 - Rotates toward target, fires powerful projectiles
 - **Problem:** Shoots both drones AND you (buggy software)
-- **Solution:** Upgrade to max level → becomes safe (only shoots enemies)
+- **Solution:** Upgrade to max level ("MAX") → stops aiming at you; stray shots can still hit
 - **Cost:** Building and upgrading cost capacity
 - **Benefit:** Reduces enemy count, multiplies your firepower
 
 **Shockwaver:**
-- Detects enemies or the player entering its contact radius
+- Detects enemies or the player entering its max range (the same radius the shockwave expands to)
 - Telegraphs, then emits an expanding doughnut-shaped shockwave
 - Damages every target reached by the ring once per pulse
 - Knocks enemies back from the turret as the ring reaches them
 - Allows the player to dash through the moving wavefront with correct timing
 - Trades directional range for local crowd control around the turret
-- Supports health and damage upgrades
+- Upgrades can raise health, damage, blast radius and pulse rate; at max level the player no longer triggers it, but its pulses still damage the player
 
 ---
 

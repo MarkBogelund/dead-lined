@@ -53,9 +53,11 @@ func buff_max_health(multiplier: float) -> void:
 	max_health = int(max_health * multiplier)
 	restore_to_max()
 
-func increase_max_health(amount: int) -> void:
-	max_health += amount
-	current_health = mini(current_health + amount, max_health)
+## Sets max health; current health changes by the same amount the maximum changed.
+func set_max_health(value: int) -> void:
+	var delta := value - max_health
+	max_health = value
+	current_health = clampi(current_health + delta, 0, max_health)
 	health_changed.emit(current_health, max_health)
 
 func heal(amount: int) -> void:

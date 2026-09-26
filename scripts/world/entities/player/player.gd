@@ -105,6 +105,8 @@ func _connect_signals() -> void:
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
 	shop_manager.turret_bought.connect(_on_turret_bought)
 	shop_manager.turret_lost.connect(_on_turret_lost)
+	shop_manager.turret_upgraded.connect(capacity.spend)
+	shop_manager.turret_sold.connect(_on_turret_sold)
 	wave_manager.build_phase_started.connect(func() -> void: crunch_time.set_build_phase(true))
 	wave_manager.combat_phase_started.connect(func(_i: int) -> void: crunch_time.set_build_phase(false))
 	dash.dash_ended.connect(_on_dash_ended)
@@ -272,6 +274,10 @@ func _on_turret_bought(price: float) -> void:
 	capacity.lower_threshold()
 
 func _on_turret_lost() -> void:
+	capacity.raise_threshold()
+
+func _on_turret_sold(refund: float) -> void:
+	capacity.gain(refund)
 	capacity.raise_threshold()
 
 func _on_crunch_time_started(buffs: Dictionary) -> void:

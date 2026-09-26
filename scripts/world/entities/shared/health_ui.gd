@@ -1,19 +1,24 @@
 extends Node2D
 class_name HealthUIComponent
 
+## Always-visible turret status: level inside the frame's circle, health in its bar.
+
 @export var health_component: HealthComponent
 @export var offset := Vector2(0, -18)
 
 @onready var fill: ColorRect = $Fill
+@onready var level_label: Label = $LevelLabel
 
-const BAR_WIDTH := 24.0
-var _player_in_range := false
+## Width of the bar interior in turret-health-ui.png (pixels 11..29).
+const BAR_WIDTH := 19.0
 
 func _ready() -> void:
 	position = offset
-	visible = true
 	if health_component:
 		_connect_health_component()
+
+func set_level(level: int) -> void:
+	level_label.text = "%d" % level
 
 func setup(component: HealthComponent) -> void:
 	if health_component == component:
@@ -32,10 +37,6 @@ func _connect_health_component() -> void:
 	if not health_component.health_changed.is_connected(_on_health_changed):
 		health_component.health_changed.connect(_on_health_changed)
 	_update_health_bar(health_component.get_current_health(), health_component.max_health)
-
-func set_player_in_range(in_range: bool) -> void:
-	_player_in_range = in_range
-	visible = not in_range
 
 func _on_health_changed(current: int, maximum: int) -> void:
 	_update_health_bar(current, maximum)

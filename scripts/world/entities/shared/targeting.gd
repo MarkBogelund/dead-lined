@@ -19,12 +19,19 @@ class_name TargetingComponent
 
 var _sorted_configs: Array[TargetConfig] = []
 var _current_target: Node2D
+var _disabled_groups: Dictionary[String, bool] = {}
 
 func _ready() -> void:
 	_create_runtime_configs()
 
 func initialize(s_max_range: float) -> void:
 	max_range = s_max_range
+
+func set_group_enabled(group_name: String, is_enabled: bool) -> void:
+	if is_enabled:
+		_disabled_groups.erase(group_name)
+	else:
+		_disabled_groups[group_name] = true
 
 func configure_priorities(priorities: Dictionary, distance_threshold: float, same_priority_distance: float = 0.0) -> void:
 	priority_distance_threshold = distance_threshold
@@ -56,7 +63,7 @@ func get_best_target(from_position: Vector2, filter: Callable = Callable()) -> N
 	
 	# Scan through all priority groups
 	for config: TargetConfig in _sorted_configs:
-		if config.group_name.is_empty():
+		if config.group_name.is_empty() or _disabled_groups.has(config.group_name):
 			continue
 		
 		var nodes: Array[Node] = get_tree().get_nodes_in_group(config.group_name)
@@ -132,6 +139,9 @@ func _is_valid_target(target: Variant, from_position: Vector2, filter: Callable)
 		return false
 	if target_node.has_method("is_dead") and target_node.is_dead():
 		return false
+	for group_name: String in _disabled_groups:
+		if target_node.is_in_group(group_name):
+			return false
 	if max_range >= 0.0 and from_position.distance_squared_to(target_node.global_position) > max_range * max_range:
 		return false
 	return not filter.is_valid() or filter.call(target_node)

@@ -2,6 +2,8 @@ extends StaticBody2D
 class_name TurretBase
 
 signal died
+signal upgrade_purchased(cost: float)
+signal sold(refund: float)
 
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var health: HealthComponent = $HealthComponent
@@ -12,6 +14,8 @@ signal died
 @onready var exclusion_zone: TurretExclusionZone = $TurretExclusionZone
 @onready var hud: TurretHUD = $TurretHUD
 @onready var range_indicator: RangeIndicator = $RangeIndicator
+@onready var visuals: Node2D = $Visuals
+@onready var body_collision: CollisionShape2D = $CollisionShape2D
 @onready var body_visual: CanvasItem = _get_body_visual()
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
@@ -20,13 +24,24 @@ signal died
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 
 var enabled := true
+## Floor for attack cooldowns; upgrades below it are clamped with a warning.
+const MIN_ATTACK_COOLDOWN := 0.5
+var total_invested := 0.0
 var _active := false
 var _repairing := false
+var _selling := false
+var _sell_refund_ratio := 0.0
+var _stops_targeting_player_when_maxed := false
 var _hit_flash_tween: Tween
 
 @export_group("Presentation")
 @export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
-@export var hit_flash_shader: Shader
+## Keyed by the upgrade_charge / upgrade animations; drives the surface shader's flash_amount.
+@export_range(0.0, 1.0, 0.01) var upgrade_whiteness := 0.0:
+	set = _set_upgrade_whiteness
+## turret_surface.gdshader: combines the hit flash and gold shine effects (see shaders/include/).
+@export var surface_shader: Shader
+@export_range(0.05, 2.0, 0.05) var sell_fade_duration := 0.25
 
 func _get_body_visual() -> CanvasItem:
 	var sprite := get_node_or_null("Visuals/Sprite2D") as CanvasItem
@@ -36,7 +51,7 @@ func _get_body_visual() -> CanvasItem:
 
 func _ready() -> void:
 	add_to_group("turrets")
-	_configure_hit_flash_materials()
+	_configure_surface_materials()
 	health_ui.setup(health)
 	_configure_base_animations()
 	if wave_manager:
@@ -52,16 +67,127 @@ func _ready() -> void:
 	repair.repaired.connect(health.heal)
 	if player:
 		repair.capacity_drained.connect(player.capacity.spend)
-	if player and wave_manager:
-		hud.setup(self, player, wave_manager)
+	upgrader.upgraded.connect(_on_upgraded)
+	health_ui.set_level(upgrader.level)
+	if upgrader.is_max_level():
+		_on_maxed()
+	if wave_manager:
+		hud.setup(self, wave_manager)
 
-func initialize_base(max_health: int, capacity_drain_rate: float, health_restore_rate: float, exclusion_radius: float, display_range: float) -> void:
-	health.initialize(max_health)
-	repair.initialize(capacity_drain_rate, health_restore_rate)
-	exclusion_zone.initialize(exclusion_radius)
+func initialize_base(stats: TurretStats, display_range: float) -> void:
+	health.initialize(stats.max_health)
+	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate)
 	range_indicator.initialize(display_range)
+	upgrader.initialize(stats.upgrades)
+	_sell_refund_ratio = stats.sell_refund_ratio
+	_stops_targeting_player_when_maxed = stats.stops_targeting_player_when_maxed
+
+## Called by ShopManager on placement so the sell refund includes the purchase price.
+func set_purchase_price(price: float) -> void:
+	total_invested = price
+
+## Called by ShopManager on placement; the radius belongs to the shop entry.
+func set_exclusion_radius(radius: float) -> void:
+	exclusion_zone.initialize(radius)
+
+func get_level() -> int:
+	return upgrader.level
+
+func is_max_level() -> bool:
+	return upgrader.is_max_level()
+
+func get_upgrade_cost() -> float:
+	var upgrade := upgrader.next_upgrade()
+	return upgrade.cost if upgrade else 0.0
+
+func can_upgrade() -> bool:
+	var upgrade := upgrader.next_upgrade()
+	return upgrade != null and _can_manage() and player != null and player.capacity.can_afford(upgrade.cost)
+
+func try_upgrade() -> void:
+	if not can_upgrade():
+		return
+	var cost := get_upgrade_cost()
+	total_invested += cost
+	upgrader.apply_next()
+	upgrade_purchased.emit(cost)
+
+## upgrade_charge is scaled so it finishes exactly when the upgrade hold completes.
+func start_upgrade_charge(hold_duration: float) -> void:
+	# A new hold cuts the previous burst short; its particles keep playing out.
+	animation.stop_animation("upgrade")
+	var length := animation.get_animation("upgrade_charge").length
+	animation.play_animation("upgrade_charge", -1, length / hold_duration)
+
+func stop_upgrade_charge() -> void:
+	animation.stop_animation("upgrade_charge")
+
+# Skips unchanged values so RESET doesn't cancel a running hit flash.
+func _set_upgrade_whiteness(value: float) -> void:
+	if is_equal_approx(value, upgrade_whiteness):
+		return
+	upgrade_whiteness = value
+	for shader_material: ShaderMaterial in _get_surface_materials():
+		shader_material.set_shader_parameter("flash_amount", value)
+
+func get_sell_value() -> float:
+	var refund := total_invested * _sell_refund_ratio
+	return minf(refund, player.capacity.get_max()) if player else refund
+
+func can_sell() -> bool:
+	return _can_manage()
+
+func sell() -> void:
+	if not can_sell():
+		return
+	_selling = true
+	enabled = false
+	_active = false
+	if _repairing:
+		_stop_repairing()
+	_on_combat_stopped()
+	remove_from_group("turrets")
+	body_collision.set_deferred("disabled", true)
+	health_ui.hide()
+	range_indicator.hide_indicator()
+	sold.emit(get_sell_value())
+	var tween := create_tween().set_parallel()
+	tween.tween_property(visuals, "modulate:a", 0.0, sell_fade_duration)
+	tween.tween_property(visuals, "scale", Vector2.ZERO, sell_fade_duration).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tween.chain().tween_callback(queue_free)
+
+## Upgrading and selling are build-phase actions; standalone scenes without a WaveManager allow them.
+func _can_manage() -> bool:
+	return not _selling and not is_dead() and (wave_manager == null or wave_manager.is_build_phase())
+
+func _on_upgraded(upgrade: TurretUpgrade) -> void:
+	if upgrade.max_health >= 0:
+		health.set_max_health(upgrade.max_health)
+	if upgrade.damage >= 0:
+		set_damage(upgrade.damage)
+	if upgrade.attack_range >= 0.0:
+		set_attack_range(upgrade.attack_range)
+	if upgrade.attack_cooldown >= 0.0:
+		if upgrade.attack_cooldown < MIN_ATTACK_COOLDOWN:
+			push_warning("%s level %d attack_cooldown %.2f is below MIN_ATTACK_COOLDOWN %.2f; clamping" % [name, upgrader.level, upgrade.attack_cooldown, MIN_ATTACK_COOLDOWN])
+		set_attack_cooldown(maxf(MIN_ATTACK_COOLDOWN, upgrade.attack_cooldown))
+	health_ui.set_level(upgrader.level)
+	animation.play_animation("upgrade")
+	if upgrader.is_max_level():
+		_on_maxed()
+
+func _on_maxed() -> void:
+	_set_gold_shine(true)
+	if _stops_targeting_player_when_maxed:
+		_stop_targeting_player()
+
+## Override: stop selecting the player as a target. Attacks may still hit the player.
+func _stop_targeting_player() -> void:
+	pass
 
 func _configure_base_animations() -> void:
+	animation.configure_animation("upgrade_charge", 2, true)
+	animation.configure_animation("upgrade", 3, true)
 	animation.configure_animation("repair", 3, true)
 	animation.configure_animation("die", 4, true)
 
@@ -79,11 +205,9 @@ func _on_game_over() -> void:
 	_on_combat_stopped()
 
 func _on_player_entered() -> void:
-	health_ui.set_player_in_range(true)
 	range_indicator.show_indicator()
 
 func _on_player_exited() -> void:
-	health_ui.set_player_in_range(false)
 	range_indicator.hide_indicator()
 
 ## Subclasses overriding _physics_process must call super._physics_process(delta).
@@ -127,7 +251,7 @@ func is_turret_active() -> bool:
 	return _active and enabled and not is_dead() and not _repairing
 
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
-	if is_dead():
+	if is_dead() or _selling:
 		return
 	var was_fatal := health.take_damage(amount)
 	if was_fatal:
@@ -135,45 +259,50 @@ func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> v
 	else:
 		_play_hit_flash()
 
+## Hit flash effect: owns only the flash_* uniforms.
 func _play_hit_flash() -> void:
-	var flash_materials := _get_hit_flash_materials()
-	if flash_materials.is_empty():
+	var surface_materials := _get_surface_materials()
+	if surface_materials.is_empty():
 		return
 	if _hit_flash_tween:
 		_hit_flash_tween.kill()
-	for shader_material: ShaderMaterial in flash_materials:
+	for shader_material: ShaderMaterial in surface_materials:
 		shader_material.set_shader_parameter("flash_amount", 1.0)
 	_hit_flash_tween = create_tween()
-	for shader_material: ShaderMaterial in flash_materials:
+	for shader_material: ShaderMaterial in surface_materials:
 		_hit_flash_tween.parallel().tween_property(shader_material, "shader_parameter/flash_amount", 0.0, hit_flash_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
-func _configure_hit_flash_materials() -> void:
-	if not hit_flash_shader:
-		push_error("TurretBase requires a hit_flash_shader to flash turret visuals when damaged")
-		return
-	_assign_hit_flash_material(body_visual)
-	_assign_hit_flash_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem)
+## Gold shine effect: owns only the gold_* / shine_* / sparkle_* uniforms.
+func _set_gold_shine(enabled_shine: bool) -> void:
+	for shader_material: ShaderMaterial in _get_surface_materials():
+		shader_material.set_shader_parameter("gold_amount", 1.0 if enabled_shine else 0.0)
 
-func _assign_hit_flash_material(visual: CanvasItem) -> void:
+func _configure_surface_materials() -> void:
+	if not surface_shader:
+		push_error("TurretBase requires a surface_shader for hit flash and gold shine")
+		return
+	_assign_surface_material(body_visual)
+	_assign_surface_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem)
+
+func _assign_surface_material(visual: CanvasItem) -> void:
 	if not visual:
 		return
 	var material := visual.material as ShaderMaterial
 	if not material:
 		material = ShaderMaterial.new()
 	visual.material = material
-	material.shader = hit_flash_shader
-	material.set_shader_parameter("flash_amount", 0.0)
+	material.shader = surface_shader
 
-func _get_hit_flash_materials() -> Array[ShaderMaterial]:
-	var flash_materials: Array[ShaderMaterial] = []
-	_add_hit_flash_material(body_visual, flash_materials)
-	_add_hit_flash_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem, flash_materials)
-	return flash_materials
+func _get_surface_materials() -> Array[ShaderMaterial]:
+	var surface_materials: Array[ShaderMaterial] = []
+	_add_surface_material(body_visual, surface_materials)
+	_add_surface_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem, surface_materials)
+	return surface_materials
 
-func _add_hit_flash_material(visual: CanvasItem, flash_materials: Array[ShaderMaterial]) -> void:
+func _add_surface_material(visual: CanvasItem, surface_materials: Array[ShaderMaterial]) -> void:
 	var shader_material := visual.material as ShaderMaterial if visual else null
 	if shader_material:
-		flash_materials.append(shader_material)
+		surface_materials.append(shader_material)
 
 func _before_death_animation() -> void:
 	pass
@@ -190,8 +319,14 @@ func get_damage_value() -> int:
 	push_warning("TurretBase.get_damage_value() should be overridden")
 	return 0
 
-func apply_damage_upgrade(_amount: int) -> void:
-	push_warning("TurretBase.apply_damage_upgrade() should be overridden")
+func set_damage(_value: int) -> void:
+	push_warning("TurretBase.set_damage() should be overridden")
+
+func set_attack_range(_value: float) -> void:
+	push_warning("TurretBase.set_attack_range() should be overridden")
+
+func set_attack_cooldown(_value: float) -> void:
+	push_warning("TurretBase.set_attack_cooldown() should be overridden")
 
 func shake_screen(intensity: float, duration: float) -> void:
 	camera_shake_manager.shake_screen(intensity, duration)

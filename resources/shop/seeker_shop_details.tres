@@ -19,5 +19,4 @@ turret_scene = ExtResource("4_q04sb")
 ghost_scene = ExtResource("1_vji5u")
 stats = ExtResource("5_seekerstats")
 preview_range = 250.0
-exclusion_radius = 80.0
 metadata/_custom_type_script = "uid://q2sxkhmik7ny"

@@ -3,61 +3,40 @@
 [ext_resource type="Script" uid="uid://cseekerstat01" path="res://scripts/data/seeker_stats.gd" id="1_seekerstats"]
 [ext_resource type="Script" uid="uid://d0774ofuob1o8" path="res://scripts/data/turret_upgrade_level.gd" id="2_nmlpx"]
 
-[sub_resource type="Resource" id="Resource_nmlpx"]
+[sub_resource type="Resource" id="Upgrade1"]
 script = ExtResource("2_nmlpx")
 cost = 25.0
-value = 5
-metadata/_custom_type_script = "uid://d0774ofuob1o8"
+max_health = 275
+attack_range = 175.0
 
-[sub_resource type="Resource" id="Resource_qtbxs"]
+[sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_nmlpx")
 cost = 35.0
-value = 5
-metadata/_custom_type_script = "uid://d0774ofuob1o8"
+damage = 10
+attack_cooldown = 0.75
 
-[sub_resource type="Resource" id="Resource_2gvxv"]
+[sub_resource type="Resource" id="Upgrade3"]
 script = ExtResource("2_nmlpx")
 cost = 45.0
-metadata/_custom_type_script = "uid://d0774ofuob1o8"
+max_health = 300
+attack_range = 200.0
 
-[sub_resource type="Resource" id="Resource_faxe0"]
+[sub_resource type="Resource" id="Upgrade4"]
 script = ExtResource("2_nmlpx")
 cost = 55.0
-metadata/_custom_type_script = "uid://d0774ofuob1o8"
-
-[sub_resource type="Resource" id="Resource_nh28m"]
-script = ExtResource("2_nmlpx")
-cost = 25.0
-value = 20
-metadata/_custom_type_script = "uid://d0774ofuob1o8"
-
-[sub_resource type="Resource" id="Resource_jw1wh"]
-script = ExtResource("2_nmlpx")
-cost = 35.0
-value = 20
-metadata/_custom_type_script = "uid://d0774ofuob1o8"
-
-[sub_resource type="Resource" id="Resource_5qqth"]
-script = ExtResource("2_nmlpx")
-cost = 45.0
-value = 15
-metadata/_custom_type_script = "uid://d0774ofuob1o8"
-
-[sub_resource type="Resource" id="Resource_nuvq8"]
-script = ExtResource("2_nmlpx")
-cost = 55.0
-value = 15
-metadata/_custom_type_script = "uid://d0774ofuob1o8"
+max_health = 350
+damage = 20
+attack_range = 250.0
+attack_cooldown = 0.5
 
 [resource]
 script = ExtResource("1_seekerstats")
-max_range = 250.0
+max_range = 150.0
 aim_speed = 7.0
 accuracy_angle = 0.15
 priority_distance_threshold = 30.0
 projectile_damage = 5
 projectile_speed = 170.0
 max_health = 250
-health_upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Resource_nh28m"), SubResource("Resource_jw1wh"), SubResource("Resource_5qqth"), SubResource("Resource_nuvq8")])
-damage_upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Resource_nmlpx"), SubResource("Resource_qtbxs"), SubResource("Resource_2gvxv"), SubResource("Resource_faxe0")])
+upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Upgrade3"), SubResource("Upgrade4")])
 health_restore_rate = 50.0

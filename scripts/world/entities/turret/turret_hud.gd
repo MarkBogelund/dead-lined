@@ -1,42 +1,33 @@
 extends Node
 class_name TurretHUD
 
-## Manages TurretInfoPanel and UpgradePanel for a single turret.
-## Lives as a child of the turret scene.
-## Show/hide is driven by the turret's InteractionZone and wave phase.
+## Owns the turret's panel. Opens by proximity in both phases; action buttons show in build phase only.
+## Forwards panel requests to the turret.
 
-@onready var info_panel: TurretInfoPanel = %InfoPanel
-@onready var upgrade_panel: UpgradePanel = %UpgradePanel
+@onready var panel: TurretPanel = %TurretPanel
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
-@onready var toggle_menu: ToggleMenuComponent = $ToggleMenuUpgrade
-@onready var _toggle_info: ToggleMenuComponent = $ToggleMenuInfo
+@onready var toggle_menu: ToggleMenuComponent = $ToggleMenu
 
 var _turret: TurretBase = null
-var _player: Player = null
-var _wave_manager: WaveManager = null
-var _build_phase := false
 
-func setup(turret: TurretBase, player: Player, wave_manager: WaveManager) -> void:
+func setup(turret: TurretBase, wave_manager: WaveManager) -> void:
 	_turret = turret
-	_player = player
-	_wave_manager = wave_manager
-	_build_phase = wave_manager.is_build_phase()
-
-	toggle_menu.open_fn = func() -> void: upgrade_panel.open(_turret, _player, _wave_manager)
-	toggle_menu.close_fn = func() -> void: upgrade_panel.close()
+	toggle_menu.open_fn = func() -> void: panel.open(_turret)
+	toggle_menu.close_fn = func() -> void: panel.close()
 	toggle_menu.interaction_zone = turret.interaction_range
-	toggle_menu.menu_control = upgrade_panel
-	toggle_menu.enabled = _build_phase
-	if _build_phase and turret.interaction_range.is_player_in_range():
+	toggle_menu.menu_control = panel
+	panel.set_actions_visible(wave_manager.is_build_phase())
+	panel.upgrade_requested.connect(turret.try_upgrade)
+	panel.upgrade_hold_started.connect(turret.start_upgrade_charge)
+	panel.upgrade_hold_ended.connect(turret.stop_upgrade_charge)
+	panel.sell_requested.connect(turret.sell)
+	if turret.interaction_range.is_player_in_range():
 		toggle_menu.open()
-
-	_toggle_info.open_fn = func() -> void: info_panel.open(_turret)
-	_toggle_info.close_fn = func() -> void: info_panel.close()
-	_toggle_info.interaction_zone = turret.interaction_range
 
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
-	turret.died.connect(_on_turret_died)
+	turret.died.connect(_on_turret_removed)
+	turret.sold.connect(_on_turret_sold)
 
 func _process(_delta: float) -> void:
 	if not is_instance_valid(_turret):
@@ -44,17 +35,14 @@ func _process(_delta: float) -> void:
 	canvas_layer.offset = _turret.get_viewport().get_canvas_transform() * _turret.global_position
 
 func _on_build_phase_started() -> void:
-	_build_phase = true
-	toggle_menu.enabled = true
-	if _turret.interaction_range.is_player_in_range():
-		toggle_menu.open()
+	panel.set_actions_visible(true)
 
 func _on_combat_phase_started(_wave: int) -> void:
-	_build_phase = false
-	toggle_menu.close()
-	toggle_menu.enabled = false
+	panel.set_actions_visible(false)
 
-func _on_turret_died() -> void:
+func _on_turret_sold(_refund: float) -> void:
+	_on_turret_removed()
+
+func _on_turret_removed() -> void:
 	toggle_menu.close()
-	_toggle_info.close()
 	queue_free()
