@@ -1,19 +1,30 @@
 extends TextureButton
 class_name HoldButton
 
-## Press and hold for hold_duration to emit hold_completed. Progress is shown by the child ProgressFill.
+## Press and hold for hold_duration to emit hold_completed.
+## Progress is drawn by the hold_progress shader on progress_target, masked to its opaque pixels.
 ## Releasing, disabling, or hiding the button cancels the hold; a new press is required to repeat.
 
 signal hold_completed
 
-@export_range(0.1, 5.0, 0.05) var hold_duration := 0.8
+const PROGRESS_SHADER := preload("res://shaders/hold_progress.gdshader")
 
-@onready var progress_fill: Control = $ProgressFill
+@export_range(0.1, 5.0, 0.05) var hold_duration := 0.8
+@export var progress_target: Control
+@export var fill_color := Color(1.0, 1.0, 1.0, 0.35)
 
 var _holding := false
 var _progress := 0.0
+var _material: ShaderMaterial
 
 func _ready() -> void:
+	if not progress_target:
+		push_error("%s: HoldButton requires progress_target" % name)
+		return
+	_material = ShaderMaterial.new()
+	_material.shader = PROGRESS_SHADER
+	_material.set_shader_parameter("fill_color", fill_color)
+	progress_target.material = _material
 	button_down.connect(_on_button_down)
 	button_up.connect(_cancel_hold)
 	_set_progress(0.0)
@@ -39,4 +50,5 @@ func _cancel_hold() -> void:
 
 func _set_progress(value: float) -> void:
 	_progress = clampf(value, 0.0, 1.0)
-	progress_fill.anchor_right = _progress
+	_material.set_shader_parameter("rect_size", progress_target.size)
+	_material.set_shader_parameter("progress", _progress)
