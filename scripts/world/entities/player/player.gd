@@ -52,6 +52,7 @@ var _base_velocity := Vector2.ZERO
 
 const MIN_MOVE_SPEED := 10.0
 const PLAYER_BODY_LAYER := 2 ## Matches project.godot 2d_physics layer_2 ("PlayerBody")
+const TURRET_BODY_LAYER := 6 ## Matches project.godot 2d_physics layer_6 ("TurretBody")
 
 var _conveyor_velocity := Vector2.ZERO
 var _crunch_tint_tween: Tween
@@ -232,10 +233,14 @@ func _handle_dash_started(direction: Vector2) -> void:
 	camera_shake_manager.shake_screen(0.15, 0.15)
 
 ## Invincible players leave the PlayerBody layer so enemy hitboxes (e.g. Kamikazer explosions) can't trigger on them.
+## Dashing also ignores turret bodies, matching how the player already passes through enemies.
 func _sync_body_layer() -> void:
 	var should_collide := not _is_invincible()
 	if get_collision_layer_value(PLAYER_BODY_LAYER) != should_collide:
 		set_collision_layer_value(PLAYER_BODY_LAYER, should_collide)
+	var should_hit_turrets := not dash.is_dashing()
+	if get_collision_mask_value(TURRET_BODY_LAYER) != should_hit_turrets:
+		set_collision_mask_value(TURRET_BODY_LAYER, should_hit_turrets)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if _is_dead or _is_invincible():

@@ -539,7 +539,6 @@ energy = 0.3
 texture = SubResource("GradientTexture2D_vtaks")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
-visible = false
 
 [node name="SlowMotionOverlay" type="ColorRect" parent="UI" unique_id=238059335]
 anchors_preset = 15
