@@ -58,6 +58,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 
 **What you do:**
 - Dodge incoming projectiles (PRIMARY SKILL)
+- Dash: the player is invincible from the moment dash is pressed until the dash ends. A quick tap (released within 0.15 s) is a normal 120 px dash. Holding longer charges it: time slows (0.5×, still steering), the player glows white, and releasing dashes in the movement direction (or facing direction when standing still). Distance grows linearly from 120 px to 300 px at 0.5 s after the press (real time, auto-fires). No shooting or activating Crunch Time while the button is held.
 - Shoot enemies freely (0.25s cooldown, 0 capacity cost)
 - Activate Crunch Time when capacity % allows
 - Manage capacity by surviving hits

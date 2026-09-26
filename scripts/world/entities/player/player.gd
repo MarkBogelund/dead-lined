@@ -8,7 +8,7 @@ signal died
 @onready var shop_manager: ShopManager = %ShopManager
 @onready var game_over_manager: GameOverManager = %GameOverManager
 @onready var camera_shake_manager: CameraShakeManager = %CameraShakeManager
-@onready var freeze_frame_manager: FreezeFrameManager = %FreezeFrameManager
+@onready var time_scale_manager: TimeScaleManager = %TimeScaleManager
 
 @onready var capacity: CapacityComponent = $CapacityComponent
 @onready var knockback: KnockbackComponent = $KnockbackComponent
@@ -23,10 +23,15 @@ signal died
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var camera: Camera2D = $"Camera2D"
+@onready var camera: GameCamera = $"Camera2D"
 
 @export var stats: PlayerStats
 @export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
+
+@export_group("Dash Charge Presentation")
+@export_range(1.0, 2.0, 0.01) var dash_charge_zoom := 1.15
+@export_range(0.0, 1.0, 0.01) var dash_charge_zoom_in_duration := 0.2
+@export_range(0.0, 1.0, 0.01) var dash_charge_zoom_out_duration := 0.15
 
 var damage_knockback_force := 200.0
 var damage_freeze_duration := 0.1
@@ -34,6 +39,9 @@ var damage_screen_shake_intensity := 0.2
 var death_knockback_force := 400.0
 var death_freeze_duration := 0.15
 var death_screen_shake_intensity := 0.35
+var dash_charge_time_scale := 0.5
+
+const DASH_CHARGE_SOURCE := &"dash_charge"
 
 enum MoveState {NORMAL, DASHING, KNOCKED, FROZEN}
 
@@ -67,7 +75,8 @@ func _initialize() -> void:
 		push_error("%s requires a PlayerStats resource" % name)
 		return
 	movement.initialize(stats.speed, stats.acceleration, stats.friction)
-	dash.initialize(stats.dash_distance, stats.dash_duration, stats.dash_cooldown)
+	dash.initialize(stats.dash_min_distance, stats.dash_max_distance, stats.dash_speed, stats.dash_charge_delay, stats.dash_max_charge_time, stats.dash_cooldown)
+	dash_charge_time_scale = stats.dash_charge_time_scale
 	melee_weapon.initialize(stats.slash_damage, stats.slash_knockback, stats.slash_self_knockback, stats.slash_radius, stats.slash_arc_angle, stats.slash_duration, stats.slash_cooldown)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
 	capacity.initialize(stats.initial_capacity, stats.max_capacity, stats.crunch_threshold, stats.threshold_step, stats.min_crunch_threshold)
@@ -92,6 +101,8 @@ func _setup_animations() -> void:
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("move", 1, false)
 	animation.configure_animation("slash", 2, true)
+	animation.configure_animation("shoot", 2, true)
+	animation.configure_animation("dash_charge", 2, true)
 	animation.configure_animation("dash", 2, true)
 	animation.configure_animation("take_damage", 3, true)
 	animation.configure_animation("die", 4, true)
@@ -110,7 +121,10 @@ func _connect_signals() -> void:
 	shop_manager.turret_sold.connect(_on_turret_sold)
 	wave_manager.build_phase_started.connect(func() -> void: crunch_time.set_build_phase(true))
 	wave_manager.combat_phase_started.connect(func(_i: int) -> void: crunch_time.set_build_phase(false))
-	dash.dash_ended.connect(_on_dash_ended)
+	dash.charge_started.connect(_on_dash_charge_started)
+	dash.charge_maxed.connect(_release_dash)
+	dash.charge_ended.connect(_on_dash_charge_ended)
+	dash.dash_started.connect(_handle_dash_started)
 
 func _apply_crunch_tint(target_tint: Color) -> void:
 	if is_instance_valid(animated_sprite):
@@ -121,6 +135,7 @@ func _apply_crunch_tint(target_tint: Color) -> void:
 		_crunch_tint_tween.tween_property(animated_sprite, "self_modulate", target_tint, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _physics_process(delta: float) -> void:
+	_sync_body_layer()
 	_process_movement(delta)
 	_process_locomotion()
 	if not _is_dead:
@@ -139,7 +154,7 @@ func _process_movement(delta: float) -> void:
 	match _get_move_state():
 		MoveState.DASHING:
 			_base_velocity = Vector2.ZERO
-			velocity = dash.get_dash_velocity()
+			velocity = dash.step_dash(delta)
 			_add_conveyor_velocity()
 			move_and_slide()
 		MoveState.KNOCKED:
@@ -157,7 +172,7 @@ func _process_movement(delta: float) -> void:
 			move_and_slide()
 
 func _process_locomotion() -> void:
-	if _is_dead:
+	if _is_dead or dash.is_charging():
 		return
 	var is_moving := velocity.length() > MIN_MOVE_SPEED
 	animation.play_animation("move" if is_moving else "idle")
@@ -165,11 +180,11 @@ func _process_locomotion() -> void:
 		_set_facing(velocity.x)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("crunch_time"):
+	if event.is_action_pressed("crunch_time") and (crunch_time.is_crunch_time_active() or not dash.is_holding()):
 		var can_activate := capacity.can_crunch_time() and capacity.can_afford(crunch_time.activation_cost)
 		crunch_time.toggle(can_activate)
 	
-	if event.is_action_pressed("shoot"):
+	if event.is_action_pressed("shoot") and not dash.is_holding():
 		var mouse_pos := get_global_mouse_position()
 		if crunch_time.is_crunch_time_active():
 			if melee_weapon.try_slash(mouse_pos):
@@ -178,12 +193,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			aiming.aim_at(mouse_pos, 0.0)
 			if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-				animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
+				animation.play_animation("shoot")
 	
 	if event.is_action_pressed("dash"):
-		var dash_dir := _get_dash_direction()
-		if dash.try_dash(dash_dir):
-			_handle_dash_started(dash_dir)
+		dash.try_press()
+	elif event.is_action_released("dash"):
+		_release_dash()
 
 func _set_facing(dir_x: float) -> void:
 	if dir_x == 0.0:
@@ -196,18 +211,36 @@ func _get_dash_direction() -> Vector2:
 		return velocity.normalized()
 	return Vector2.RIGHT if _facing_right else Vector2.LEFT
 
+func _release_dash() -> void:
+	dash.release(_get_dash_direction())
+
+func _on_dash_charge_started() -> void:
+	time_scale_manager.request(DASH_CHARGE_SOURCE, dash_charge_time_scale)
+	camera.set_zoom_factor(DASH_CHARGE_SOURCE, dash_charge_zoom, dash_charge_zoom_in_duration, true)
+	# Scaled so the white ramp completes in dash.get_charge_duration() real seconds despite slow-motion.
+	var length := animation.get_animation("dash_charge").length
+	animation.play_animation("dash_charge", -1, length / (dash.get_charge_duration() * dash_charge_time_scale))
+
+func _on_dash_charge_ended() -> void:
+	time_scale_manager.release(DASH_CHARGE_SOURCE)
+	camera.set_zoom_factor(DASH_CHARGE_SOURCE, 1.0, dash_charge_zoom_out_duration, true)
+	animation.stop_animation("dash_charge")
+
 func _handle_dash_started(direction: Vector2) -> void:
 	_set_facing(direction.x)
 	animation.play_animation("dash")
 	camera_shake_manager.shake_screen(0.15, 0.15)
-	set_collision_layer_value(PLAYER_BODY_LAYER, false)
 
-func _on_dash_ended() -> void:
-	set_collision_layer_value(PLAYER_BODY_LAYER, true)
+## Invincible players leave the PlayerBody layer so enemy hitboxes (e.g. Kamikazer explosions) can't trigger on them.
+func _sync_body_layer() -> void:
+	var should_collide := not _is_invincible()
+	if get_collision_layer_value(PLAYER_BODY_LAYER) != should_collide:
+		set_collision_layer_value(PLAYER_BODY_LAYER, should_collide)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if _is_dead or _is_invincible():
 		return
+	dash.cancel_charge()
 	dash.cancel_dash()
 	capacity.spend(float(amount))
 	if capacity.current_capacity <= 0.0:
@@ -223,7 +256,7 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	knockback.apply(from_position, knockback_force)
 	
 	# Impact effects
-	freeze_frame_manager.freeze(damage_freeze_duration)
+	time_scale_manager.freeze(damage_freeze_duration)
 	camera_shake_manager.shake_screen(damage_screen_shake_intensity, 0.3)
 	
 	# Animation
@@ -239,7 +272,7 @@ func _handle_death(from_position: Vector2) -> void:
 	knockback.apply(from_position, death_knockback_force)
 	
 	# Stronger impact effects on death
-	freeze_frame_manager.freeze(death_freeze_duration)
+	time_scale_manager.freeze(death_freeze_duration)
 	camera_shake_manager.shake_screen(death_screen_shake_intensity, 0.3)
 	
 	# Disable controls

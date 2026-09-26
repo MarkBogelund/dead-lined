@@ -44,12 +44,16 @@ Four layers, signals flow **outward/upward**, direct calls flow **downward** to 
 
 ```text
 UI          → reacts to signals, never mutates gameplay state directly
-Systems     → WaveManager, ShopManager, ScoreManager, GameOverManager (scene-local, not autoloads)
+Systems     → WaveManager, ShopManager, ScoreManager, GameOverManager, TimeScaleManager (scene-local, not autoloads)
 World       → Player / enemies / turrets — orchestrator scripts composing components
 Data        → Resource (.tres) subclasses — stats, never hold logic
 ```
 
 Only one autoload exists: `MenuManager` ([scripts/systems/menu_manager.gd](scripts/systems/menu_manager.gd)). Everything else is scene-local under [scenes/game.tscn](scenes/game.tscn), because this is a single-session game — a global signal bus for everything would add indirection without benefit here.
+
+`TimeScaleManager` ([scripts/systems/time_scale_manager.gd](scripts/systems/time_scale_manager.gd)) is the only writer of `Engine.time_scale`. Callers `request(source, scale)` / `release(source)` by `StringName`; the slowest active request wins, and `freeze(duration)` is a timed request at 0. This lets hitstop and dash slow-motion overlap without one resetting the other. It resets time to 1.0 when it leaves the tree.
+
+`GameCamera` ([scripts/world/game_camera.gd](scripts/world/game_camera.gd), on the player's `Camera2D` in `game.tscn`) owns zoom the same way: `set_zoom_factor(source, factor, duration, ignore_time_scale)` tweens a named factor that multiplies onto the base zoom (`&"crunch_time"` from `CrunchTimeComponent`, `&"dash_charge"` from `Player`), so the effects stack instead of overwriting each other. `SlowMotionOverlay` ([scripts/ui/slow_motion_overlay.gd](scripts/ui/slow_motion_overlay.gd), first child of `UI` so the HUD draws above it) listens to `player.dash.charge_started` / `charge_ended` and fades [shaders/slow_motion.gdshader](shaders/slow_motion.gdshader) (screen-texture desaturation) in and out on real time; it hides itself when faded out.
 
 ### Component ownership
 
@@ -59,7 +63,9 @@ Each entity (Player, Chaser, Stalker, Turret, …) is an **orchestrator**: it co
 - expose it through methods (`spend()`, `take_damage()`, `initialize()`) and signals (`health_changed`, `capacity_changed`)
 - never reach into siblings or the parent scene
 
-Fallible actions return `bool` (`try_shoot()`, `try_slash()`, `try_dash()`) — the caller decides what happens on success (animation, sound, camera shake).
+Fallible actions return `bool` (`try_shoot()`, `try_slash()`, `try_press()`) — the caller decides what happens on success (animation, sound, camera shake).
+
+The player dash is charged: `DashComponent` runs `IDLE → HOLDING → CHARGING → DASHING → COOLDOWN`. `Player` calls `try_press()` on press and `release(direction)` on release or when `charge_maxed` fires. Releasing within `charge_delay` (HOLDING) is a plain `min_distance` dash with no slow-motion; past it the component enters CHARGING and emits `charge_started`. Both timers count real time (they divide out `Engine.time_scale`); `max_charge_time` is measured from the press. Distance is `lerp(min_distance, max_distance, charge_ratio)`; the dash starts at `dash_speed` and eases out, and `step_dash(delta)` integrates the exact displacement per physics step so the tuned distance is what the player travels. The component only emits `charge_started` / `charge_ended`; `Player` reacts by requesting/releasing `&"dash_charge"` on `TimeScaleManager` and playing `dash_charge` (slash frame 0, white `modulate` ramp, `WindupParticles`), speed-scaled so the ramp finishes at full charge; locomotion animations are skipped while charging. While the player is invincible (dash held or dashing, or Crunch Time), `Player._sync_body_layer()` removes it from the `PlayerBody` physics layer each physics frame, so enemy hitboxes and projectiles pass through instead of triggering (e.g. Kamikazer explosions). All values come from the `PlayerStats` Dash group.
 
 Enemies share `EnemyBase` for health, damage/death handling, spawn intro state, conveyor velocity, and common components. Turrets inherit the reusable [turret_base.tscn](scenes/world/entities/turret_base.tscn) template for health, repair, upgrades, phase lifecycle, interaction UI, collision, particles, animation, and damage/death handling. `TurretBase` also initializes the common health bar and `TurretHUD`, whose upgrade panel owns the shared upgrade workflow. The base owns all common node names as direct children, including `Visuals`; derived scenes must put their body artwork below `Visuals` so inherited reset, repair, hit, and death animations can address the whole visual tree. Seeker and Shockwaver retain only their behavior-specific components and visuals, while Seeker Strong inherits Seeker and overrides only its stats resource. Shared turret balancing fields live in `TurretStats`; concrete stats resources add behavior-specific values.
 
@@ -164,7 +170,7 @@ Not worth automating: movement feel, animation timing, camera shake, turret-plac
 
 ```text
 scenes/game.tscn          main scene: Systems / World / UI subtrees
-scripts/systems/          WaveManager, ShopManager, ScoreManager, GameOverManager, TurretPlacer
+scripts/systems/          WaveManager, ShopManager, ScoreManager, GameOverManager, TurretPlacer, TimeScaleManager
 scripts/world/entities/   Player, enemies (Chaser/Stalker/Kamikazer), Turret, shared components
 scripts/data/             Resource subclasses (stats)
 resources/                .tres stat variants
