@@ -27,11 +27,11 @@ signal crunch_time_ended(buffs: Dictionary, duration: float)
 var is_active := false
 var _is_build_phase := true
 var _active_duration: float = 0.0
-var _camera: Camera2D
-var _camera_zoom_tween: Tween
-var _camera_zoom_before_activation := Vector2.ONE
+var _camera: GameCamera
 
-func initialize(p_activation_cost: float, p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float, p_camera: Camera2D) -> void:
+const CAMERA_ZOOM_SOURCE := &"crunch_time"
+
+func initialize(p_activation_cost: float, p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float, p_camera: GameCamera) -> void:
 	activation_cost = p_activation_cost
 	duration = p_duration
 	damage_multiplier = p_damage
@@ -66,11 +66,7 @@ func activate() -> void:
 	
 	is_active = true
 	_active_duration = 0.0
-	if _camera:
-		if _camera_zoom_tween:
-			_camera_zoom_tween.kill()
-		_camera_zoom_before_activation = _camera.zoom
-	_apply_camera_zoom(effects.camera_zoom_active if effects else Vector2(1.75, 1.75))
+	_apply_camera_zoom(effects.camera_zoom_active.x if effects else 1.75)
 		
 	# Build buff dictionary and emit for Player to apply
 	var buffs := {
@@ -89,7 +85,7 @@ func deactivate() -> void:
 		return # Already inactive
 	
 	is_active = false
-	_apply_camera_zoom(_camera_zoom_before_activation)
+	_apply_camera_zoom(1.0)
 		
 	# Build buff dictionary and emit for Player to reverse buffs
 	var buffs := {
@@ -106,11 +102,7 @@ func deactivate() -> void:
 func is_crunch_time_active() -> bool:
 	return is_active
 
-func _apply_camera_zoom(target_zoom: Vector2) -> void:
+func _apply_camera_zoom(factor: float) -> void:
 	if not _camera:
 		return
-	if _camera_zoom_tween:
-		_camera_zoom_tween.kill()
-	_camera_zoom_tween = create_tween()
-	var zoom_duration := effects.camera_zoom_duration if effects else 0.35
-	_camera_zoom_tween.tween_property(_camera, "zoom", target_zoom, zoom_duration).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_camera.set_zoom_factor(CAMERA_ZOOM_SOURCE, factor, effects.camera_zoom_duration if effects else 0.35)

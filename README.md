@@ -53,6 +53,8 @@ Only one autoload exists: `MenuManager` ([scripts/systems/menu_manager.gd](scrip
 
 `TimeScaleManager` ([scripts/systems/time_scale_manager.gd](scripts/systems/time_scale_manager.gd)) is the only writer of `Engine.time_scale`. Callers `request(source, scale)` / `release(source)` by `StringName`; the slowest active request wins, and `freeze(duration)` is a timed request at 0. This lets hitstop and dash slow-motion overlap without one resetting the other. It resets time to 1.0 when it leaves the tree.
 
+`GameCamera` ([scripts/world/game_camera.gd](scripts/world/game_camera.gd), on the player's `Camera2D` in `game.tscn`) owns zoom the same way: `set_zoom_factor(source, factor, duration, ignore_time_scale)` tweens a named factor that multiplies onto the base zoom (`&"crunch_time"` from `CrunchTimeComponent`, `&"dash_charge"` from `Player`), so the effects stack instead of overwriting each other. `SlowMotionOverlay` ([scripts/ui/slow_motion_overlay.gd](scripts/ui/slow_motion_overlay.gd), first child of `UI` so the HUD draws above it) listens to `player.dash.charge_started` / `charge_ended` and fades [shaders/slow_motion.gdshader](shaders/slow_motion.gdshader) (screen-texture desaturation) in and out on real time; it hides itself when faded out.
+
 ### Component ownership
 
 Each entity (Player, Chaser, Stalker, Turret, …) is an **orchestrator**: it composes child component nodes and wires their signals together in `_ready()` → `_connect_signals()`. Components:

@@ -23,10 +23,15 @@ signal died
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var camera: Camera2D = $"Camera2D"
+@onready var camera: GameCamera = $"Camera2D"
 
 @export var stats: PlayerStats
 @export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
+
+@export_group("Dash Charge Presentation")
+@export_range(1.0, 2.0, 0.01) var dash_charge_zoom := 1.15
+@export_range(0.0, 1.0, 0.01) var dash_charge_zoom_in_duration := 0.2
+@export_range(0.0, 1.0, 0.01) var dash_charge_zoom_out_duration := 0.15
 
 var damage_knockback_force := 200.0
 var damage_freeze_duration := 0.1
@@ -36,7 +41,7 @@ var death_freeze_duration := 0.15
 var death_screen_shake_intensity := 0.35
 var dash_charge_time_scale := 0.5
 
-const DASH_CHARGE_TIME_SOURCE := &"dash_charge"
+const DASH_CHARGE_SOURCE := &"dash_charge"
 
 enum MoveState {NORMAL, DASHING, KNOCKED, FROZEN}
 
@@ -209,13 +214,15 @@ func _release_dash() -> void:
 	dash.release(_get_dash_direction())
 
 func _on_dash_charge_started() -> void:
-	time_scale_manager.request(DASH_CHARGE_TIME_SOURCE, dash_charge_time_scale)
+	time_scale_manager.request(DASH_CHARGE_SOURCE, dash_charge_time_scale)
+	camera.set_zoom_factor(DASH_CHARGE_SOURCE, dash_charge_zoom, dash_charge_zoom_in_duration, true)
 	# Scaled so the white ramp completes in dash.get_charge_duration() real seconds despite slow-motion.
 	var length := animation.get_animation("dash_charge").length
 	animation.play_animation("dash_charge", -1, length / (dash.get_charge_duration() * dash_charge_time_scale))
 
 func _on_dash_charge_ended() -> void:
-	time_scale_manager.release(DASH_CHARGE_TIME_SOURCE)
+	time_scale_manager.release(DASH_CHARGE_SOURCE)
+	camera.set_zoom_factor(DASH_CHARGE_SOURCE, 1.0, dash_charge_zoom_out_duration, true)
 	animation.stop_animation("dash_charge")
 
 func _handle_dash_started(direction: Vector2) -> void:

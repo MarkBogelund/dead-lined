@@ -28,6 +28,8 @@
 [ext_resource type="PackedScene" uid="uid://c3pausemenu01" path="res://scenes/ui/pause_menu.tscn" id="27_qnb83"]
 [ext_resource type="Resource" uid="uid://dfqqng3tkvdcl" path="res://resources/spawner/conveyor_settings.tres" id="28_conveyor_settings"]
 [ext_resource type="Resource" uid="uid://cals7t00fcr3i" path="res://resources/shop/shockwaver_shop_details.tres" id="29_shockwaver_shop"]
+[ext_resource type="Script" uid="uid://dwuvwmcnb0y5n" path="res://scripts/world/game_camera.gd" id="30_game_camera"]
+[ext_resource type="Script" uid="uid://b6dgq5hs8g2d7" path="res://scripts/ui/slow_motion_overlay.gd" id="31_slowmo"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -484,6 +486,7 @@ limit_right = 360
 limit_bottom = 250
 limit_smoothed = true
 position_smoothing_enabled = true
+script = ExtResource("30_game_camera")
 
 [node name="EnemySpawnerNorthwest" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
 position = Vector2(-296, -264)
@@ -506,6 +509,17 @@ energy = 0.3
 texture = SubResource("GradientTexture2D_vtaks")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1148117081]
+
+[node name="SlowMotionOverlay" type="ColorRect" parent="UI" unique_id=238059335]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("31_slowmo")
+max_desaturation = 0.3
+fade_in_duration = 0.1
 
 [node name="HUD" parent="UI" unique_id=1136343478 instance=ExtResource("1_kvpfn")]
 metadata/_edit_lock_ = true
