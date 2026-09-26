@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1_profile")
-high_priority_group = &"enemies"
-low_priority_group = &"player"
-cross_priority_margin = 42.0
-cross_priority_return_margin = 42.0
-same_priority_margin = 42.0
+primary_group = &"enemies"
+secondary_group = &"player"
+switch_to_secondary_margin = 42.0
+return_to_primary_margin = 36.0
+retarget_margin = 36.0

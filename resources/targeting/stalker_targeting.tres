@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_profile")
-low_priority_group = &"turrets"
-lock_radius = 80.0
+secondary_group = &"turrets"
+primary_lock_radius = 80.0

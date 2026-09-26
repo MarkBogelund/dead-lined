@@ -4,9 +4,8 @@
 
 [resource]
 script = ExtResource("1_profile")
-low_priority_group = &"turrets"
-lock_radius = 54.0
-cross_priority_margin = 36.0
-cross_priority_return_margin = 42.0
-same_priority_margin = 36.0
-debug_draw = true
+secondary_group = &"turrets"
+primary_lock_radius = 100.0
+switch_to_secondary_margin = 48.0
+return_to_primary_margin = 24.0
+retarget_margin = 36.0

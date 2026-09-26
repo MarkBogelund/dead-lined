@@ -1,21 +1,40 @@
 extends Resource
 class_name TargetingProfile
 
-## Two-tier target selection rules for TargetingComponent. Distances are straight-line pixels.
+## Two-group target selection rules for TargetingComponent. Distances are straight-line pixels.
 
-## Group preferred by default (enemies: "player", turrets: "enemies"). Debug: blue circle = distance to nearest; blue line = targeted.
-@export var high_priority_group: StringName = &"player"
-## Fallback group; leave empty to only ever target the high-priority group. Debug: orange circle = distance to nearest; orange line = targeted.
-@export var low_priority_group: StringName = &""
-## A high-priority target within this distance always wins. -1 disables the lock. Debug: yellow circle.
-@export var lock_radius: float = -1.0
-## Switch to the low-priority target when dist(high) > dist(low) + this. Debug: red circle (high target outside it -> low target chosen).
-@export var cross_priority_margin: float = 20.0
-## While on the low-priority target, switch back when dist(high) < dist(low) + this. Keep <= cross_priority_margin. Debug: red circle while on the low target.
-@export var cross_priority_return_margin: float = 0.0
-## A same-priority challenger replaces the current target only when dist(challenger) + this < dist(current). Debug: green circle (challenger inside it takes over).
-@export var same_priority_margin: float = 16.0
+## The group this entity prefers to target (enemies: player, turrets: enemies). Debug: blue.
+@export var primary_group: StringName = &"player"
+## The fallback group, used when the primary target is clearly farther away. Leave empty to never use one. Debug: orange.
+@export var secondary_group: StringName = &""
+## A primary target this close is always chosen, no matter where the secondary target is. -1 turns it off. Debug: yellow.
+@export var primary_lock_radius: float = -1.0
+## How much farther than the secondary target the primary target must be before the entity switches away from it. Debug: red.
+@export var switch_to_secondary_margin: float = 20.0
+## How much farther than the secondary target the primary target may still be when the entity switches back to it.
+## Keep it at or below the switch margin so the entity doesn't flip back and forth. Debug: purple.
+@export var return_to_primary_margin: float = 0.0
+## How much closer another target in the same group must be before the entity drops its current target for it. Debug: green.
+@export var retarget_margin: float = 16.0
 
 @export_group("Debug")
-## Draws the decision distances on the ground around every entity using this profile. White circle = the component's max_range.
-@export var debug_draw := false
+## White circle: the component's max range.
+@export var debug_max_range := false
+## Yellow circle: the primary lock radius.
+@export var debug_lock_radius := false
+## Blue circle: distance to the nearest primary target.
+@export var debug_primary_distance := false
+## Orange circle: distance to the nearest secondary target.
+@export var debug_secondary_distance := false
+## Red circle: the primary target leaving this circle makes the entity switch to the secondary target.
+@export var debug_switch_ring := false
+## Purple circle: the primary target entering this circle brings the entity back to it.
+@export var debug_return_ring := false
+## Green circle: another same-group target entering this circle takes over as the target.
+@export var debug_retarget_ring := false
+## Line to the current target, blue when primary and orange when secondary.
+@export var debug_target_line := false
+
+func is_debug_enabled() -> bool:
+	return debug_max_range or debug_lock_radius or debug_primary_distance or debug_secondary_distance \
+		or debug_switch_ring or debug_return_ring or debug_retarget_ring or debug_target_line
