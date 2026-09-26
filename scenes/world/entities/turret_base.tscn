@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="11_flash"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="12_hit"]
 [ext_resource type="Material" uid="uid://dmgkx87u0f2qi" path="res://materials/windup_particle_process_material.tres" id="14_6mmhf"]
-[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/hit_flash.gdshader" id="14_hit_flash"]
+[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="14_hit_flash"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 9.0
@@ -231,7 +231,7 @@ z_index = 1
 collision_layer = 32
 collision_mask = 19
 script = ExtResource("1_base")
-hit_flash_shader = ExtResource("14_hit_flash")
+surface_shader = ExtResource("14_hit_flash")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=190497504]
 shape = SubResource("BodyShape")

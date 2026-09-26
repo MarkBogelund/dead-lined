@@ -34,7 +34,8 @@ var _hit_flash_tween: Tween
 
 @export_group("Presentation")
 @export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
-@export var hit_flash_shader: Shader
+## turret_surface.gdshader: combines the hit flash and gold shine effects (see shaders/include/).
+@export var surface_shader: Shader
 @export_range(0.05, 2.0, 0.05) var sell_fade_duration := 0.25
 
 func _get_body_visual() -> CanvasItem:
@@ -45,7 +46,7 @@ func _get_body_visual() -> CanvasItem:
 
 func _ready() -> void:
 	add_to_group("turrets")
-	_configure_hit_flash_materials()
+	_configure_surface_materials()
 	health_ui.setup(health)
 	_configure_base_animations()
 	if wave_manager:
@@ -143,6 +144,7 @@ func _on_upgraded(upgrade: TurretUpgrade) -> void:
 		_on_maxed()
 
 func _on_maxed() -> void:
+	_set_gold_shine(true)
 	if _stops_targeting_player_when_maxed:
 		_stop_targeting_player()
 
@@ -222,45 +224,50 @@ func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> v
 	else:
 		_play_hit_flash()
 
+## Hit flash effect: owns only the flash_* uniforms.
 func _play_hit_flash() -> void:
-	var flash_materials := _get_hit_flash_materials()
-	if flash_materials.is_empty():
+	var surface_materials := _get_surface_materials()
+	if surface_materials.is_empty():
 		return
 	if _hit_flash_tween:
 		_hit_flash_tween.kill()
-	for shader_material: ShaderMaterial in flash_materials:
+	for shader_material: ShaderMaterial in surface_materials:
 		shader_material.set_shader_parameter("flash_amount", 1.0)
 	_hit_flash_tween = create_tween()
-	for shader_material: ShaderMaterial in flash_materials:
+	for shader_material: ShaderMaterial in surface_materials:
 		_hit_flash_tween.parallel().tween_property(shader_material, "shader_parameter/flash_amount", 0.0, hit_flash_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
-func _configure_hit_flash_materials() -> void:
-	if not hit_flash_shader:
-		push_error("TurretBase requires a hit_flash_shader to flash turret visuals when damaged")
-		return
-	_assign_hit_flash_material(body_visual)
-	_assign_hit_flash_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem)
+## Gold shine effect: owns only the gold_* / shine_* / sparkle_* uniforms.
+func _set_gold_shine(enabled_shine: bool) -> void:
+	for shader_material: ShaderMaterial in _get_surface_materials():
+		shader_material.set_shader_parameter("gold_amount", 1.0 if enabled_shine else 0.0)
 
-func _assign_hit_flash_material(visual: CanvasItem) -> void:
+func _configure_surface_materials() -> void:
+	if not surface_shader:
+		push_error("TurretBase requires a surface_shader for hit flash and gold shine")
+		return
+	_assign_surface_material(body_visual)
+	_assign_surface_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem)
+
+func _assign_surface_material(visual: CanvasItem) -> void:
 	if not visual:
 		return
 	var material := visual.material as ShaderMaterial
 	if not material:
 		material = ShaderMaterial.new()
 	visual.material = material
-	material.shader = hit_flash_shader
-	material.set_shader_parameter("flash_amount", 0.0)
+	material.shader = surface_shader
 
-func _get_hit_flash_materials() -> Array[ShaderMaterial]:
-	var flash_materials: Array[ShaderMaterial] = []
-	_add_hit_flash_material(body_visual, flash_materials)
-	_add_hit_flash_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem, flash_materials)
-	return flash_materials
+func _get_surface_materials() -> Array[ShaderMaterial]:
+	var surface_materials: Array[ShaderMaterial] = []
+	_add_surface_material(body_visual, surface_materials)
+	_add_surface_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem, surface_materials)
+	return surface_materials
 
-func _add_hit_flash_material(visual: CanvasItem, flash_materials: Array[ShaderMaterial]) -> void:
+func _add_surface_material(visual: CanvasItem, surface_materials: Array[ShaderMaterial]) -> void:
 	var shader_material := visual.material as ShaderMaterial if visual else null
 	if shader_material:
-		flash_materials.append(shader_material)
+		surface_materials.append(shader_material)
 
 func _before_death_animation() -> void:
 	pass
