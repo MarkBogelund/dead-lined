@@ -64,6 +64,9 @@ func _process(delta: float) -> void:
 		_begin_telegraph()
 
 func _begin_telegraph() -> void:
+	# A cooldown shorter than the shoot animation would otherwise latch _telegraphing without firing.
+	if animation.get_current_anim_name() == "shoot" and animation.is_playing():
+		return
 	if not animation.play_animation("shoot"):
 		return
 	_telegraphing = true
@@ -79,12 +82,12 @@ func _before_death_animation() -> void:
 func get_damage_value() -> int:
 	return shoot.projectile_damage
 
-func apply_damage_upgrade(amount: int) -> void:
-	shoot.projectile_damage += amount
+func set_damage(value: int) -> void:
+	shoot.projectile_damage = value
 
-func apply_range_upgrade(amount: float) -> void:
-	targeting.max_range = maxf(0.0, targeting.max_range + amount)
-	range_indicator.initialize(targeting.max_range)
+func set_attack_range(value: float) -> void:
+	targeting.max_range = value
+	range_indicator.initialize(value)
 
-func apply_cooldown_upgrade(amount: float) -> void:
-	shoot.shoot_cooldown = maxf(MIN_ATTACK_COOLDOWN, shoot.shoot_cooldown + amount)
+func set_attack_cooldown(value: float) -> void:
+	shoot.shoot_cooldown = value

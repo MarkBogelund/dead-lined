@@ -24,8 +24,8 @@ signal sold(refund: float)
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 
 var enabled := true
-## Floor for attack cooldowns so negative cooldown upgrades can't reach zero.
-const MIN_ATTACK_COOLDOWN := 0.05
+## Floor for attack cooldowns; upgrades below it are clamped with a warning.
+const MIN_ATTACK_COOLDOWN := 0.5
 var total_invested := 0.0
 var _active := false
 var _repairing := false
@@ -137,14 +137,16 @@ func _can_manage() -> bool:
 	return not _selling and not is_dead() and (wave_manager == null or wave_manager.is_build_phase())
 
 func _on_upgraded(upgrade: TurretUpgrade) -> void:
-	if upgrade.max_health_bonus != 0:
-		health.increase_max_health(upgrade.max_health_bonus)
-	if upgrade.damage_bonus != 0:
-		apply_damage_upgrade(upgrade.damage_bonus)
-	if not is_zero_approx(upgrade.range_bonus):
-		apply_range_upgrade(upgrade.range_bonus)
-	if not is_zero_approx(upgrade.cooldown_bonus):
-		apply_cooldown_upgrade(upgrade.cooldown_bonus)
+	if upgrade.max_health >= 0:
+		health.set_max_health(upgrade.max_health)
+	if upgrade.damage >= 0:
+		set_damage(upgrade.damage)
+	if upgrade.attack_range >= 0.0:
+		set_attack_range(upgrade.attack_range)
+	if upgrade.attack_cooldown >= 0.0:
+		if upgrade.attack_cooldown < MIN_ATTACK_COOLDOWN:
+			push_warning("%s level %d attack_cooldown %.2f is below MIN_ATTACK_COOLDOWN %.2f; clamping" % [name, upgrader.level, upgrade.attack_cooldown, MIN_ATTACK_COOLDOWN])
+		set_attack_cooldown(maxf(MIN_ATTACK_COOLDOWN, upgrade.attack_cooldown))
 	health_ui.set_level(upgrader.level)
 	if upgrader.is_max_level():
 		_on_maxed()
@@ -290,14 +292,14 @@ func get_damage_value() -> int:
 	push_warning("TurretBase.get_damage_value() should be overridden")
 	return 0
 
-func apply_damage_upgrade(_amount: int) -> void:
-	push_warning("TurretBase.apply_damage_upgrade() should be overridden")
+func set_damage(_value: int) -> void:
+	push_warning("TurretBase.set_damage() should be overridden")
 
-func apply_range_upgrade(_amount: float) -> void:
-	push_warning("TurretBase.apply_range_upgrade() should be overridden")
+func set_attack_range(_value: float) -> void:
+	push_warning("TurretBase.set_attack_range() should be overridden")
 
-func apply_cooldown_upgrade(_amount: float) -> void:
-	push_warning("TurretBase.apply_cooldown_upgrade() should be overridden")
+func set_attack_cooldown(_value: float) -> void:
+	push_warning("TurretBase.set_attack_cooldown() should be overridden")
 
 func shake_screen(intensity: float, duration: float) -> void:
 	camera_shake_manager.shake_screen(intensity, duration)

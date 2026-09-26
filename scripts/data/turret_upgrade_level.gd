@@ -4,9 +4,10 @@ class_name TurretUpgrade
 ## One upgrade level. A turret is maxed once every entry in TurretStats.upgrades is applied.
 
 @export var cost: float = 15.0
-@export var max_health_bonus: int = 0
-@export var damage_bonus: int = 0
-## Added to the attack range in pixels; negative shrinks it.
-@export var range_bonus: float = 0.0
-## Added to the seconds between attacks; negative attacks faster.
-@export var cooldown_bonus: float = 0.0
+## Absolute values the turret has after this upgrade. -1 leaves the stat unchanged.
+@export var max_health: int = -1
+@export var damage: int = -1
+## Attack range in pixels.
+@export var attack_range: float = -1.0
+## Seconds between attacks.
+@export var attack_cooldown: float = -1.0

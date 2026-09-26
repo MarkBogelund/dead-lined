@@ -36,12 +36,12 @@ func _on_shockwave_windup_started() -> void:
 func get_damage_value() -> int:
 	return shockwave.damage
 
-func apply_damage_upgrade(amount: int) -> void:
-	shockwave.apply_damage_upgrade(amount)
+func set_damage(value: int) -> void:
+	shockwave.damage = value
 
-func apply_range_upgrade(amount: float) -> void:
-	shockwave.apply_range_upgrade(amount)
+func set_attack_range(value: float) -> void:
+	shockwave.set_shockwave_radius(value)
 	range_indicator.initialize(shockwave.shockwave_radius)
 
-func apply_cooldown_upgrade(amount: float) -> void:
-	shockwave.cooldown = maxf(MIN_ATTACK_COOLDOWN, shockwave.cooldown + amount)
+func set_attack_cooldown(value: float) -> void:
+	shockwave.cooldown = value

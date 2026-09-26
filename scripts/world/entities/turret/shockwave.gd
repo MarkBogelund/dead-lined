@@ -51,10 +51,11 @@ func configure(p_contact_radius: float, p_shockwave_radius: float, p_ring_thickn
 	knockback_force = maxf(0.0, p_knockback_force)
 	_apply_radius()
 
-## Shifts both the trigger radius and the blast radius, keeping the gap between them.
-func apply_range_upgrade(amount: float) -> void:
-	contact_radius = maxf(0.0, contact_radius + amount)
-	shockwave_radius = maxf(contact_radius, shockwave_radius + amount)
+## Sets the blast radius; the trigger radius moves with it so the gap between them is kept.
+func set_shockwave_radius(value: float) -> void:
+	var gap := shockwave_radius - contact_radius
+	shockwave_radius = maxf(0.0, value)
+	contact_radius = maxf(0.0, shockwave_radius - gap)
 	_apply_radius()
 
 func _apply_radius() -> void:
@@ -68,9 +69,6 @@ func set_enabled(value: bool) -> void:
 	_enabled = value
 	if not value:
 		_reset()
-
-func apply_damage_upgrade(amount: int) -> void:
-	damage += amount
 
 func _physics_process(delta: float) -> void:
 	if not _enabled:
