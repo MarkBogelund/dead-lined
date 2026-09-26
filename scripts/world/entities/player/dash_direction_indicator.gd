@@ -1,34 +1,42 @@
 extends Node2D
 class_name DashDirectionIndicator
 
-## Thin line from the player toward where the dash will go; shown only while charging.
+## Sprite pointing where the dash will go, shown only while charging. Rotation is done by pixel_rotate.gdshader
+## on a world-aligned grid, so the art keeps crisp, undeformed pixels at any angle.
 
+const SHADER := preload("res://shaders/pixel_rotate.gdshader")
+
+## Drawn pointing right; its left edge sits start_offset pixels from the player.
+@export var texture: Texture2D = preload("res://assets/sprites/player/dash_direction.png")
 @export_range(0.0, 64.0, 1.0) var start_offset := 8.0
-@export_range(1.0, 128.0, 1.0) var length := 24.0
-## Width at the end nearest the player; the line tapers to tip_width.
-@export_range(0.0, 8.0, 0.5) var base_width := 3.0
-@export_range(0.0, 8.0, 0.5) var tip_width := 0.0
 @export var color := Color(1.0, 1.0, 1.0, 0.85)
 
-var _direction := Vector2.RIGHT
+var _material: ShaderMaterial
 
 func _ready() -> void:
+	# Positioned manually on whole pixels so the rotation grid never shifts by sub-pixel player movement.
+	top_level = true
+	_material = ShaderMaterial.new()
+	_material.shader = SHADER
+	material = _material
 	hide()
 
 func point_in(direction: Vector2) -> void:
 	if direction.is_zero_approx():
 		return
-	_direction = direction.normalized()
+	global_position = (get_parent() as Node2D).global_position.round()
+	_material.set_shader_parameter("angle", direction.angle())
 	show()
 	queue_redraw()
 
 func _draw() -> void:
-	var start := (_direction * start_offset).round()
-	var end := (_direction * (start_offset + length)).round()
-	var side := _direction.orthogonal()
-	var points := PackedVector2Array([
-		start + side * base_width * 0.5,
-		end + side * tip_width * 0.5,
-		end - side * tip_width * 0.5,
-		start - side * base_width * 0.5])
-	draw_colored_polygon(points, color)
+	if not texture:
+		return
+	var sprite_size := texture.get_size()
+	# Big enough to hold the sprite at any angle around the pivot.
+	var half := ceilf(start_offset + sprite_size.length())
+	var canvas := Rect2(-Vector2.ONE * half, Vector2.ONE * half * 2.0)
+	_material.set_shader_parameter("canvas_size", canvas.size)
+	_material.set_shader_parameter("sprite_size", sprite_size)
+	_material.set_shader_parameter("start_offset", start_offset)
+	draw_texture_rect(texture, canvas, false, color)

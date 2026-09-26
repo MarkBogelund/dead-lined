@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dpq66p1vi27sr" path="res://scenes/world/entities/melee_weapon.tscn" id="12_ghcoa"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="14_yfgcb"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="16_74ekq"]
+[ext_resource type="Texture2D" uid="uid://dxiw7gf3j1g6i" path="res://assets/sprites/player/dash-direction-indicator.png" id="17_2454e"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="18_1vgk0"]
 [ext_resource type="Script" uid="uid://ceh6tabl76hf8" path="res://scripts/world/entities/player/aim_indicator.gd" id="19_aimindicator"]
 [ext_resource type="Material" uid="uid://bxeh6alamp27j" path="res://materials/dash_charge_particle_process_material.tres" id="20_windup"]
@@ -782,10 +783,8 @@ process_material = ExtResource("20_windup")
 z_index = 4
 position = Vector2(0, 8)
 script = ExtResource("21_dashdir")
+texture = ExtResource("17_2454e")
 start_offset = 24.0
-length = 16.0
-base_width = 2.0
-tip_width = 1.0
 color = Color(1, 1, 1, 1)
 
 [node name="AimIndicator" type="Node2D" parent="." unique_id=254607644]
