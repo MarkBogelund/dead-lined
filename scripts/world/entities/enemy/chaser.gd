@@ -31,11 +31,11 @@ func _initialize() -> void:
 		push_error("%s requires a ChaserStats resource" % name)
 		return
 	_initialize_base(stats.max_health, stats.scrap_drop_amount)
-	hitbox.initialize(stats.hitbox_damage, stats.hitbox_knockback)
+	hitbox.initialize(stats.damage, stats.knockback)
 	targeting.configure(stats.targeting)
 	targeting.target_changed.connect(_on_target_changed)
-	_speed = stats.speed
-	_self_knockback = stats.self_knockback
+	_speed = stats.move_speed
+	_self_knockback = stats.bounce_back_force
 	_attack_radius = stats.attack_radius
 	_attack_exit_margin = stats.attack_exit_margin
 

@@ -1,10 +1,14 @@
 [gd_resource type="Resource" script_class="KamikazerStats" format=3 uid="uid://dfmgppjmpi2ej"]
 
 [ext_resource type="Script" uid="uid://wp2jn3tx866t" path="res://scripts/data/kamikazer_stats.gd" id="1_kamikazerstats"]
+[ext_resource type="Resource" uid="uid://3imbum7vqvu8" path="res://resources/targeting/kamikazer_targeting.tres" id="2_targeting"]
 
 [resource]
 script = ExtResource("1_kamikazerstats")
-max_health = 3
-speed = 60.0
 charge_speed = 170.0
+max_health = 3
+damage = 30
+knockback = 260.0
+move_speed = 60.0
+targeting = ExtResource("2_targeting")
 scrap_drop_amount = 4

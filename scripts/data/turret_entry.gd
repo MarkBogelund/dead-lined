@@ -7,9 +7,9 @@ class_name TurretEntry
 @export var price: int
 @export var turret_scene: PackedScene
 @export var ghost_scene: PackedScene
-@export var stats: Resource
+## The placed turret's stats; the placement preview shows its attack_range.
+@export var stats: TurretStats
 
 @export_group("Placement Preview")
-@export var preview_range: float = -1.0
 ## Used by the placement ghost and applied to the placed turret's exclusion zone.
 @export var exclusion_radius: float = 80.0

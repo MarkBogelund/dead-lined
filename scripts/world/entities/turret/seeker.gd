@@ -25,14 +25,14 @@ func _initialize() -> void:
 		return
 	aiming.visual_node = $Visuals/Canon
 	aiming.muzzle = $Visuals/Canon/Graphics/Muzzle
-	initialize_base(stats, stats.max_range)
-	targeting.initialize(stats.max_range)
+	initialize_base(stats)
+	targeting.initialize(stats.attack_range)
 	targeting.configure(stats.targeting)
-	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
-	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
+	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed)
+	aiming.initialize(stats.aim_speed, stats.aim_tolerance)
 
 func _on_combat_started() -> void:
-	_shoot_delay = stats.shoot_start_delay
+	_shoot_delay = stats.first_shot_delay
 
 func _on_combat_stopped() -> void:
 	_telegraphing = false

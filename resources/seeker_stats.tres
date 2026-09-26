@@ -32,11 +32,11 @@ attack_cooldown = 0.5
 
 [resource]
 script = ExtResource("1_seekerstats")
-max_range = 150.0
 aim_speed = 5.0
-accuracy_angle = 0.15
-projectile_damage = 5
+aim_tolerance = 0.15
 projectile_speed = 170.0
-max_health = 500
+max_health = 250
+damage = 5
+attack_range = 150.0
 upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Upgrade3"), SubResource("Upgrade4")])
-health_restore_rate = 50.0
+repair_health_per_second = 10.0

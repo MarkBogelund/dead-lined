@@ -74,10 +74,10 @@ func _ready() -> void:
 	if wave_manager:
 		hud.setup(self, wave_manager)
 
-func initialize_base(stats: TurretStats, display_range: float) -> void:
+func initialize_base(stats: TurretStats) -> void:
 	health.initialize(stats.max_health)
-	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate)
-	range_indicator.initialize(display_range)
+	repair.initialize(stats.repair_cost_per_second, stats.repair_health_per_second)
+	range_indicator.initialize(stats.attack_range)
 	upgrader.initialize(stats.upgrades)
 	_sell_refund_ratio = stats.sell_refund_ratio
 	_stops_targeting_player_when_maxed = stats.stops_targeting_player_when_maxed

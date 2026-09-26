@@ -33,11 +33,12 @@ metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [resource]
 script = ExtResource("1_stats")
-max_range = 90.0
 ring_thickness = 15.0
-cooldown = 1.5
 expansion_duration = 0.7
-damage = 5
 max_health = 200
+damage = 5
+knockback = 180.0
+attack_range = 90.0
+attack_cooldown = 1.5
 upgrades = Array[ExtResource("2_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Resource_nmlpx"), SubResource("Resource_qtbxs")])
-health_restore_rate = 50.0
+repair_health_per_second = 100.0

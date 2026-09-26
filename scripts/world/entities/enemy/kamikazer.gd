@@ -44,14 +44,14 @@ func _initialize() -> void:
 		return
 	_initialize_base(stats.max_health, stats.scrap_drop_amount)
 	targeting.configure(stats.targeting)
-	hitbox.initialize(stats.explosion_damage, stats.explosion_knockback)
-	_speed = stats.speed
+	hitbox.initialize(stats.damage, stats.knockback)
+	_speed = stats.move_speed
 	_charge_speed = stats.charge_speed
-	_explosion_screen_shake_intensity = stats.explosion_screen_shake_intensity
+	_explosion_screen_shake_intensity = stats.explosion_screen_shake
 	_charge_acceleration = stats.charge_acceleration
 	_charge_deceleration = stats.charge_deceleration
-	_charge_stop_threshold = stats.charge_stop_threshold
-	_collision_cooldown_duration = stats.collision_cooldown_duration
+	_charge_stop_threshold = stats.charge_stop_speed
+	_collision_cooldown_duration = stats.collision_stun_duration
 	_default_avoidance_mask = navigation.avoidance_mask
 
 func _physics_process(delta: float) -> void:

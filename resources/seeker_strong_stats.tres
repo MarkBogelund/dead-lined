@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="SeekerStats" format=3 uid="uid://duk1unxdeylhi"]
 
 [ext_resource type="Script" uid="uid://cseekerstat01" path="res://scripts/data/seeker_stats.gd" id="1_ou7rm"]
+[ext_resource type="Resource" uid="uid://b6y1jjauy4x2y" path="res://resources/targeting/turret_targeting.tres" id="2_1eg34"]
 [ext_resource type="Script" uid="uid://d0774ofuob1o8" path="res://scripts/data/turret_upgrade_level.gd" id="2_74yky"]
 
 [sub_resource type="Resource" id="Upgrade1"]
@@ -17,10 +18,10 @@ damage = 40
 
 [resource]
 script = ExtResource("1_ou7rm")
-max_range = 190.0
 aim_speed = 4.0
-accuracy_angle = 0.3
-projectile_damage = 20
+aim_tolerance = 0.3
 max_health = 300
+damage = 20
+attack_range = 190.0
 upgrades = Array[ExtResource("2_74yky")]([SubResource("Upgrade1"), SubResource("Upgrade2")])
-health_restore_rate = 20.0
+repair_health_per_second = 20.0

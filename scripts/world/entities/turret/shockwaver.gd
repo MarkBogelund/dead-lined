@@ -15,8 +15,8 @@ func _initialize() -> void:
 	if not stats:
 		push_error("%s requires a ShockwaverStats resource" % name)
 		return
-	initialize_base(stats, stats.max_range)
-	shockwave.configure(stats.max_range, stats.ring_thickness, stats.cooldown, stats.expansion_duration, stats.damage, stats.knockback_force)
+	initialize_base(stats)
+	shockwave.configure(stats.attack_range, stats.ring_thickness, stats.attack_cooldown, stats.expansion_duration, stats.damage, stats.knockback)
 
 func _on_combat_started() -> void:
 	shockwave.set_enabled(true)

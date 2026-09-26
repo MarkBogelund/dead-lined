@@ -30,14 +30,14 @@ func _initialize() -> void:
 		push_error("%s requires a StalkerStats resource" % name)
 		return
 	_initialize_base(stats.max_health, stats.scrap_drop_amount)
-	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
+	aiming.initialize(stats.aim_speed, stats.aim_tolerance)
 	targeting.configure(stats.targeting)
-	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
-	_speed = stats.speed
-	_ideal_distance = stats.ideal_distance
-	_distance_tolerance = stats.distance_tolerance
-	_max_shoot_distance = stats.max_shoot_distance
-	_shoot_delay = stats.shoot_start_delay
+	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed)
+	_speed = stats.move_speed
+	_ideal_distance = stats.preferred_distance
+	_distance_tolerance = stats.preferred_distance_tolerance
+	_max_shoot_distance = stats.shoot_range
+	_shoot_delay = stats.first_shot_delay
 
 func _physics_process(delta: float) -> void:
 	_shoot_delay -= delta
