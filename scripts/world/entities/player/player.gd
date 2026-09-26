@@ -119,7 +119,6 @@ func _connect_signals() -> void:
 	dash.charge_maxed.connect(_release_dash)
 	dash.charge_ended.connect(_on_dash_charge_ended)
 	dash.dash_started.connect(_handle_dash_started)
-	dash.dash_ended.connect(_on_dash_ended)
 
 func _apply_crunch_tint(target_tint: Color) -> void:
 	if is_instance_valid(animated_sprite):
@@ -130,6 +129,7 @@ func _apply_crunch_tint(target_tint: Color) -> void:
 		_crunch_tint_tween.tween_property(animated_sprite, "self_modulate", target_tint, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _physics_process(delta: float) -> void:
+	_sync_body_layer()
 	_process_movement(delta)
 	_process_locomotion()
 	if not _is_dead:
@@ -222,10 +222,12 @@ func _handle_dash_started(direction: Vector2) -> void:
 	_set_facing(direction.x)
 	animation.play_animation("dash")
 	camera_shake_manager.shake_screen(0.15, 0.15)
-	set_collision_layer_value(PLAYER_BODY_LAYER, false)
 
-func _on_dash_ended() -> void:
-	set_collision_layer_value(PLAYER_BODY_LAYER, true)
+## Invincible players leave the PlayerBody layer so enemy hitboxes (e.g. Kamikazer explosions) can't trigger on them.
+func _sync_body_layer() -> void:
+	var should_collide := not _is_invincible()
+	if get_collision_layer_value(PLAYER_BODY_LAYER) != should_collide:
+		set_collision_layer_value(PLAYER_BODY_LAYER, should_collide)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if _is_dead or _is_invincible():
