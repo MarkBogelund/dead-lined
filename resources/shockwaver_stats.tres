@@ -11,9 +11,28 @@ damage_bonus = 5
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_upgrade")
-cost = 40.0
+cost = 25.0
 max_health_bonus = 25
+damage_bonus = 2
+range_bonus = 20.0
+
+[sub_resource type="Resource" id="Resource_nmlpx"]
+script = ExtResource("2_upgrade")
+cost = 45.0
+max_health_bonus = 50
 damage_bonus = 5
+range_bonus = 20.0
+cooldown_bonus = -0.5
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
+
+[sub_resource type="Resource" id="Resource_qtbxs"]
+script = ExtResource("2_upgrade")
+cost = 55.0
+max_health_bonus = 50
+damage_bonus = 5
+range_bonus = 10.0
+cooldown_bonus = -1.0
+metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [resource]
 script = ExtResource("1_stats")
@@ -25,5 +44,5 @@ expansion_duration = 0.7
 damage = 5
 max_health = 300
 exclusion_radius = 100.0
-upgrades = Array[ExtResource("2_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2")])
+upgrades = Array[ExtResource("2_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Resource_nmlpx"), SubResource("Resource_qtbxs")])
 health_restore_rate = 50.0

@@ -49,6 +49,15 @@ func configure(p_contact_radius: float, p_shockwave_radius: float, p_ring_thickn
 	expansion_duration = maxf(0.01, p_expansion_duration)
 	damage = maxi(0, p_damage)
 	knockback_force = maxf(0.0, p_knockback_force)
+	_apply_radius()
+
+## Shifts both the trigger radius and the blast radius, keeping the gap between them.
+func apply_range_upgrade(amount: float) -> void:
+	contact_radius = maxf(0.0, contact_radius + amount)
+	shockwave_radius = maxf(contact_radius, shockwave_radius + amount)
+	_apply_radius()
+
+func _apply_radius() -> void:
 	var circle := detection_shape.shape as CircleShape2D
 	if circle:
 		circle.radius = shockwave_radius + ring_thickness * 0.5
@@ -89,6 +98,8 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 func _ready() -> void:
+	# The scene's shape is shared by every Shockwaver; per-turret range upgrades need their own.
+	detection_shape.shape = detection_shape.shape.duplicate()
 	var material := ShaderMaterial.new()
 	material.shader = PIXEL_ART_SHADER
 	shockwave_visual.material = material

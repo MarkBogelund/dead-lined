@@ -126,7 +126,7 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 - Knocks enemies back from the turret as the ring reaches them
 - Allows the player to dash through the moving wavefront with correct timing
 - Trades directional range for local crowd control around the turret
-- Upgrades raise health and damage; at max level the player no longer triggers it, but its pulses still damage the player
+- Upgrades can raise health, damage, blast radius and pulse rate; at max level the player no longer triggers it, but its pulses still damage the player
 
 ---
 

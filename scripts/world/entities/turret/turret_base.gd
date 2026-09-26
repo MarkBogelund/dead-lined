@@ -24,6 +24,8 @@ signal sold(refund: float)
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 
 var enabled := true
+## Floor for attack cooldowns so negative cooldown upgrades can't reach zero.
+const MIN_ATTACK_COOLDOWN := 0.05
 var total_invested := 0.0
 var _active := false
 var _repairing := false
@@ -139,6 +141,10 @@ func _on_upgraded(upgrade: TurretUpgrade) -> void:
 		health.increase_max_health(upgrade.max_health_bonus)
 	if upgrade.damage_bonus != 0:
 		apply_damage_upgrade(upgrade.damage_bonus)
+	if not is_zero_approx(upgrade.range_bonus):
+		apply_range_upgrade(upgrade.range_bonus)
+	if not is_zero_approx(upgrade.cooldown_bonus):
+		apply_cooldown_upgrade(upgrade.cooldown_bonus)
 	health_ui.set_level(upgrader.level)
 	if upgrader.is_max_level():
 		_on_maxed()
@@ -286,6 +292,12 @@ func get_damage_value() -> int:
 
 func apply_damage_upgrade(_amount: int) -> void:
 	push_warning("TurretBase.apply_damage_upgrade() should be overridden")
+
+func apply_range_upgrade(_amount: float) -> void:
+	push_warning("TurretBase.apply_range_upgrade() should be overridden")
+
+func apply_cooldown_upgrade(_amount: float) -> void:
+	push_warning("TurretBase.apply_cooldown_upgrade() should be overridden")
 
 func shake_screen(intensity: float, duration: float) -> void:
 	camera_shake_manager.shake_screen(intensity, duration)

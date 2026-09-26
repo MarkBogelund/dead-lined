@@ -38,3 +38,10 @@ func get_damage_value() -> int:
 
 func apply_damage_upgrade(amount: int) -> void:
 	shockwave.apply_damage_upgrade(amount)
+
+func apply_range_upgrade(amount: float) -> void:
+	shockwave.apply_range_upgrade(amount)
+	range_indicator.initialize(shockwave.shockwave_radius)
+
+func apply_cooldown_upgrade(amount: float) -> void:
+	shockwave.cooldown = maxf(MIN_ATTACK_COOLDOWN, shockwave.cooldown + amount)

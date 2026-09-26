@@ -81,3 +81,10 @@ func get_damage_value() -> int:
 
 func apply_damage_upgrade(amount: int) -> void:
 	shoot.projectile_damage += amount
+
+func apply_range_upgrade(amount: float) -> void:
+	targeting.max_range = maxf(0.0, targeting.max_range + amount)
+	range_indicator.initialize(targeting.max_range)
+
+func apply_cooldown_upgrade(amount: float) -> void:
+	shoot.shoot_cooldown = maxf(MIN_ATTACK_COOLDOWN, shoot.shoot_cooldown + amount)

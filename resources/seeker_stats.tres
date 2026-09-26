@@ -8,28 +8,33 @@ script = ExtResource("2_nmlpx")
 cost = 1.0
 max_health_bonus = 40
 damage_bonus = 5
+cooldown_bonus = -0.25
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_nmlpx")
 cost = 1.0
 max_health_bonus = 30
 damage_bonus = 5
+range_bonus = 20.0
 
 [sub_resource type="Resource" id="Upgrade3"]
 script = ExtResource("2_nmlpx")
 cost = 1.0
 max_health_bonus = 30
 damage_bonus = 10
+cooldown_bonus = -0.5
 
 [sub_resource type="Resource" id="Upgrade4"]
 script = ExtResource("2_nmlpx")
 cost = 1.0
 max_health_bonus = 20
 damage_bonus = 10
+range_bonus = 40.0
+cooldown_bonus = -1.0
 
 [resource]
 script = ExtResource("1_seekerstats")
-max_range = 250.0
+max_range = 200.0
 aim_speed = 7.0
 accuracy_angle = 0.15
 priority_distance_threshold = 30.0
