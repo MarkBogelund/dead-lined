@@ -18,6 +18,7 @@ signal died
 @onready var melee_weapon: MeleeWeapon = $MeleeWeapon
 @onready var dash: DashComponent = $DashComponent
 @onready var aiming: AimingComponent = $AimingComponent
+@onready var aim_indicator: AimIndicator = $AimIndicator
 @onready var crunch_time: CrunchTimeComponent = $CrunchTimeComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -122,6 +123,9 @@ func _apply_crunch_tint(target_tint: Color) -> void:
 func _physics_process(delta: float) -> void:
 	_process_movement(delta)
 	_process_locomotion()
+	if not _is_dead:
+		aiming.aim_at(get_global_mouse_position(), 0.0)
+		aim_indicator.point_in(aiming.get_aim_direction())
 
 func _get_move_state() -> MoveState:
 	if dash.is_dashing(): return MoveState.DASHING
@@ -230,6 +234,7 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 
 func _handle_death(from_position: Vector2) -> void:
 	_is_dead = true
+	aim_indicator.hide()
 	crunch_time.deactivate()
 	knockback.apply(from_position, death_knockback_force)
 	
