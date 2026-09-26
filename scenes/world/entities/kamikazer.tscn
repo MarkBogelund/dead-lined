@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="16_chargefx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1no88"]
+radius = 11.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xa7qf"]
 atlas = ExtResource("4_hvkdi")
@@ -598,6 +599,7 @@ color_ramp = SubResource("GradientTexture1D_charge")
 
 [node name="Kamikazer" type="CharacterBody2D" unique_id=1145312353 groups=["enemies"]]
 collision_layer = 8
+collision_mask = 33
 motion_mode = 1
 wall_min_slide_angle = 0.0
 floor_block_on_wall = false
@@ -606,7 +608,7 @@ stats = ExtResource("1_kamikazerstats")
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=338084793]
 collision_layer = 16
-collision_mask = 2
+collision_mask = 34
 script = ExtResource("4_ck52e")
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 

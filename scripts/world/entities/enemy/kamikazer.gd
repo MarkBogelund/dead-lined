@@ -155,7 +155,7 @@ func _start_charge(target_position: Vector2) -> void:
 func _on_hit_target(target: Node) -> void:
 	if _exploding or is_dead() or not target:
 		return
-	if not target.is_in_group("player"):
+	if not target.is_in_group("player") and not target.is_in_group("turrets"):
 		return
 	_trigger_explosion(target.global_position)
 
