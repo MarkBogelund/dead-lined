@@ -6,6 +6,7 @@ class_name HoldButton
 ## Releasing, disabling, or hiding the button cancels the hold; a new press is required to repeat.
 
 signal hold_completed
+signal hold_progress_changed(progress: float)
 
 const PROGRESS_SHADER := preload("res://shaders/hold_progress.gdshader")
 
@@ -52,3 +53,4 @@ func _set_progress(value: float) -> void:
 	_progress = clampf(value, 0.0, 1.0)
 	_material.set_shader_parameter("rect_size", progress_target.size)
 	_material.set_shader_parameter("progress", _progress)
+	hold_progress_changed.emit(_progress)

@@ -5,6 +5,7 @@ class_name TurretPanel
 ## Emits requests only; the turret performs upgrades and sales.
 
 signal upgrade_requested
+signal upgrade_hold_changed(progress: float)
 signal sell_requested
 
 @onready var actions: Control = %Actions
@@ -18,6 +19,7 @@ var _turret: TurretBase
 func _ready() -> void:
 	visible = false
 	upgrade_button.hold_completed.connect(upgrade_requested.emit)
+	upgrade_button.hold_progress_changed.connect(upgrade_hold_changed.emit)
 	sell_button.hold_completed.connect(sell_requested.emit)
 
 func _process(_delta: float) -> void:

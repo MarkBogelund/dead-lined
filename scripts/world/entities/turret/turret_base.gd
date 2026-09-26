@@ -16,6 +16,8 @@ signal sold(refund: float)
 @onready var range_indicator: RangeIndicator = $RangeIndicator
 @onready var visuals: Node2D = $Visuals
 @onready var body_collision: CollisionShape2D = $CollisionShape2D
+@onready var windup_particles: GPUParticles2D = $WindupParticles
+@onready var upgrade_particles: GPUParticles2D = $UpgradeParticles
 @onready var body_visual: CanvasItem = _get_body_visual()
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
@@ -33,6 +35,7 @@ var _selling := false
 var _sell_refund_ratio := 0.0
 var _stops_targeting_player_when_maxed := false
 var _hit_flash_tween: Tween
+var _upgrade_charging := false
 
 @export_group("Presentation")
 @export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
@@ -106,6 +109,16 @@ func try_upgrade() -> void:
 	upgrader.apply_next()
 	upgrade_purchased.emit(cost)
 
+## Driven by the upgrade HoldButton's progress (0 = released or completed).
+func set_upgrade_charge(progress: float) -> void:
+	var charging := progress > 0.0
+	if not charging and not _upgrade_charging:
+		return
+	_upgrade_charging = charging
+	windup_particles.emitting = charging
+	for shader_material: ShaderMaterial in _get_surface_materials():
+		shader_material.set_shader_parameter("flash_amount", progress if charging else 0.0)
+
 func get_sell_value() -> float:
 	var refund := total_invested * _sell_refund_ratio
 	return minf(refund, player.capacity.get_max()) if player else refund
@@ -148,6 +161,7 @@ func _on_upgraded(upgrade: TurretUpgrade) -> void:
 			push_warning("%s level %d attack_cooldown %.2f is below MIN_ATTACK_COOLDOWN %.2f; clamping" % [name, upgrader.level, upgrade.attack_cooldown, MIN_ATTACK_COOLDOWN])
 		set_attack_cooldown(maxf(MIN_ATTACK_COOLDOWN, upgrade.attack_cooldown))
 	health_ui.set_level(upgrader.level)
+	upgrade_particles.restart()
 	if upgrader.is_max_level():
 		_on_maxed()
 

@@ -18,6 +18,7 @@ func setup(turret: TurretBase, wave_manager: WaveManager) -> void:
 	toggle_menu.menu_control = panel
 	panel.set_actions_visible(wave_manager.is_build_phase())
 	panel.upgrade_requested.connect(turret.try_upgrade)
+	panel.upgrade_hold_changed.connect(turret.set_upgrade_charge)
 	panel.sell_requested.connect(turret.sell)
 	if turret.interaction_range.is_player_in_range():
 		toggle_menu.open()

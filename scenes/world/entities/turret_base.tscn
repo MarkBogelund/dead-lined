@@ -43,6 +43,36 @@ scale_min = 2.0
 scale_max = 4.0
 color_ramp = SubResource("RepairParticleColorRamp")
 
+[sub_resource type="Curve" id="UpgradeParticleAngleCurve"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="UpgradeParticleAngleTexture"]
+curve = SubResource("UpgradeParticleAngleCurve")
+
+[sub_resource type="Curve" id="UpgradeParticleScaleCurve"]
+_data = [Vector2(0.6, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="UpgradeParticleScaleTexture"]
+curve = SubResource("UpgradeParticleScaleCurve")
+
+[sub_resource type="ParticleProcessMaterial" id="UpgradeParticleMaterial"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_max = 20.0
+angle_curve = SubResource("UpgradeParticleAngleTexture")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 60.0
+initial_velocity_max = 120.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.4
+scale_curve = SubResource("UpgradeParticleScaleTexture")
+
 [sub_resource type="Animation" id="Reset"]
 length = 0.001
 tracks/0/type = "value"
@@ -275,6 +305,11 @@ scale = Vector2(2, 2)
 amount = 16
 lifetime = 0.4
 speed_scale = 1.25
+
+[node name="UpgradeParticles" parent="." instance=ExtResource("12_hit")]
+amount = 24
+lifetime = 0.45
+process_material = SubResource("UpgradeParticleMaterial")
 
 [node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=1488027812]
 z_index = 14

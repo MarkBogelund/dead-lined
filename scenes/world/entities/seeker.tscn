@@ -100,6 +100,9 @@ hit_flash_duration = 0.48
 [node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
 z_index = 0
 
+[node name="RangeIndicator" parent="." index="7" unique_id=248886830]
+z_index = -1
+
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/seeker = SubResource("SeekerLibrary")
 
