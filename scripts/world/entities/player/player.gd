@@ -70,7 +70,7 @@ func _initialize() -> void:
 		push_error("%s requires a PlayerStats resource" % name)
 		return
 	movement.initialize(stats.speed, stats.acceleration, stats.friction)
-	dash.initialize(stats.dash_min_distance, stats.dash_max_distance, stats.dash_speed, stats.dash_max_charge_time, stats.dash_cooldown)
+	dash.initialize(stats.dash_min_distance, stats.dash_max_distance, stats.dash_speed, stats.dash_charge_delay, stats.dash_max_charge_time, stats.dash_cooldown)
 	dash_charge_time_scale = stats.dash_charge_time_scale
 	melee_weapon.initialize(stats.slash_damage, stats.slash_knockback, stats.slash_self_knockback, stats.slash_radius, stats.slash_arc_angle, stats.slash_duration, stats.slash_cooldown)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
@@ -166,7 +166,7 @@ func _process_movement(delta: float) -> void:
 			move_and_slide()
 
 func _process_locomotion() -> void:
-	if _is_dead:
+	if _is_dead or dash.is_charging():
 		return
 	var is_moving := velocity.length() > MIN_MOVE_SPEED
 	animation.play_animation("move" if is_moving else "idle")
@@ -174,11 +174,11 @@ func _process_locomotion() -> void:
 		_set_facing(velocity.x)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("crunch_time") and (crunch_time.is_crunch_time_active() or not dash.is_charging()):
+	if event.is_action_pressed("crunch_time") and (crunch_time.is_crunch_time_active() or not dash.is_holding()):
 		var can_activate := capacity.can_crunch_time() and capacity.can_afford(crunch_time.activation_cost)
 		crunch_time.toggle(can_activate)
 	
-	if event.is_action_pressed("shoot") and not dash.is_charging():
+	if event.is_action_pressed("shoot") and not dash.is_holding():
 		var mouse_pos := get_global_mouse_position()
 		if crunch_time.is_crunch_time_active():
 			if melee_weapon.try_slash(mouse_pos):
@@ -190,7 +190,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				animation.play_animation("slash") # Reuse slash animation for shooting since it has the same timing needs
 	
 	if event.is_action_pressed("dash"):
-		dash.try_begin_charge()
+		dash.try_press()
 	elif event.is_action_released("dash"):
 		_release_dash()
 
@@ -206,11 +206,13 @@ func _get_dash_direction() -> Vector2:
 	return Vector2.RIGHT if _facing_right else Vector2.LEFT
 
 func _release_dash() -> void:
-	dash.release_charge(_get_dash_direction())
+	dash.release(_get_dash_direction())
 
 func _on_dash_charge_started() -> void:
 	time_scale_manager.request(DASH_CHARGE_TIME_SOURCE, dash_charge_time_scale)
-	animation.play_animation("dash_charge")
+	# Scaled so the white ramp completes in dash.get_charge_duration() real seconds despite slow-motion.
+	var length := animation.get_animation("dash_charge").length
+	animation.play_animation("dash_charge", -1, length / (dash.get_charge_duration() * dash_charge_time_scale))
 
 func _on_dash_charge_ended() -> void:
 	time_scale_manager.release(DASH_CHARGE_TIME_SOURCE)

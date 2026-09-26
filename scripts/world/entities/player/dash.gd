@@ -1,17 +1,19 @@
 extends Node2D
 class_name DashComponent
 
-## Hold to charge (the owner slows time), release to dash; charge time sets the distance.
+## Press to dash; holding past charge_delay starts a charge (the owner slows time) that sets the distance.
 
+## Hold passed charge_delay: the charge (slow-motion) begins.
 signal charge_started
-## Charge reached max_charge_time; the owner should call release_charge().
+## Charge reached max_charge_time; the owner should call release().
 signal charge_maxed
-## Emitted when a charge is released or cancelled.
+## Emitted when a started charge is released or cancelled.
 signal charge_ended
 signal dash_started(direction: Vector2)
 signal dash_ended
 
-enum State {IDLE, CHARGING, DASHING, COOLDOWN}
+## HOLDING = pressed but still inside the tap window; releasing here is a plain min-distance dash.
+enum State {IDLE, HOLDING, CHARGING, DASHING, COOLDOWN}
 
 @export var enabled := true
 @export var invincible := true
@@ -26,6 +28,9 @@ enum State {IDLE, CHARGING, DASHING, COOLDOWN}
 @export var max_distance := 300.0
 ## Starting speed; the dash eases out to 0 over its duration.
 @export var dash_speed := 1750.0
+## Real-time seconds the button must be held before charging starts.
+@export var charge_delay := 0.15
+## Real-time seconds from press until a charge fires automatically.
 @export var max_charge_time := 0.5
 @export var cooldown_time := 0.5
 @export var ease_out_power := 2.0 ## Controls deceleration
@@ -39,20 +44,24 @@ var _cooldown_timer := 0.0
 var _charge_time := 0.0
 var _charge_maxed := false
 
-func initialize(p_min_distance: float, p_max_distance: float, p_speed: float, p_max_charge_time: float, p_cooldown: float) -> void:
+func initialize(p_min_distance: float, p_max_distance: float, p_speed: float, p_charge_delay: float, p_max_charge_time: float, p_cooldown: float) -> void:
 	min_distance = p_min_distance
 	max_distance = maxf(p_min_distance, p_max_distance)
 	dash_speed = p_speed
-	max_charge_time = maxf(0.01, p_max_charge_time)
+	charge_delay = maxf(0.0, p_charge_delay)
+	max_charge_time = maxf(charge_delay + 0.01, p_max_charge_time)
 	cooldown_time = p_cooldown
 
 func _process(delta: float) -> void:
 	match _state:
-		State.CHARGING:
-			# Charge in real time: the owner slows Engine.time_scale while charging.
+		State.HOLDING, State.CHARGING:
+			# Real time: the owner slows Engine.time_scale while charging.
 			if Engine.time_scale > 0.0:
 				_charge_time += delta / Engine.time_scale
-			if _charge_time >= max_charge_time and not _charge_maxed:
+			if _state == State.HOLDING and _charge_time >= charge_delay:
+				_state = State.CHARGING
+				charge_started.emit()
+			if _state == State.CHARGING and _charge_time >= max_charge_time and not _charge_maxed:
 				_charge_maxed = true
 				charge_maxed.emit()
 		State.COOLDOWN:
@@ -60,34 +69,46 @@ func _process(delta: float) -> void:
 			if _cooldown_timer <= 0.0:
 				_state = State.IDLE
 
-func try_begin_charge() -> bool:
+func try_press() -> bool:
 	if not enabled or _state != State.IDLE:
 		return false
-	_state = State.CHARGING
+	_state = State.HOLDING
 	_charge_time = 0.0
 	_charge_maxed = false
-	charge_started.emit()
 	return true
 
-func release_charge(direction: Vector2) -> bool:
-	if _state != State.CHARGING:
+## Fires the dash: min_distance from the tap window, otherwise scaled by charge time.
+func release(direction: Vector2) -> bool:
+	if _state != State.HOLDING and _state != State.CHARGING:
 		return false
 	var distance := lerpf(min_distance, max_distance, get_charge_ratio())
+	var was_charging := _state == State.CHARGING
 	_state = State.IDLE
-	charge_ended.emit()
+	if was_charging:
+		charge_ended.emit()
 	if direction.length() < 0.1:
 		return false
 	_start_dash(direction.normalized(), distance)
 	return true
 
-## Drops the charge without dashing or starting the cooldown.
+## Drops the press/charge without dashing or starting the cooldown.
 func cancel_charge() -> void:
-	if _state == State.CHARGING:
+	var was_charging := _state == State.CHARGING
+	if _state == State.HOLDING or was_charging:
 		_state = State.IDLE
+	if was_charging:
 		charge_ended.emit()
 
 func get_charge_ratio() -> float:
-	return clampf(_charge_time / max_charge_time, 0.0, 1.0)
+	return clampf((_charge_time - charge_delay) / (max_charge_time - charge_delay), 0.0, 1.0)
+
+## Real-time seconds a started charge takes to reach max distance.
+func get_charge_duration() -> float:
+	return max_charge_time - charge_delay
+
+## True while the button is held (tap window or charging); blocks other actions.
+func is_holding() -> bool:
+	return _state == State.HOLDING or _state == State.CHARGING
 
 func is_charging() -> bool:
 	return _state == State.CHARGING
@@ -96,7 +117,7 @@ func is_dashing() -> bool:
 	return _state == State.DASHING
 
 func is_invincible() -> bool:
-	return (invincible and _state == State.DASHING) or (invincible_while_charging and _state == State.CHARGING)
+	return (invincible and _state == State.DASHING) or (invincible_while_charging and is_holding())
 
 ## Call once per physics step while dashing; returns the velocity that covers exactly this step's share of the distance.
 func step_dash(delta: float) -> Vector2:

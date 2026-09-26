@@ -16,7 +16,9 @@ class_name PlayerStats
 @export var dash_max_distance: float = 300.0
 ## Starting speed of a dash in pixels/second; it eases to 0, so longer dashes last longer
 @export var dash_speed: float = 1750.0
-## Real-time seconds the dash can be charged before it fires automatically
+## Real-time seconds dash must be held before charging (slow-motion) starts; releasing sooner is a plain min-distance dash
+@export var dash_charge_delay: float = 0.15
+## Real-time seconds from press until a charged dash fires automatically
 @export var dash_max_charge_time: float = 0.5
 ## Engine time scale while charging a dash
 @export_range(0.05, 1.0, 0.05) var dash_charge_time_scale: float = 0.5
