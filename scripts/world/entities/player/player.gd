@@ -19,6 +19,7 @@ signal died
 @onready var dash: DashComponent = $DashComponent
 @onready var aiming: AimingComponent = $AimingComponent
 @onready var aim_indicator: AimIndicator = $AimIndicator
+@onready var dash_direction_indicator: DashDirectionIndicator = $DashDirectionIndicator
 @onready var crunch_time: CrunchTimeComponent = $CrunchTimeComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -142,6 +143,10 @@ func _physics_process(delta: float) -> void:
 	if not _is_dead:
 		aiming.aim_at(get_global_mouse_position(), 0.0)
 		aim_indicator.point_in(aiming.get_aim_direction())
+	if dash.is_charging():
+		dash_direction_indicator.point_in(_get_dash_direction())
+	elif dash_direction_indicator.visible:
+		dash_direction_indicator.hide()
 
 func _get_move_state() -> MoveState:
 	if dash.is_dashing(): return MoveState.DASHING

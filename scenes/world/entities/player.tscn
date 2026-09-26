@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="18_1vgk0"]
 [ext_resource type="Script" uid="uid://ceh6tabl76hf8" path="res://scripts/world/entities/player/aim_indicator.gd" id="19_aimindicator"]
 [ext_resource type="Material" uid="uid://bxeh6alamp27j" path="res://materials/dash_charge_particle_process_material.tres" id="20_windup"]
+[ext_resource type="Script" uid="uid://dtlddhxtx6w20" path="res://scripts/world/entities/player/dash_direction_indicator.gd" id="21_dashdir"]
 
 [sub_resource type="Animation" id="Animation_qlg0r"]
 length = 0.001
@@ -777,12 +778,22 @@ process_material = ExtResource("20_windup")
 
 [node name="Muzzle" type="Marker2D" parent="." unique_id=234567891]
 
+[node name="DashDirectionIndicator" type="Node2D" parent="." unique_id=130748289]
+z_index = 4
+position = Vector2(0, 8)
+script = ExtResource("21_dashdir")
+start_offset = 24.0
+length = 16.0
+base_width = 2.0
+tip_width = 1.0
+color = Color(1, 1, 1, 1)
+
 [node name="AimIndicator" type="Node2D" parent="." unique_id=254607644]
 z_index = 4
 position = Vector2(24, 0)
 script = ExtResource("19_aimindicator")
 distance = 32.0
-color = Color(0.39695928, 0.29874277, 0, 1)
+color = Color(1, 1, 1, 1)
 
 [node name="FlashVfx" parent="." unique_id=462082651 instance=ExtResource("16_74ekq")]
 scale = Vector2(2, 2)
