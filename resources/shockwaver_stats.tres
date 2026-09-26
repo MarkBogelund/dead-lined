@@ -11,7 +11,7 @@ attack_range = 100.0
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_upgrade")
-cost = 25.0
+cost = 35.0
 damage = 10
 attack_cooldown = 1.0
 

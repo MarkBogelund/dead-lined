@@ -111,6 +111,8 @@ func try_upgrade() -> void:
 
 ## upgrade_charge is scaled so it finishes exactly when the upgrade hold completes.
 func start_upgrade_charge(hold_duration: float) -> void:
+	# A new hold cuts the previous burst short; its particles keep playing out.
+	animation.stop_animation("upgrade")
 	var length := animation.get_animation("upgrade_charge").length
 	animation.play_animation("upgrade_charge", -1, length / hold_duration)
 

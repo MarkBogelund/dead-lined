@@ -5,25 +5,25 @@
 
 [sub_resource type="Resource" id="Upgrade1"]
 script = ExtResource("2_nmlpx")
-cost = 1.0
+cost = 25.0
 max_health = 275
 attack_range = 175.0
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_nmlpx")
-cost = 1.0
+cost = 35.0
 damage = 10
 attack_cooldown = 0.75
 
 [sub_resource type="Resource" id="Upgrade3"]
 script = ExtResource("2_nmlpx")
-cost = 1.0
+cost = 45.0
 max_health = 300
 attack_range = 200.0
 
 [sub_resource type="Resource" id="Upgrade4"]
 script = ExtResource("2_nmlpx")
-cost = 1.0
+cost = 55.0
 max_health = 350
 damage = 20
 attack_range = 250.0
