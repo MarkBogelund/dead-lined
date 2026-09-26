@@ -58,6 +58,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 
 **What you do:**
 - Dodge incoming projectiles (PRIMARY SKILL)
+- Charged dash: hold dash to slow time (0.5×, invincible, still steering), release to dash in the movement direction (or facing direction when standing still). Distance grows linearly with hold time from 120 px (tap) to 300 px (0.5 s real time, auto-fires). No shooting or activating Crunch Time while charging.
 - Shoot enemies freely (0.25s cooldown, 0 capacity cost)
 - Activate Crunch Time when capacity % allows
 - Manage capacity by surviving hits

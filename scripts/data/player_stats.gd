@@ -10,10 +10,16 @@ class_name PlayerStats
 @export var friction: float = 2500.0
 
 @export_group("Dash")
-## Total distance covered in a single dash
-@export var dash_distance: float = 250.0
-## Time in seconds a single dash lasts
-@export var dash_duration: float = 0.2
+## Distance travelled by a tapped dash, in pixels
+@export var dash_min_distance: float = 120.0
+## Distance travelled by a fully charged dash, in pixels
+@export var dash_max_distance: float = 300.0
+## Starting speed of a dash in pixels/second; it eases to 0, so longer dashes last longer
+@export var dash_speed: float = 1750.0
+## Real-time seconds the dash can be charged before it fires automatically
+@export var dash_max_charge_time: float = 0.5
+## Engine time scale while charging a dash
+@export_range(0.05, 1.0, 0.05) var dash_charge_time_scale: float = 0.5
 ## Seconds before the player can dash again
 @export var dash_cooldown: float = 0.2
 

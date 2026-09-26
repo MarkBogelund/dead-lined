@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
 [ext_resource type="Script" uid="uid://b2gaurk2muptq" path="res://scripts/systems/score_manager.gd" id="8_score"]
 [ext_resource type="Script" uid="uid://ta3ftlocrs8x" path="res://scripts/systems/camera_shake_manager.gd" id="8_shake"]
-[ext_resource type="Script" uid="uid://bcjdlvprcr1uv" path="res://scripts/systems/freeze_frame_manager.gd" id="10_freeze"]
+[ext_resource type="Script" uid="uid://bcjdlvprcr1uv" path="res://scripts/systems/time_scale_manager.gd" id="10_freeze"]
 [ext_resource type="Texture2D" uid="uid://cknqvqanj5h2b" path="res://assets/sprites/environment/environment-tileset.png" id="11_37s47"]
 [ext_resource type="PackedScene" uid="uid://dq6se5v2fekwy" path="res://scenes/ui/shop_panel.tscn" id="11_kvuet"]
 [ext_resource type="PackedScene" uid="uid://cgem2dpa2ox1r" path="res://scenes/world/environment/props/arm_prop.tscn" id="12_37s47"]
@@ -240,7 +240,7 @@ unique_name_in_owner = true
 script = ExtResource("8_shake")
 camera = NodePath("../../World/Player/Camera2D")
 
-[node name="FreezeFrameManager" type="Node" parent="Systems" unique_id=1339413309 groups=["freeze_frame_manager"]]
+[node name="TimeScaleManager" type="Node" parent="Systems" unique_id=1339413309]
 unique_name_in_owner = true
 script = ExtResource("10_freeze")
 
