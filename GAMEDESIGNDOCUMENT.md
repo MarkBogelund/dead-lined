@@ -120,7 +120,7 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 - **Benefit:** Reduces enemy count, multiplies your firepower
 
 **Shockwaver:**
-- Detects enemies or the player entering its contact radius
+- Detects enemies or the player entering its max range (the same radius the shockwave expands to)
 - Telegraphs, then emits an expanding doughnut-shaped shockwave
 - Damages every target reached by the ring once per pulse
 - Knocks enemies back from the turret as the ring reaches them

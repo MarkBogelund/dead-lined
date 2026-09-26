@@ -77,7 +77,6 @@ func _ready() -> void:
 func initialize_base(stats: TurretStats, display_range: float) -> void:
 	health.initialize(stats.max_health)
 	repair.initialize(stats.capacity_drain_rate, stats.health_restore_rate)
-	exclusion_zone.initialize(stats.exclusion_radius)
 	range_indicator.initialize(display_range)
 	upgrader.initialize(stats.upgrades)
 	_sell_refund_ratio = stats.sell_refund_ratio
@@ -86,6 +85,10 @@ func initialize_base(stats: TurretStats, display_range: float) -> void:
 ## Called by ShopManager on placement so the sell refund includes the purchase price.
 func set_purchase_price(price: float) -> void:
 	total_invested = price
+
+## Called by ShopManager on placement; the radius belongs to the shop entry.
+func set_exclusion_radius(radius: float) -> void:
+	exclusion_zone.initialize(radius)
 
 func get_level() -> int:
 	return upgrader.level

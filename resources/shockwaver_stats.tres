@@ -33,13 +33,11 @@ metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [resource]
 script = ExtResource("1_stats")
-contact_radius = 90.0
-shockwave_radius = 90.0
+max_range = 90.0
 ring_thickness = 15.0
 cooldown = 1.5
 expansion_duration = 0.7
 damage = 5
 max_health = 200
-exclusion_radius = 100.0
 upgrades = Array[ExtResource("2_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Resource_nmlpx"), SubResource("Resource_qtbxs")])
 health_restore_rate = 50.0

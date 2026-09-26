@@ -22,6 +22,5 @@ aim_speed = 4.0
 accuracy_angle = 0.3
 projectile_damage = 20
 max_health = 300
-exclusion_radius = 120.0
 upgrades = Array[ExtResource("2_74yky")]([SubResource("Upgrade1"), SubResource("Upgrade2")])
 health_restore_rate = 20.0

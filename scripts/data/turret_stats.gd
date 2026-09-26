@@ -4,9 +4,6 @@ class_name TurretStats
 @export_group("Health")
 @export var max_health: int = 100
 
-@export_group("Placement")
-@export var exclusion_radius: float = 80.0
-
 @export_group("Upgrades")
 @export var upgrades: Array[TurretUpgrade] = []
 ## When maxed the turret stops targeting the player; its attacks can still hit the player.
