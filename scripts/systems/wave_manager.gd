@@ -5,7 +5,7 @@ signal build_phase_started
 signal combat_phase_started(wave_index: int)
 signal build_phase_tick(time_left: float)
 
-@export var settings: WaveSettings = preload("res://resources/wave_settings.tres")
+@export var settings: WaveSettings = preload("res://resources/waves/wave_settings.tres")
 
 var _current_phase: Phase = Phase.BUILD
 var _phase_timer := 0.0

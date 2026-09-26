@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="StalkerStats" format=3 uid="uid://dx2wpandhkndg"]
 
 [ext_resource type="Script" uid="uid://bsbgk5kaetk47" path="res://scripts/data/stalker_stats.gd" id="1_stalkerstats"]
-[ext_resource type="Resource" uid="uid://cifxhqdsf4hcy" path="res://resources/targeting/enemy_targeting.tres" id="2_myjwd"]
+[ext_resource type="Resource" uid="uid://cifxhqdsf4hcy" path="res://resources/enemies/enemy_targeting.tres" id="2_myjwd"]
 
 [resource]
 script = ExtResource("1_stalkerstats")

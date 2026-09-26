@@ -9,7 +9,7 @@ class_name CapacityOverlay
 @export var good_color: Color = Color(1.0, 0.82, 0.2, 1.0)
 @export var good_curve: Curve ## X = 0 at 50%, 1 at 100% — Y = intensity (0-1)
 
-@export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
+@export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/player/crunch_time_effects.tres")
 
 var _active_crunch_time := false
 var _last_capacity := 0.0

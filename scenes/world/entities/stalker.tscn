@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bvk8hf7vr3pqi"]
 
 [ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="1_stalker"]
-[ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/stalker_stats.tres" id="1_stalkerstats"]
+[ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/enemies/stalker/stalker_stats.tres" id="1_stalkerstats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_mcjbk"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_scrap"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]

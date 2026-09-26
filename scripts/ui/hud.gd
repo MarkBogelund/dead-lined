@@ -1,6 +1,6 @@
 extends Control
 
-@export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
+@export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/player/crunch_time_effects.tres")
 
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var player: Player = %Player

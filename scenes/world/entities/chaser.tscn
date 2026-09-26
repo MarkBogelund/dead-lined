@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dbn6ammn3fpex"]
 
-[ext_resource type="Resource" uid="uid://blw5awhrqlike" path="res://resources/chaser_stats.tres" id="1_chaserstats"]
+[ext_resource type="Resource" uid="uid://blw5awhrqlike" path="res://resources/enemies/chaser/chaser_stats.tres" id="1_chaserstats"]
 [ext_resource type="Script" uid="uid://73dnhyc0uhym" path="res://scripts/world/entities/enemy/chaser.gd" id="1_dxuae"]
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_fffhc"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="3_fffhc"]

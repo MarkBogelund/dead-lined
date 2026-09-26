@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="KamikazerStats" format=3 uid="uid://dfmgppjmpi2ej"]
 
 [ext_resource type="Script" uid="uid://wp2jn3tx866t" path="res://scripts/data/kamikazer_stats.gd" id="1_kamikazerstats"]
-[ext_resource type="Resource" uid="uid://3imbum7vqvu8" path="res://resources/targeting/kamikazer_targeting.tres" id="2_targeting"]
+[ext_resource type="Resource" uid="uid://3imbum7vqvu8" path="res://resources/enemies/kamikazer/kamikazer_targeting.tres" id="2_targeting"]
 
 [resource]
 script = ExtResource("1_kamikazerstats")

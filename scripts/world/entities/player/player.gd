@@ -26,7 +26,7 @@ signal died
 @onready var camera: GameCamera = $"Camera2D"
 
 @export var stats: PlayerStats
-@export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
+@export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/player/crunch_time_effects.tres")
 
 @export_group("Dash Charge Presentation")
 @export_range(1.0, 2.0, 0.01) var dash_charge_zoom := 1.15

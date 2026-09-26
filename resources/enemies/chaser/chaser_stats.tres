@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ChaserStats" format=3 uid="uid://blw5awhrqlike"]
 
 [ext_resource type="Script" uid="uid://cchaserstats1" path="res://scripts/data/chaser_stats.gd" id="1_chaserstats"]
-[ext_resource type="Resource" uid="uid://cifxhqdsf4hcy" path="res://resources/targeting/enemy_targeting.tres" id="2_0genj"]
+[ext_resource type="Resource" uid="uid://cifxhqdsf4hcy" path="res://resources/enemies/enemy_targeting.tres" id="2_0genj"]
 
 [resource]
 script = ExtResource("1_chaserstats")

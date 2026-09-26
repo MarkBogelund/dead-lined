@@ -21,7 +21,7 @@ signal crunch_time_ended(buffs: Dictionary, duration: float)
 @export var duration: float = 5.0
 
 @export_group("Camera")
-@export var effects: CrunchTimeEffects = preload("res://resources/crunch_time_effects.tres")
+@export var effects: CrunchTimeEffects = preload("res://resources/player/crunch_time_effects.tres")
 
 ## State
 var is_active := false

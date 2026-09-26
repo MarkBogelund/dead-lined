@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/entities/turret_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://ci6t3dum71ion" path="res://scripts/world/entities/turret/seeker.gd" id="2_script"]
-[ext_resource type="Resource" uid="uid://cwq21j4s01byy" path="res://resources/seeker_stats.tres" id="3_stats"]
+[ext_resource type="Resource" uid="uid://cwq21j4s01byy" path="res://resources/turrets/seeker/seeker_stats.tres" id="3_stats"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_shoot"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_projectile"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="6_targeting"]

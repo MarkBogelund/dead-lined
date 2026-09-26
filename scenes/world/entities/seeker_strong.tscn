@@ -1,5 +1,5 @@
 [gd_scene load_steps=2 format=3 uid="uid://cj3ixjp2dooji"]
 [ext_resource type="PackedScene" path="res://scenes/world/entities/seeker.tscn" id="1_seeker"]
-[ext_resource type="Resource" path="res://resources/seeker_strong_stats.tres" id="2_stats"]
+[ext_resource type="Resource" path="res://resources/turrets/seeker_strong/seeker_strong_stats.tres" id="2_stats"]
 [node name="SeekerStrong" instance=ExtResource("1_seeker")]
 stats = ExtResource("2_stats")
