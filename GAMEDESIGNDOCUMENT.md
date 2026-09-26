@@ -44,7 +44,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 **What you do:**
 - Place new turrets (costs capacity)
 - Upgrade existing turrets by holding Upgrade on the turret panel (costs capacity; each level applies an unannounced buff)
-- Sell turrets by holding Sell (refunds 75% of everything spent on that turret)
+- Sell turrets by holding Sell (refunds 75% of everything spent on that turret, capped at max capacity)
 - Repair damaged turrets by holding Left Shift inside their radius, in build or combat phase (drains capacity while repairing)
 - Collect leftover enemy drops
 

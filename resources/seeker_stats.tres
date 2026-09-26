@@ -6,25 +6,25 @@
 [sub_resource type="Resource" id="Upgrade1"]
 script = ExtResource("2_nmlpx")
 cost = 25.0
-max_health_bonus = 20
+max_health_bonus = 40
 damage_bonus = 5
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_nmlpx")
 cost = 35.0
-max_health_bonus = 20
+max_health_bonus = 30
 damage_bonus = 5
 
 [sub_resource type="Resource" id="Upgrade3"]
 script = ExtResource("2_nmlpx")
 cost = 45.0
-max_health_bonus = 15
+max_health_bonus = 30
 damage_bonus = 10
 
 [sub_resource type="Resource" id="Upgrade4"]
 script = ExtResource("2_nmlpx")
 cost = 55.0
-max_health_bonus = 15
+max_health_bonus = 20
 damage_bonus = 10
 
 [resource]

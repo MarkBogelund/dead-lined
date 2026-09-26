@@ -36,10 +36,8 @@ func set_actions_visible(value: bool) -> void:
 	actions.visible = value
 
 func _refresh() -> void:
-	if _turret.is_max_level():
-		upgrade_label.text = "MAX"
-		upgrade_button.disabled = true
-	else:
+	upgrade_button.visible = not _turret.is_max_level()
+	if upgrade_button.visible:
 		upgrade_label.text = "%d" % int(_turret.get_upgrade_cost())
 		upgrade_button.disabled = not _turret.can_upgrade()
 	sell_label.text = "%d" % int(_turret.get_sell_value())

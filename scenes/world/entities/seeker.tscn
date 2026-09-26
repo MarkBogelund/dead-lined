@@ -98,7 +98,7 @@ stats = ExtResource("3_stats")
 hit_flash_duration = 0.48
 
 [node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
-health_component = NodePath("../HealthComponent")
+z_index = 0
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/seeker = SubResource("SeekerLibrary")

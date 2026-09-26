@@ -104,7 +104,8 @@ func try_upgrade() -> void:
 	upgrade_purchased.emit(cost)
 
 func get_sell_value() -> float:
-	return total_invested * _sell_refund_ratio
+	var refund := total_invested * _sell_refund_ratio
+	return minf(refund, player.capacity.get_max()) if player else refund
 
 func can_sell() -> bool:
 	return _can_manage()
