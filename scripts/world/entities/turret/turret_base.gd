@@ -27,6 +27,7 @@ var enabled := true
 ## Floor for attack cooldowns; upgrades below it are clamped with a warning.
 const MIN_ATTACK_COOLDOWN := 0.5
 var total_invested := 0.0
+var _base_stats: TurretStats
 var _active := false
 var _repairing := false
 var _selling := false
@@ -75,6 +76,7 @@ func _ready() -> void:
 		hud.setup(self, wave_manager)
 
 func initialize_base(stats: TurretStats) -> void:
+	_base_stats = stats
 	health.initialize(stats.max_health)
 	repair.initialize(stats.repair_cost_per_second, stats.repair_health_per_second)
 	range_indicator.initialize(stats.attack_range)
@@ -160,17 +162,19 @@ func sell() -> void:
 func _can_manage() -> bool:
 	return not _selling and not is_dead() and (wave_manager == null or wave_manager.is_build_phase())
 
+## Upgrade values multiply the base stats (not the previous level); -1 keeps the previous level's value.
 func _on_upgraded(upgrade: TurretUpgrade) -> void:
-	if upgrade.max_health >= 0:
-		health.set_max_health(upgrade.max_health)
-	if upgrade.damage >= 0:
-		set_damage(upgrade.damage)
+	if upgrade.max_health >= 0.0:
+		health.set_max_health(roundi(_base_stats.max_health * upgrade.max_health))
+	if upgrade.damage >= 0.0:
+		set_damage(roundi(_base_stats.damage * upgrade.damage))
 	if upgrade.attack_range >= 0.0:
-		set_attack_range(upgrade.attack_range)
+		set_attack_range(_base_stats.attack_range * upgrade.attack_range)
 	if upgrade.attack_cooldown >= 0.0:
-		if upgrade.attack_cooldown < MIN_ATTACK_COOLDOWN:
-			push_warning("%s level %d attack_cooldown %.2f is below MIN_ATTACK_COOLDOWN %.2f; clamping" % [name, upgrader.level, upgrade.attack_cooldown, MIN_ATTACK_COOLDOWN])
-		set_attack_cooldown(maxf(MIN_ATTACK_COOLDOWN, upgrade.attack_cooldown))
+		var cooldown := _base_stats.attack_cooldown * upgrade.attack_cooldown
+		if cooldown < MIN_ATTACK_COOLDOWN:
+			push_warning("%s level %d attack_cooldown %.2f is below MIN_ATTACK_COOLDOWN %.2f; clamping" % [name, upgrader.level, cooldown, MIN_ATTACK_COOLDOWN])
+		set_attack_cooldown(maxf(MIN_ATTACK_COOLDOWN, cooldown))
 	health_ui.set_level(upgrader.level)
 	animation.play_animation("upgrade")
 	if upgrader.is_max_level():

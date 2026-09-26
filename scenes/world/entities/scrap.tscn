@@ -278,6 +278,7 @@ fill_from = Vector2(0.5, 0.5)
 [node name="Scrap" type="RigidBody2D" unique_id=1809465642]
 collision_layer = 512
 script = ExtResource("1_sd2yw")
+despawn_delay = 15
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=188524499]
 z_index = 2

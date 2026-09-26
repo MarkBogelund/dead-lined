@@ -7,27 +7,27 @@
 [sub_resource type="Resource" id="Upgrade1"]
 script = ExtResource("2_nmlpx")
 cost = 25.0
-max_health = 275
-attack_range = 175.0
+max_health = 1.1
+attack_range = 1.17
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_nmlpx")
 cost = 35.0
-damage = 10
+damage = 2.0
 attack_cooldown = 0.75
 
 [sub_resource type="Resource" id="Upgrade3"]
 script = ExtResource("2_nmlpx")
 cost = 45.0
-max_health = 300
-attack_range = 200.0
+max_health = 1.2
+attack_range = 1.33
 
 [sub_resource type="Resource" id="Upgrade4"]
 script = ExtResource("2_nmlpx")
 cost = 55.0
-max_health = 350
-damage = 20
-attack_range = 250.0
+max_health = 1.4
+damage = 4.0
+attack_range = 1.67
 attack_cooldown = 0.5
 
 [resource]
@@ -35,8 +35,8 @@ script = ExtResource("1_seekerstats")
 aim_speed = 5.0
 aim_tolerance = 0.15
 projectile_speed = 170.0
-max_health = 250
+max_health = 300
 damage = 5
-attack_range = 0.0
+attack_range = 150.0
 upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Upgrade3"), SubResource("Upgrade4")])
-repair_health_per_second = 10.0
+repair_health_per_second = 100.0

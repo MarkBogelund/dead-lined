@@ -6,36 +6,36 @@
 [sub_resource type="Resource" id="Upgrade1"]
 script = ExtResource("2_upgrade")
 cost = 25.0
-max_health = 225
-attack_range = 100.0
+max_health = 1.125
+attack_range = 1.11
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_upgrade")
 cost = 35.0
-damage = 10
-attack_cooldown = 1.0
+damage = 2.0
+attack_cooldown = 0.67
 
 [sub_resource type="Resource" id="Resource_nmlpx"]
 script = ExtResource("2_upgrade")
 cost = 45.0
-max_health = 250
-attack_range = 125.0
+max_health = 1.25
+attack_range = 1.39
 metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [sub_resource type="Resource" id="Resource_qtbxs"]
 script = ExtResource("2_upgrade")
 cost = 55.0
-max_health = 275
-damage = 20
-attack_range = 150.0
-attack_cooldown = 0.75
+max_health = 1.375
+damage = 4.0
+attack_range = 1.67
+attack_cooldown = 0.5
 metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [resource]
 script = ExtResource("1_stats")
 ring_thickness = 15.0
 expansion_duration = 0.7
-max_health = 200
+max_health = 250
 damage = 5
 knockback = 180.0
 attack_range = 90.0

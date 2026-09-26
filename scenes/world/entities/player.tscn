@@ -782,7 +782,7 @@ z_index = 4
 position = Vector2(24, 0)
 script = ExtResource("19_aimindicator")
 distance = 32.0
-dot_radius = 1
+color = Color(0.39695928, 0.29874277, 0, 1)
 
 [node name="FlashVfx" parent="." unique_id=462082651 instance=ExtResource("16_74ekq")]
 scale = Vector2(2, 2)

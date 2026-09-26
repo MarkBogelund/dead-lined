@@ -7,14 +7,14 @@
 [sub_resource type="Resource" id="Upgrade1"]
 script = ExtResource("2_74yky")
 cost = 25.0
-max_health = 315
-damage = 30
+max_health = 1.05
+damage = 1.5
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_74yky")
 cost = 35.0
-max_health = 330
-damage = 40
+max_health = 1.1
+damage = 2.0
 
 [resource]
 script = ExtResource("1_ou7rm")
