@@ -145,8 +145,8 @@ func _physics_process(delta: float) -> void:
 		aim_indicator.point_in(aiming.get_aim_direction())
 	if dash.is_charging():
 		dash_direction_indicator.point_in(_get_dash_direction())
-	elif dash_direction_indicator.visible:
-		dash_direction_indicator.hide()
+	else:
+		dash_direction_indicator.fade_out()
 
 func _get_move_state() -> MoveState:
 	if dash.is_dashing(): return MoveState.DASHING

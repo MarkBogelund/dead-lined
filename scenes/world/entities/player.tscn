@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="16_74ekq"]
 [ext_resource type="Texture2D" uid="uid://dxiw7gf3j1g6i" path="res://assets/sprites/player/dash-direction-indicator.png" id="17_2454e"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="18_1vgk0"]
+[ext_resource type="Texture2D" uid="uid://cknlmh6uhqt32" path="res://assets/sprites/player/crosshair.png" id="19_1esm0"]
 [ext_resource type="Script" uid="uid://ceh6tabl76hf8" path="res://scripts/world/entities/player/aim_indicator.gd" id="19_aimindicator"]
 [ext_resource type="Material" uid="uid://bxeh6alamp27j" path="res://materials/dash_charge_particle_process_material.tres" id="20_windup"]
 [ext_resource type="Script" uid="uid://dtlddhxtx6w20" path="res://scripts/world/entities/player/dash_direction_indicator.gd" id="21_dashdir"]
@@ -784,15 +785,17 @@ z_index = 4
 position = Vector2(0, 8)
 script = ExtResource("21_dashdir")
 texture = ExtResource("17_2454e")
-start_offset = 24.0
+start_offset = 32.0
 color = Color(1, 1, 1, 1)
+fade_duration = 0.1
 
 [node name="AimIndicator" type="Node2D" parent="." unique_id=254607644]
 z_index = 4
 position = Vector2(24, 0)
 script = ExtResource("19_aimindicator")
+texture = ExtResource("19_1esm0")
 distance = 32.0
-color = Color(1, 1, 1, 1)
+color = Color(0.9613809, 0.61137724, 1.1551381e-06, 1)
 
 [node name="FlashVfx" parent="." unique_id=462082651 instance=ExtResource("16_74ekq")]
 scale = Vector2(2, 2)
