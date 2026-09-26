@@ -15,7 +15,7 @@ class_name ChaserStats
 
 @export_group("Targeting")
 ## Target selection rules (player high priority, turrets low)
-@export var targeting: TargetingProfile = preload("res://resources/targeting/chaser_targeting.tres")
+@export var targeting: TargetingProfile = preload("res://resources/targeting/enemy_targeting.tres")
 
 @export_group("Combat")
 ## Damage dealt on contact with the player

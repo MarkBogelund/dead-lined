@@ -6,6 +6,6 @@
 script = ExtResource("1_profile")
 secondary_group = &"turrets"
 primary_lock_radius = 100.0
-switch_to_secondary_margin = 48.0
-return_to_primary_margin = 24.0
+switch_to_secondary_margin = 80.0
+return_to_primary_margin = 40.0
 retarget_margin = 36.0

@@ -19,7 +19,7 @@ class_name StalkerStats
 ## Angle tolerance in radians within which the stalker will fire
 @export var accuracy_angle: float = 0.25
 ## Target selection rules (player high priority, turrets low)
-@export var targeting: TargetingProfile = preload("res://resources/targeting/stalker_targeting.tres")
+@export var targeting: TargetingProfile = preload("res://resources/targeting/enemy_targeting.tres")
 
 @export_group("Shooting")
 ## Seconds after acquiring line-of-sight before the first shot is fired

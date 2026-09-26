@@ -11,7 +11,7 @@ class_name SeekerStats
 ## Angle tolerance in radians within which the seeker will fire
 @export var accuracy_angle: float = 0.1
 ## Target selection rules (enemies high priority, player low)
-@export var targeting: TargetingProfile = preload("res://resources/targeting/seeker_targeting.tres")
+@export var targeting: TargetingProfile = preload("res://resources/targeting/turret_targeting.tres")
 
 @export_group("Shooting")
 ## Seconds after acquiring a target before the first shot is fired

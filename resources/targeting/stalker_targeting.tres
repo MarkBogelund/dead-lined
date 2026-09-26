@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="TargetingProfile" format=3 uid="uid://g6nyh4w1y0i3"]
-
-[ext_resource type="Script" uid="uid://cilmx5t7s03fm" path="res://scripts/data/targeting_profile.gd" id="1_profile"]
-
-[resource]
-script = ExtResource("1_profile")
-secondary_group = &"turrets"
-primary_lock_radius = 80.0
