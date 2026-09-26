@@ -32,10 +32,8 @@ func _initialize() -> void:
 		return
 	_initialize_base(stats.max_health, stats.scrap_drop_amount)
 	hitbox.initialize(stats.hitbox_damage, stats.hitbox_knockback)
-	targeting.configure_priorities({
-		"player": stats.player_target_priority,
-		"turrets": stats.turret_target_priority,
-	}, stats.priority_distance_threshold)
+	targeting.configure(stats.targeting)
+	targeting.target_changed.connect(_on_target_changed)
 	_speed = stats.speed
 	_self_knockback = stats.self_knockback
 	_attack_radius = stats.attack_radius
@@ -72,6 +70,10 @@ func _on_hit_target(target: Node) -> void:
 
 func _should_restart_hit_particles_on_damage() -> bool:
 	return true
+
+## The attack latch measures distance to one specific target, so it must not carry over to a new one.
+func _on_target_changed(_new_target: Node2D, _old_target: Node2D) -> void:
+	_is_attacking = false
 
 ## Enters attack mode at attack_radius, but only exits it past attack_radius + margin, so resting
 ## exactly on the boundary doesn't flip the target/avoidance state every frame.

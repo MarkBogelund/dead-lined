@@ -15,19 +15,10 @@
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="14_projectile"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="15_jqj1v"]
 [ext_resource type="Texture2D" uid="uid://d4bm6n0cjpvo2" path="res://assets/sprites/enemies/stalker-shadow.png" id="16_36hmg"]
-[ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="16_mcjbk"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="17_mcjbk"]
 [ext_resource type="Texture2D" uid="uid://bioitf2isi5uq" path="res://assets/sprites/enemies/stalker.png" id="17_wkm5l"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="19_wkm5l"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="20_rqd04"]
-
-[sub_resource type="Resource" id="Resource_36hmg"]
-script = ExtResource("16_mcjbk")
-group_name = "player"
-
-[sub_resource type="Resource" id="Resource_wkm5l"]
-script = ExtResource("16_mcjbk")
-group_name = "turrets"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wkm5l"]
 radius = 9.0
@@ -781,7 +772,6 @@ muzzle = NodePath("../AimCenter/Muzzle")
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=486870823]
 script = ExtResource("15_jqj1v")
-target_configs = Array[ExtResource("16_mcjbk")]([SubResource("Resource_36hmg"), SubResource("Resource_wkm5l")])
 
 [node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
 script = ExtResource("13_shoot")

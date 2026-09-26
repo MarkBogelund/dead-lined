@@ -10,14 +10,8 @@ class_name SeekerStats
 @export var aim_speed: float = 6.0
 ## Angle tolerance in radians within which the seeker will fire
 @export var accuracy_angle: float = 0.1
-## Priority assigned to the enemy target group
-@export var enemy_target_priority: int = 1
-## Priority assigned to the player target group
-@export var player_target_priority: int = 0
-## Distance advantage required before switching to a lower-priority target
-@export var priority_distance_threshold: float = 20.0
-## Distance advantage required before switching between equal-priority targets
-@export var same_priority_switch_distance: float = 24.0
+## Target selection rules (enemies high priority, player low)
+@export var targeting: TargetingProfile = preload("res://resources/targeting/seeker_targeting.tres")
 
 @export_group("Shooting")
 ## Seconds after acquiring a target before the first shot is fired

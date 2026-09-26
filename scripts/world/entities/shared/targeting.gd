@@ -1,153 +1,129 @@
 extends Node
 class_name TargetingComponent
 
-## Reusable targeting component for entities (enemies, turrets, etc.)
-## Configure target priorities in the inspector
-## Higher priority values = higher importance
+## Picks a target from a TargetingProfile's high/low priority groups.
+## Rules (in order): drop an invalid current target; a high-priority target inside lock_radius wins;
+## otherwise the low-priority target wins only when dist(high) > dist(low) + cross_priority_margin
+## (and keeps winning until dist(high) < dist(low) + cross_priority_return_margin);
+## within the chosen tier the current target is kept unless a challenger is closer by same_priority_margin.
 
-## Array of target configurations - configure in inspector
-@export var target_configs: Array[TargetConfig] = []
+signal target_changed(new_target: Node2D, old_target: Node2D)
 
-## Distance threshold for priority switching
-## If a lower priority target is closer by more than this amount, switch to it
-@export var priority_distance_threshold := 20.0
-
-## Maximum distance to consider targets in this group (-1 = unlimited)
+@export var profile: TargetingProfile
+## Maximum distance to consider any target (-1 = unlimited). Per instance so range upgrades can change it.
 @export var max_range: float = -1.0
-## A same-priority challenger must be this many pixels closer before replacing the current target.
-@export var same_priority_switch_distance: float = 0.0
 
-var _sorted_configs: Array[TargetConfig] = []
+const DEBUG_Z_INDEX := 1
+
 var _current_target: Node2D
-var _disabled_groups: Dictionary[String, bool] = {}
+var _current_is_high := false
+var _disabled_groups: Dictionary[StringName, bool] = {}
+var _debug: TargetingDebugDraw
 
-func _ready() -> void:
-	_create_runtime_configs()
+func configure(p_profile: TargetingProfile) -> void:
+	if not p_profile:
+		push_error("%s: TargetingComponent requires a TargetingProfile" % get_parent().name)
+		return
+	profile = p_profile
+	if profile.debug_draw and not _debug:
+		_debug = TargetingDebugDraw.new()
+		_debug.z_index = DEBUG_Z_INDEX
+		add_child(_debug)
 
 func initialize(s_max_range: float) -> void:
 	max_range = s_max_range
 
-func set_group_enabled(group_name: String, is_enabled: bool) -> void:
+func set_group_enabled(group_name: StringName, is_enabled: bool) -> void:
 	if is_enabled:
 		_disabled_groups.erase(group_name)
 	else:
 		_disabled_groups[group_name] = true
 
-func configure_priorities(priorities: Dictionary, distance_threshold: float, same_priority_distance: float = 0.0) -> void:
-	priority_distance_threshold = distance_threshold
-	same_priority_switch_distance = maxf(0.0, same_priority_distance)
-	_create_runtime_configs()
-	for config: TargetConfig in _sorted_configs:
-		config.priority = int(priorities.get(config.group_name, config.priority))
-	_sort_configs()
-
-func _create_runtime_configs() -> void:
-	_sorted_configs.clear()
-	for config: TargetConfig in target_configs:
-		_sorted_configs.append(config.duplicate() as TargetConfig)
-	_sort_configs()
-
-func _sort_configs() -> void:
-	_sorted_configs.sort_custom(func(a: TargetConfig, b: TargetConfig) -> bool: return a.priority > b.priority)
-
-## Get the best target based on configured priorities and proximity
-## filter: optional callable(Node2D) -> bool; return false to exclude a candidate
-## Returns null if no valid targets found
+## filter: optional callable(Node2D) -> bool; return false to exclude a candidate (e.g. line of sight).
 func get_best_target(from_position: Vector2, filter: Callable = Callable()) -> Node2D:
-	if target_configs.is_empty():
+	if not profile:
 		return null
-	
-	var best_target: Node2D = null
-	var best_distance_sq := INF
-	var best_priority := -1
-	
-	# Scan through all priority groups
-	for config: TargetConfig in _sorted_configs:
-		if config.group_name.is_empty() or _disabled_groups.has(config.group_name):
-			continue
-		
-		var nodes: Array[Node] = get_tree().get_nodes_in_group(config.group_name)
-		
-		for node: Node in nodes:
-			# Skip invalid nodes
-			if not is_instance_valid(node) or not node is Node2D:
-				continue
-			
-			# Skip dead entities if they have is_dead() method
-			if node.has_method("is_dead") and node.is_dead():
-				continue
-			
-			var distance_sq := from_position.distance_squared_to(node.global_position)
-			
-			# Skip if outside max range
-			if max_range >= 0.0 and distance_sq > max_range * max_range:
-				continue
-			
-			# Apply optional caller-supplied filter (e.g. line of sight)
-			if filter.is_valid() and not filter.call(node):
-				continue
-			
-			# First valid target found
-			if best_target == null:
-				best_target = node
-				best_distance_sq = distance_sq
-				best_priority = config.priority
-				continue
-			
-			# Same priority - take closest
-			if config.priority == best_priority:
-				if distance_sq < best_distance_sq:
-					best_target = node
-					best_distance_sq = distance_sq
-			# Higher priority - take it as new best
-			elif config.priority > best_priority:
-				best_target = node
-				best_distance_sq = distance_sq
-				best_priority = config.priority
-			# Lower priority - only take if significantly closer
-			elif config.priority < best_priority:
-				var best_distance := sqrt(best_distance_sq)
-				var this_distance := sqrt(distance_sq)
-				
-				# If this lower priority target is closer by more than threshold, switch to it
-				if (best_distance - this_distance) > priority_distance_threshold:
-					best_target = node
-					best_distance_sq = distance_sq
-					best_priority = config.priority
-	
-	if best_target == null:
+	var high := _nearest(profile.high_priority_group, from_position, filter)
+	var low := _nearest(profile.low_priority_group, from_position, filter)
+	if not is_instance_valid(_current_target) or not _is_candidate(_current_target, from_position, filter):
 		_current_target = null
-		return null
 
-	if _is_valid_target(_current_target, from_position, filter) and best_target != _current_target:
-		var current_priority := _get_target_priority(_current_target)
-		var best_candidate_priority := _get_target_priority(best_target)
-		if current_priority == best_candidate_priority:
-			var current_distance := from_position.distance_to(_current_target.global_position)
-			var challenger_distance := from_position.distance_to(best_target.global_position)
-			if current_distance - challenger_distance < same_priority_switch_distance:
-				return _current_target
+	var use_high := _choose_high_tier(high, low, from_position)
+	var chosen: Node2D = high if use_high else low
+	var takeover_radius := -1.0
+	if chosen and _current_target and _current_is_high == use_high:
+		var current_distance := from_position.distance_to(_current_target.global_position)
+		takeover_radius = current_distance - profile.same_priority_margin
+		if from_position.distance_to(chosen.global_position) >= takeover_radius:
+			chosen = _current_target
 
-	_current_target = best_target
+	_set_current(chosen, use_high)
+	if _debug:
+		_update_debug(from_position, high, low, takeover_radius)
 	return _current_target
 
-func _is_valid_target(target: Variant, from_position: Vector2, filter: Callable) -> bool:
-	if not is_instance_valid(target) or not target is Node2D:
+func _choose_high_tier(high: Node2D, low: Node2D, from_position: Vector2) -> bool:
+	if not low:
+		return true
+	if not high:
 		return false
-	var target_node := target as Node2D
-	if not target_node.is_inside_tree():
-		return false
-	if target_node.has_method("is_dead") and target_node.is_dead():
-		return false
-	for group_name: String in _disabled_groups:
-		if target_node.is_in_group(group_name):
-			return false
-	if max_range >= 0.0 and from_position.distance_squared_to(target_node.global_position) > max_range * max_range:
-		return false
-	return not filter.is_valid() or filter.call(target_node)
+	var high_distance := from_position.distance_to(high.global_position)
+	if profile.lock_radius >= 0.0 and high_distance <= profile.lock_radius:
+		return true
+	return high_distance < from_position.distance_to(low.global_position) + _active_cross_margin()
 
-func _get_target_priority(target: Node2D) -> int:
-	for config: TargetConfig in _sorted_configs:
-		if target.is_in_group(config.group_name):
-			return config.priority
-	return -1
+## Hysteresis: once on the low tier, the high tier must come closer (return margin) to win it back.
+func _active_cross_margin() -> float:
+	var on_low := _current_target != null and not _current_is_high
+	return profile.cross_priority_return_margin if on_low else profile.cross_priority_margin
+
+func _set_current(target: Node2D, is_high: bool) -> void:
+	_current_is_high = is_high
+	if target == _current_target:
+		return
+	var old := _current_target
+	_current_target = target
+	target_changed.emit(target, old)
+
+func _nearest(group_name: StringName, from_position: Vector2, filter: Callable) -> Node2D:
+	if group_name.is_empty() or _disabled_groups.has(group_name):
+		return null
+	var best: Node2D = null
+	var best_distance_sq := INF
+	for node: Node in get_tree().get_nodes_in_group(group_name):
+		var candidate := node as Node2D
+		if not _passes_basic_checks(candidate, from_position, filter):
+			continue
+		var distance_sq := from_position.distance_squared_to(candidate.global_position)
+		if distance_sq < best_distance_sq:
+			best = candidate
+			best_distance_sq = distance_sq
+	return best
+
+func _is_candidate(target: Node2D, from_position: Vector2, filter: Callable) -> bool:
+	var in_enabled_group := false
+	for group_name: StringName in [profile.high_priority_group, profile.low_priority_group]:
+		if not group_name.is_empty() and not _disabled_groups.has(group_name) and target.is_in_group(group_name):
+			in_enabled_group = true
+	return in_enabled_group and _passes_basic_checks(target, from_position, filter)
+
+func _passes_basic_checks(target: Node2D, from_position: Vector2, filter: Callable) -> bool:
+	if not target or not target.is_inside_tree():
+		return false
+	if target.has_method("is_dead") and target.is_dead():
+		return false
+	if max_range >= 0.0 and from_position.distance_squared_to(target.global_position) > max_range * max_range:
+		return false
+	return not filter.is_valid() or filter.call(target)
+
+func _update_debug(from_position: Vector2, high: Node2D, low: Node2D, takeover_radius: float) -> void:
+	_debug.global_position = from_position
+	_debug.lock_radius = profile.lock_radius
+	_debug.max_range = max_range
+	_debug.high_distance = from_position.distance_to(high.global_position) if high else -1.0
+	_debug.low_distance = from_position.distance_to(low.global_position) if low else -1.0
+	_debug.switch_radius = _debug.low_distance + _active_cross_margin() if low else -1.0
+	_debug.takeover_radius = takeover_radius
+	_debug.target_offset = _current_target.global_position - from_position if _current_target else Vector2.ZERO
+	_debug.target_is_high = _current_is_high
+	_debug.queue_redraw()

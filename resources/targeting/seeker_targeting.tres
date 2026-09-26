@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TargetingProfile" format=3 uid="uid://b6y1jjauy4x2y"]
+
+[ext_resource type="Script" uid="uid://cilmx5t7s03fm" path="res://scripts/data/targeting_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+high_priority_group = &"enemies"
+low_priority_group = &"player"
+cross_priority_margin = 42.0
+cross_priority_return_margin = 42.0
+same_priority_margin = 42.0

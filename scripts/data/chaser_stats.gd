@@ -14,12 +14,8 @@ class_name ChaserStats
 @export var attack_exit_margin: float = 20.0
 
 @export_group("Targeting")
-## Priority assigned to the player target group
-@export var player_target_priority: int = 1
-## Priority assigned to the turret target group
-@export var turret_target_priority: int = 0
-## Distance advantage required before switching to a lower-priority target
-@export var priority_distance_threshold: float = 40.0
+## Target selection rules (player high priority, turrets low)
+@export var targeting: TargetingProfile = preload("res://resources/targeting/chaser_targeting.tres")
 
 @export_group("Combat")
 ## Damage dealt on contact with the player

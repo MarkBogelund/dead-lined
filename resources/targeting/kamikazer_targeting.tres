@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TargetingProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/targeting_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+high_priority_group = &"player"
+low_priority_group = &""

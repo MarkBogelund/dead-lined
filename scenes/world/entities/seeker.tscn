@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_shoot"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/entities/turret_projectile.tscn" id="5_projectile"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="6_targeting"]
-[ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="7_config"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="8_aiming"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="9_los"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/turrets/seeker.png" id="10_sprite"]
@@ -84,14 +83,6 @@ _data = {
 &"shoot": SubResource("Shoot")
 }
 
-[sub_resource type="Resource" id="PlayerConfig"]
-script = ExtResource("7_config")
-group_name = "player"
-
-[sub_resource type="Resource" id="EnemyConfig"]
-script = ExtResource("7_config")
-group_name = "enemies"
-
 [node name="Seeker" unique_id=2138402404 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -112,7 +103,6 @@ projectile_scene = ExtResource("5_projectile")
 
 [node name="TargetingComponent" type="Node" parent="." index="15" unique_id=726577176]
 script = ExtResource("6_targeting")
-target_configs = Array[ExtResource("7_config")]([SubResource("PlayerConfig"), SubResource("EnemyConfig")])
 
 [node name="AimingComponent" type="Node" parent="." index="16" unique_id=2062746291]
 script = ExtResource("8_aiming")

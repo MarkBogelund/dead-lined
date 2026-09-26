@@ -27,10 +27,7 @@ func _initialize() -> void:
 	aiming.muzzle = $Visuals/Canon/Graphics/Muzzle
 	initialize_base(stats, stats.max_range)
 	targeting.initialize(stats.max_range)
-	targeting.configure_priorities({
-		"enemies": stats.enemy_target_priority,
-		"player": stats.player_target_priority,
-	}, stats.priority_distance_threshold, stats.same_priority_switch_distance)
+	targeting.configure(stats.targeting)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
 	aiming.initialize(stats.aim_speed, stats.accuracy_angle)
 
@@ -41,7 +38,7 @@ func _on_combat_stopped() -> void:
 	_telegraphing = false
 
 func _stop_targeting_player() -> void:
-	targeting.set_group_enabled("player", false)
+	targeting.set_group_enabled(&"player", false)
 
 func _process(delta: float) -> void:
 	if not is_turret_active():

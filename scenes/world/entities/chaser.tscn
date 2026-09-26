@@ -13,7 +13,6 @@
 [ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation.gd" id="11_uqckg"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="12_by6ef"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="13_by6ef"]
-[ext_resource type="Script" uid="uid://cdfpgr7c2xegu" path="res://scripts/world/entities/shared/target_config.gd" id="13_wuiwp"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="14_wuiwp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1no88"]
@@ -542,14 +541,6 @@ gradient = SubResource("Gradient_03bqu")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
-[sub_resource type="Resource" id="Resource_0qpcb"]
-script = ExtResource("13_wuiwp")
-group_name = "player"
-
-[sub_resource type="Resource" id="Resource_85msy"]
-script = ExtResource("13_wuiwp")
-group_name = "turrets"
-
 [sub_resource type="Curve" id="Curve_wuiwp"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
@@ -659,7 +650,6 @@ metadata/_custom_type_script = "uid://bfdfe71wkym8b"
 
 [node name="TargetingComponent" type="Node" parent="." unique_id=37251209]
 script = ExtResource("12_by6ef")
-target_configs = Array[ExtResource("13_wuiwp")]([SubResource("Resource_0qpcb"), SubResource("Resource_85msy")])
 
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("13_by6ef")]
 process_material = SubResource("ParticleProcessMaterial_lei18")

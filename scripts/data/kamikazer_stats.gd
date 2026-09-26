@@ -21,6 +21,10 @@ class_name KamikazerStats
 ## Seconds to wait after hitting a non-player obstacle before charging again
 @export var collision_cooldown_duration: float = 1.0
 
+@export_group("Targeting")
+## Target selection rules (player only)
+@export var targeting: TargetingProfile = preload("res://resources/targeting/kamikazer_targeting.tres")
+
 @export_group("Combat")
 ## Damage dealt to the player on explosion trigger
 @export var explosion_damage: int = 30
