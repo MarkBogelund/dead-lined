@@ -37,6 +37,6 @@ aim_tolerance = 0.15
 projectile_speed = 170.0
 max_health = 250
 damage = 5
-attack_range = 150.0
+attack_range = 0.0
 upgrades = Array[ExtResource("2_nmlpx")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Upgrade3"), SubResource("Upgrade4")])
 repair_health_per_second = 10.0

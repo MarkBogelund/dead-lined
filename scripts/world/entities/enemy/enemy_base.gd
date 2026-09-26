@@ -29,8 +29,14 @@ func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
 func clear_conveyor_velocity() -> void:
 	_conveyor_velocity = Vector2.ZERO
 
+func is_riding_conveyor() -> bool:
+	return _conveyor_velocity != Vector2.ZERO
+
+## Passenger mode: on a belt the enemy stops walking and is carried, so it never fights a faster belt.
 func _add_conveyor_velocity() -> void:
-	velocity += _conveyor_velocity
+	if not is_riding_conveyor():
+		return
+	velocity = knockback.velocity + _conveyor_velocity if knockback.is_active() else _conveyor_velocity
 
 func play_spawn_intro(target_position: Vector2, duration: float) -> void:
 	_spawn_intro_active = true

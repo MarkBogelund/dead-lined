@@ -34,3 +34,8 @@ func get_safe_velocity(target_pos: Vector2, move_speed: float) -> Vector2:
 
 func _on_velocity_computed(safe_vel: Vector2) -> void:
 	last_safe_velocity = safe_vel if safe_vel.is_finite() else Vector2.ZERO
+
+## Avoidance-adjusted version of a velocity chosen without pathfinding (e.g. a final straight-line approach).
+func get_safe_direct_velocity(desired_velocity: Vector2) -> Vector2:
+	velocity = desired_velocity if desired_velocity.is_finite() else Vector2.ZERO
+	return last_safe_velocity if avoidance_enabled else velocity

@@ -5,7 +5,8 @@
 
 [resource]
 script = ExtResource("1_chaserstats")
-attack_radius = 90.0
+debug_movement = true
+debug_log_stuck = true
 max_health = 5
 damage = 5
 move_speed = 50.0

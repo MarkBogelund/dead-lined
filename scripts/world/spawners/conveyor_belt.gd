@@ -9,6 +9,10 @@ class_name ConveyorBelt
 
 var _riders: Dictionary[int, Node] = {}
 
+# Joined before any _ready so NavigationMapLayer can find every belt in its own _ready.
+func _enter_tree() -> void:
+	add_to_group(&"conveyor_belts")
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
