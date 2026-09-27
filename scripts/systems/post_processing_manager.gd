@@ -7,6 +7,7 @@ const SETTINGS := preload("res://resources/player/post_processing_settings.tres"
 
 const DASH_DESATURATION := &"dash_desaturation"
 const LOW_CAPACITY_DANGER := &"low_capacity_danger"
+const CRUNCH_TIME_SCREEN := &"crunch_time_screen"
 const CAPACITY_OVERLAY := &"capacity"
 const CRUNCH_TIME_OVERLAY := &"crunch_time"
 
@@ -16,16 +17,19 @@ var _overlay_requests: Dictionary[StringName, Dictionary] = {}
 var _screen_effects: Dictionary[StringName, StringName] = {
 	DASH_DESATURATION: &"desaturation_amount",
 	LOW_CAPACITY_DANGER: &"danger_amount",
+	CRUNCH_TIME_SCREEN: &"crunch_amount",
 }
 var _screen_amounts: Dictionary[StringName, float] = {
 	DASH_DESATURATION: 0.0,
 	LOW_CAPACITY_DANGER: 0.0,
+	CRUNCH_TIME_SCREEN: 0.0,
 }
 var _screen_tweens: Dictionary[StringName, Tween] = {}
 var _overlay_tween: Tween
 var _overlay_color := Color.WHITE
 var _overlay_intensity := 0.0
 var _overlay_pulse_speed := 0.0
+var _overlay_pulse_min := 0.75
 
 func _ready() -> void:
 	layer = 1
@@ -47,17 +51,18 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	var pulse := 1.0
 	if _overlay_pulse_speed > 0.0:
-		pulse = 0.75 + 0.25 * (0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.001 * _overlay_pulse_speed))
+		pulse = lerpf(_overlay_pulse_min, 1.0, 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.001 * _overlay_pulse_speed))
 	_material.set_shader_parameter("overlay_color", _overlay_color)
 	_material.set_shader_parameter("overlay_intensity", _overlay_intensity * pulse)
 
-func set_color_overlay(source: StringName, color: Color, intensity: float, priority := 0, fade_duration := 0.0, pulse_speed := 0.0) -> void:
+func set_color_overlay(source: StringName, color: Color, intensity: float, priority := 0, fade_duration := 0.0, pulse_speed := 0.0, pulse_min := 0.75) -> void:
 	_overlay_requests[source] = {
 		"color": color,
 		"intensity": clampf(intensity, 0.0, 1.0),
 		"priority": priority,
 		"fade_duration": maxf(fade_duration, 0.0),
 		"pulse_speed": maxf(pulse_speed, 0.0),
+		"pulse_min": clampf(pulse_min, 0.0, 1.0),
 	}
 	_resolve_overlay()
 
@@ -99,6 +104,7 @@ func reset() -> void:
 	_overlay_color = Color.WHITE
 	_overlay_intensity = 0.0
 	_overlay_pulse_speed = 0.0
+	_overlay_pulse_min = 0.75
 	for effect: StringName in _screen_amounts:
 		_set_screen_amount(0.0, effect)
 	_material.set_shader_parameter("overlay_intensity", 0.0)
@@ -120,14 +126,22 @@ func update_capacity_effects(capacity: float, maximum: float) -> void:
 
 func set_crunch_time_overlay(active: bool, effects: CrunchTimeEffects) -> void:
 	if active:
+		set_effect_parameter(&"crunch_tint_color", effects.active_screen_tint_color)
+		set_effect_parameter(&"crunch_tint_intensity", effects.active_screen_tint_intensity)
+		set_effect_parameter(&"crunch_chromatic_aberration", effects.active_chromatic_aberration)
+		set_effect_parameter(&"crunch_bloom_intensity", effects.active_bloom_intensity)
+		set_effect_parameter(&"crunch_bloom_radius", effects.active_bloom_radius)
+		set_screen_effect(CRUNCH_TIME_SCREEN, 1.0, SETTINGS.crunch_time_fade_duration)
 		set_color_overlay(
 			CRUNCH_TIME_OVERLAY,
 			effects.active_overlay_color,
 			effects.active_overlay_intensity,
 			SETTINGS.crunch_time_priority,
 			SETTINGS.crunch_time_fade_duration,
-			effects.active_overlay_pulse_speed)
+			effects.active_overlay_pulse_speed,
+			effects.active_overlay_pulse_min)
 	else:
+		set_screen_effect(CRUNCH_TIME_SCREEN, 0.0, SETTINGS.crunch_time_fade_duration)
 		clear_color_overlay(CRUNCH_TIME_OVERLAY, SETTINGS.crunch_time_fade_duration)
 
 func _set_screen_amount(value: float, effect: StringName) -> void:
@@ -144,6 +158,7 @@ func _resolve_overlay(override_duration := -1.0) -> void:
 	var target_intensity := float(selected.get("intensity", 0.0))
 	var duration := override_duration if override_duration >= 0.0 else float(selected.get("fade_duration", 0.0))
 	_overlay_pulse_speed = float(selected.get("pulse_speed", 0.0))
+	_overlay_pulse_min = float(selected.get("pulse_min", 0.75))
 	if _overlay_tween:
 		_overlay_tween.kill()
 	if duration <= 0.0:

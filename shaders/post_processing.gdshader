@@ -17,6 +17,15 @@ uniform float danger_red_tint : hint_range(0.0, 1.0) = 1.0;
 uniform float danger_screen_coverage : hint_range(0.0, 1.0) = 0.54;
 group_uniforms;
 
+group_uniforms crunch_time;
+uniform float crunch_amount : hint_range(0.0, 1.0) = 0.0;
+uniform vec4 crunch_tint_color : source_color = vec4(1.0, 0.72, 0.16, 1.0);
+uniform float crunch_tint_intensity : hint_range(0.0, 1.0) = 0.28;
+uniform float crunch_chromatic_aberration : hint_range(0.0, 1.0) = 0.5;
+uniform float crunch_bloom_intensity : hint_range(0.0, 1.0) = 0.45;
+uniform float crunch_bloom_radius = 2.5;
+group_uniforms;
+
 group_uniforms color_overlay;
 uniform vec4 overlay_color : source_color = vec4(0.4, 0.0, 0.0, 1.0);
 uniform float overlay_intensity : hint_range(0.0, 1.0) = 0.0;
@@ -24,6 +33,11 @@ group_uniforms;
 
 float danger_hash(vec3 value) {
 	return fract(sin(dot(value, vec3(127.1, 311.7, 74.7))) * 43758.5453);
+}
+
+vec3 crunch_bright_pass(vec3 sample_color) {
+	float brightness = max(sample_color.r, max(sample_color.g, sample_color.b));
+	return sample_color * smoothstep(0.6, 1.0, brightness);
 }
 
 void fragment() {
@@ -50,7 +64,8 @@ void fragment() {
 
 	vec2 radial_direction = normalize(centered + vec2(0.0001));
 	float effective_chromatic = danger_chromatic_aberration * danger_amount;
-	vec2 chromatic_offset = radial_direction * 6.0 * effective_chromatic * spatial_coverage * SCREEN_PIXEL_SIZE;
+	float crunch_chromatic = crunch_chromatic_aberration * crunch_amount;
+	vec2 chromatic_offset = radial_direction * (6.0 * effective_chromatic * spatial_coverage + 4.0 * crunch_chromatic) * SCREEN_PIXEL_SIZE;
 	vec2 sample_uv = clamp(SCREEN_UV + glitch_offset, vec2(0.0), vec2(1.0));
 	float red = texture(screen_texture, clamp(sample_uv + chromatic_offset, vec2(0.0), vec2(1.0))).r;
 	float green = texture(screen_texture, sample_uv).g;
@@ -63,6 +78,23 @@ void fragment() {
 	vec3 fully_red = vec3(max(luminance, 0.08), 0.0, 0.0);
 	float effective_red_tint = danger_red_tint * danger_amount;
 	color = mix(color, fully_red, effective_red_tint * spatial_coverage);
+
+	if (crunch_amount > 0.0 && crunch_bloom_intensity > 0.0) {
+		vec2 radius = SCREEN_PIXEL_SIZE * crunch_bloom_radius;
+		vec3 bloom = vec3(0.0);
+		bloom += crunch_bright_pass(texture(screen_texture, clamp(sample_uv + vec2(radius.x, 0.0), vec2(0.0), vec2(1.0))).rgb);
+		bloom += crunch_bright_pass(texture(screen_texture, clamp(sample_uv - vec2(radius.x, 0.0), vec2(0.0), vec2(1.0))).rgb);
+		bloom += crunch_bright_pass(texture(screen_texture, clamp(sample_uv + vec2(0.0, radius.y), vec2(0.0), vec2(1.0))).rgb);
+		bloom += crunch_bright_pass(texture(screen_texture, clamp(sample_uv - vec2(0.0, radius.y), vec2(0.0), vec2(1.0))).rgb);
+		bloom += crunch_bright_pass(texture(screen_texture, clamp(sample_uv + radius, vec2(0.0), vec2(1.0))).rgb);
+		bloom += crunch_bright_pass(texture(screen_texture, clamp(sample_uv - radius, vec2(0.0), vec2(1.0))).rgb);
+		bloom += crunch_bright_pass(texture(screen_texture, clamp(sample_uv + vec2(radius.x, -radius.y), vec2(0.0), vec2(1.0))).rgb);
+		bloom += crunch_bright_pass(texture(screen_texture, clamp(sample_uv + vec2(-radius.x, radius.y), vec2(0.0), vec2(1.0))).rgb);
+		color += bloom * (0.125 * crunch_bloom_intensity * crunch_amount);
+	}
+	float crunch_luminance = dot(color, vec3(0.299, 0.587, 0.114));
+	vec3 gold_tinted = crunch_tint_color.rgb * max(crunch_luminance, 0.12);
+	color = mix(color, gold_tinted, crunch_tint_intensity * crunch_amount);
 
 	float vignette = smoothstep(0.2, 1.3, length(centered));
 	float overlay_weight = overlay_color.a * vignette * overlay_intensity;
