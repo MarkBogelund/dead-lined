@@ -1,13 +1,13 @@
 extends Control
-class_name OffscreenTurretIndicators
+class_name CriticalTurretIndicators
 
-## Arrows warning that a turret is critically damaged and pointing the way to it. Each arrow sits on a fixed
-## border inset from the screen edge, on the line from the player (the camera centre) to its turret.
+## Arrows warning that a turret is critically damaged and pointing the way to it. Each arrow sits next to its
+## turret on the player's side, and only while the player is far enough away.
 
 @export var arrow_texture: Texture2D = preload("res://assets/sprites/ui/turret_critical_arrow.png")
 @export var arrow_color := Color(1.0, 1.0, 1.0, 1.0)
-## How far the border sits from the screen edge toward the centre, as a fraction of the half-screen.
-@export_range(0.0, 0.9, 0.01) var center_inset := 0.2
+## Distance in pixels the arrow keeps from its turret, toward the player.
+@export_range(0.0, 256.0, 1.0) var turret_offset := 48.0
 ## Distance in pixels from the player at which a critical turret gets an arrow.
 @export_range(0.0, 1000.0, 10.0) var min_player_distance := 240.0
 @export_range(0.1, 4.0, 0.05) var pulse_period := 0.8
@@ -24,7 +24,7 @@ func _ready() -> void:
 	if shop_manager:
 		shop_manager.turret_bought.connect(_on_turret_bought)
 	else:
-		push_error("OffscreenTurretIndicators needs a node in the shop_manager group")
+		push_error("CriticalTurretIndicators needs a node in the shop_manager group")
 	if game_over_manager:
 		game_over_manager.game_over.connect(_on_game_over)
 	_track_turrets()
@@ -60,28 +60,19 @@ func _process(delta: float) -> void:
 		return
 	_pulse_time += delta
 	modulate.a = lerpf(pulse_min_alpha, 1.0, 0.5 + 0.5 * sin(_pulse_time * TAU / pulse_period))
-	var center := get_viewport_rect().size * 0.5
 	var canvas_transform := get_viewport().get_canvas_transform()
 	for turret: TurretBase in _arrows:
-		_update_arrow(turret, _arrows[turret], center, canvas_transform)
+		_update_arrow(turret, _arrows[turret], canvas_transform)
 
-func _update_arrow(turret: TurretBase, arrow: PixelRotatedSprite, center: Vector2, canvas_transform: Transform2D) -> void:
-	var offset := canvas_transform * turret.global_position - center
-	if not turret.is_critical() or player == null or offset.is_zero_approx() \
-			or player.global_position.distance_to(turret.global_position) < min_player_distance:
+func _update_arrow(turret: TurretBase, arrow: PixelRotatedSprite, canvas_transform: Transform2D) -> void:
+	if not turret.is_critical() or player == null:
 		arrow.fade_to(0.0)
 		return
-	# Fraction of the way to the turret at which the border is crossed.
-	var half := center * (1.0 - center_inset)
-	var reach := INF
-	if not is_zero_approx(offset.x):
-		reach = half.x / absf(offset.x)
-	if not is_zero_approx(offset.y):
-		reach = minf(reach, half.y / absf(offset.y))
-	# Past the border the arrow would sit behind its turret instead of pointing the player toward it.
-	if reach >= 1.0:
+	var to_player := player.global_position - turret.global_position
+	if to_player.length() < min_player_distance:
 		arrow.fade_to(0.0)
 		return
-	arrow.position = (center + offset * reach).round()
-	arrow.point_at(offset.angle())
+	var world_position := turret.global_position + to_player.normalized() * turret_offset
+	arrow.position = (canvas_transform * world_position).round()
+	arrow.point_at((-to_player).angle())
 	arrow.fade_to(1.0)

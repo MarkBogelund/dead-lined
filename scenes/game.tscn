@@ -32,7 +32,7 @@
 [ext_resource type="Script" uid="uid://dwuvwmcnb0y5n" path="res://scripts/world/game_camera.gd" id="30_game_camera"]
 [ext_resource type="Script" uid="uid://b6dgq5hs8g2d7" path="res://scripts/ui/slow_motion_overlay.gd" id="31_slowmo"]
 [ext_resource type="Script" uid="uid://bt03k72gubhe" path="res://scripts/world/navigation_map_layer.gd" id="32_navmap"]
-[ext_resource type="Script" uid="uid://bwun4kfd5apsa" path="res://scripts/ui/offscreen_turret_indicators.gd" id="33_offscreen"]
+[ext_resource type="Script" uid="uid://bwun4kfd5apsa" path="res://scripts/ui/critical_turret_indicators.gd" id="33_offscreen"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -556,7 +556,7 @@ fade_in_duration = 0.1
 [node name="HUD" parent="UI" unique_id=1136343478 instance=ExtResource("1_kvpfn")]
 metadata/_edit_lock_ = true
 
-[node name="OffscreenTurretIndicators" type="Control" parent="UI" unique_id=1799884786]
+[node name="CriticalTurretIndicators" type="Control" parent="UI" unique_id=1799884786]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -566,9 +566,9 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("33_offscreen")
 arrow_texture = ExtResource("29_js0lu")
-arrow_color = Color(0.9598885, 0.19824979, 0, 1)
-center_inset = 0.5
-min_player_distance = 150.0
+arrow_color = Color(0.95, 0.17416666, 0, 1)
+turret_offset = 100.0
+min_player_distance = 250.0
 pulse_period = 0.6
 pulse_min_alpha = 0.3
 
