@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="CrunchPowerupSettings" format=3]
+[gd_resource type="Resource" script_class="CrunchPowerupSettings" format=3 uid="uid://du4ieurqmx0qj"]
 
-[ext_resource type="Script" path="res://scripts/data/crunch_powerup_settings.gd" id="1_settings"]
+[ext_resource type="Script" uid="uid://wajaakh8qlm0" path="res://scripts/data/crunch_powerup_settings.gd" id="1_settings"]
 
 [resource]
 script = ExtResource("1_settings")

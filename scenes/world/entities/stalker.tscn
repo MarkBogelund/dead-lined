@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="1_stalker"]
 [ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/enemies/stalker/stalker_stats.tres" id="1_stalkerstats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_mcjbk"]
-[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/orb.tscn" id="2_orb"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/capacity_orb.tscn" id="2_orb"]
 [ext_resource type="PackedScene" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="7_ag4mk"]

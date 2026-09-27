@@ -66,11 +66,11 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 **Escalation:** Each wave spawns more enemies, faster bullets, higher difficulty
 
 ### Crunch Time (Power-Up Mode)
-**Powerup:** Each enemy has a small chance (2% by default, set per enemy type) to drop a Crunch Time powerup: a double-size orb with a red glow that lasts longer on the ground. Touching it picks it up and it trails behind the player. Only one can be carried; others stay on the ground.
+**Powerup:** Each enemy has a small chance (2% by default, set per enemy type) to drop a Crunch Time powerup: an orb with its own look that lasts longer on the ground. Touching it picks it up and it trails behind the player. Only one can be carried, and none can be picked up while Crunch Time is running; the rest stay on the ground.
 
 **Activation:** Press Crunch Time (C) during combat while carrying the powerup. It is used up on activation and lasts 5 seconds. No capacity cost.
 
-**Losing it:** The carried powerup disappears if the player is hit, or when the round ends unused. Uncollected powerups disappear after their lifetime or when the round ends.
+**Losing it:** The carried powerup disappears if the player is hit, or when the round ends unused. Uncollected powerups disappear as soon as combat ends, or after their lifetime. Leftover orbs stay through the build phase so they can still be collected, and clear when the next wave starts.
 
 **Effect:**
 - Invincibility

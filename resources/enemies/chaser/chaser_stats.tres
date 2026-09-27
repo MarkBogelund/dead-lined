@@ -8,4 +8,4 @@ script = ExtResource("1_chaserstats")
 max_health = 6
 damage = 8
 move_speed = 50.0
-crunch_powerup_drop_chance = 0.5
+crunch_powerup_drop_chance = 1.0

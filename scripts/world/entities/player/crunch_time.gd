@@ -63,9 +63,9 @@ func set_build_phase(is_build: bool) -> void:
 func has_charge() -> bool:
 	return _has_charge
 
-## Returns false if a charge is already carried, so the powerup stays on the ground.
+## Returns false if Crunch Time is running or a charge is already carried, so the powerup stays on the ground.
 func add_charge() -> bool:
-	if _has_charge:
+	if is_active or _has_charge:
 		return false
 	_has_charge = true
 	charge_gained.emit()

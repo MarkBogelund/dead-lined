@@ -5,8 +5,6 @@ class_name CrunchPowerup
 
 @export var settings: CrunchPowerupSettings
 
-@onready var visuals: Node2D = $Visuals
-@onready var light: PointLight2D = $Visuals/PointLight2D
 @onready var hit_particles: GPUParticles2D = $HitParticles
 
 var _carrier: Player
@@ -19,16 +17,15 @@ func _ready() -> void:
 		push_error("CrunchPowerup requires a CrunchPowerupSettings resource")
 		return
 	lifetime = settings.lifetime
-	# Scaled on the parent because the orb animations key the sprite and light scales directly.
-	visuals.scale = Vector2.ONE * settings.visual_scale
-	light.color = settings.light_color
-	light.energy = settings.light_energy
 	super()
 	set_physics_process(false)
 
-## The round ending clears a carried charge via the player; this covers the one still on the ground.
+## Uncollected powerups are cleared the moment combat ends; a carried one goes with the charge.
 func _connect_phase_signals(wave_manager: WaveManager) -> void:
-	wave_manager.build_phase_started.connect(_on_despawn_phase)
+	wave_manager.build_phase_started.connect(_on_clearing_phase_started)
+
+func _is_clearing_phase_active() -> bool:
+	return _wave_manager.is_build_phase()
 
 func _try_collect(player: Player) -> bool:
 	return player.try_collect_crunch_powerup()
@@ -46,7 +43,7 @@ func _on_collected(player: Player) -> void:
 
 func _physics_process(delta: float) -> void:
 	if _carrier.velocity.length() > 1.0:
-		_trail_direction = -_carrier.velocity.normalized()
+		_trail_direction = - _carrier.velocity.normalized()
 	var target := _carrier.global_position + _trail_direction * settings.follow_distance
 	_follow_position = _follow_position.lerp(target, 1.0 - exp(-settings.follow_smoothing * delta))
 	_bob_time += delta

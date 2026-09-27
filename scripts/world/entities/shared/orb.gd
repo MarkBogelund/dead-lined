@@ -12,6 +12,8 @@ var can_collect := false
 @onready var detection_area: Area2D = $DetectionArea
 @onready var animation_handler: AnimationHandler = $AnimationHandler
 
+var _wave_manager: WaveManager
+
 func _ready() -> void:
 	add_to_group("orbs")
 	detection_area.body_entered.connect(_on_body_entered)
@@ -19,20 +21,28 @@ func _ready() -> void:
 	animation_handler.configure_animation("pick_up", 1, true)
 	animation_handler.configure_animation("despawn", 2, true)
 	animation_handler.animation_finished.connect(_on_animation_finished)
-	var wave_manager := get_tree().get_first_node_in_group("wave_manager") as WaveManager
-	if wave_manager:
-		_connect_phase_signals(wave_manager)
+	_wave_manager = get_tree().get_first_node_in_group("wave_manager") as WaveManager
+	if _wave_manager:
+		_connect_phase_signals(_wave_manager)
 
 ## Called by OrbDropComponent right after the orb enters the tree.
 func launch(impulse: Vector2) -> void:
 	apply_impulse(impulse)
 	can_collect = true
+	# The wave's last enemy drops mid-death-animation, after the phase has already flipped.
+	if _is_clearing_phase_active():
+		_despawn()
+		return
 	get_tree().create_timer(freeze_delay).timeout.connect(_on_freeze_timer)
 	get_tree().create_timer(lifetime).timeout.connect(_on_lifetime_timer)
 
-## Override to despawn on a different phase change.
+## Override to clear uncollected orbs on a different phase change.
 func _connect_phase_signals(wave_manager: WaveManager) -> void:
-	wave_manager.combat_phase_started.connect(_on_despawn_phase.unbind(1))
+	wave_manager.combat_phase_started.connect(_on_clearing_phase_started.unbind(1))
+
+## Override: true when the clearing phase is already running.
+func _is_clearing_phase_active() -> bool:
+	return false
 
 ## Override: return true when the player took the orb.
 func _try_collect(_player: Player) -> bool:
@@ -49,7 +59,7 @@ func _on_lifetime_timer() -> void:
 	if can_collect:
 		_despawn()
 
-func _on_despawn_phase() -> void:
+func _on_clearing_phase_started() -> void:
 	if can_collect:
 		_despawn()
 

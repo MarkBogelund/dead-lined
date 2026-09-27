@@ -1,6 +1,5 @@
-[gd_scene format=3 uid="uid://hkv38g7wyh2u"]
+[gd_scene format=3 uid="uid://b83263apue40x"]
 
-[ext_resource type="Script" path="res://scripts/world/entities/shared/scrap.gd" id="1_sd2yw"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="2_wf045"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="3_m4e56"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="4_wf045"]
@@ -277,8 +276,6 @@ fill_from = Vector2(0.5, 0.5)
 
 [node name="Scrap" type="RigidBody2D" unique_id=1809465642]
 collision_layer = 512
-script = ExtResource("1_sd2yw")
-despawn_delay = 15
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=188524499]
 z_index = 2

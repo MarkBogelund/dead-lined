@@ -7,12 +7,6 @@ class_name CrunchPowerupSettings
 ## Seconds an uncollected powerup stays on the ground.
 @export var lifetime: float = 25.0
 
-@export_group("Look")
-## Scale of the powerup relative to a regular orb.
-@export var visual_scale: float = 2.0
-@export var light_color: Color = Color(1.0, 0.1, 0.08, 1.0)
-@export var light_energy: float = 0.35
-
 @export_group("Carry")
 ## Distance the carried powerup trails behind the player.
 @export var follow_distance: float = 14.0
