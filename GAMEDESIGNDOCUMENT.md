@@ -66,7 +66,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 **Escalation:** Each wave spawns more enemies, faster bullets, higher difficulty
 
 ### Crunch Time (Power-Up Mode)
-**Powerup:** Each enemy has a small chance (2% by default, set per enemy type) to drop a Crunch Time powerup: an orb with its own look that lasts longer on the ground. Touching it picks it up and it trails behind the player. Only one can be carried, and none can be picked up while Crunch Time is running; the rest stay on the ground.
+**Powerup:** Each enemy has a small chance (2% by default, set per enemy type) to drop a Crunch Time powerup: an orb with its own look that lasts longer on the ground. Every turret standing on the map raises that chance (+2% each, capped at +15%), so a turret-heavy board — which is harder to dodge in — hands out more escapes. Touching it picks it up and it trails behind the player. Only one can be carried, and none can be picked up while Crunch Time is running; the rest stay on the ground.
 
 **Activation:** Press Crunch Time (C) during combat while carrying the powerup. It is used up on activation and lasts 5 seconds. No capacity cost.
 

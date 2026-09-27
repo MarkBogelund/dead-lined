@@ -6,7 +6,9 @@
 [resource]
 script = ExtResource("1_spawnentry")
 enemy_scene = ExtResource("2_kamikazer")
-base_amount = 4
+base_amount = 2
 introduction_wave = 2
 amount_multiplier_per_wave = 1.2
+health_multiplier = 1.2
+health_multiplier_every_n_waves = 2
 metadata/_custom_type_script = "uid://du0rvecuvnlry"

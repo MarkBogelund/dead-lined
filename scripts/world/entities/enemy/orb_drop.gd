@@ -38,8 +38,14 @@ func drop() -> void:
 		return
 	for i: int in range(orb_drop_amount):
 		_spawn(orb_scene)
-	if not in_crunch_time and randf() < crunch_powerup_chance:
+	if not in_crunch_time and randf() < _powerup_chance():
 		_spawn(crunch_powerup_scene)
+
+## More turrets standing means a better shot at a powerup, since turrets make dodging harder.
+func _powerup_chance() -> float:
+	var turret_count := get_tree().get_nodes_in_group("turrets").size()
+	var bonus := minf(crunch_settings.chance_per_turret * turret_count, crunch_settings.max_turret_bonus)
+	return crunch_powerup_chance + bonus
 
 func _spawn(scene: PackedScene) -> void:
 	var orb := scene.instantiate() as Orb
