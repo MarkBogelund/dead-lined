@@ -143,10 +143,18 @@ func _physics_process(delta: float) -> void:
 	if not _is_dead:
 		aiming.aim_at(get_global_mouse_position(), 0.0)
 		aim_indicator.point_in(aiming.get_aim_direction())
+		_process_auto_shoot()
 	if dash.is_charging():
 		dash_direction_indicator.point_in(_get_dash_direction())
 	else:
 		dash_direction_indicator.fade_out()
+
+## Holding the shoot action keeps firing at the ShootComponent's cooldown; crunch time swaps it for the slash.
+func _process_auto_shoot() -> void:
+	if crunch_time.is_crunch_time_active() or dash.is_holding() or not Input.is_action_pressed("shoot"):
+		return
+	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
+		animation.play_animation("shoot")
 
 func _get_move_state() -> MoveState:
 	if dash.is_dashing(): return MoveState.DASHING
@@ -190,16 +198,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		var can_activate := capacity.can_crunch_time() and capacity.can_afford(crunch_time.activation_cost)
 		crunch_time.toggle(can_activate)
 	
-	if event.is_action_pressed("shoot") and not dash.is_holding():
+	if event.is_action_pressed("shoot") and not dash.is_holding() and crunch_time.is_crunch_time_active():
 		var mouse_pos := get_global_mouse_position()
-		if crunch_time.is_crunch_time_active():
-			if melee_weapon.try_slash(mouse_pos):
-				_set_facing(mouse_pos.x - global_position.x)
-				animation.play_animation("slash")
-		else:
-			aiming.aim_at(mouse_pos, 0.0)
-			if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
-				animation.play_animation("shoot")
+		if melee_weapon.try_slash(mouse_pos):
+			_set_facing(mouse_pos.x - global_position.x)
+			animation.play_animation("slash")
 	
 	if event.is_action_pressed("dash"):
 		dash.try_press()
