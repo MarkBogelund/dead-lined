@@ -57,6 +57,7 @@ const TURRET_BODY_LAYER := 6 ## Matches project.godot 2d_physics layer_6 ("Turre
 
 var _conveyor_velocity := Vector2.ZERO
 var _crunch_tint_tween: Tween
+var _shoot_held := false
 
 func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
 	_conveyor_velocity = conveyor_velocity
@@ -116,6 +117,7 @@ func _connect_signals() -> void:
 	crunch_time.crunch_time_started.connect(_on_crunch_time_started)
 	crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
 	# Systems
+	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
 	shop_manager.turret_bought.connect(_on_turret_bought)
 	shop_manager.turret_lost.connect(_on_turret_lost)
@@ -151,7 +153,9 @@ func _physics_process(delta: float) -> void:
 
 ## Holding the shoot action keeps firing at the ShootComponent's cooldown; crunch time swaps it for the slash.
 func _process_auto_shoot() -> void:
-	if crunch_time.is_crunch_time_active() or dash.is_holding() or not Input.is_action_pressed("shoot"):
+	if not Input.is_action_pressed("shoot"):
+		_shoot_held = false
+	if not _shoot_held or crunch_time.is_crunch_time_active() or dash.is_holding():
 		return
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 		animation.play_animation("shoot")
@@ -194,6 +198,10 @@ func _process_locomotion() -> void:
 		_set_facing(velocity.x)
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Armed here, not by polling, so clicks consumed by the UI or turret placer never fire.
+	if event.is_action_pressed("shoot"):
+		_shoot_held = true
+
 	if event.is_action_pressed("crunch_time") and (crunch_time.is_crunch_time_active() or not dash.is_holding()):
 		var can_activate := capacity.can_crunch_time() and capacity.can_afford(crunch_time.activation_cost)
 		crunch_time.toggle(can_activate)
