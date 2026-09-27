@@ -111,12 +111,8 @@ func update_capacity_effects(capacity: float, maximum: float) -> void:
 		danger_amount = 0.0
 	set_screen_effect(LOW_CAPACITY_DANGER, danger_amount)
 
-	if not SETTINGS.capacity_vignette_enabled:
+	if fraction <= 0.5 or not SETTINGS.good_capacity_vignette_enabled:
 		clear_color_overlay(CAPACITY_OVERLAY)
-	elif fraction <= 0.5:
-		var progress := 1.0 - fraction / 0.5
-		var intensity := SETTINGS.danger_curve.sample(progress) if SETTINGS.danger_curve else progress
-		set_color_overlay(CAPACITY_OVERLAY, SETTINGS.danger_color, intensity, SETTINGS.capacity_priority)
 	else:
 		var progress := (fraction - 0.5) / 0.5
 		var intensity := SETTINGS.good_curve.sample(progress) if SETTINGS.good_curve else progress

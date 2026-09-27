@@ -3,11 +3,8 @@ class_name PostProcessingSettings
 
 ## Shared tuning for full-screen effects managed by PostProcessingManager.
 
-@export_group("Capacity Vignette")
-## Kept for later polish; disabled while the standalone low-capacity effect is developed.
-@export var capacity_vignette_enabled := false
-@export var danger_color := Color(0.4, 0.0, 0.0, 1.0)
-@export var danger_curve: Curve
+@export_group("High Capacity Vignette")
+@export var good_capacity_vignette_enabled := false
 @export var good_color := Color(1.0, 0.82, 0.2, 1.0)
 @export var good_curve: Curve
 @export var capacity_priority := 0
