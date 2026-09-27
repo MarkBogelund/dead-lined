@@ -89,7 +89,6 @@ func _initialize() -> void:
 		stats.radius_multiplier,
 		stats.speed_multiplier,
 		stats.arc_angle_multiplier,
-		stats.weapon_size_multiplier,
 		stats.cooldown_multiplier,
 		camera)
 	damage_knockback_force = stats.damage_knockback_force
@@ -143,17 +142,23 @@ func _physics_process(delta: float) -> void:
 	if not _is_dead:
 		aiming.aim_at(get_global_mouse_position(), 0.0)
 		aim_indicator.point_in(aiming.get_aim_direction())
-		_process_auto_shoot()
+		_process_held_primary_attack()
 	if dash.is_charging():
 		dash_direction_indicator.point_in(_get_dash_direction())
 	else:
 		dash_direction_indicator.fade_out()
 
-## Holding the shoot action keeps firing at the ShootComponent's cooldown; crunch time swaps it for the slash.
-func _process_auto_shoot() -> void:
+## Holding the primary action retries the active weapon; each component owns its cooldown.
+func _process_held_primary_attack() -> void:
 	if not Input.is_action_pressed("shoot"):
 		_shoot_held = false
-	if not _shoot_held or crunch_time.is_crunch_time_active() or dash.is_holding():
+	if not _shoot_held or dash.is_holding():
+		return
+	if crunch_time.is_crunch_time_active():
+		var mouse_position := get_global_mouse_position()
+		if melee_weapon.try_slash(mouse_position):
+			_set_facing(mouse_position.x - global_position.x)
+			animation.play_animation("slash")
 		return
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 		animation.play_animation("shoot")
@@ -202,12 +207,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("crunch_time") and not dash.is_holding():
 		crunch_time.try_activate()
-	
-	if event.is_action_pressed("shoot") and not dash.is_holding() and crunch_time.is_crunch_time_active():
-		var mouse_pos := get_global_mouse_position()
-		if melee_weapon.try_slash(mouse_pos):
-			_set_facing(mouse_pos.x - global_position.x)
-			animation.play_animation("slash")
 	
 	if event.is_action_pressed("dash"):
 		dash.try_press()
@@ -344,12 +343,10 @@ func _on_crunch_time_started(buffs: Dictionary) -> void:
 	melee_weapon.set_crunch_time_active(true, buffs)
 	melee_weapon.set_enabled(true)
 	movement.set_crunch_time_active(true, buffs["speed"])
-	melee_weapon.scale *= buffs["weapon_size"]
 	_apply_crunch_tint(crunch_time_effects.active_tint if crunch_time_effects else Color(1.0, 0.72, 0.16, 1.0))
 
 func _on_crunch_time_ended(buffs: Dictionary, _duration: float) -> void:
 	melee_weapon.set_enabled(false)
 	melee_weapon.set_crunch_time_active(false, buffs)
 	movement.set_crunch_time_active(false, buffs["speed"])
-	melee_weapon.scale /= buffs["weapon_size"]
 	_apply_crunch_tint(Color.WHITE)

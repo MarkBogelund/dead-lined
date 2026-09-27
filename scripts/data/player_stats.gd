@@ -68,8 +68,6 @@ class_name PlayerStats
 @export var speed_multiplier: float = 1.5
 ## Slash arc angle multiplier while crunch time is active
 @export var arc_angle_multiplier: float = 1.5
-## Melee weapon scale multiplier while crunch time is active
-@export var weapon_size_multiplier: float = 2.0
 ## Cooldown multiplier while crunch time is active (< 1 = faster)
 @export var cooldown_multiplier: float = 0.5
 

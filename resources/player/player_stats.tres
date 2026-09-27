@@ -13,6 +13,7 @@ projectile_damage = 1
 projectile_knockback = 150
 initial_capacity = 35.0
 damage_multiplier = 1.5
+arc_angle_multiplier = 2.0
 damage_freeze_duration = 0.15
 damage_screen_shake_intensity = 0.25
 death_freeze_duration = 0.2

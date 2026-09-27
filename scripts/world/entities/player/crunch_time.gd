@@ -19,7 +19,6 @@ signal charge_lost
 @export var radius_multiplier := 2.0
 @export var speed_multiplier := 1.5
 @export var arc_angle_multiplier := 2.0
-@export var weapon_size_multiplier := 2.0
 @export var cooldown_multiplier := 0.5 # 0.5 = half cooldown (faster)
 
 @export_group("Activation")
@@ -37,13 +36,12 @@ var _camera: GameCamera
 
 const CAMERA_ZOOM_SOURCE := &"crunch_time"
 
-func initialize(p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float, p_camera: GameCamera) -> void:
+func initialize(p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_cooldown: float, p_camera: GameCamera) -> void:
 	duration = p_duration
 	damage_multiplier = p_damage
 	radius_multiplier = p_radius
 	speed_multiplier = p_speed
 	arc_angle_multiplier = p_arc_angle
-	weapon_size_multiplier = p_weapon_size
 	cooldown_multiplier = p_cooldown
 	_camera = p_camera
 
@@ -101,7 +99,6 @@ func activate() -> void:
 		"radius": radius_multiplier,
 		"speed": speed_multiplier,
 		"arc_angle": arc_angle_multiplier,
-		"weapon_size": weapon_size_multiplier,
 		"cooldown": cooldown_multiplier
 	}
 	crunch_time_started.emit(buffs)
@@ -120,7 +117,6 @@ func deactivate() -> void:
 		"radius": radius_multiplier,
 		"speed": speed_multiplier,
 		"arc_angle": arc_angle_multiplier,
-		"weapon_size": weapon_size_multiplier,
 		"cooldown": cooldown_multiplier
 	}
 	crunch_time_ended.emit(buffs, _active_duration)

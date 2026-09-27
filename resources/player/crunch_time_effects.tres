@@ -13,6 +13,5 @@ active_screen_tint_intensity = 0.5
 active_chromatic_aberration = 0.25
 active_bloom_intensity = 0.2
 active_bloom_radius = 1.0
-camera_zoom_active = Vector2(1.875, 1.875)
 ready_tint = Color(1, 1, 1, 1)
 active_tint = Color(1, 1, 1, 1)
