@@ -129,7 +129,7 @@ func _update_capacity_fill(capacity: float) -> void:
 	capacity_fill.offset_left = fill_right - rendered_width
 	capacity_fill.offset_right = fill_right
 	capacity_label.text = "%d" % int(capacity)
-	PostProcessingManager.update_capacity_overlay(capacity, maximum)
+	PostProcessingManager.update_capacity_effects(capacity, maximum)
 
 func _update_crunch_time_ready_state() -> void:
 	var is_ready := player.crunch_time.has_charge() and not player.crunch_time.is_crunch_time_active()

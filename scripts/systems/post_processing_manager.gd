@@ -6,6 +6,7 @@ const COMPOSITOR_SHADER := preload("res://shaders/post_processing.gdshader")
 const SETTINGS := preload("res://resources/player/post_processing_settings.tres")
 
 const DASH_DESATURATION := &"dash_desaturation"
+const LOW_CAPACITY_DANGER := &"low_capacity_danger"
 const CAPACITY_OVERLAY := &"capacity"
 const CRUNCH_TIME_OVERLAY := &"crunch_time"
 
@@ -14,9 +15,11 @@ var _material: ShaderMaterial
 var _overlay_requests: Dictionary[StringName, Dictionary] = {}
 var _screen_effects: Dictionary[StringName, StringName] = {
 	DASH_DESATURATION: &"desaturation_amount",
+	LOW_CAPACITY_DANGER: &"danger_amount",
 }
 var _screen_amounts: Dictionary[StringName, float] = {
 	DASH_DESATURATION: 0.0,
+	LOW_CAPACITY_DANGER: 0.0,
 }
 var _screen_tweens: Dictionary[StringName, Tween] = {}
 var _overlay_tween: Tween
@@ -34,6 +37,10 @@ func _ready() -> void:
 	_material.shader = COMPOSITOR_SHADER
 	_material.set_shader_parameter("max_desaturation", SETTINGS.dash_max_desaturation)
 	_material.set_shader_parameter("darken", SETTINGS.dash_darken)
+	_material.set_shader_parameter("danger_glitch_intensity", SETTINGS.danger_glitch_intensity)
+	_material.set_shader_parameter("danger_chromatic_aberration", SETTINGS.danger_chromatic_aberration)
+	_material.set_shader_parameter("danger_red_tint", SETTINGS.danger_red_tint)
+	_material.set_shader_parameter("danger_screen_coverage", SETTINGS.danger_screen_coverage)
 	_surface.material = _material
 	_surface.hide()
 
@@ -97,9 +104,16 @@ func reset() -> void:
 	_material.set_shader_parameter("overlay_intensity", 0.0)
 	_refresh_visibility()
 
-func update_capacity_overlay(capacity: float, maximum: float) -> void:
+func update_capacity_effects(capacity: float, maximum: float) -> void:
 	var fraction := clampf(capacity / maximum if maximum > 0.0 else 0.0, 0.0, 1.0)
-	if fraction <= 0.5:
+	var danger_amount := SETTINGS.danger_strength_curve.sample(fraction) if SETTINGS.danger_strength_curve else 1.0 - fraction
+	if SETTINGS.danger_screen_coverage <= 0.0:
+		danger_amount = 0.0
+	set_screen_effect(LOW_CAPACITY_DANGER, danger_amount)
+
+	if not SETTINGS.capacity_vignette_enabled:
+		clear_color_overlay(CAPACITY_OVERLAY)
+	elif fraction <= 0.5:
 		var progress := 1.0 - fraction / 0.5
 		var intensity := SETTINGS.danger_curve.sample(progress) if SETTINGS.danger_curve else progress
 		set_color_overlay(CAPACITY_OVERLAY, SETTINGS.danger_color, intensity, SETTINGS.capacity_priority)

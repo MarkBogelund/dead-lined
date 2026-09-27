@@ -3,8 +3,12 @@
 [ext_resource type="Script" uid="uid://dh45ag1q48qqx" path="res://scripts/data/post_processing_settings.gd" id="1_settings"]
 
 [sub_resource type="Curve" id="Curve_danger"]
-_data = [Vector2(0.49607846, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 3.4410524, 0.0, 0, 0]
+_data = [Vector2(0.49607846, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 1, 0]
 point_count = 2
+
+[sub_resource type="Curve" id="Curve_low_capacity"]
+_data = [Vector2(0, 1), 0.0, -0.375, 0, 0, Vector2(0.1255814, 0.9195402), -0.375, 0.0, 0, 0, Vector2(0.23953488, 0.48850572), 0.0, 0.0, 0, 0, Vector2(0.34651163, 0), 0.0, 0.0, 0, 0]
+point_count = 4
 
 [sub_resource type="Curve" id="Curve_good"]
 _data = [Vector2(0.7, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.6154127), 5.8518996, 0.0, 0, 0]
@@ -14,3 +18,5 @@ point_count = 2
 script = ExtResource("1_settings")
 danger_curve = SubResource("Curve_danger")
 good_curve = SubResource("Curve_good")
+danger_strength_curve = SubResource("Curve_low_capacity")
+danger_screen_coverage = 1.0
