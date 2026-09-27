@@ -315,11 +315,11 @@ func _configure_surface_materials() -> void:
 func _assign_surface_material(visual: CanvasItem) -> void:
 	if not visual:
 		return
-	var material := visual.material as ShaderMaterial
-	if not material:
-		material = ShaderMaterial.new()
-	visual.material = material
-	material.shader = surface_shader
+	var shader_material := visual.material as ShaderMaterial
+	if not shader_material:
+		shader_material = ShaderMaterial.new()
+	visual.material = shader_material
+	shader_material.shader = surface_shader
 
 func _get_surface_materials() -> Array[ShaderMaterial]:
 	var surface_materials: Array[ShaderMaterial] = []

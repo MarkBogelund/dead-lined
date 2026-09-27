@@ -3,7 +3,7 @@ class_name ShootComponent
 
 @export var projectile_scene: PackedScene
 @export var projectile_damage := 10
-@export var projectile_knockback := 200
+@export var projectile_knockback := 200.0
 @export var shoot_cooldown := 0.5
 @export var projectile_speed := 300.0
 
@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 	if _shoot_timer > 0.0:
 		_shoot_timer -= delta
 
-func initialize(p_shoot_cooldown: float, p_damage: int, p_knockback: int, p_speed: float) -> void:
+func initialize(p_shoot_cooldown: float, p_damage: int, p_knockback: float, p_speed: float) -> void:
 	shoot_cooldown = p_shoot_cooldown
 	projectile_damage = p_damage
 	projectile_knockback = p_knockback

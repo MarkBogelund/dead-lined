@@ -70,7 +70,7 @@ func _choose_primary(primary: Node2D, secondary: Node2D, from_position: Vector2)
 	if profile.primary_lock_radius >= 0.0 and primary_distance <= profile.primary_lock_radius:
 		return true
 	var on_secondary := _current_target != null and not _current_is_primary
-	var margin := profile.return_to_primary_margin if on_secondary else profile.switch_to_secondary_margin
+	var margin: float = profile.return_to_primary_margin if on_secondary else profile.switch_to_secondary_margin
 	return primary_distance < from_position.distance_to(secondary.global_position) + margin
 
 func _set_current(target: Node2D, is_primary: bool) -> void:

@@ -8,7 +8,7 @@ extends Node2D
 var projectile_speed: float
 var direction := Vector2.ZERO
 var _damage: int
-var _knockback: int
+var _knockback: float
 var _is_resolving_hit := false
 
 func _ready() -> void:
@@ -41,7 +41,7 @@ func set_orientation(pos: Vector2, rot: float, dir: Vector2) -> void:
 	rotation = rot
 	direction = dir
 	
-func set_parameters(speed: float, damage: int, knockback: int) -> void:
+func set_parameters(speed: float, damage: int, knockback: float) -> void:
 	projectile_speed = speed
 	_damage = damage
 	_knockback = knockback

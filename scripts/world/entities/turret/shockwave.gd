@@ -94,9 +94,9 @@ func _physics_process(delta: float) -> void:
 func _ready() -> void:
 	# The scene's shape is shared by every Shockwaver; per-turret range upgrades need their own.
 	detection_shape.shape = detection_shape.shape.duplicate()
-	var material := ShaderMaterial.new()
-	material.shader = PIXEL_ART_SHADER
-	shockwave_visual.material = material
+	var shader_material := ShaderMaterial.new()
+	shader_material.shader = PIXEL_ART_SHADER
+	shockwave_visual.material = shader_material
 	_configure_shockwave_visual()
 	shockwave_visual.hide()
 
@@ -105,14 +105,14 @@ func _configure_shockwave_visual() -> void:
 	var canvas_radius := max_range + pixel_margin
 	shockwave_visual.position = Vector2(-canvas_radius, -canvas_radius)
 	shockwave_visual.size = Vector2.ONE * canvas_radius * 2.0
-	var material := shockwave_visual.material as ShaderMaterial
-	material.set_shader_parameter("canvas_size", shockwave_visual.size)
-	material.set_shader_parameter("pixel_size", pixel_size)
-	material.set_shader_parameter("center_line_thickness", center_line_thickness)
-	material.set_shader_parameter("center_line_color", center_line_color)
-	material.set_shader_parameter("ring_thickness", ring_thickness)
-	material.set_shader_parameter("shockwave_color", shockwave_color)
-	material.set_shader_parameter("current_radius", 0.0)
+	var shader_material := shockwave_visual.material as ShaderMaterial
+	shader_material.set_shader_parameter("canvas_size", shockwave_visual.size)
+	shader_material.set_shader_parameter("pixel_size", pixel_size)
+	shader_material.set_shader_parameter("center_line_thickness", center_line_thickness)
+	shader_material.set_shader_parameter("center_line_color", center_line_color)
+	shader_material.set_shader_parameter("ring_thickness", ring_thickness)
+	shader_material.set_shader_parameter("shockwave_color", shockwave_color)
+	shader_material.set_shader_parameter("current_radius", 0.0)
 
 func _has_trigger_target() -> bool:
 	for body: Node2D in detection_area.get_overlapping_bodies():
@@ -187,11 +187,11 @@ func _reset() -> void:
 	queue_redraw()
 
 func _update_shockwave_visual(radius: float, alpha: float) -> void:
-	var material := shockwave_visual.material as ShaderMaterial
-	material.set_shader_parameter("current_radius", radius)
+	var shader_material := shockwave_visual.material as ShaderMaterial
+	shader_material.set_shader_parameter("current_radius", radius)
 	var visual_color := shockwave_color
 	visual_color.a = alpha
-	material.set_shader_parameter("shockwave_color", visual_color)
+	shader_material.set_shader_parameter("shockwave_color", visual_color)
 
 func _draw() -> void:
 	if _state == State.WINDUP:

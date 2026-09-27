@@ -97,6 +97,7 @@ func _build_spawn_queue(wave_index: int) -> Array[EnemySpawnEntry]:
 
 func _apply_wave_scaling(enemy: Node, entry: EnemySpawnEntry) -> void:
 	if entry.health_multiplier_every_n_waves > 0:
+		@warning_ignore("integer_division")
 		var health_steps := _current_wave / entry.health_multiplier_every_n_waves
 		enemy.buff_health(pow(entry.health_multiplier, health_steps))
 	var damage_multiplier := 1.0 + wave_index_to_damage_multiplier(_current_wave)
