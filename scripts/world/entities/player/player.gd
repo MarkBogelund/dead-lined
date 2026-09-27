@@ -27,7 +27,6 @@ signal died
 @onready var camera: GameCamera = $"Camera2D"
 
 @export var stats: PlayerStats
-@export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/player/crunch_time_effects.tres")
 
 @export_group("Dash Charge Presentation")
 @export_range(1.0, 2.0, 0.01) var dash_charge_zoom := 1.15
@@ -56,7 +55,6 @@ const PLAYER_BODY_LAYER := 2 ## Matches project.godot 2d_physics layer_2 ("Playe
 const TURRET_BODY_LAYER := 6 ## Matches project.godot 2d_physics layer_6 ("TurretBody")
 
 var _conveyor_velocity := Vector2.ZERO
-var _crunch_tint_tween: Tween
 var _shoot_held := false
 
 func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
@@ -126,14 +124,6 @@ func _connect_signals() -> void:
 	dash.charge_maxed.connect(_release_dash)
 	dash.charge_ended.connect(_on_dash_charge_ended)
 	dash.dash_started.connect(_handle_dash_started)
-
-func _apply_crunch_tint(target_tint: Color) -> void:
-	if is_instance_valid(animated_sprite):
-		if _crunch_tint_tween:
-			_crunch_tint_tween.kill()
-		_crunch_tint_tween = create_tween()
-		var duration := crunch_time_effects.tint_transition_duration if crunch_time_effects else 0.2
-		_crunch_tint_tween.tween_property(animated_sprite, "self_modulate", target_tint, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _physics_process(delta: float) -> void:
 	_sync_body_layer()
@@ -343,10 +333,8 @@ func _on_crunch_time_started(buffs: Dictionary) -> void:
 	melee_weapon.set_crunch_time_active(true, buffs)
 	melee_weapon.set_enabled(true)
 	movement.set_crunch_time_active(true, buffs["speed"])
-	_apply_crunch_tint(crunch_time_effects.active_tint if crunch_time_effects else Color(1.0, 0.72, 0.16, 1.0))
 
 func _on_crunch_time_ended(buffs: Dictionary, _duration: float) -> void:
 	melee_weapon.set_enabled(false)
 	melee_weapon.set_crunch_time_active(false, buffs)
 	movement.set_crunch_time_active(false, buffs["speed"])
-	_apply_crunch_tint(Color.WHITE)

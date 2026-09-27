@@ -124,22 +124,22 @@ func update_capacity_effects(capacity: float, maximum: float) -> void:
 		var intensity := SETTINGS.good_curve.sample(progress) if SETTINGS.good_curve else progress
 		set_color_overlay(CAPACITY_OVERLAY, SETTINGS.good_color, intensity, SETTINGS.capacity_priority)
 
-func set_crunch_time_overlay(active: bool, effects: CrunchTimeEffects) -> void:
+func set_crunch_time_overlay(active: bool) -> void:
 	if active:
-		set_effect_parameter(&"crunch_tint_color", effects.active_screen_tint_color)
-		set_effect_parameter(&"crunch_tint_intensity", effects.active_screen_tint_intensity)
-		set_effect_parameter(&"crunch_chromatic_aberration", effects.active_chromatic_aberration)
-		set_effect_parameter(&"crunch_bloom_intensity", effects.active_bloom_intensity)
-		set_effect_parameter(&"crunch_bloom_radius", effects.active_bloom_radius)
+		set_effect_parameter(&"crunch_tint_color", SETTINGS.crunch_screen_tint_color)
+		set_effect_parameter(&"crunch_tint_intensity", SETTINGS.crunch_screen_tint_intensity)
+		set_effect_parameter(&"crunch_chromatic_aberration", SETTINGS.crunch_chromatic_aberration)
+		set_effect_parameter(&"crunch_bloom_intensity", SETTINGS.crunch_bloom_intensity)
+		set_effect_parameter(&"crunch_bloom_radius", SETTINGS.crunch_bloom_radius)
 		set_screen_effect(CRUNCH_TIME_SCREEN, 1.0, SETTINGS.crunch_time_fade_duration)
 		set_color_overlay(
 			CRUNCH_TIME_OVERLAY,
-			effects.active_overlay_color,
-			effects.active_overlay_intensity,
+			SETTINGS.crunch_overlay_color,
+			SETTINGS.crunch_overlay_intensity,
 			SETTINGS.crunch_time_priority,
 			SETTINGS.crunch_time_fade_duration,
-			effects.active_overlay_pulse_speed,
-			effects.active_overlay_pulse_min)
+			SETTINGS.crunch_overlay_pulse_speed,
+			SETTINGS.crunch_overlay_pulse_min)
 	else:
 		set_screen_effect(CRUNCH_TIME_SCREEN, 0.0, SETTINGS.crunch_time_fade_duration)
 		clear_color_overlay(CRUNCH_TIME_OVERLAY, SETTINGS.crunch_time_fade_duration)

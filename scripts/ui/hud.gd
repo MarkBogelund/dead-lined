@@ -1,7 +1,5 @@
 extends Control
 
-@export var crunch_time_effects: CrunchTimeEffects = preload("res://resources/player/crunch_time_effects.tres")
-
 @onready var wave_manager: WaveManager = %WaveManager
 @onready var player: Player = %Player
 @onready var score_manager: ScoreManager = %ScoreManager
@@ -101,12 +99,12 @@ func _on_crunch_charge_changed() -> void:
 
 func _on_crunch_time_started(_buffs: Dictionary) -> void:
 	_update_crunch_time_ready_state()
-	PostProcessingManager.set_crunch_time_overlay(true, crunch_time_effects)
+	PostProcessingManager.set_crunch_time_overlay(true)
 	_play_capacity_state_animation()
 
 func _on_crunch_time_ended(_buffs: Dictionary, _duration: float) -> void:
 	_update_crunch_time_ready_state()
-	PostProcessingManager.set_crunch_time_overlay(false, crunch_time_effects)
+	PostProcessingManager.set_crunch_time_overlay(false)
 	_play_capacity_state_animation()
 
 func _update_capacity_fill(capacity: float) -> void:

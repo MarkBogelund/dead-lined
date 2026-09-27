@@ -24,17 +24,12 @@ signal charge_lost
 @export_group("Activation")
 @export var duration: float = 5.0
 
-@export_group("Camera")
-@export var effects: CrunchTimeEffects = preload("res://resources/player/crunch_time_effects.tres")
-
 ## State
 var is_active := false
 var _has_charge := false
 var _is_build_phase := true
 var _active_duration: float = 0.0
 var _camera: GameCamera
-
-const CAMERA_ZOOM_SOURCE := &"crunch_time"
 
 func initialize(p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_cooldown: float, p_camera: GameCamera) -> void:
 	duration = p_duration
@@ -91,7 +86,8 @@ func activate() -> void:
 	
 	is_active = true
 	_active_duration = 0.0
-	_apply_camera_zoom(effects.camera_zoom_active.x if effects else 1.75)
+	if _camera:
+		_camera.set_crunch_time_active(true)
 		
 	# Build buff dictionary and emit for Player to apply
 	var buffs := {
@@ -109,7 +105,8 @@ func deactivate() -> void:
 		return # Already inactive
 	
 	is_active = false
-	_apply_camera_zoom(1.0)
+	if _camera:
+		_camera.set_crunch_time_active(false)
 		
 	# Build buff dictionary and emit for Player to reverse buffs
 	var buffs := {
@@ -125,7 +122,3 @@ func deactivate() -> void:
 func is_crunch_time_active() -> bool:
 	return is_active
 
-func _apply_camera_zoom(factor: float) -> void:
-	if not _camera:
-		return
-	_camera.set_zoom_factor(CAMERA_ZOOM_SOURCE, factor, effects.camera_zoom_duration if effects else 0.35)

@@ -30,3 +30,12 @@ class_name PostProcessingSettings
 @export_group("Crunch Time")
 @export var crunch_time_priority := 100
 @export_range(0.0, 2.0, 0.01) var crunch_time_fade_duration := 0.15
+@export var crunch_overlay_color := Color(1.0, 0.68, 0.12, 1.0)
+@export_range(0.0, 1.0, 0.01) var crunch_overlay_intensity := 0.55
+@export_range(0.0, 20.0, 0.1) var crunch_overlay_pulse_speed := 2.0
+@export_range(0.0, 1.0, 0.01) var crunch_overlay_pulse_min := 0.55
+@export var crunch_screen_tint_color := Color(1.0, 0.72, 0.16, 1.0)
+@export_range(0.0, 1.0, 0.01) var crunch_screen_tint_intensity := 0.28
+@export_range(0.0, 1.0, 0.01) var crunch_chromatic_aberration := 0.5
+@export_range(0.0, 1.0, 0.01) var crunch_bloom_intensity := 0.45
+@export_range(0.5, 8.0, 0.25) var crunch_bloom_radius := 2.5
