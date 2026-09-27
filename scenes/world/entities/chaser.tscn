@@ -2,7 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://blw5awhrqlike" path="res://resources/enemies/chaser/chaser_stats.tres" id="1_chaserstats"]
 [ext_resource type="Script" uid="uid://73dnhyc0uhym" path="res://scripts/world/entities/enemy/chaser.gd" id="1_dxuae"]
-[ext_resource type="PackedScene" path="res://scenes/world/entities/capacity_orb.tscn" id="2_fffhc"]
+[ext_resource type="PackedScene" uid="uid://ba7ofk84pf82" path="res://scenes/world/entities/capacity_orb.tscn" id="2_fffhc"]
 [ext_resource type="PackedScene" uid="uid://cu481a52yhdms" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="3_fffhc"]
 [ext_resource type="Texture2D" uid="uid://ccp2efd60ustu" path="res://assets/sprites/enemies/chaser.png" id="4_by6ef"]
@@ -635,9 +635,8 @@ texture = SubResource("GradientTexture2D_fffhc")
 script = ExtResource("8_jg6m2")
 orb_scene = ExtResource("2_fffhc")
 crunch_powerup_scene = ExtResource("2_powerup")
-impulse_min = 20.0
-impulse_max = 150.0
-linear_damp = 8.0
+impulse_max = 250.0
+linear_damp = 5.0
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1098384666]
 path_desired_distance = 4.0

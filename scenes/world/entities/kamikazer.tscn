@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://e7tmr32ly7kc" path="res://scripts/world/entities/enemy/kamikazer.gd" id="1_kamikazer"]
 [ext_resource type="Resource" uid="uid://dfmgppjmpi2ej" path="res://resources/enemies/kamikazer/kamikazer_stats.tres" id="1_kamikazerstats"]
-[ext_resource type="PackedScene" path="res://scenes/world/entities/capacity_orb.tscn" id="2_fffhc"]
-[ext_resource type="PackedScene" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
+[ext_resource type="PackedScene" uid="uid://ba7ofk84pf82" path="res://scenes/world/entities/capacity_orb.tscn" id="2_fffhc"]
+[ext_resource type="PackedScene" uid="uid://cu481a52yhdms" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="3_fffhc"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_ck52e"]
 [ext_resource type="Texture2D" uid="uid://4ls8qibe4vmq" path="res://assets/sprites/enemies/kamikazer.png" id="4_hvkdi"]
@@ -646,9 +646,8 @@ texture = SubResource("GradientTexture2D_fffhc")
 script = ExtResource("8_jg6m2")
 orb_scene = ExtResource("2_fffhc")
 crunch_powerup_scene = ExtResource("2_powerup")
-impulse_min = 20.0
-impulse_max = 150.0
-linear_damp = 8.0
+impulse_max = 250.0
+linear_damp = 5.0
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1098384666]
 path_desired_distance = 4.0
@@ -656,7 +655,6 @@ target_desired_distance = 2.0
 avoidance_enabled = true
 radius = 14.0
 neighbor_distance = 80.0
-max_neighbors = 10
 time_horizon_agents = 1.5
 script = ExtResource("11_uqckg")
 metadata/_custom_type_script = "uid://bfdfe71wkym8b"

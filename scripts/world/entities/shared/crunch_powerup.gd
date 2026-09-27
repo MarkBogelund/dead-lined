@@ -25,7 +25,7 @@ func _connect_phase_signals(wave_manager: WaveManager) -> void:
 	wave_manager.build_phase_started.connect(_on_clearing_phase_started)
 
 func _is_clearing_phase_active() -> bool:
-	return _wave_manager.is_build_phase()
+	return _wave_manager != null and _wave_manager.is_build_phase()
 
 func _try_collect(player: Player) -> bool:
 	return player.try_collect_crunch_powerup()

@@ -21,6 +21,9 @@ func _ready() -> void:
 	animation_handler.configure_animation("pick_up", 1, true)
 	animation_handler.configure_animation("despawn", 2, true)
 	animation_handler.animation_finished.connect(_on_animation_finished)
+	# Each pickup scene supplies its own looping idle; the base only owns pick_up and despawn.
+	if animation_handler.has_configured_animation("idle"):
+		animation_handler.play_animation("idle")
 	_wave_manager = get_tree().get_first_node_in_group("wave_manager") as WaveManager
 	if _wave_manager:
 		_connect_phase_signals(_wave_manager)

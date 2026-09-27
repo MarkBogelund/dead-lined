@@ -1,15 +1,11 @@
 [gd_scene format=3 uid="uid://dfdoke3xag1rp"]
 
-[ext_resource type="Script" path="res://scripts/world/entities/shared/orb.gd" id="1_sd2yw"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="2_wf045"]
+[ext_resource type="Script" uid="uid://c62ss1mibrylf" path="res://scripts/world/entities/shared/orb.gd" id="1_sd2yw"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="3_m4e56"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="4_wf045"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sd2yw"]
 radius = 7.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_m4e56"]
-radius = 9.0
 
 [sub_resource type="Curve" id="Curve_wf045"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
@@ -92,26 +88,26 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Visuals:rotation")
+tracks/3/path = NodePath("Visuals:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Vector2(1, 1)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("Visuals:scale")
+tracks/4/path = NodePath("Visuals:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_s8mod"]
@@ -212,30 +208,11 @@ tracks/4/keys = {
 "values": [false]
 }
 
-[sub_resource type="Animation" id="Animation_wf045"]
-resource_name = "spin"
-length = 4.0
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 4),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 6.2831855]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_s8mod"]
 _data = {
 &"RESET": SubResource("Animation_g63yp"),
 &"despawn": SubResource("Animation_s8mod"),
-&"pick_up": SubResource("Animation_v70sy"),
-&"spin": SubResource("Animation_wf045")
+&"pick_up": SubResource("Animation_v70sy")
 }
 
 [node name="Orb" type="RigidBody2D" unique_id=1809465642]
@@ -244,8 +221,9 @@ gravity_scale = 0.0
 lock_rotation = true
 linear_damp = 3.0
 script = ExtResource("1_sd2yw")
+freeze_delay = 0.5
 
-[node name="Visuals" type="Node2D" parent="."]
+[node name="Visuals" type="Node2D" parent="." unique_id=544235218]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=13068341]
 shape = SubResource("CircleShape2D_sd2yw")
@@ -254,15 +232,11 @@ shape = SubResource("CircleShape2D_sd2yw")
 collision_layer = 512
 collision_mask = 64
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=45020708]
-shape = SubResource("CircleShape2D_m4e56")
-
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("3_m4e56")]
 amount = 5
 process_material = SubResource("ParticleProcessMaterial_jj6sx")
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1863819974]
 libraries/ = SubResource("AnimationLibrary_s8mod")
-autoplay = &"spin"
 script = ExtResource("4_wf045")
 metadata/_custom_type_script = "uid://cq7h5m3f8n2jk"

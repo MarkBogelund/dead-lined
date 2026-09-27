@@ -4,30 +4,67 @@
 [ext_resource type="Script" uid="uid://dkh6t1minj7ss" path="res://scripts/world/entities/shared/crunch_powerup.gd" id="2_powerup"]
 [ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="3_settings"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yxwvc"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/environment/shadow.png" id="5_p65r1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yxwvc"]
 atlas = ExtResource("4_yxwvc")
 region = Rect2(16, 0, 16, 16)
 
-[sub_resource type="Gradient" id="Gradient_f5wuv"]
+[sub_resource type="Gradient" id="Gradient_p65r1"]
 offsets = PackedFloat32Array(0, 0.7161804)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_b5yvb"]
-gradient = SubResource("Gradient_f5wuv")
+gradient = SubResource("Gradient_p65r1")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_spl43"]
+radius = 13.0
+
+[sub_resource type="Animation" id="Animation_b5yvb"]
+length = 2.0
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Graphic:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 1), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tjynn"]
+_data = {
+&"idle": SubResource("Animation_b5yvb")
+}
 
 [node name="CrunchPowerup" unique_id=1331096062 instance=ExtResource("1_orb")]
 script = ExtResource("2_powerup")
 settings = ExtResource("3_settings")
 
-[node name="Sprite2D" type="Sprite2D" parent="Visuals" index="0" unique_id=154060269]
+[node name="Graphic" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="0" unique_id=154060269]
 z_index = 2
 texture = SubResource("AtlasTexture_yxwvc")
 
-[node name="PointLight2D" type="PointLight2D" parent="Visuals" index="1" unique_id=343020866]
+[node name="Shadow" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="1" unique_id=2047766133]
+modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+position = Vector2(0, 8)
+texture = ExtResource("5_p65r1")
+
+[node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="2" unique_id=343020866]
 scale = Vector2(0.5, 0.5)
-color = Color(0.93853164, 0, 0.23270178, 1)
+color = Color(0.9049989, 0.4029837, 0, 1)
 energy = 0.4
 texture = SubResource("GradientTexture2D_b5yvb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" parent_id_path=PackedInt32Array(612364774) index="0" unique_id=1938746431]
+shape = SubResource("CircleShape2D_spl43")
+
+[node name="AnimationHandler" parent="." index="4" unique_id=1863819974]
+libraries/crunch_powerup = SubResource("AnimationLibrary_tjynn")

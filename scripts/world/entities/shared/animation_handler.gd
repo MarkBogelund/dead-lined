@@ -81,6 +81,10 @@ func stop_animation(anim_name: String) -> void:
 		super.advance(0.0)
 		super.stop(true)
 
+## True when the animation exists in any of this player's libraries.
+func has_configured_animation(anim_name: String) -> bool:
+	return not _resolve_animation_path(anim_name).is_empty()
+
 func _resolve_animation_path(anim_name: String) -> StringName:
 	if has_animation(anim_name):
 		return StringName(anim_name)

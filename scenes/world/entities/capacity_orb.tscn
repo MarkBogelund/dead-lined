@@ -2,26 +2,71 @@
 
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/orb.tscn" id="1_orb"]
 [ext_resource type="Script" uid="uid://bqjasswwq5oc4" path="res://scripts/world/entities/shared/capacity_orb.gd" id="2_capacity"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="3_shapes"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="3_y67we"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/environment/shadow.png" id="4_s1gev"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s1gev"]
 atlas = ExtResource("3_y67we")
 region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
-atlas = ExtResource("3_shapes")
-region = Rect2(16, 0, 16, 16)
+[sub_resource type="Gradient" id="Gradient_f5wuv"]
+offsets = PackedFloat32Array(0, 0.7161804)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_s1gev"]
+gradient = SubResource("Gradient_f5wuv")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_spl43"]
+radius = 12.0
+
+[sub_resource type="Animation" id="Animation_idle"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Graphic:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(0.7320429, 0.8122526, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 1), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_capacity"]
+_data = {
+&"idle": SubResource("Animation_idle")
+}
 
 [node name="CapacityOrb" unique_id=622360135 instance=ExtResource("1_orb")]
 script = ExtResource("2_capacity")
 value = 1
+lifetime = 10.0
 
-[node name="Graphic" type="Sprite2D" parent="Visuals" index="0" unique_id=1108536769]
+[node name="Graphic" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="0" unique_id=1108536769]
 z_index = 4
 texture = SubResource("AtlasTexture_s1gev")
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=587014683]
+[node name="Shadow" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="1" unique_id=587014683]
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
-position = Vector2(0, 2)
-texture = SubResource("AtlasTexture_spl43")
+z_index = 1
+position = Vector2(0, 4)
+texture = ExtResource("4_s1gev")
+
+[node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="2" unique_id=751755519]
+scale = Vector2(0.5, 0.5)
+color = Color(0, 0.6604926, 0.6313208, 1)
+energy = 0.2
+texture = SubResource("GradientTexture2D_s1gev")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" parent_id_path=PackedInt32Array(612364774) index="0" unique_id=1869326981]
+shape = SubResource("CircleShape2D_spl43")
+
+[node name="AnimationHandler" parent="." index="4" unique_id=1863819974]
+libraries/capacity = SubResource("AnimationLibrary_capacity")

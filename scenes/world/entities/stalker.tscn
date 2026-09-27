@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="1_stalker"]
 [ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/enemies/stalker/stalker_stats.tres" id="1_stalkerstats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_mcjbk"]
-[ext_resource type="PackedScene" path="res://scenes/world/entities/capacity_orb.tscn" id="2_orb"]
-[ext_resource type="PackedScene" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
+[ext_resource type="PackedScene" uid="uid://ba7ofk84pf82" path="res://scenes/world/entities/capacity_orb.tscn" id="2_orb"]
+[ext_resource type="PackedScene" uid="uid://cu481a52yhdms" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="7_ag4mk"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="7_health"]
@@ -793,7 +793,6 @@ target_desired_distance = 12.0
 avoidance_enabled = true
 radius = 14.0
 neighbor_distance = 80.0
-max_neighbors = 10
 time_horizon_agents = 1.5
 script = ExtResource("10_nav")
 
@@ -801,8 +800,8 @@ script = ExtResource("10_nav")
 script = ExtResource("9_orbdrop")
 orb_scene = ExtResource("2_orb")
 crunch_powerup_scene = ExtResource("2_powerup")
-impulse_min = 20.0
-impulse_max = 150.0
+impulse_max = 250.0
+linear_damp = 5.0
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=741080340]
 collision_layer = 16
