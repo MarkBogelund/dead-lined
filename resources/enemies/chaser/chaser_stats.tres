@@ -5,5 +5,4 @@
 
 [resource]
 script = ExtResource("1_chaserstats")
-damage = 5
 move_speed = 50.0

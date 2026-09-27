@@ -87,6 +87,7 @@ _data = {
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
 hit_flash_duration = 0.48
+critical_health_ratio = 0.3
 
 [node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
 z_index = 0

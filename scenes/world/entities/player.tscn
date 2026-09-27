@@ -786,7 +786,6 @@ position = Vector2(0, 8)
 script = ExtResource("21_dashdir")
 texture = ExtResource("17_2454e")
 start_offset = 32.0
-color = Color(1, 1, 1, 1)
 fade_duration = 0.1
 
 [node name="AimIndicator" type="Node2D" parent="." unique_id=254607644]

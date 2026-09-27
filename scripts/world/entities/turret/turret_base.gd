@@ -34,9 +34,14 @@ var _selling := false
 var _sell_refund_ratio := 0.0
 var _stops_targeting_player_when_maxed := false
 var _hit_flash_tween: Tween
+var _is_critical := false
 
 @export_group("Presentation")
 @export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
+## Health fraction at or below which the turret looks broken and gets an off-screen indicator.
+@export_range(0.0, 1.0, 0.05) var critical_health_ratio := 0.25
+## How long the critical red takes to burn out to white once the turret dies.
+@export_range(0.01, 2.0, 0.01) var death_burnout_duration := 0.2
 ## Keyed by the upgrade_charge / upgrade animations; drives the surface shader's flash_amount.
 @export_range(0.0, 1.0, 0.01) var upgrade_whiteness := 0.0:
 	set = _set_upgrade_whiteness
@@ -65,6 +70,7 @@ func _ready() -> void:
 		game_over_manager.game_over.connect(_on_game_over)
 	interaction_range.player_entered.connect(_on_player_entered)
 	interaction_range.player_exited.connect(_on_player_exited)
+	health.health_changed.connect(_on_health_changed)
 	repair.repaired.connect(health.heal)
 	if player:
 		repair.capacity_drained.connect(player.capacity.spend)
@@ -94,6 +100,23 @@ func set_exclusion_radius(radius: float) -> void:
 
 func get_level() -> int:
 	return upgrader.level
+
+func is_critical() -> bool:
+	return _is_critical and not is_dead()
+
+func _on_health_changed(current: int, maximum: int) -> void:
+	# The death burnout owns the damage uniforms from here on.
+	if is_dead():
+		return
+	_set_critical(maximum > 0 and float(current) / maximum <= critical_health_ratio)
+
+## Damage effect: owns only the damage_* / crack_* uniforms.
+func _set_critical(value: bool) -> void:
+	if value == _is_critical:
+		return
+	_is_critical = value
+	for shader_material: ShaderMaterial in _get_surface_materials():
+		shader_material.set_shader_parameter("damage_amount", 1.0 if value else 0.0)
 
 func is_max_level() -> bool:
 	return upgrader.is_max_level()
@@ -145,6 +168,7 @@ func sell() -> void:
 	_selling = true
 	enabled = false
 	_active = false
+	_set_critical(false)
 	if _repairing:
 		_stop_repairing()
 	_on_combat_stopped()
@@ -311,9 +335,21 @@ func _add_surface_material(visual: CanvasItem, surface_materials: Array[ShaderMa
 func _before_death_animation() -> void:
 	pass
 
+## Runs alongside the die animation: the critical red fades out as the sprite flashes white.
+func _play_death_burnout() -> void:
+	if not _is_critical:
+		return
+	if _hit_flash_tween:
+		_hit_flash_tween.kill()
+	var tween := create_tween().set_parallel()
+	for shader_material: ShaderMaterial in _get_surface_materials():
+		tween.tween_property(shader_material, "shader_parameter/damage_amount", 0.0, death_burnout_duration)
+		tween.tween_property(shader_material, "shader_parameter/flash_amount", 1.0, death_burnout_duration)
+
 func _handle_death() -> void:
 	_before_death_animation()
 	remove_from_group("turrets")
+	_play_death_burnout()
 	enabled = false
 	_active = false
 	animation.play_animation("die")
