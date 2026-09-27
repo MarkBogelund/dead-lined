@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PostProcessingSettings" format=3 uid="uid://bu5600ksqb16q"]
+
+[ext_resource type="Script" uid="uid://dh45ag1q48qqx" path="res://scripts/data/post_processing_settings.gd" id="1_settings"]
+
+[sub_resource type="Curve" id="Curve_danger"]
+_data = [Vector2(0.49607846, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 3.4410524, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_good"]
+_data = [Vector2(0.7, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.6154127), 5.8518996, 0.0, 0, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("1_settings")
+danger_curve = SubResource("Curve_danger")
+good_curve = SubResource("Curve_good")

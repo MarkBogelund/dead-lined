@@ -231,6 +231,11 @@ func _release_dash() -> void:
 func _on_dash_charge_started() -> void:
 	time_scale_manager.request(DASH_CHARGE_SOURCE, dash_charge_time_scale)
 	camera.set_zoom_factor(DASH_CHARGE_SOURCE, dash_charge_zoom, dash_charge_zoom_in_duration, true)
+	PostProcessingManager.set_screen_effect(
+		PostProcessingManager.DASH_DESATURATION,
+		1.0,
+		PostProcessingManager.SETTINGS.dash_fade_in_duration,
+		true)
 	# Scaled so the white ramp completes in dash.get_charge_duration() real seconds despite slow-motion.
 	var length := animation.get_animation("dash_charge").length
 	animation.play_animation("dash_charge", -1, length / (dash.get_charge_duration() * dash_charge_time_scale))
@@ -238,6 +243,11 @@ func _on_dash_charge_started() -> void:
 func _on_dash_charge_ended() -> void:
 	time_scale_manager.release(DASH_CHARGE_SOURCE)
 	camera.set_zoom_factor(DASH_CHARGE_SOURCE, 1.0, dash_charge_zoom_out_duration, true)
+	PostProcessingManager.set_screen_effect(
+		PostProcessingManager.DASH_DESATURATION,
+		0.0,
+		PostProcessingManager.SETTINGS.dash_fade_out_duration,
+		true)
 	animation.stop_animation("dash_charge")
 
 func _handle_dash_started(direction: Vector2) -> void:

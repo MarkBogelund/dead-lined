@@ -44,16 +44,18 @@ Four layers, signals flow **outward/upward**, direct calls flow **downward** to 
 
 ```text
 UI          → reacts to signals, never mutates gameplay state directly
-Systems     → WaveManager, ShopManager, ScoreManager, GameOverManager, TimeScaleManager (scene-local, not autoloads)
+Systems     → WaveManager, ShopManager, ScoreManager, GameOverManager, TimeScaleManager (scene-local); MenuManager and PostProcessingManager (autoloads)
 World       → Player / enemies / turrets — orchestrator scripts composing components
 Data        → Resource (.tres) subclasses — stats, never hold logic
 ```
 
-Only one autoload exists: `MenuManager` ([scripts/systems/menu_manager.gd](scripts/systems/menu_manager.gd)). Everything else is scene-local under [scenes/game.tscn](scenes/game.tscn), because this is a single-session game — a global signal bus for everything would add indirection without benefit here.
+Two infrastructure autoloads exist: `MenuManager` ([scripts/systems/menu_manager.gd](scripts/systems/menu_manager.gd)) and `PostProcessingManager` ([scripts/systems/post_processing_manager.gd](scripts/systems/post_processing_manager.gd)). Gameplay systems remain scene-local under [scenes/game.tscn](scenes/game.tscn), because this is a single-session game — a global signal bus for everything would add indirection without benefit here.
 
 `TimeScaleManager` ([scripts/systems/time_scale_manager.gd](scripts/systems/time_scale_manager.gd)) is the only writer of `Engine.time_scale`. Callers `request(source, scale)` / `release(source)` by `StringName`; the slowest active request wins, and `freeze(duration)` is a timed request at 0. This lets hitstop and dash slow-motion overlap without one resetting the other. It resets time to 1.0 when it leaves the tree.
 
-`GameCamera` ([scripts/world/game_camera.gd](scripts/world/game_camera.gd), on the player's `Camera2D` in `game.tscn`) owns zoom the same way: `set_zoom_factor(source, factor, duration, ignore_time_scale)` tweens a named factor that multiplies onto the base zoom (`&"crunch_time"` from `CrunchTimeComponent`, `&"dash_charge"` from `Player`), so the effects stack instead of overwriting each other. `SlowMotionOverlay` ([scripts/ui/slow_motion_overlay.gd](scripts/ui/slow_motion_overlay.gd), first child of `UI` so the HUD draws above it) listens to `player.dash.charge_started` / `charge_ended` and fades [shaders/slow_motion.gdshader](shaders/slow_motion.gdshader) (screen-texture desaturation) in and out on real time; it hides itself when faded out.
+`GameCamera` ([scripts/world/game_camera.gd](scripts/world/game_camera.gd), on the player's `Camera2D` in `game.tscn`) owns zoom the same way: `set_zoom_factor(source, factor, duration, ignore_time_scale)` tweens a named factor that multiplies onto the base zoom (`&"crunch_time"` from `CrunchTimeComponent`, `&"dash_charge"` from `Player`), so the effects stack instead of overwriting each other.
+
+`PostProcessingManager` owns all full-screen world effects through one [post_processing.gdshader](shaders/post_processing.gdshader) compositor. Its CanvasLayer is layer 1 and game UI is explicitly layer 2, so post-processing never changes HUD, menus, labels, or indicators. Color/vignette callers use source-keyed `set_color_overlay(source, color, intensity, priority, fade_duration, pulse_speed)` / `clear_color_overlay(source)`: the highest priority wins and clearing it restores the next request. HUD forwards capacity to `update_capacity_overlay()` and Crunch Time state to `set_crunch_time_overlay()`; `Player` fades the registered `&"dash_desaturation"` screen effect during dash charge. `reset()` runs when a fresh HUD starts so the persistent autoload cannot leak effects across scene reloads. Tuning lives in [post_processing_settings.tres](resources/player/post_processing_settings.tres). To add another scalar screen effect, add its uniform and fragment operation to the compositor, then call `register_screen_effect(id, uniform)` and use `set_screen_effect(id, amount, duration)`; keeping screen reads in one shader ensures effects compose in a defined order. The compositor ColorRect hides at zero strength, avoiding unnecessary screen copies.
 
 ### Component ownership
 
@@ -124,6 +126,7 @@ A few places intentionally cross the strict ownership boundary because the added
 - Turret repair drains player capacity directly (`repair.capacity_drained.connect(player.capacity.spend)`) rather than going through an event/coordinator layer.
 - Spawners and factories (`ShootComponent`, `EnemySpawner`, `TurretPlacer`) call `get_tree().current_scene.add_child(...)` directly instead of routing through a dedicated spawn coordinator.
 - `OrbDropComponent.drop()` looks up the player via `get_tree().get_first_node_in_group("player")` and reads `player.crunch_time.is_crunch_time_active()` directly to skip orb and powerup drops during crunch time, instead of the player broadcasting a "no drops" event enemies subscribe to.
+- `PostProcessingManager` is an autoload with a direct global call API because color overlays and full-screen effects are cross-cutting presentation used by unrelated gameplay/UI owners; a scene-local bus plus coordinator would add indirection while still requiring one persistent compositor.
 - `TurretBase` reads the `repair` input directly (`Input.is_action_pressed`) instead of the player routing it to the nearest turret; with at most a handful of turrets, a player-side turret selection layer would add more indirection than value.
 - `TurretBase` reads `player.capacity.can_afford()` to decide whether the upgrade button is enabled. Spending and refunds still flow as signals (`TurretBase.upgrade_purchased` / `sold` → `ShopManager.turret_upgraded` / `turret_sold` → `Player`); only the read-only affordability check crosses the boundary, because a signal round-trip for a per-frame button state adds no value.
 

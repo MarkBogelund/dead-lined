@@ -20,7 +20,6 @@ extends Control
 @onready var floating_score_text: FloatingScoreText = $FloatingScoreText
 
 @onready var animation_handler: AnimationHandler = $AnimationHandler
-@onready var _capacity_overlay: CapacityOverlay = %CapacityOverlay
 
 var _last_capacity: float = 0.0
 var _capacity_fill_layout_initialized := false
@@ -30,6 +29,7 @@ var _capacity_fill_left_overhang := 0.0
 var _capacity_fill_right_overhang := 0.0
 
 func _ready() -> void:
+	PostProcessingManager.reset()
 	_initialize_values()
 	_connect_signals()
 	animation_handler.configure_animation("score_update", 0, false)
@@ -101,12 +101,12 @@ func _on_crunch_charge_changed() -> void:
 
 func _on_crunch_time_started(_buffs: Dictionary) -> void:
 	_update_crunch_time_ready_state()
-	_capacity_overlay.set_crunch_time_active(true)
+	PostProcessingManager.set_crunch_time_overlay(true, crunch_time_effects)
 	_play_capacity_state_animation()
 
 func _on_crunch_time_ended(_buffs: Dictionary, _duration: float) -> void:
 	_update_crunch_time_ready_state()
-	_capacity_overlay.set_crunch_time_active(false)
+	PostProcessingManager.set_crunch_time_overlay(false, crunch_time_effects)
 	_play_capacity_state_animation()
 
 func _update_capacity_fill(capacity: float) -> void:
@@ -129,7 +129,7 @@ func _update_capacity_fill(capacity: float) -> void:
 	capacity_fill.offset_left = fill_right - rendered_width
 	capacity_fill.offset_right = fill_right
 	capacity_label.text = "%d" % int(capacity)
-	_capacity_overlay.update_capacity(capacity, maximum)
+	PostProcessingManager.update_capacity_overlay(capacity, maximum)
 
 func _update_crunch_time_ready_state() -> void:
 	var is_ready := player.crunch_time.has_charge() and not player.crunch_time.is_crunch_time_active()
