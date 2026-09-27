@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/orb.tscn" id="1_orb"]
+[ext_resource type="Script" path="res://scripts/world/entities/shared/crunch_powerup.gd" id="2_powerup"]
+[ext_resource type="Resource" path="res://resources/player/crunch_powerup_settings.tres" id="3_settings"]
+
+[node name="CrunchPowerup" instance=ExtResource("1_orb")]
+script = ExtResource("2_powerup")
+settings = ExtResource("3_settings")

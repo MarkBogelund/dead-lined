@@ -62,7 +62,6 @@ func _enter_build_phase() -> void:
 func _enter_combat_phase() -> void:
 	_current_phase = Phase.COMBAT
 	_wave_index += 1
-	get_tree().call_group("scrap", "despawn_on_combat")
 	combat_phase_started.emit(_wave_index)
 
 func _on_enemy_died() -> void:

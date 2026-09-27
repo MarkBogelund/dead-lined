@@ -15,7 +15,6 @@ extends Control
 @onready var capacity_fill_clip: Control = $CapacityBar/CapacityFillClip
 @onready var capacity_fill: NinePatchRect = $CapacityBar/CapacityFillClip/CapacityFill
 @onready var capacity_label: Label = $CapacityBar/CapacityLabel
-@onready var crunch_time_threshold_line: ColorRect = $CapacityBar/CrunchTimeThreshold
 @onready var crunch_time_label: Label = %CrunchTimeReadyLabel
 @onready var score_label: Label = %ScoreLabel
 @onready var floating_score_text: FloatingScoreText = $FloatingScoreText
@@ -53,8 +52,9 @@ func _initialize_values() -> void:
 
 func _connect_signals() -> void:
 	player.capacity.capacity_changed.connect(_on_capacity_changed)
-	player.capacity.crunch_time_threshold_changed.connect(_tween_threshold_line)
-	player.capacity.crunch_time_unlocked.connect(_on_crunch_time_unlocked)
+	player.crunch_time.charge_gained.connect(_on_crunch_charge_changed)
+	player.crunch_time.charge_spent.connect(_on_crunch_charge_changed)
+	player.crunch_time.charge_lost.connect(_on_crunch_charge_changed)
 	player.crunch_time.crunch_time_started.connect(_on_crunch_time_started)
 	player.crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
 	wave_manager.combat_phase_started.connect(set_wave)
@@ -73,14 +73,12 @@ func _initialize_capacity_fill_layout() -> void:
 	_capacity_fill_right_overhang = capacity_fill.position.x + capacity_fill.size.x - capacity_fill_clip.size.x
 	_capacity_fill_layout_initialized = true
 	_update_capacity_fill(player.capacity.current_capacity)
-	_set_threshold_line_position(player.capacity.crunch_time_threshold)
 	_update_capacity_fill_shader_width()
 
 func _on_capacity_bar_resized() -> void:
 	if not _capacity_fill_layout_initialized:
 		return
 	_update_capacity_fill(player.capacity.current_capacity)
-	_set_threshold_line_position(player.capacity.crunch_time_threshold)
 
 func _update_capacity_fill_shader_width() -> void:
 	var shader_material := capacity_fill.material as ShaderMaterial
@@ -97,7 +95,7 @@ func _on_capacity_changed(capacity: float) -> void:
 	elif delta < 0.0:
 		_play_capacity_change_animation()
 
-func _on_crunch_time_unlocked() -> void:
+func _on_crunch_charge_changed() -> void:
 	_update_crunch_time_ready_state()
 	_play_capacity_state_animation()
 
@@ -134,33 +132,15 @@ func _update_capacity_fill(capacity: float) -> void:
 	_capacity_overlay.update_capacity(capacity, maximum)
 
 func _update_crunch_time_ready_state() -> void:
-	var is_ready := player.capacity.can_crunch_time() and not player.crunch_time.is_crunch_time_active()
+	var is_ready := player.crunch_time.has_charge() and not player.crunch_time.is_crunch_time_active()
 	crunch_time_label.visible = is_ready
 	if not is_ready:
 		crunch_time_label.scale = Vector2.ONE
 
-func _set_threshold_line_position(threshold: float) -> void:
-	if not _capacity_fill_layout_initialized:
-		return
-	var maximum := player.capacity.get_max()
-	var fraction := threshold / maximum if maximum > 0.0 else 0.0
-	var full_width := capacity_bar.size.x - _capacity_fill_clip_left_inset - _capacity_fill_clip_right_inset
-	crunch_time_threshold_line.position.x = _capacity_fill_clip_left_inset + fraction * full_width - crunch_time_threshold_line.size.x / 2.0
-
-func _tween_threshold_line(threshold: float) -> void:
-	if not _capacity_fill_layout_initialized:
-		return
-	var maximum := player.capacity.get_max()
-	var fraction := threshold / maximum if maximum > 0.0 else 0.0
-	var full_width := capacity_bar.size.x - _capacity_fill_clip_left_inset - _capacity_fill_clip_right_inset
-	var target_x := _capacity_fill_clip_left_inset + fraction * full_width - crunch_time_threshold_line.size.x / 2.0
-	var tween := create_tween()
-	tween.tween_property(crunch_time_threshold_line, "position:x", target_x, 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-
 func _play_capacity_state_animation() -> void:
 	if player.crunch_time.is_crunch_time_active():
 		animation_handler.play_animation("capacity_active")
-	elif player.capacity.can_crunch_time():
+	elif player.crunch_time.has_charge():
 		animation_handler.play_animation("capacity_ready")
 	else:
 		animation_handler.stop()

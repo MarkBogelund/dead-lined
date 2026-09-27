@@ -14,4 +14,4 @@ projectile_speed = 90.0
 max_health = 6
 damage = 5
 move_speed = 25.0
-scrap_drop_amount = 5
+orb_drop_amount = 5

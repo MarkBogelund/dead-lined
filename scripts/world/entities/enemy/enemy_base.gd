@@ -6,7 +6,7 @@ signal died
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var knockback: KnockbackComponent = $KnockbackComponent
 @onready var health: HealthComponent = $HealthComponent
-@onready var drop_scrap: DropScrapComponent = $DropScrapComponent
+@onready var orb_drop: OrbDropComponent = $OrbDropComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var hit_particles: GPUParticles2D = $HitParticles
 @onready var navigation: NavigationComponent = $NavigationComponent
@@ -14,9 +14,9 @@ signal died
 @onready var contact_hitbox: HitboxComponent = $HitboxComponent
 
 
-func _initialize_base(max_health: int, scrap_drop_amount: int) -> void:
-	health.initialize(max_health)
-	drop_scrap.initialize(scrap_drop_amount)
+func _initialize_base(stats: EnemyStats) -> void:
+	health.initialize(stats.max_health)
+	orb_drop.initialize(stats.orb_drop_amount, stats.crunch_powerup_drop_chance)
 
 var _spawn_intro_active := false
 var _collision_layer_before_intro := 0
@@ -104,7 +104,7 @@ func _should_restart_hit_particles_on_damage() -> bool:
 	return false
 
 func despawn() -> void:
-	drop_scrap.drop()
+	orb_drop.drop()
 	queue_free()
 
 func is_dead() -> bool:

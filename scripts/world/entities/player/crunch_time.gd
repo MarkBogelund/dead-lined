@@ -1,11 +1,17 @@
 extends Node
 class_name CrunchTimeComponent
 
-## Manages crunch time activation, duration, and buff calculations
+## Manages the Crunch Time charge, activation, duration, and buff calculations.
+## A charge comes from a collected CrunchPowerup; the player can carry one at a time.
 ## Emits signals for Player to apply/remove buffs
 
 signal crunch_time_started(buffs: Dictionary)
 signal crunch_time_ended(buffs: Dictionary, duration: float)
+signal charge_gained
+## The charge was used to activate Crunch Time.
+signal charge_spent
+## The charge was taken away (hit, death, or the round ending) without being used.
+signal charge_lost
 
 ## Buff multipliers (configurable in inspector)
 @export_group("Buff Multipliers")
@@ -17,7 +23,6 @@ signal crunch_time_ended(buffs: Dictionary, duration: float)
 @export var cooldown_multiplier := 0.5 # 0.5 = half cooldown (faster)
 
 @export_group("Activation")
-@export var activation_cost: float = 50.0
 @export var duration: float = 5.0
 
 @export_group("Camera")
@@ -25,14 +30,14 @@ signal crunch_time_ended(buffs: Dictionary, duration: float)
 
 ## State
 var is_active := false
+var _has_charge := false
 var _is_build_phase := true
 var _active_duration: float = 0.0
 var _camera: GameCamera
 
 const CAMERA_ZOOM_SOURCE := &"crunch_time"
 
-func initialize(p_activation_cost: float, p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float, p_camera: GameCamera) -> void:
-	activation_cost = p_activation_cost
+func initialize(p_duration: float, p_damage: float, p_radius: float, p_speed: float, p_arc_angle: float, p_weapon_size: float, p_cooldown: float, p_camera: GameCamera) -> void:
 	duration = p_duration
 	damage_multiplier = p_damage
 	radius_multiplier = p_radius
@@ -51,13 +56,35 @@ func _process(delta: float) -> void:
 
 func set_build_phase(is_build: bool) -> void:
 	_is_build_phase = is_build
-	if is_build and is_active:
+	if is_build:
 		deactivate()
+		lose_charge()
 
-## Toggle crunch time — activates if can_activate is true, deactivates if already active
-func toggle(can_activate: bool) -> void:
-	if not is_active and can_activate:
-		activate()
+func has_charge() -> bool:
+	return _has_charge
+
+## Returns false if a charge is already carried, so the powerup stays on the ground.
+func add_charge() -> bool:
+	if _has_charge:
+		return false
+	_has_charge = true
+	charge_gained.emit()
+	return true
+
+func lose_charge() -> void:
+	if not _has_charge:
+		return
+	_has_charge = false
+	charge_lost.emit()
+
+## Spends the carried charge to start Crunch Time.
+func try_activate() -> bool:
+	if is_active or _is_build_phase or not _has_charge:
+		return false
+	_has_charge = false
+	charge_spent.emit()
+	activate()
+	return true
 
 ## Activate crunch time with buffs
 func activate() -> void:

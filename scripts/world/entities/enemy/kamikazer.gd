@@ -42,7 +42,7 @@ func _initialize() -> void:
 	if not stats:
 		push_error("%s requires a KamikazerStats resource" % name)
 		return
-	_initialize_base(stats.max_health, stats.scrap_drop_amount)
+	_initialize_base(stats)
 	targeting.configure(stats.targeting)
 	hitbox.initialize(stats.damage, stats.knockback)
 	_speed = stats.move_speed

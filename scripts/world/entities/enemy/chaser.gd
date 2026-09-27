@@ -30,7 +30,7 @@ func _initialize() -> void:
 	if not stats:
 		push_error("%s requires a ChaserStats resource" % name)
 		return
-	_initialize_base(stats.max_health, stats.scrap_drop_amount)
+	_initialize_base(stats)
 	hitbox.initialize(stats.damage, stats.knockback)
 	targeting.configure(stats.targeting)
 	targeting.target_changed.connect(func(_new: Node2D, _old: Node2D) -> void: _flank_active = true)

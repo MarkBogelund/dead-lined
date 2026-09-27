@@ -2,13 +2,14 @@
 
 [ext_resource type="Resource" uid="uid://blw5awhrqlike" path="res://resources/enemies/chaser/chaser_stats.tres" id="1_chaserstats"]
 [ext_resource type="Script" uid="uid://73dnhyc0uhym" path="res://scripts/world/entities/enemy/chaser.gd" id="1_dxuae"]
-[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_fffhc"]
+[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/orb.tscn" id="2_fffhc"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="3_fffhc"]
 [ext_resource type="Texture2D" uid="uid://ccp2efd60ustu" path="res://assets/sprites/enemies/chaser.png" id="4_by6ef"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_ck52e"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="4_qurf7"]
 [ext_resource type="Texture2D" uid="uid://1tbgasd1ucay" path="res://assets/sprites/enemies/chaser-shadow.png" id="5_wuiwp"]
-[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/drop_scrap.gd" id="8_jg6m2"]
+[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/orb_drop.gd" id="8_jg6m2"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="8_uqckg"]
 [ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation.gd" id="11_uqckg"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="12_by6ef"]
@@ -383,7 +384,7 @@ tracks/8/keys = {
 tracks/9/type = "method"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("DropScrapComponent")
+tracks/9/path = NodePath("OrbDropComponent")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -630,9 +631,10 @@ position = Vector2(0, -9)
 color = Color(0.94509804, 0.18431373, 0.34901962, 0.30588236)
 texture = SubResource("GradientTexture2D_fffhc")
 
-[node name="DropScrapComponent" type="Node" parent="." unique_id=478857233]
+[node name="OrbDropComponent" type="Node" parent="." unique_id=478857233]
 script = ExtResource("8_jg6m2")
-scrap_scene = ExtResource("2_fffhc")
+orb_scene = ExtResource("2_fffhc")
+crunch_powerup_scene = ExtResource("2_powerup")
 impulse_min = 20.0
 impulse_max = 150.0
 linear_damp = 8.0

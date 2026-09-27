@@ -82,9 +82,8 @@ func _initialize() -> void:
 	dash_charge_time_scale = stats.dash_charge_time_scale
 	melee_weapon.initialize(stats.slash_damage, stats.slash_knockback, stats.slash_self_knockback, stats.slash_radius, stats.slash_arc_angle, stats.slash_duration, stats.slash_cooldown)
 	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
-	capacity.initialize(stats.initial_capacity, stats.max_capacity, stats.crunch_threshold, stats.threshold_step, stats.min_crunch_threshold)
+	capacity.initialize(stats.initial_capacity, stats.max_capacity)
 	crunch_time.initialize(
-		stats.crunch_activation_cost,
 		stats.crunch_duration,
 		stats.damage_multiplier,
 		stats.radius_multiplier,
@@ -119,10 +118,9 @@ func _connect_signals() -> void:
 	# Systems
 	shop_manager.turret_placement_started.connect(_on_turret_placement_started)
 	shop_manager.turret_placement_ended.connect(_on_turret_placement_ended)
-	shop_manager.turret_bought.connect(_on_turret_bought)
-	shop_manager.turret_lost.connect(_on_turret_lost)
+	shop_manager.turret_bought.connect(capacity.spend)
 	shop_manager.turret_upgraded.connect(capacity.spend)
-	shop_manager.turret_sold.connect(_on_turret_sold)
+	shop_manager.turret_sold.connect(capacity.gain)
 	wave_manager.build_phase_started.connect(func() -> void: crunch_time.set_build_phase(true))
 	wave_manager.combat_phase_started.connect(func(_i: int) -> void: crunch_time.set_build_phase(false))
 	dash.charge_started.connect(_on_dash_charge_started)
@@ -202,9 +200,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("shoot"):
 		_shoot_held = true
 
-	if event.is_action_pressed("crunch_time") and (crunch_time.is_crunch_time_active() or not dash.is_holding()):
-		var can_activate := capacity.can_crunch_time() and capacity.can_afford(crunch_time.activation_cost)
-		crunch_time.toggle(can_activate)
+	if event.is_action_pressed("crunch_time") and not dash.is_holding():
+		crunch_time.try_activate()
 	
 	if event.is_action_pressed("shoot") and not dash.is_holding() and crunch_time.is_crunch_time_active():
 		var mouse_pos := get_global_mouse_position()
@@ -263,6 +260,7 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 		return
 	dash.cancel_charge()
 	dash.cancel_dash()
+	crunch_time.lose_charge()
 	capacity.spend(float(amount))
 	if capacity.current_capacity <= 0.0:
 		_handle_death(from_position)
@@ -320,6 +318,10 @@ var can_pickup: bool:
 func pickup(amount: int) -> void:
 	capacity.gain(float(amount))
 
+## Called by CrunchPowerup on contact; false leaves it on the ground.
+func try_collect_crunch_powerup() -> bool:
+	return not _is_dead and crunch_time.add_charge()
+
 func _on_turret_placement_started() -> void:
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)
@@ -328,19 +330,7 @@ func _on_turret_placement_ended() -> void:
 	shoot.set_enabled(true)
 	melee_weapon.set_enabled(crunch_time.is_crunch_time_active())
 
-func _on_turret_bought(price: float) -> void:
-	capacity.spend(price)
-	capacity.lower_threshold()
-
-func _on_turret_lost() -> void:
-	capacity.raise_threshold()
-
-func _on_turret_sold(refund: float) -> void:
-	capacity.gain(refund)
-	capacity.raise_threshold()
-
 func _on_crunch_time_started(buffs: Dictionary) -> void:
-	capacity.spend(crunch_time.activation_cost)
 	melee_weapon.set_crunch_time_active(true, buffs)
 	melee_weapon.set_enabled(true)
 	movement.set_crunch_time_active(true, buffs["speed"])

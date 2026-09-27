@@ -22,5 +22,7 @@ class_name EnemyStats
 @export var targeting: TargetingProfile = preload("res://resources/enemies/enemy_targeting.tres")
 
 @export_group("Drops")
-## Scrap units dropped on death.
-@export var scrap_drop_amount: int = 3
+## Capacity orbs dropped on death.
+@export var orb_drop_amount: int = 3
+## Chance (0-1) of also dropping a Crunch Time powerup on death.
+@export_range(0.0, 1.0, 0.005) var crunch_powerup_drop_chance: float = 0.02

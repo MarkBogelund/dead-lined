@@ -29,7 +29,7 @@ func _initialize() -> void:
 	if not stats:
 		push_error("%s requires a StalkerStats resource" % name)
 		return
-	_initialize_base(stats.max_health, stats.scrap_drop_amount)
+	_initialize_base(stats)
 	aiming.initialize(stats.aim_speed, stats.aim_tolerance)
 	targeting.configure(stats.targeting)
 	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed)

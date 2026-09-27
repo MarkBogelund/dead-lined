@@ -56,16 +56,8 @@ class_name PlayerStats
 @export var initial_capacity: float = 80.0
 ## Hard cap on capacity
 @export var max_capacity: float = 100.0
-## Capacity level at which crunch time becomes available
-@export var crunch_threshold: float = 90.0
-## How much the crunch threshold lowers each time a turret is placed
-@export var threshold_step: float = 10.0
-## Minimum value the crunch threshold can reach
-@export var min_crunch_threshold: float = 10.0
 
 @export_group("Crunch Time")
-## Capacity spent on crunch time activation
-@export var crunch_activation_cost: float = 50.0
 ## Duration of crunch time in seconds
 @export var crunch_duration: float = 5.0
 ## Slash damage multiplier while crunch time is active

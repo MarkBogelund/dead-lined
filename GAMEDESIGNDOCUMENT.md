@@ -17,14 +17,13 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 ### Core Gameplay
 1. **Free-Fire Dodging** — Shoot enemies infinitely and fast (0.25s cooldown, 0 capacity cost). Dodging bullet patterns is the primary skill loop.
 2. **Turret Strategy** — Place turrets during build phases to multiply your firepower. Costs capacity. Risky because they shoot at you too.
-3. **Crunch Time Mode** — Activate a power-up to become invincible, switch to the wrench as your only weapon, and gain combat buffs. Capacity-gated.
+3. **Crunch Time Mode** — Pick up a rare powerup dropped by enemies, then activate it to become invincible, switch to the wrench as your only weapon, and gain combat buffs.
 
 ### The Unique Twist
 **Turrets as Double-Edged Sword:**
 - Unlike traditional tower defense, turrets aren't reliable helpers—they're buggy and target both enemies and you
 - Creates constant risk/reward tension: build turrets for firepower = higher friendly fire risk
 - Upgrading turrets to max level makes them safe (only shoot enemies)
-- Each turret placement lowers the Crunch Time threshold, forcing future waves to rely more on pure dodging skill
 
 **Crunch Time Inversion:**
 - Normal play: you dodge while turrets assist
@@ -32,7 +31,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 - Switching modes forces different playstyles
 
 ### Design Philosophy
-**Every element serves the core:** Dodging is primary skill. Turrets are strategic layer. Capacity gates turret building and Crunch Time to create meaningful decisions. Nothing distracts from the core loop.
+**Every element serves the core:** Dodging is primary skill. Turrets are strategic layer. Capacity gates turret building to create meaningful decisions; Crunch Time is a rare, earned burst. Nothing distracts from the core loop.
 
 ---
 
@@ -61,22 +60,24 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 - Pull aggro off turrets: enemies always go for the player within 100 px, and only switch to a turret when it is more than 80 px closer than the player (they come back once the player is within 40 px of the turret's distance)
 - Dash: the player is invincible from the moment dash is pressed until the dash ends. A quick tap (released within 0.15 s) is a normal 120 px dash. Holding longer charges it: time slows (0.5×, still steering), the player glows white, and releasing dashes in the movement direction (or facing direction when standing still). Distance grows linearly from 120 px to 300 px at 0.5 s after the press (real time, auto-fires). No shooting or activating Crunch Time while the button is held.
 - Shoot enemies freely (0.25s cooldown, 0 capacity cost)
-- Activate Crunch Time when capacity % allows
+- Activate a carried Crunch Time powerup
 - Manage capacity by surviving hits
 
 **Escalation:** Each wave spawns more enemies, faster bullets, higher difficulty
 
 ### Crunch Time (Power-Up Mode)
-**Activation:** Manual trigger, only during combat, requires capacity ≥ threshold
+**Powerup:** Each enemy has a small chance (2% by default, set per enemy type) to drop a Crunch Time powerup: a double-size orb with a red glow that lasts longer on the ground. Touching it picks it up and it trails behind the player. Only one can be carried; others stay on the ground.
 
-**Cost:** Spends 50 capacity on activation and lasts 5 seconds
+**Activation:** Press Crunch Time (C) during combat while carrying the powerup. It is used up on activation and lasts 5 seconds. No capacity cost.
+
+**Losing it:** The carried powerup disappears if the player is hit, or when the round ends unused. Uncollected powerups disappear after their lifetime or when the round ends.
 
 **Effect:**
 - Invincibility
 - Wrench becomes your only weapon (shooting disabled)
 - Combat buffs: 3x damage, faster swings, 2x radius, 1.5x speed
 
-**Caveat:** You must be aggressive and close-range. Each turret placed lowers the threshold, making future Crunch Times harder to access.
+**Caveat:** You must be aggressive and close-range, and no orbs or powerups drop while Crunch Time is active.
 
 ---
 
@@ -90,23 +91,20 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 | Build turret | 10-20% | Strategy cost |
 | Upgrade turret | Escalates | Reliability cost |
 | Sell turret | Refund | Returns 75% of the turret's total cost |
-| Activate Crunch Time | 50% | Power-up gate |
 | Repair turret | Continuous | Restores turret health while held |
-| Enemy defeated | +5-10% | Resource generation |
+| Collect orbs | +5-10% | Resource generation |
 
-**Strategic Tension:** Build turrets to help combat (costs capacity) but it also makes Crunch Time harder to access next wave.
+**Strategic Tension:** Build turrets to help combat, but every turret spends the same capacity that keeps you alive.
 
 **Death Condition:** Capacity reaches 0% → Player burns out and dies.
-
-**Crunch Time Gate:** Must be ≥ threshold to activate. Threshold lowers with each turret placed.
 
 ---
 
 ## 👾 Enemies & Combat
 
 ### Enemy Types
-- **Stalker (Ranged):** Maintains distance and fires slow, readable projectiles. Drops medium scrap.
-- **Chaser (Melee):** Rushes and pressures the player or nearby turrets. Drops small scrap.
+- **Stalker (Ranged):** Maintains distance and fires slow, readable projectiles. Drops a medium number of orbs.
+- **Chaser (Melee):** Rushes and pressures the player or nearby turrets. Drops a few orbs.
 - **Kamikazer:** Commits to a charge and self-destructs on contact. High burst damage and lower frequency.
 
 **Design Goal:** Slow, readable projectiles allow skill-based dodging. Mix of enemy types creates tactical variety.

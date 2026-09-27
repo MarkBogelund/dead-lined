@@ -3,11 +3,12 @@
 [ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="1_stalker"]
 [ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/enemies/stalker/stalker_stats.tres" id="1_stalkerstats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_mcjbk"]
-[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/scrap.tscn" id="2_scrap"]
+[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/orb.tscn" id="2_orb"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="7_ag4mk"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="7_health"]
-[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/drop_scrap.gd" id="9_dropscrap"]
+[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/orb_drop.gd" id="9_orbdrop"]
 [ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation.gd" id="10_nav"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="12_36hmg"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="12_los"]
@@ -279,7 +280,7 @@ tracks/7/keys = {
 tracks/8/type = "method"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("DropScrapComponent")
+tracks/8/path = NodePath("OrbDropComponent")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -796,9 +797,10 @@ max_neighbors = 10
 time_horizon_agents = 1.5
 script = ExtResource("10_nav")
 
-[node name="DropScrapComponent" type="Node" parent="." unique_id=1674501989]
-script = ExtResource("9_dropscrap")
-scrap_scene = ExtResource("2_scrap")
+[node name="OrbDropComponent" type="Node" parent="." unique_id=1674501989]
+script = ExtResource("9_orbdrop")
+orb_scene = ExtResource("2_orb")
+crunch_powerup_scene = ExtResource("2_powerup")
 impulse_min = 20.0
 impulse_max = 150.0
 
