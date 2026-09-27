@@ -568,7 +568,7 @@ script = ExtResource("33_offscreen")
 arrow_texture = ExtResource("29_js0lu")
 arrow_color = Color(0.9598885, 0.19824979, 0, 1)
 center_inset = 0.5
-visible_margin = 90.0
+min_player_distance = 150.0
 pulse_period = 0.6
 pulse_min_alpha = 0.3
 
