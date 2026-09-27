@@ -77,7 +77,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 - Wrench becomes your only weapon (shooting disabled)
 - Combat buffs: 3x damage, faster swings, 2x radius, 1.5x speed
 
-**Caveat:** You must be aggressive and close-range, and no orbs or powerups drop while Crunch Time is active.
+**Caveat:** You must be aggressive and close-range, and no powerups drop while Crunch Time is active. Orbs are suppressed too, unless the playtest toggle `drop_orbs_during_crunch_time` is enabled.
 
 ---
 

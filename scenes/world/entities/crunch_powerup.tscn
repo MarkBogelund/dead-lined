@@ -3,11 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/orb.tscn" id="1_orb"]
 [ext_resource type="Script" uid="uid://dkh6t1minj7ss" path="res://scripts/world/entities/shared/crunch_powerup.gd" id="2_powerup"]
 [ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="3_settings"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="4_yxwvc"]
+[ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yxwvc"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_p65r1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_yxwvc"]
 atlas = ExtResource("4_yxwvc")
-region = Rect2(64, 0, 16, 16)
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="Gradient" id="Gradient_f5wuv"]
 offsets = PackedFloat32Array(0, 0.7161804)
@@ -24,9 +24,10 @@ settings = ExtResource("3_settings")
 
 [node name="Sprite2D" type="Sprite2D" parent="Visuals" index="0" unique_id=154060269]
 z_index = 2
-texture = SubResource("AtlasTexture_p65r1")
+texture = SubResource("AtlasTexture_yxwvc")
 
 [node name="PointLight2D" type="PointLight2D" parent="Visuals" index="1" unique_id=343020866]
+scale = Vector2(0.5, 0.5)
 color = Color(0.93853164, 0, 0.23270178, 1)
 energy = 0.4
 texture = SubResource("GradientTexture2D_b5yvb")

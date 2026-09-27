@@ -9,6 +9,7 @@ class_name OrbDropComponent
 @export var impulse_max := 300.0
 ## How quickly dropped orbs slow down (higher = stops faster).
 @export var linear_damp := 3.0
+@export var crunch_settings: CrunchPowerupSettings = preload("res://resources/player/crunch_powerup_settings.tres")
 
 var orb_drop_amount := 1
 var crunch_powerup_chance := 0.0
@@ -24,17 +25,20 @@ func _ready() -> void:
 		push_error("OrbDropComponent must be a child of a Node2D entity")
 	if not orb_scene or not crunch_powerup_scene:
 		push_error("OrbDropComponent requires orb_scene and crunch_powerup_scene")
+	if not crunch_settings:
+		push_error("OrbDropComponent requires a CrunchPowerupSettings resource")
 
 ## Called from each enemy's die animation.
 func drop() -> void:
-	if not _parent or not orb_scene or not crunch_powerup_scene:
+	if not _parent or not orb_scene or not crunch_powerup_scene or not crunch_settings:
 		return
 	var player := get_tree().get_first_node_in_group("player") as Player
-	if player and player.crunch_time.is_crunch_time_active():
+	var in_crunch_time := player != null and player.crunch_time.is_crunch_time_active()
+	if in_crunch_time and not crunch_settings.drop_orbs_during_crunch_time:
 		return
 	for i: int in range(orb_drop_amount):
 		_spawn(orb_scene)
-	if randf() < crunch_powerup_chance:
+	if not in_crunch_time and randf() < crunch_powerup_chance:
 		_spawn(crunch_powerup_scene)
 
 func _spawn(scene: PackedScene) -> void:

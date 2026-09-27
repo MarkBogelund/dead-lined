@@ -6,6 +6,8 @@ class_name CrunchPowerupSettings
 @export_group("Ground")
 ## Seconds an uncollected powerup stays on the ground.
 @export var lifetime: float = 25.0
+## Playtesting: keep dropping capacity orbs while Crunch Time is running. Powerups never drop during it.
+@export var drop_orbs_during_crunch_time: bool = false
 
 @export_group("Carry")
 ## Distance the carried powerup trails behind the player.

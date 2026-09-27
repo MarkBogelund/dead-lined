@@ -4,3 +4,4 @@
 
 [resource]
 script = ExtResource("1_settings")
+drop_orbs_during_crunch_time = true
