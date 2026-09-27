@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://dh45ag1q48qqx" path="res://scripts/data/post_processing_settings.gd" id="1_settings"]
 
 [sub_resource type="Curve" id="Curve_danger"]
-_data = [Vector2(0.49607846, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 1, 0]
+_data = [Vector2(0.75348836, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 4.056604, 0.0, 1, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_low_capacity"]
-_data = [Vector2(0, 1), 0.0, -0.375, 0, 0, Vector2(0.1255814, 0.9195402), -0.375, 0.0, 0, 0, Vector2(0.23953488, 0.48850572), 0.0, 0.0, 0, 0, Vector2(0.34651163, 0), 0.0, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0, 1), 0.0, -0.375, 0, 0, Vector2(0.2511628, 0.6685083), -0.68852127, -0.68852127, 0, 0, Vector2(0.39534885, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_good"]
 _data = [Vector2(0.7, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.6154127), 5.8518996, 0.0, 0, 0]
@@ -16,7 +16,11 @@ point_count = 2
 
 [resource]
 script = ExtResource("1_settings")
+capacity_vignette_enabled = true
 danger_curve = SubResource("Curve_danger")
 good_curve = SubResource("Curve_good")
 danger_strength_curve = SubResource("Curve_low_capacity")
-danger_screen_coverage = 1.0
+danger_glitch_intensity = 0.4
+danger_chromatic_aberration = 0.7
+danger_red_tint = 0.6
+danger_screen_coverage = 0.85
