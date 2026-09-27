@@ -127,6 +127,14 @@ func _enter_windup() -> void:
 	_state_time = 0.0
 	windup_started.emit()
 
+## Aborts a windup the owner could not present; the next frame retries while a target is still in range.
+func cancel_windup() -> void:
+	if _state != State.WINDUP:
+		return
+	_state = State.READY
+	_state_time = 0.0
+	queue_redraw()
+
 func execute_shockwave() -> void:
 	if not _enabled or _state != State.WINDUP:
 		return

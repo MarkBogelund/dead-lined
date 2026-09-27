@@ -31,7 +31,9 @@ func _stop_targeting_player() -> void:
 	shockwave.trigger_on_player = false
 
 func _on_shockwave_windup_started() -> void:
-	animation.play_animation("shock")
+	# execute_shockwave() is keyed in the shock animation, so a blocked play (upgrade, repair) would strand the windup.
+	if not animation.play_animation("shock"):
+		shockwave.cancel_windup()
 
 func get_damage_value() -> int:
 	return shockwave.damage

@@ -21,6 +21,46 @@ fill_from = Vector2(0.5, 0.5)
 [sub_resource type="CircleShape2D" id="CircleShape2D_spl43"]
 radius = 21.0
 
+[sub_resource type="Curve" id="Curve_s1gev"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_uq7i1"]
+curve = SubResource("Curve_s1gev")
+
+[sub_resource type="Gradient" id="Gradient_pwj27"]
+offsets = PackedFloat32Array(0.31566265, 0.62362635)
+colors = PackedColorArray(1, 1, 1, 1, 4.042983e-06, 0.49949998, 0.6840304, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_p0on7"]
+gradient = SubResource("Gradient_pwj27")
+
+[sub_resource type="Curve" id="Curve_m70pa"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gfr86"]
+curve = SubResource("Curve_m70pa")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t3y7w"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 8.0
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_uq7i1")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.39999998
+scale_curve = SubResource("CurveTexture_gfr86")
+color_ramp = SubResource("GradientTexture1D_p0on7")
+
 [sub_resource type="Animation" id="Animation_idle"]
 resource_name = "idle"
 length = 2.0
@@ -67,6 +107,9 @@ texture = SubResource("GradientTexture2D_s1gev")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" parent_id_path=PackedInt32Array(612364774) index="0" unique_id=1869326981]
 shape = SubResource("CircleShape2D_spl43")
+
+[node name="HitParticles" parent="." index="3" unique_id=1586402119]
+process_material = SubResource("ParticleProcessMaterial_t3y7w")
 
 [node name="AnimationHandler" parent="." index="4" unique_id=1863819974]
 libraries/capacity = SubResource("AnimationLibrary_capacity")
