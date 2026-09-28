@@ -4,10 +4,11 @@
 [ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/enemies/stalker/stalker_stats.tres" id="3_stats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="4_aiming"]
+[ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_ihk34"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="5_shoot"]
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="6_projectile"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="7_los"]
-[ext_resource type="Script" uid="uid://kxqm1yu6myfa" path="res://scripts/world/entities/shared/keep_distance.gd" id="8_keep_distance"]
+[ext_resource type="Script" uid="uid://qvvfgcvg6et7" path="res://scripts/world/entities/shared/orbit.gd" id="8_orbit"]
 [ext_resource type="Texture2D" uid="uid://d4bm6n0cjpvo2" path="res://assets/sprites/enemies/stalker-shadow.png" id="9_shadow"]
 [ext_resource type="Texture2D" uid="uid://bioitf2isi5uq" path="res://assets/sprites/enemies/stalker.png" id="10_sprite"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="11_particles"]
@@ -185,6 +186,12 @@ _data = {
 &"idle": SubResource("Animation_idle"),
 &"shoot": SubResource("Animation_shoot")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ag4mk"]
+resource_local_to_scene = true
+shader = ExtResource("4_ihk34")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rqd04"]
 atlas = ExtResource("9_shadow")
@@ -398,65 +405,68 @@ color_ramp = SubResource("GradientTexture1D_0juef")
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
 
-[node name="CollisionShape2D" parent="." unique_id=1100000002]
+[node name="CollisionShape2D" parent="." index="0" unique_id=1100000002]
 shape = SubResource("CircleShape2D_body")
 
-[node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1100000003) unique_id=1100000004]
+[node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1100000003) index="0" unique_id=1100000004]
 shape = SubResource("CircleShape2D_hitbox")
 
-[node name="NavigationComponent" parent="." unique_id=1100000007]
+[node name="NavigationComponent" parent="." index="4" unique_id=1100000007]
 target_desired_distance = 12.0
 
-[node name="AnimationHandler" parent="." unique_id=1100000010]
+[node name="AnimationHandler" parent="." index="7" unique_id=1100000010]
 libraries/stalker = SubResource("StalkerLibrary")
 
-[node name="Shadow" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) unique_id=1725397380]
+[node name="Visuals" parent="." index="8" unique_id=1100000011]
+material = SubResource("ShaderMaterial_ag4mk")
+
+[node name="Shadow" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1725397380]
 modulate = Color(0, 0, 0, 0.19607843)
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uhdj6")
 
-[node name="AimCenter" type="Node2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) unique_id=1830255728]
+[node name="AimCenter" type="Node2D" parent="Visuals" index="1" unique_id=1830255728]
 
-[node name="Muzzle" type="Sprite2D" parent="Visuals/AimCenter" unique_id=1366521328]
+[node name="Muzzle" type="Sprite2D" parent="Visuals/AimCenter" index="0" unique_id=1366521328]
 self_modulate = Color(0, 0, 0, 0.46666667)
 position = Vector2(19, 0)
 scale = Vector2(0.25, 0.25)
 texture = SubResource("AtlasTexture_gbqtd")
 
-[node name="ShootParticles" parent="Visuals/AimCenter/Muzzle" unique_id=106591860 instance=ExtResource("11_particles")]
+[node name="ShootParticles" parent="Visuals/AimCenter/Muzzle" index="0" unique_id=106591860 instance=ExtResource("11_particles")]
 scale = Vector2(4, 4)
 amount = 20
 process_material = SubResource("ParticleProcessMaterial_h2hrh")
 
-[node name="Body" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) unique_id=909493684]
-use_parent_material = true
+[node name="Body" type="AnimatedSprite2D" parent="Visuals" index="2" unique_id=909493684]
 z_index = 5
+use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_gbqtd")
 
-[node name="PointLight2D" type="PointLight2D" parent="Visuals/Body" unique_id=453189616]
+[node name="PointLight2D" type="PointLight2D" parent="Visuals/Body" index="0" unique_id=453189616]
 show_behind_parent = true
 energy = 0.2
 texture = SubResource("GradientTexture2D_rqd04")
 
-[node name="HitParticles" parent="." unique_id=1586402119]
+[node name="HitParticles" parent="." index="9" unique_id=1586402119]
 process_material = SubResource("ParticleProcessMaterial_uhdj6")
 
-[node name="AimingComponent" type="Node" parent="." unique_id=1729909200 node_paths=PackedStringArray("visual_node", "muzzle")]
+[node name="AimingComponent" type="Node" parent="." index="11" unique_id=1729909200 node_paths=PackedStringArray("visual_node", "muzzle")]
 script = ExtResource("4_aiming")
 visual_node = NodePath("../Visuals/AimCenter")
 muzzle = NodePath("../Visuals/AimCenter/Muzzle")
 
-[node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
+[node name="ShootComponent" type="Node" parent="." index="12" unique_id=1897763259]
 script = ExtResource("5_shoot")
 projectile_scene = ExtResource("6_projectile")
 
-[node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
+[node name="LineOfSightComponent" type="Node2D" parent="." index="13" unique_id=992499215]
 script = ExtResource("7_los")
 
-[node name="KeepDistanceComponent" type="Node" parent="." unique_id=992499216]
-script = ExtResource("8_keep_distance")
+[node name="OrbitComponent" type="Node" parent="." index="14" unique_id=992499216]
+script = ExtResource("8_orbit")
 
-[node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=2118097210]
+[node name="WindupParticles" type="GPUParticles2D" parent="." index="15" unique_id=2118097210]
 z_index = 14
 emitting = false
 amount = 30

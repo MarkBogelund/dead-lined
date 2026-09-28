@@ -4,7 +4,7 @@ class_name Stalker
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var aiming: AimingComponent = $AimingComponent
-@onready var keep_distance: KeepDistanceComponent = $KeepDistanceComponent
+@onready var orbit: OrbitComponent = $OrbitComponent
 @onready var body_sprite: AnimatedSprite2D = $Visuals/Body
 
 @export var stats: StalkerStats
@@ -27,7 +27,8 @@ func _initialize() -> void:
 	aiming.initialize(stats.aim_speed, stats.aim_tolerance)
 	targeting.configure(stats.targeting)
 	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed)
-	keep_distance.initialize(stats.preferred_distance, stats.preferred_distance_tolerance)
+	orbit.initialize(stats.preferred_distance, stats.preferred_distance_tolerance, stats.orbit_exit_margin, stats.orbit_lead_angle, stats.orbit_stuck_time, stats.orbit_stuck_distance)
+	targeting.target_changed.connect(func(_new: Node2D, _old: Node2D) -> void: orbit.reset())
 	_speed = stats.move_speed
 	_max_shoot_distance = stats.shoot_range
 	_shoot_delay = stats.first_shot_delay
@@ -45,7 +46,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			var distance := global_position.distance_to(target.global_position)
 			var has_line_of_sight := line_of_sight.can_see(global_position, target.global_position)
-			var goal := keep_distance.get_move_goal(global_position, target.global_position, has_line_of_sight)
+			var goal := orbit.get_move_goal(global_position, target.global_position, has_line_of_sight, delta, navigation.get_navigation_map())
 			velocity = navigation.get_safe_velocity(goal, _speed)
 
 			if has_line_of_sight:

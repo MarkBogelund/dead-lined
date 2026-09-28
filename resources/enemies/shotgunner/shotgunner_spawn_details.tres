@@ -6,7 +6,6 @@
 [resource]
 script = ExtResource("1_entry")
 enemy_scene = ExtResource("2_shotgunner")
-introduction_wave = 4
 amount_multiplier_per_wave = 1.2
 health_multiplier = 1.2
 health_multiplier_every_n_waves = 3
