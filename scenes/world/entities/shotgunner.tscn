@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/entities/enemy_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://430k33hlxfqf" path="res://scripts/world/entities/enemy/shotgunner.gd" id="2_script"]
-[ext_resource type="Resource" path="res://resources/enemies/shotgunner/shotgunner_stats.tres" id="3_stats"]
+[ext_resource type="Resource" uid="uid://b6eyeolv8yep6" path="res://resources/enemies/shotgunner/shotgunner_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_2stc0"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="4_aiming"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="5_shoot"]
@@ -301,6 +301,7 @@ process_material = SubResource("ParticleProcessMaterial_shoot")
 [node name="Body" type="AnimatedSprite2D" parent="Visuals" index="1" unique_id=1200000005]
 z_index = 5
 use_parent_material = true
+scale = Vector2(1.1326456, 1.1326456)
 sprite_frames = SubResource("SpriteFrames_15kce")
 animation = &"idle"
 
@@ -326,7 +327,6 @@ script = ExtResource("8_keep_distance")
 
 [node name="WindupParticles" type="GPUParticles2D" parent="." index="15" unique_id=1200000010]
 z_index = 14
-emitting = false
 amount = 30
 texture = SubResource("AtlasTexture_windup")
 lifetime = 0.5
