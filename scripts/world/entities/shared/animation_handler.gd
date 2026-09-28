@@ -102,6 +102,9 @@ func _apply_resets() -> bool:
 func has_configured_animation(anim_name: String) -> bool:
 	return not _resolve_animation_path(anim_name).is_empty()
 
+func get_animation_length(anim_name: String) -> float:
+	return get_animation(_resolve_animation_path(anim_name)).length
+
 func _resolve_animation_path(anim_name: String) -> StringName:
 	if has_animation(anim_name):
 		return StringName(anim_name)

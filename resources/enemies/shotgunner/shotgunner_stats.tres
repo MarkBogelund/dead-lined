@@ -1,22 +1,21 @@
-[gd_resource type="Resource" script_class="ShotgunnerStats" format=3]
+[gd_resource type="Resource" script_class="ShotgunnerStats" format=3 uid="uid://b6eyeolv8yep6"]
 
 [ext_resource type="Script" uid="uid://bg3i7i75nocso" path="res://scripts/data/shotgunner_stats.gd" id="1_stats"]
 [ext_resource type="Resource" uid="uid://cifxhqdsf4hcy" path="res://resources/enemies/enemy_targeting.tres" id="2_targeting"]
 
 [resource]
 script = ExtResource("1_stats")
-windup_duration = 2.0
-projectile_count = 5
-spread_angle = 45.0
-preferred_distance = 80.0
+windup_duration = 0.5
+projectile_count = 6
+spread_angle = 135.0
+preferred_distance = 70.0
 preferred_distance_tolerance = 25.0
 aim_speed = 4.0
+aim_tolerance = 0.35
 shoot_range = 150.0
 attack_cooldown = 3.0
-projectile_speed = 220.0
+projectile_speed = 100.0
 max_health = 16
 damage = 5
 move_speed = 25.0
-targeting = ExtResource("2_targeting")
 orb_drop_amount = 10
-crunch_powerup_drop_chance = 0.02

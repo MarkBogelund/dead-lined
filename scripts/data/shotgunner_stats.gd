@@ -2,7 +2,7 @@ extends RangedEnemyStats
 class_name ShotgunnerStats
 
 @export_group("Shotgunner")
-## Seconds the shotgunner stands still telegraphing before it fires. Taking damage cancels the shot.
+## Seconds the windup animation is scaled to last before it fires. Taking damage cancels the shot.
 @export var windup_duration: float = 2.0
 ## Projectiles fired per shot.
 @export_range(1, 32, 1) var projectile_count: int = 5

@@ -1,7 +1,7 @@
 extends EnemyBase
 class_name Shotgunner
 
-## Keeps its distance like the Stalker, then stands still for a windup and fires a fan of projectiles.
+## Keeps its distance like the Stalker, then stands still during the windup animation, which fires a fan of projectiles.
 ## Damage during the windup cancels the shot and still spends the attack cooldown.
 
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
@@ -16,13 +16,12 @@ var _speed := 25.0
 var _max_shoot_distance := 120.0
 var _shoot_delay := 0.0
 var _windup_duration := 2.0
-var _windup_remaining := 0.0
 var _winding_up := false
 
 func _ready() -> void:
 	_initialize()
 	animation.configure_animation("idle", 0, false)
-	animation.configure_animation("windup", 1, false)
+	animation.configure_animation("windup", 1, true)
 	animation.configure_animation("shoot", 1, true)
 
 func _initialize() -> void:
@@ -48,9 +47,6 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 	elif _winding_up:
 		velocity = Vector2.ZERO
-		_windup_remaining -= delta
-		if _windup_remaining <= 0.0:
-			_fire()
 	else:
 		_process_movement(delta)
 
@@ -77,16 +73,21 @@ func _process_movement(delta: float) -> void:
 	if in_range and _shoot_delay <= 0.0 and shoot.is_ready() and aiming.is_aimed_at(target.global_position):
 		_begin_windup()
 
+## The windup clip is authored at any length and sped up/slowed down to last windup_duration.
 func _begin_windup() -> void:
-	if not animation.play_animation("windup"):
+	var speed := animation.get_animation_length("windup") / _windup_duration
+	if not animation.play_animation("windup", -1, speed):
 		return
 	_winding_up = true
-	_windup_remaining = _windup_duration
 	velocity = Vector2.ZERO
 
-func _fire() -> void:
+## Called by the windup animation's Call Method track at the fire keyframe.
+func _execute_shot() -> void:
+	if not _winding_up:
+		return
 	_winding_up = false
 	shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction())
+	animation.stop_animation("windup")
 	animation.play_animation("shoot")
 
 func _cancel_windup() -> void:

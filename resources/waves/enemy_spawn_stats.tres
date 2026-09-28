@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/enemies/chaser/chaser_spawn_details.tres" id="3_chaser"]
 [ext_resource type="Resource" uid="uid://cq5r8y2nwx7ih" path="res://resources/enemies/stalker/stalker_spawn_details.tres" id="4_stalker"]
 [ext_resource type="Resource" uid="uid://cx3hxt45w3uit" path="res://resources/enemies/kamikazer/kamikazer_spawn_details.tres" id="5_kamikazer"]
-[ext_resource type="Resource" path="res://resources/enemies/shotgunner/shotgunner_spawn_details.tres" id="6_shotgunner"]
+[ext_resource type="Resource" uid="uid://1betm04mhcru" path="res://resources/enemies/shotgunner/shotgunner_spawn_details.tres" id="6_shotgunner"]
 
 [resource]
 script = ExtResource("1_spawn_stats")
