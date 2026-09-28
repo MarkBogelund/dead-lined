@@ -68,19 +68,24 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 func stop_animation(anim_name: String) -> void:
 	if _current_animation != anim_name:
 		return
+	_release_current()
+	super.stop()
+	if _apply_resets():
+		super.stop(true)
+
+## Plays the animation from the start even if it is already current (e.g. repeated hits).
+## Safe inside physics callbacks: the RESET and replay are deferred by play_animation().
+func restart_animation(anim_name: String) -> bool:
+	if _current_animation == anim_name:
+		_release_current()
+	return play_animation(anim_name)
+
+func _release_current() -> void:
 	_current_animation = ""
 	_current_priority = 0
 	if _locked:
 		_locked = false
 		animation_unlocked.emit()
-	super.stop()
-	if _apply_resets():
-		super.stop(true)
-
-## Plays the animation from the start, stopping it first if it is already the current one (e.g. repeated hits).
-func restart_animation(anim_name: String) -> bool:
-	stop_animation(anim_name)
-	return play_animation(anim_name)
 
 ## Applies the RESET of every library, so inherited scenes can reset their own tracks in an extra library.
 func _apply_resets() -> bool:
