@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemySpawnEntry" format=3 uid="uid://1betm04mhcru"]
+
+[ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="1_entry"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/shotgunner.tscn" id="2_shotgunner"]
+
+[resource]
+script = ExtResource("1_entry")
+enemy_scene = ExtResource("2_shotgunner")
+amount_multiplier_per_wave = 1.2
+health_multiplier = 1.2
+health_multiplier_every_n_waves = 3

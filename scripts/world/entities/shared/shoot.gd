@@ -24,6 +24,10 @@ func initialize(p_shoot_cooldown: float, p_damage: int, p_knockback: float, p_sp
 	projectile_knockback = p_knockback
 	projectile_speed = p_speed
 
+func set_spread(p_projectile_count: int, p_spread_angle: float) -> void:
+	projectile_count = p_projectile_count
+	spread_angle = p_spread_angle
+
 func set_enabled(enabled: bool) -> void:
 	shooting_activated = enabled
 
