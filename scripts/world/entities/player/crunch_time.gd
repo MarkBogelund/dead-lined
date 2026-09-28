@@ -121,4 +121,3 @@ func deactivate() -> void:
 ## Public API for checking if crunch time is active
 func is_crunch_time_active() -> bool:
 	return is_active
-

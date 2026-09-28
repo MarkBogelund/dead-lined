@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://ceh6tabl76hf8" path="res://scripts/world/entities/player/aim_indicator.gd" id="19_aimindicator"]
 [ext_resource type="Material" uid="uid://bxeh6alamp27j" path="res://materials/dash_charge_particle_process_material.tres" id="20_windup"]
 [ext_resource type="Script" uid="uid://dtlddhxtx6w20" path="res://scripts/world/entities/player/dash_direction_indicator.gd" id="21_dashdir"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="22_vfx_shapes"]
 
 [sub_resource type="Animation" id="Animation_qlg0r"]
 length = 0.001
@@ -710,6 +711,31 @@ gradient = SubResource("Gradient_73kkf")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_crunch_shine"]
+atlas = ExtResource("22_vfx_shapes")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Gradient" id="Gradient_crunch_shine"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture_crunch_shine"]
+gradient = SubResource("Gradient_crunch_shine")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_crunch_shine"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 57.43
+spread = 180.0
+initial_velocity_min = 18.0
+initial_velocity_max = 35.0
+gravity = Vector3(0, 0, 0)
+damping_min = 5.0
+damping_max = 9.0
+scale_min = 0.14999999
+scale_max = 0.29999998
+color_ramp = SubResource("GradientTexture_crunch_shine")
+
 [node name="Player" type="CharacterBody2D" unique_id=244036277 groups=["player"]]
 z_index = 2
 collision_layer = 66
@@ -777,6 +803,15 @@ amount = 30
 lifetime = 0.5
 speed_scale = 2.0
 process_material = ExtResource("20_windup")
+
+[node name="CrunchShineParticles" type="GPUParticles2D" parent="." unique_id=850455454]
+z_index = 14
+emitting = false
+amount = 36
+texture = SubResource("AtlasTexture_crunch_shine")
+lifetime = 0.65
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_crunch_shine")
 
 [node name="Muzzle" type="Marker2D" parent="." unique_id=234567891]
 

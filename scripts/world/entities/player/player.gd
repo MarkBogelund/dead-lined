@@ -22,6 +22,7 @@ signal died
 @onready var dash_direction_indicator: DashDirectionIndicator = $DashDirectionIndicator
 @onready var crunch_time: CrunchTimeComponent = $CrunchTimeComponent
 @onready var hit_particles: GPUParticles2D = $HitParticles
+@onready var crunch_shine_particles: GPUParticles2D = $CrunchShineParticles
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera: GameCamera = $"Camera2D"
@@ -333,8 +334,10 @@ func _on_crunch_time_started(buffs: Dictionary) -> void:
 	melee_weapon.set_crunch_time_active(true, buffs)
 	melee_weapon.set_enabled(true)
 	movement.set_crunch_time_active(true, buffs["speed"])
+	crunch_shine_particles.emitting = true
 
 func _on_crunch_time_ended(buffs: Dictionary, _duration: float) -> void:
 	melee_weapon.set_enabled(false)
 	melee_weapon.set_crunch_time_active(false, buffs)
 	movement.set_crunch_time_active(false, buffs["speed"])
+	crunch_shine_particles.emitting = false

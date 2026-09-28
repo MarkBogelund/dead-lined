@@ -5,6 +5,7 @@
 [ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="3_settings"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yxwvc"]
 [ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/environment/shadow.png" id="5_p65r1"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="6_b5yvb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yxwvc"]
 atlas = ExtResource("4_yxwvc")
@@ -44,6 +45,31 @@ _data = {
 &"idle": SubResource("Animation_b5yvb")
 }
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_tjynn"]
+atlas = ExtResource("6_b5yvb")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Gradient" id="Gradient_nysxx"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(1, 0.45000005, 0, 0, 1, 1, 1, 1, 0.89, 0.40050003, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wrr3l"]
+gradient = SubResource("Gradient_nysxx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g8wfp"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 22.86
+spread = 180.0
+initial_velocity_min = 18.0
+initial_velocity_max = 35.0
+gravity = Vector3(0, 0, 0)
+damping_min = 5.0
+damping_max = 9.0
+scale_min = 0.14999999
+scale_max = 0.29999998
+color_ramp = SubResource("GradientTexture1D_wrr3l")
+
 [node name="CrunchPowerup" unique_id=1331096062 instance=ExtResource("1_orb")]
 script = ExtResource("2_powerup")
 settings = ExtResource("3_settings")
@@ -68,3 +94,11 @@ shape = SubResource("CircleShape2D_spl43")
 
 [node name="AnimationHandler" parent="." index="4" unique_id=1863819974]
 libraries/crunch_powerup = SubResource("AnimationLibrary_tjynn")
+
+[node name="GlitterParticles" type="GPUParticles2D" parent="." index="5" unique_id=1848259452]
+z_index = 14
+amount = 10
+texture = SubResource("AtlasTexture_tjynn")
+lifetime = 0.65
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_g8wfp")
