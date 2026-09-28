@@ -17,6 +17,10 @@ signal died
 func _initialize_base(stats: EnemyStats) -> void:
 	health.initialize(stats.max_health)
 	orb_drop.initialize(stats.orb_drop_amount, stats.crunch_powerup_drop_chance)
+	animation.configure_animation("spawn_sleep", 0, false)
+	animation.configure_animation("spawn_wake", 0, true)
+	animation.configure_animation("take_damage", 2, true)
+	animation.configure_animation("die", 3, true)
 
 var _spawn_intro_active := false
 var _collision_layer_before_intro := 0
@@ -83,8 +87,7 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	_before_handle_damage()
 	knockback.apply(from_position, knockback_force)
-	if _should_restart_hit_particles_on_damage() and hit_particles:
-		hit_particles.restart()
+	hit_particles.restart()
 	animation.play_animation("take_damage")
 
 func _handle_death(from_position: Vector2, knockback_force: float) -> void:
@@ -99,9 +102,6 @@ func _before_handle_damage() -> void:
 
 func _before_handle_death() -> void:
 	pass
-
-func _should_restart_hit_particles_on_damage() -> bool:
-	return false
 
 func despawn() -> void:
 	orb_drop.drop()

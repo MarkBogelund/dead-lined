@@ -6,6 +6,10 @@ class_name ShootComponent
 @export var projectile_knockback := 200.0
 @export var shoot_cooldown := 0.5
 @export var projectile_speed := 300.0
+## Projectiles per shot, spread evenly across spread_angle.
+@export var projectile_count := 1
+## Total fan angle in degrees between the outermost projectiles.
+@export var spread_angle := 0.0
 
 var _shoot_timer := 0.0
 var shooting_activated := true
@@ -26,6 +30,9 @@ func set_enabled(enabled: bool) -> void:
 func is_ready() -> bool:
 	return _shoot_timer <= 0.0 and shooting_activated
 
+func start_cooldown() -> void:
+	_shoot_timer = shoot_cooldown
+
 func try_shoot(from_pos: Vector2, direction: Vector2) -> bool:
 	if _shoot_timer > 0.0 or not shooting_activated:
 		return false
@@ -34,11 +41,16 @@ func try_shoot(from_pos: Vector2, direction: Vector2) -> bool:
 		push_error("No projectile scene assigned to ShootComponent")
 		return false
 
-	var projectile := projectile_scene.instantiate()
-	projectile.set_orientation(from_pos, direction.angle(), direction)
-	projectile.set_parameters(projectile_speed, projectile_damage, projectile_knockback)
+	for i in projectile_count:
+		var spread_offset := 0.0
+		if projectile_count > 1:
+			spread_offset = deg_to_rad(spread_angle) * (float(i) / (projectile_count - 1) - 0.5)
+		var projectile_direction := direction.rotated(spread_offset)
+		var projectile := projectile_scene.instantiate()
+		projectile.set_orientation(from_pos, projectile_direction.angle(), projectile_direction)
+		projectile.set_parameters(projectile_speed, projectile_damage, projectile_knockback)
+		get_tree().current_scene.add_child(projectile)
 
-	get_tree().current_scene.add_child(projectile)
-	_shoot_timer = shoot_cooldown
+	start_cooldown()
 	
 	return true

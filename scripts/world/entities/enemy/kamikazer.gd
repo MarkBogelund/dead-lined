@@ -3,7 +3,7 @@ class_name Kamikazer
 
 @onready var hitbox: HitboxComponent = $HitboxComponent
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var animated_sprite: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 @onready var charge_particles: GPUParticles2D = $ChargeParticles
 @onready var camera_shake_manager: CameraShakeManager = get_tree().get_first_node_in_group("camera_shake_manager")
 
@@ -32,10 +32,6 @@ func _ready() -> void:
 	_initialize()
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("charge", 0, false)
-	animation.configure_animation("spawn_sleep", 0, false)
-	animation.configure_animation("spawn_wake", 0, true)
-	animation.configure_animation("take_damage", 1, true)
-	animation.configure_animation("die", 2, true)
 	hitbox.hit_target.connect(_on_hit_target)
 
 func _initialize() -> void:
@@ -173,6 +169,3 @@ func _trigger_explosion(from_position: Vector2) -> void:
 func buff_damage(multiplier: float) -> void:
 	hitbox.damage = int(hitbox.damage * multiplier)
 	hitbox.knockback *= multiplier
-
-func _should_restart_hit_particles_on_damage() -> bool:
-	return true

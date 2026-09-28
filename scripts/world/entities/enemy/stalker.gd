@@ -4,25 +4,19 @@ class_name Stalker
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var aiming: AimingComponent = $AimingComponent
-@onready var body_sprite: AnimatedSprite2D = $Body
+@onready var keep_distance: KeepDistanceComponent = $KeepDistanceComponent
+@onready var body_sprite: AnimatedSprite2D = $Visuals/Body
 
 @export var stats: StalkerStats
 
 var _speed := 25.0
-var _ideal_distance := 100.0
-var _distance_tolerance := 20.0
 var _max_shoot_distance := 120.0
 var _shoot_delay := 0.0
 var _telegraphing := false
 
 func _ready() -> void:
 	_initialize()
-	# Configure animations
 	animation.configure_animation("idle", 0, false)
-	animation.configure_animation("spawn_sleep", 0, false)
-	animation.configure_animation("spawn_wake", 0, true)
-	animation.configure_animation("take_damage", 2, true)
-	animation.configure_animation("die", 3, true)
 	animation.configure_animation("shoot", 1, true)
 
 func _initialize() -> void:
@@ -33,9 +27,8 @@ func _initialize() -> void:
 	aiming.initialize(stats.aim_speed, stats.aim_tolerance)
 	targeting.configure(stats.targeting)
 	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed)
+	keep_distance.initialize(stats.preferred_distance, stats.preferred_distance_tolerance)
 	_speed = stats.move_speed
-	_ideal_distance = stats.preferred_distance
-	_distance_tolerance = stats.preferred_distance_tolerance
 	_max_shoot_distance = stats.shoot_range
 	_shoot_delay = stats.first_shot_delay
 
@@ -50,39 +43,18 @@ func _physics_process(delta: float) -> void:
 		if not target:
 			velocity = Vector2.ZERO
 		else:
-			# Calculate distance and line of sight
-			var to_target := target.global_position - global_position
-			var distance := to_target.length()
+			var distance := global_position.distance_to(target.global_position)
 			var has_line_of_sight := line_of_sight.can_see(global_position, target.global_position)
-			
-			# Movement logic: prioritize line of sight
-			if not has_line_of_sight:
-				# Phase 1: No LOS - actively seek target to find line of sight
-				velocity = navigation.get_safe_velocity(target.global_position, _speed)
-			else:
-				# Phase 2: Has LOS - maintain ideal distance
-				var ideal_position := target.global_position - to_target.normalized() * _ideal_distance
-				
-				if distance < (_ideal_distance - _distance_tolerance):
-					# Too close - retreat to ideal position
-					velocity = navigation.get_safe_velocity(ideal_position, _speed)
-				elif distance > (_ideal_distance + _distance_tolerance):
-					# Too far - advance toward target
-					velocity = navigation.get_safe_velocity(target.global_position, _speed)
-				else:
-					# Good distance (80-120 range) - track target movement by navigating to ideal position
-					velocity = navigation.get_safe_velocity(ideal_position, _speed)
-			
-			# Aim and shoot only when has line of sight
+			var goal := keep_distance.get_move_goal(global_position, target.global_position, has_line_of_sight)
+			velocity = navigation.get_safe_velocity(goal, _speed)
+
 			if has_line_of_sight:
 				aiming.aim_at(target.global_position, delta)
-				
-# Telegraph and shoot if within distance and aim is accurate
+
 			if distance <= _max_shoot_distance and _shoot_delay <= 0.0 and not _telegraphing and shoot.is_ready():
 				if aiming.is_aimed_at(target.global_position):
 					_begin_telegraph()
 
-		# Play idle animation when moving
 		animation.play_animation("idle")
 		if target:
 			_face_target(body_sprite, target.global_position)

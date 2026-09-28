@@ -1,27 +1,22 @@
 [gd_scene format=3 uid="uid://bvk8hf7vr3pqi"]
 
-[ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="1_stalker"]
-[ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/enemies/stalker/stalker_stats.tres" id="1_stalkerstats"]
-[ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="2_mcjbk"]
-[ext_resource type="PackedScene" uid="uid://ba7ofk84pf82" path="res://scenes/world/entities/capacity_orb.tscn" id="2_orb"]
-[ext_resource type="PackedScene" uid="uid://cu481a52yhdms" path="res://scenes/world/entities/crunch_powerup.tscn" id="2_powerup"]
-[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="7_ag4mk"]
-[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="7_health"]
-[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/orb_drop.gd" id="9_orbdrop"]
-[ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation.gd" id="10_nav"]
-[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="12_36hmg"]
-[ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="12_los"]
-[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="13_shoot"]
-[ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="14_projectile"]
-[ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="15_jqj1v"]
-[ext_resource type="Texture2D" uid="uid://d4bm6n0cjpvo2" path="res://assets/sprites/enemies/stalker-shadow.png" id="16_36hmg"]
-[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="17_mcjbk"]
-[ext_resource type="Texture2D" uid="uid://bioitf2isi5uq" path="res://assets/sprites/enemies/stalker.png" id="17_wkm5l"]
-[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="19_wkm5l"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="20_rqd04"]
+[ext_resource type="PackedScene" uid="uid://dq4enemybase7x" path="res://scenes/world/entities/enemy_base.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="2_script"]
+[ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/enemies/stalker/stalker_stats.tres" id="3_stats"]
+[ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="4_aiming"]
+[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="5_shoot"]
+[ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="6_projectile"]
+[ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="7_los"]
+[ext_resource type="Script" uid="uid://kxqm1yu6myfa" path="res://scripts/world/entities/shared/keep_distance.gd" id="8_keep_distance"]
+[ext_resource type="Texture2D" uid="uid://d4bm6n0cjpvo2" path="res://assets/sprites/enemies/stalker-shadow.png" id="9_shadow"]
+[ext_resource type="Texture2D" uid="uid://bioitf2isi5uq" path="res://assets/sprites/enemies/stalker.png" id="10_sprite"]
+[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="11_particles"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="12_vfx"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_wkm5l"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 9.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
 radius = 9.0
 
 [sub_resource type="Animation" id="Animation_reset"]
@@ -29,7 +24,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body:frame")
+tracks/0/path = NodePath("Visuals/Body:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -41,43 +36,43 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Body:scale")
+tracks/1/path = NodePath("Visuals/Shadow:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
+"update": 1,
+"values": [0]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Body:modulate")
+tracks/2/path = NodePath("Visuals/Body:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1, 1)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("HitboxComponent:monitoring")
+tracks/3/path = NodePath("WindupParticles:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("HitParticles:emitting")
+tracks/4/path = NodePath("Visuals/AimCenter/Muzzle/ShootParticles:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -89,246 +84,17 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Shadow:scale")
+tracks/5/path = NodePath("Visuals/AimCenter/Muzzle:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Body:visible")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("CollisionShape2D:disabled")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("WindupParticles:emitting")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("AimCenter/Muzzle/ShootParticles:emitting")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("AimCenter/Muzzle:position")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(19, 0)]
 }
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("AimCenter/Muzzle:scale")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.25, 0.25)]
-}
 
-[sub_resource type="Animation" id="Animation_damage"]
-resource_name = "die"
-length = 0.7
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Body:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(2, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.2, 1.2)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Body:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(5.6568503, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(340.224, 340.224, 340.224, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("HitboxComponent:monitoring")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("HitParticles:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("HitParticles")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [false],
-"method": &"restart"
-}]
-}
-tracks/5/type = "method"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("FlashVfx")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"start"
-}]
-}
-tracks/6/type = "method"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath(".")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0.7),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"queue_free"
-}]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("Shadow:scale")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(2, 1),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
-}
-tracks/8/type = "method"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("OrbDropComponent")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"drop"
-}]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("Body:visible")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("CollisionShape2D:disabled")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("AimCenter/Muzzle:scale")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0.25, 0.25), Vector2(1e-05, 1e-05)]
-}
-
-[sub_resource type="Animation" id="Animation_ag4mk"]
+[sub_resource type="Animation" id="Animation_idle"]
 resource_name = "idle"
 length = 0.3
 loop_mode = 1
@@ -336,7 +102,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body:frame")
+tracks/0/path = NodePath("Visuals/Body:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -346,14 +112,14 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3]
 }
 
-[sub_resource type="Animation" id="Animation_wkm5l"]
+[sub_resource type="Animation" id="Animation_shoot"]
 resource_name = "shoot"
 length = 0.6
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Body:scale")
+tracks/0/path = NodePath("Visuals/Body:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -391,7 +157,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("AimCenter/Muzzle/ShootParticles:emitting")
+tracks/3/path = NodePath("Visuals/AimCenter/Muzzle/ShootParticles:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -400,171 +166,40 @@ tracks/3/keys = {
 "update": 1,
 "values": [true]
 }
-tracks/4/type = "method"
+tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath(".")
+tracks/4/path = NodePath("Visuals/AimCenter/Muzzle:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0.3),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"_execute_shot"
-}]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("AimCenter/Muzzle:position")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
 "times": PackedFloat32Array(0.2, 0.3, 0.4),
 "transitions": PackedFloat32Array(0.39229217, 2.219139, 1),
 "update": 0,
 "values": [Vector2(19, 0), Vector2(18, 0), Vector2(19, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_spawn_sleep"]
-resource_name = "spawn_sleep"
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Body:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Shadow:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Body:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Color(0.45, 0.45, 0.45, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_spawn_wake"]
-resource_name = "spawn_wake"
-length = 0.25
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Body:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0.45, 0.45, 0.45, 1), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_die"]
-resource_name = "take_damage"
-length = 0.083333336
-step = 0.083333336
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"values": []
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Body:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.083333336),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Color(18.892157, 18.892157, 18.892157, 1), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("HitParticles:emitting")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("HitParticles")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [false],
-"method": &"restart"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_stalker"]
+[sub_resource type="AnimationLibrary" id="StalkerLibrary"]
 _data = {
 &"RESET": SubResource("Animation_reset"),
-&"die": SubResource("Animation_damage"),
-&"idle": SubResource("Animation_ag4mk"),
-&"shoot": SubResource("Animation_wkm5l"),
-&"spawn_sleep": SubResource("Animation_spawn_sleep"),
-&"spawn_wake": SubResource("Animation_spawn_wake"),
-&"take_damage": SubResource("Animation_die")
+&"idle": SubResource("Animation_idle"),
+&"shoot": SubResource("Animation_shoot")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
-radius = 9.0
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_rqd04"]
-atlas = ExtResource("16_36hmg")
+atlas = ExtResource("9_shadow")
 region = Rect2(0, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_26iul"]
-atlas = ExtResource("16_36hmg")
+atlas = ExtResource("9_shadow")
 region = Rect2(24, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j6h5e"]
-atlas = ExtResource("16_36hmg")
+atlas = ExtResource("9_shadow")
 region = Rect2(48, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0juef"]
-atlas = ExtResource("16_36hmg")
+atlas = ExtResource("9_shadow")
 region = Rect2(72, 0, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_uhdj6"]
@@ -588,7 +223,7 @@ animations = [{
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gbqtd"]
-atlas = ExtResource("20_rqd04")
+atlas = ExtResource("12_vfx")
 region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="Curve" id="Curve_26iul"]
@@ -632,19 +267,19 @@ scale_curve = SubResource("CurveTexture_38riw")
 color_ramp = SubResource("GradientTexture1D_uhdj6")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iwnrm"]
-atlas = ExtResource("17_wkm5l")
+atlas = ExtResource("10_sprite")
 region = Rect2(0, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_38riw"]
-atlas = ExtResource("17_wkm5l")
+atlas = ExtResource("10_sprite")
 region = Rect2(24, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h2hrh"]
-atlas = ExtResource("17_wkm5l")
+atlas = ExtResource("10_sprite")
 region = Rect2(48, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qwnb1"]
-atlas = ExtResource("17_wkm5l")
+atlas = ExtResource("10_sprite")
 region = Rect2(72, 0, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gbqtd"]
@@ -716,7 +351,7 @@ scale_curve = SubResource("CurveTexture_0juef")
 color_ramp = SubResource("GradientTexture1D_26iul")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_uhdj6"]
-atlas = ExtResource("20_rqd04")
+atlas = ExtResource("12_vfx")
 region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="Curve" id="Curve_rqd04"]
@@ -759,98 +394,66 @@ scale_max = 0.5
 scale_curve = SubResource("CurveTexture_iwnrm")
 color_ramp = SubResource("GradientTexture1D_0juef")
 
-[node name="Stalker" type="CharacterBody2D" unique_id=942424531 groups=["enemies"]]
-collision_layer = 8
-motion_mode = 1
-wall_min_slide_angle = 0.0
-script = ExtResource("1_stalker")
-stats = ExtResource("1_stalkerstats")
+[node name="Stalker" unique_id=942424531 instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+stats = ExtResource("3_stats")
 
-[node name="AimingComponent" type="Node" parent="." unique_id=1729909200 node_paths=PackedStringArray("visual_node", "muzzle")]
-script = ExtResource("2_mcjbk")
-visual_node = NodePath("../AimCenter")
-muzzle = NodePath("../AimCenter/Muzzle")
+[node name="CollisionShape2D" parent="." unique_id=1100000002]
+shape = SubResource("CircleShape2D_body")
 
-[node name="TargetingComponent" type="Node" parent="." unique_id=486870823]
-script = ExtResource("15_jqj1v")
+[node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1100000003) unique_id=1100000004]
+shape = SubResource("CircleShape2D_hitbox")
 
-[node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
-script = ExtResource("13_shoot")
-projectile_scene = ExtResource("14_projectile")
-
-[node name="KnockbackComponent" type="Node" parent="." unique_id=207747810]
-script = ExtResource("4_knockback")
-
-[node name="HealthComponent" type="Node" parent="." unique_id=775711309]
-script = ExtResource("7_health")
-
-[node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
-script = ExtResource("12_los")
-
-[node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1238538286]
-path_desired_distance = 4.0
+[node name="NavigationComponent" parent="." unique_id=1100000007]
 target_desired_distance = 12.0
-avoidance_enabled = true
-radius = 14.0
-neighbor_distance = 80.0
-time_horizon_agents = 1.5
-script = ExtResource("10_nav")
 
-[node name="OrbDropComponent" type="Node" parent="." unique_id=1674501989]
-script = ExtResource("9_orbdrop")
-orb_scene = ExtResource("2_orb")
-crunch_powerup_scene = ExtResource("2_powerup")
-impulse_max = 250.0
-linear_damp = 5.0
+[node name="AnimationHandler" parent="." unique_id=1100000010]
+libraries/stalker = SubResource("StalkerLibrary")
 
-[node name="HitboxComponent" type="Area2D" parent="." unique_id=741080340]
-collision_layer = 16
-collision_mask = 34
-script = ExtResource("12_36hmg")
-metadata/_custom_type_script = "uid://de8v0knxsnhob"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1613851753]
-shape = SubResource("CircleShape2D_wkm5l")
-
-[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1949746839]
-libraries/ = SubResource("AnimationLibrary_stalker")
-script = ExtResource("7_ag4mk")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=125532968]
-shape = SubResource("CircleShape2D_collision")
-
-[node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=1725397380]
+[node name="Shadow" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) unique_id=1725397380]
 modulate = Color(0, 0, 0, 0.19607843)
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_uhdj6")
 
-[node name="AimCenter" type="Node2D" parent="." unique_id=1830255728]
+[node name="AimCenter" type="Node2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) unique_id=1830255728]
 
-[node name="Muzzle" type="Sprite2D" parent="AimCenter" unique_id=1366521328]
+[node name="Muzzle" type="Sprite2D" parent="Visuals/AimCenter" unique_id=1366521328]
 self_modulate = Color(0, 0, 0, 0.46666667)
 position = Vector2(19, 0)
 scale = Vector2(0.25, 0.25)
 texture = SubResource("AtlasTexture_gbqtd")
 
-[node name="ShootParticles" parent="AimCenter/Muzzle" unique_id=106591860 instance=ExtResource("17_mcjbk")]
+[node name="ShootParticles" parent="Visuals/AimCenter/Muzzle" unique_id=106591860 instance=ExtResource("11_particles")]
 scale = Vector2(4, 4)
 amount = 20
 process_material = SubResource("ParticleProcessMaterial_h2hrh")
 
-[node name="Body" type="AnimatedSprite2D" parent="." unique_id=909493684]
+[node name="Body" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) unique_id=909493684]
 z_index = 5
 sprite_frames = SubResource("SpriteFrames_gbqtd")
 
-[node name="PointLight2D" type="PointLight2D" parent="Body" unique_id=453189616]
+[node name="PointLight2D" type="PointLight2D" parent="Visuals/Body" unique_id=453189616]
 show_behind_parent = true
 energy = 0.2
 texture = SubResource("GradientTexture2D_rqd04")
 
-[node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("17_mcjbk")]
+[node name="HitParticles" parent="." unique_id=1586402119]
 process_material = SubResource("ParticleProcessMaterial_uhdj6")
 
-[node name="FlashVfx" parent="." unique_id=1756477109 instance=ExtResource("19_wkm5l")]
-scale = Vector2(2, 2)
+[node name="AimingComponent" type="Node" parent="." unique_id=1729909200 node_paths=PackedStringArray("visual_node", "muzzle")]
+script = ExtResource("4_aiming")
+visual_node = NodePath("../Visuals/AimCenter")
+muzzle = NodePath("../Visuals/AimCenter/Muzzle")
+
+[node name="ShootComponent" type="Node" parent="." unique_id=1897763259]
+script = ExtResource("5_shoot")
+projectile_scene = ExtResource("6_projectile")
+
+[node name="LineOfSightComponent" type="Node2D" parent="." unique_id=992499215]
+script = ExtResource("7_los")
+
+[node name="KeepDistanceComponent" type="Node" parent="." unique_id=992499216]
+script = ExtResource("8_keep_distance")
 
 [node name="WindupParticles" type="GPUParticles2D" parent="." unique_id=2118097210]
 z_index = 14

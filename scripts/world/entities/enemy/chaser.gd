@@ -4,7 +4,7 @@ class_name Chaser
 ## Walks to its target plus a personal flank offset that fades out up close, then finishes the approach in a straight line.
 
 @onready var hitbox: HitboxComponent = $HitboxComponent
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var animated_sprite: AnimatedSprite2D = $Visuals/AnimatedSprite2D
 
 @export var stats: ChaserStats
 
@@ -20,10 +20,6 @@ var _flank_active := true
 func _ready() -> void:
 	_initialize()
 	animation.configure_animation("idle", 0, false)
-	animation.configure_animation("spawn_sleep", 0, false)
-	animation.configure_animation("spawn_wake", 0, true)
-	animation.configure_animation("take_damage", 1, true)
-	animation.configure_animation("die", 2, true)
 	hitbox.hit_target.connect(_on_hit_target)
 
 func _initialize() -> void:
@@ -79,6 +75,3 @@ func buff_damage(multiplier: float) -> void:
 func _on_hit_target(target: Node) -> void:
 	if target and _self_knockback > 0:
 		knockback.apply(target.global_position, _self_knockback)
-
-func _should_restart_hit_particles_on_damage() -> bool:
-	return true
