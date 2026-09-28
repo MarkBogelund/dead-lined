@@ -15,6 +15,8 @@ signal died
 
 
 func _initialize_base(stats: EnemyStats) -> void:
+	if not $Visuals.material is ShaderMaterial:
+		push_error("%s: Visuals needs the enemy_surface ShaderMaterial for hit flash" % name)
 	health.initialize(stats.max_health)
 	orb_drop.initialize(stats.orb_drop_amount, stats.crunch_powerup_drop_chance)
 	animation.configure_animation("spawn_sleep", 0, false)
@@ -88,7 +90,7 @@ func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	_before_handle_damage()
 	knockback.apply(from_position, knockback_force)
 	hit_particles.restart()
-	animation.play_animation("take_damage")
+	animation.restart_animation("take_damage")
 
 func _handle_death(from_position: Vector2, knockback_force: float) -> void:
 	_before_handle_death()

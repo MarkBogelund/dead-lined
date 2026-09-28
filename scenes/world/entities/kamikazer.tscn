@@ -281,6 +281,7 @@ libraries/kamikazer = SubResource("KamikazerLibrary")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) index="0" unique_id=148251673]
 z_index = 6
+use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_xwavj")
 animation = &"idle"
 

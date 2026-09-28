@@ -77,6 +77,11 @@ func stop_animation(anim_name: String) -> void:
 	if _apply_resets():
 		super.stop(true)
 
+## Plays the animation from the start, stopping it first if it is already the current one (e.g. repeated hits).
+func restart_animation(anim_name: String) -> bool:
+	stop_animation(anim_name)
+	return play_animation(anim_name)
+
 ## Applies the RESET of every library, so inherited scenes can reset their own tracks in an extra library.
 func _apply_resets() -> bool:
 	var applied := false

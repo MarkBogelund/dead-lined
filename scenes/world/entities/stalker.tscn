@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bvk8hf7vr3pqi"]
 
-[ext_resource type="PackedScene" uid="uid://dq4enemybase7x" path="res://scenes/world/entities/enemy_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/entities/enemy_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://fvc60nwinoqc" path="res://scripts/world/entities/enemy/stalker.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://dx2wpandhkndg" path="res://resources/enemies/stalker/stalker_stats.tres" id="3_stats"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="4_aiming"]
@@ -429,6 +429,7 @@ amount = 20
 process_material = SubResource("ParticleProcessMaterial_h2hrh")
 
 [node name="Body" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) unique_id=909493684]
+use_parent_material = true
 z_index = 5
 sprite_frames = SubResource("SpriteFrames_gbqtd")
 
