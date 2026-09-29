@@ -1,23 +1,10 @@
 [gd_scene format=3 uid="uid://dl22tx6cs3xwt"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/entities/projectile_base.tscn" id="1_base"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="2_texture"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x0bxo"]
-atlas = ExtResource("2_texture")
-region = Rect2(32, 0, 16, 16)
+[ext_resource type="PackedScene" uid="uid://lbntiqfct3r5" path="res://scenes/world/entities/projectile_base.tscn" id="1_base"]
+[ext_resource type="Texture2D" uid="uid://c7kpx46shdlsc" path="res://assets/sprites/projectile.png" id="2_xktya"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6q2a6"]
 radius = 4.0
-
-[sub_resource type="Gradient" id="Gradient_f5wuv"]
-offsets = PackedFloat32Array(0.24668436, 0.7161804)
-colors = PackedColorArray(0.55100006, 0.8436, 0.95, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_x0bxo"]
-gradient = SubResource("Gradient_f5wuv")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="Animation" id="Animation_reset"]
 length = 0.001
@@ -57,23 +44,32 @@ _data = {
 &"idle": SubResource("Animation_idle")
 }
 
+[sub_resource type="Gradient" id="Gradient_f5wuv"]
+offsets = PackedFloat32Array(0.24668436, 0.7161804)
+colors = PackedColorArray(0.55100006, 0.8436, 0.95, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x0bxo"]
+gradient = SubResource("Gradient_f5wuv")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
 [node name="Projectile" unique_id=31779294 instance=ExtResource("1_base")]
 
-[node name="HitboxComponent" parent="." unique_id=1400000002]
+[node name="HitboxComponent" parent="." index="0" unique_id=1400000002]
 collision_layer = 20
 collision_mask = 11
 no_damage_group = &"turrets"
 
-[node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1400000002) unique_id=1400000003]
+[node name="CollisionShape2D" parent="HitboxComponent" index="0" unique_id=1400000003]
 shape = SubResource("CircleShape2D_6q2a6")
 
-[node name="AnimationHandler" parent="." unique_id=1400000004]
+[node name="AnimationHandler" parent="." index="1" unique_id=1400000004]
 libraries/turret_projectile = SubResource("TurretProjectileLibrary")
 
-[node name="Sprite2D" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) unique_id=699264040]
+[node name="Sprite2D" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) index="0" unique_id=699264040]
 z_index = 5
-texture = SubResource("AtlasTexture_x0bxo")
+texture = ExtResource("2_xktya")
 
-[node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) unique_id=742823931]
+[node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) index="1" unique_id=742823931]
 energy = 0.2
 texture = SubResource("GradientTexture2D_x0bxo")
