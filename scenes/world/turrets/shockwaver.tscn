@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="4_sprite"]
 [ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="6_shockwave"]
-[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/shockwave_pixel_art.gdshader" id="6_pixel_shader"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="6_pixel_shader"]
 
 [sub_resource type="Animation" id="Shock"]
 resource_name = "shock"

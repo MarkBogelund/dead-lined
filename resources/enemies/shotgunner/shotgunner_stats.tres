@@ -17,5 +17,6 @@ attack_cooldown = 3.0
 projectile_speed = 90.0
 max_health = 16
 damage = 5
+move_speed = 60.0
 targeting = ExtResource("2_targeting")
 orb_drop_amount = 10

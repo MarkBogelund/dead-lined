@@ -21,7 +21,6 @@ enum State {IDLE, HOLDING, CHARGING, DASHING, COOLDOWN}
 
 @onready var dash_particles: GPUParticles2D = $DashParticles
 @onready var trail: Trail = $Trail
-@onready var flash_vfx: Vfx = $FlashVfx
 
 @export_group("Dash Movement")
 @export var min_distance := 120.0
@@ -157,8 +156,6 @@ func _start_dash(direction: Vector2, distance: float) -> void:
 		dash_particles.emitting = true
 	if trail:
 		trail.start_tracking()
-	if flash_vfx:
-		flash_vfx.start()
 
 	dash_started.emit(direction)
 

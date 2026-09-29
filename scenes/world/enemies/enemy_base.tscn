@@ -6,13 +6,13 @@
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
 [ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation.gd" id="5_nav"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="6_targeting"]
-[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/orb_drop.gd" id="7_orbdrop"]
 [ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="7_crunch_settings"]
+[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/orb_drop.gd" id="7_orbdrop"]
 [ext_resource type="PackedScene" uid="uid://ba7ofk84pf82" path="res://scenes/world/pickups/capacity_orb.tscn" id="8_orb"]
 [ext_resource type="PackedScene" uid="uid://cu481a52yhdms" path="res://scenes/world/pickups/crunch_powerup.tscn" id="9_powerup"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="10_anim"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="11_hit"]
-[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="12_flash"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="12_pixel_ring"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="13_surface"]
 
 [sub_resource type="Animation" id="Animation_reset"]
@@ -89,6 +89,30 @@ tracks/5/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Flash:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("HitParticles:emitting")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_die"]
 resource_name = "die"
@@ -156,19 +180,17 @@ tracks/4/keys = {
 "method": &"restart"
 }]
 }
-tracks/5/type = "method"
+tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("FlashVfx")
+tracks/5/path = NodePath("Flash:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"start"
-}]
+"times": PackedFloat32Array(0, 0.2, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
 }
 tracks/6/type = "method"
 tracks/6/imported = false
@@ -209,6 +231,54 @@ tracks/8/keys = {
 "args": [],
 "method": &"queue_free"
 }]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Flash:material:shader_parameter/current_radius")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.2, 0.3, 0.45),
+"transitions": PackedFloat32Array(0.366021, 1, 1),
+"update": 0,
+"values": [0.0, 8.0, 15.0]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Flash:material:shader_parameter/ring_thickness")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.2, 0.45),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [8.0, 2.0]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Flash:material:shader_parameter/shockwave_color")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0.2, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 2, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("HitParticles:emitting")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_spawn_sleep"]
@@ -275,6 +345,17 @@ shader = ExtResource("13_surface")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
+resource_local_to_scene = true
+shader = ExtResource("12_pixel_ring")
+shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/current_radius = 15.0
+shader_parameter/ring_thickness = 2.0
+shader_parameter/pixel_size = 2.0
+shader_parameter/center_line_thickness = 1.0
+shader_parameter/center_line_color = Color(1, 1, 1, 1)
+shader_parameter/canvas_size = Vector2(40, 40)
+
 [node name="EnemyBase" type="CharacterBody2D" unique_id=1100000001 groups=["enemies"]]
 collision_layer = 8
 motion_mode = 1
@@ -313,9 +394,9 @@ script = ExtResource("6_targeting")
 script = ExtResource("7_orbdrop")
 orb_scene = ExtResource("8_orb")
 crunch_powerup_scene = ExtResource("9_powerup")
-crunch_settings = ExtResource("7_crunch_settings")
 impulse_max = 250.0
 linear_damp = 5.0
+crunch_settings = ExtResource("7_crunch_settings")
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1100000010]
 libraries/ = SubResource("BaseLibrary")
@@ -326,5 +407,12 @@ material = SubResource("ShaderMaterial_surface")
 
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("11_hit")]
 
-[node name="FlashVfx" parent="." unique_id=1756477109 instance=ExtResource("12_flash")]
-scale = Vector2(2, 2)
+[node name="Flash" type="ColorRect" parent="." unique_id=1756477109]
+visible = false
+z_index = 10
+material = SubResource("ShaderMaterial_flash")
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 2

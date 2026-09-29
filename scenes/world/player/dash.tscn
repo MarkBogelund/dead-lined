@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash.gd" id="1_1hc6r"]
 [ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="3_w1v22"]
-[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="4_dgq4j"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/speed_particles.tscn" id="5_speed_particles"]
 
 [sub_resource type="Curve" id="Curve_yfgcb"]
@@ -29,5 +28,3 @@ gradient = SubResource("Gradient_dash_trail")
 script = ExtResource("3_w1v22")
 coordinate_mode = 0
 max_length = 15
-
-[node name="FlashVfx" parent="." unique_id=1756477109 instance=ExtResource("4_dgq4j")]

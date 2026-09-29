@@ -11,10 +11,10 @@
 [ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="9_jbwj1"]
 [ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="10_afiv6"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="11_ero07"]
-[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="12_dndde"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="12_pixel_ring"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="13_x0xi1"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/windup_particles.tscn" id="14_bd33e"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/steam_particles.tscn" id="15_lb2rj"]
+[ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="14_bd33e"]
+[ext_resource type="PackedScene" uid="uid://brr8cpo7s6nw5" path="res://scenes/world/vfx/steam_particles.tscn" id="15_lb2rj"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 9.0
@@ -108,24 +108,46 @@ tracks/6/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Flash:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Flash:material:shader_parameter/current_radius")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [16.0]
+}
 
 [sub_resource type="Animation" id="Death"]
 resource_name = "die"
 length = 0.7
 step = 0.1
-tracks/0/type = "method"
+tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("FlashVfx")
+tracks/0/path = NodePath("Flash:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"start"
-}]
+"times": PackedFloat32Array(0, 0.2, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -179,6 +201,42 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1, 1.3195077),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0.75, 0.75)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Flash:material:shader_parameter/current_radius")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2, 0.35, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 16.0, 18.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Flash:material:shader_parameter/ring_thickness")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.2, 0.35),
+"transitions": PackedFloat32Array(0.366021, 1),
+"update": 0,
+"values": [3.0, 4.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Flash:material:shader_parameter/shockwave_color")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.3, 0.5),
+"transitions": PackedFloat32Array(1.1486982, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Repair"]
@@ -274,6 +332,17 @@ _data = {
 &"upgrade_charge": SubResource("UpgradeCharge")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
+resource_local_to_scene = true
+shader = ExtResource("12_pixel_ring")
+shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/current_radius = 16.0
+shader_parameter/ring_thickness = 4.0
+shader_parameter/pixel_size = 2.0
+shader_parameter/center_line_thickness = 1.0
+shader_parameter/center_line_color = Color(1, 1, 1, 1)
+shader_parameter/canvas_size = Vector2(40, 40)
+
 [sub_resource type="Curve" id="UpgradeParticleAngleCurve"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
@@ -346,8 +415,15 @@ script = ExtResource("9_jbwj1")
 libraries/ = SubResource("BaseLibrary")
 script = ExtResource("11_ero07")
 
-[node name="FlashVfx" parent="." unique_id=850017021 instance=ExtResource("12_dndde")]
-scale = Vector2(2, 2)
+[node name="Flash" type="ColorRect" parent="." unique_id=850017021]
+visible = false
+z_index = 10
+material = SubResource("ShaderMaterial_flash")
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+mouse_filter = 2
 
 [node name="HitParticles" parent="." unique_id=567856169 instance=ExtResource("13_x0xi1")]
 amount = 16
