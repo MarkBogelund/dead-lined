@@ -1,41 +1,9 @@
 [gd_scene format=3 uid="uid://o4crmgh4cvkq"]
 
 [ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash.gd" id="1_1hc6r"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="2_bu34d"]
 [ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="3_w1v22"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="4_dgq4j"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2454e"]
-atlas = ExtResource("2_bu34d")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="Gradient" id="Gradient_particle_color"]
-offsets = PackedFloat32Array(0.6435185, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 0.5833334, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_particle"]
-gradient = SubResource("Gradient_particle_color")
-
-[sub_resource type="Curve" id="Curve_74ekq"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_6qf0x"]
-curve = SubResource("Curve_74ekq")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dash"]
-particle_flag_disable_z = true
-emission_shape = 1
-emission_sphere_radius = 3.0
-direction = Vector3(0, 0, 0)
-spread = 30.0
-initial_velocity_min = 5.0
-initial_velocity_max = 40.0
-gravity = Vector3(0, 0, 0)
-scale_min = 0.049999997
-scale_max = 0.29999998
-scale_curve = SubResource("CurveTexture_6qf0x")
-color_ramp = SubResource("GradientTexture1D_particle")
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/speed_particles.tscn" id="5_speed_particles"]
 
 [sub_resource type="Curve" id="Curve_yfgcb"]
 _data = [Vector2(0, 0.29681003), 0.0, 0.0, 0, 0, Vector2(0.1394558, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -49,14 +17,8 @@ colors = PackedColorArray(1, 1, 1, 1, 0.9999997, 0.84858555, 0.54073334, 1)
 script = ExtResource("1_1hc6r")
 ease_out_power = 2.5
 
-[node name="DashParticles" type="GPUParticles2D" parent="." unique_id=1960158413]
-z_index = 4
+[node name="DashParticles" parent="." unique_id=1960158413 instance=ExtResource("5_speed_particles")]
 position = Vector2(0, -11)
-emitting = false
-amount = 45
-texture = SubResource("AtlasTexture_2454e")
-lifetime = 0.5
-process_material = SubResource("ParticleProcessMaterial_dash")
 
 [node name="Trail" type="Line2D" parent="." unique_id=150580796]
 z_index = 3

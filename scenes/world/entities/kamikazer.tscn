@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b8l2frb3h6x77" path="res://assets/sprites/enemies/kamikazer-shadow.png" id="5_shadow"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="6_los"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="7_chargefx"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/mist_particles.tscn" id="9_mist_particles"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 
@@ -108,7 +109,7 @@ _data = {
 &"idle": SubResource("Animation_idle")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_alyi3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bcm5f"]
 resource_local_to_scene = true
 shader = ExtResource("4_alyi3")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
@@ -287,7 +288,7 @@ shape = SubResource("CircleShape2D_hitbox")
 libraries/kamikazer = SubResource("KamikazerLibrary")
 
 [node name="Visuals" parent="." index="8" unique_id=1100000011]
-material = SubResource("ShaderMaterial_alyi3")
+material = SubResource("ShaderMaterial_bcm5f")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=148251673]
 z_index = 6
@@ -313,10 +314,11 @@ process_material = SubResource("ParticleProcessMaterial_lei18")
 script = ExtResource("6_los")
 ray_collision_mask = 9
 
-[node name="ChargeParticles" type="GPUParticles2D" parent="." index="12" unique_id=84107375]
+[node name="ChargeParticles" parent="." index="12" unique_id=84107375 instance=ExtResource("9_mist_particles")]
 z_index = 5
 emitting = false
 amount = 24
 texture = SubResource("AtlasTexture_charge")
 lifetime = 0.35
+randomness = 0.0
 process_material = SubResource("ParticleProcessMaterial_charge")

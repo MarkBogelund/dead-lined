@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="3_7p1yo"]
 [ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="4_grobf"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="5_7p1yo"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/glitter_particles.tscn" id="7_glitter_particles"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2sq7"]
 atlas = ExtResource("2_smgu6")
@@ -51,7 +52,8 @@ metadata/_edit_group_ = true
 z_index = 5
 texture = SubResource("AtlasTexture_g2sq7")
 
-[node name="GlimmerParticles" type="GPUParticles2D" parent="." unique_id=821504766]
+[node name="GlimmerParticles" parent="." unique_id=821504766 instance=ExtResource("7_glitter_particles")]
+z_index = 0
 position = Vector2(0, -8)
 emitting = false
 amount = 15

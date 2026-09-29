@@ -1,50 +1,11 @@
 [gd_scene format=3 uid="uid://dejjdoy158x2x"]
 
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="1_nw0q6"]
+[ext_resource type="Material" path="res://materials/hit_particle_process_material.tres" id="2_hit_material"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iye1l"]
 atlas = ExtResource("1_nw0q6")
 region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="Curve" id="Curve_4enbs"]
-_limits = [-1.0, 1.0, 0.0, 1.0]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_74ekq"]
-curve = SubResource("Curve_4enbs")
-
-[sub_resource type="Gradient" id="Gradient_74ekq"]
-offsets = PackedFloat32Array(0.31566265, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.5853834, 0.2893987, 9.62615e-08, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_6qf0x"]
-gradient = SubResource("Gradient_74ekq")
-
-[sub_resource type="Curve" id="Curve_1vgk0"]
-_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_1vgk0"]
-curve = SubResource("Curve_1vgk0")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1esm0"]
-particle_flag_disable_z = true
-emission_shape_scale = Vector3(0, 0, 0)
-emission_shape = 1
-emission_sphere_radius = 8.0
-angle_min = 1.0728835e-05
-angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_74ekq")
-direction = Vector3(0, 0, 0)
-spread = 180.0
-initial_velocity_min = 50.0
-initial_velocity_max = 100.0
-gravity = Vector3(0, 0, 0)
-scale_min = 0.19999999
-scale_max = 0.39999998
-scale_curve = SubResource("CurveTexture_1vgk0")
-color_ramp = SubResource("GradientTexture1D_6qf0x")
 
 [node name="HitParticles" type="GPUParticles2D" unique_id=1586402119]
 z_index = 15
@@ -54,4 +15,4 @@ texture = SubResource("AtlasTexture_iye1l")
 lifetime = 0.3
 one_shot = true
 explosiveness = 1.0
-process_material = SubResource("ParticleProcessMaterial_1esm0")
+process_material = ExtResource("2_hit_material")

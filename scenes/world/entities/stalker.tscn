@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bioitf2isi5uq" path="res://assets/sprites/enemies/stalker.png" id="10_sprite"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="11_particles"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="12_vfx"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/windup_particles.tscn" id="13_windup"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 9.0
@@ -466,11 +467,6 @@ script = ExtResource("7_los")
 [node name="OrbitComponent" type="Node" parent="." index="14" unique_id=992499216]
 script = ExtResource("8_orbit")
 
-[node name="WindupParticles" type="GPUParticles2D" parent="." index="15" unique_id=2118097210]
-z_index = 14
-emitting = false
-amount = 30
+[node name="WindupParticles" parent="." index="15" unique_id=2118097210 instance=ExtResource("13_windup")]
 texture = SubResource("AtlasTexture_uhdj6")
-lifetime = 0.5
-speed_scale = 2.0
 process_material = SubResource("ParticleProcessMaterial_38riw")

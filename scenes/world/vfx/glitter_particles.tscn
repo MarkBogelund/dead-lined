@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="1_shapes"]
+[ext_resource type="Material" uid="uid://bj73i2ir0rpr3" path="res://materials/glitter_particle_process_material.tres" id="2_material"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_particle"]
+atlas = ExtResource("1_shapes")
+region = Rect2(16, 0, 16, 16)
+
+[node name="GlitterParticles" type="GPUParticles2D"]
+z_index = 14
+amount = 10
+texture = SubResource("AtlasTexture_particle")
+lifetime = 0.65
+randomness = 0.5
+process_material = ExtResource("2_material")
