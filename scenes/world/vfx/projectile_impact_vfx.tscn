@@ -1,22 +1,22 @@
 [gd_scene format=3 uid="uid://nyqmxlfuew7s"]
 
-[ext_resource type="Texture2D" uid="uid://dqb2ogvxbqcu0" path="res://assets/sprites/shared/explosion-vfx-turret.png" id="1_0yjw8"]
-[ext_resource type="Script" uid="uid://cd56nfpfhpe8y" path="res://scripts/world/vfx/vfx.gd" id="1_vfx"]
+[ext_resource type="Script" uid="uid://cd56nfpfhpe8y" path="res://scripts/world/vfx/vfx.gd" id="1_nqov7"]
+[ext_resource type="Texture2D" uid="uid://dqb2ogvxbqcu0" path="res://assets/sprites/shared/explosion-vfx-turret.png" id="2_1tkw0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rsxgi"]
-atlas = ExtResource("1_0yjw8")
+atlas = ExtResource("2_1tkw0")
 region = Rect2(0, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8p3ff"]
-atlas = ExtResource("1_0yjw8")
+atlas = ExtResource("2_1tkw0")
 region = Rect2(24, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qxe05"]
-atlas = ExtResource("1_0yjw8")
+atlas = ExtResource("2_1tkw0")
 region = Rect2(48, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7i6j4"]
-atlas = ExtResource("1_0yjw8")
+atlas = ExtResource("2_1tkw0")
 region = Rect2(72, 0, 24, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gbewu"]
@@ -102,7 +102,7 @@ _data = {
 }
 
 [node name="ExplosionVFX" type="Node2D" unique_id=1846526661]
-script = ExtResource("1_vfx")
+script = ExtResource("1_nqov7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1169125295]
 visible = false
