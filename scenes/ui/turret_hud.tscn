@@ -2,26 +2,102 @@
 
 [ext_resource type="Script" uid="uid://dpi7tvafhwm14" path="res://scripts/world/entities/turret/turret_hud.gd" id="1_jrbl1"]
 [ext_resource type="Script" uid="uid://bhyhranqhcdwr" path="res://scripts/ui/turret_panel.gd" id="2_panel"]
+[ext_resource type="Texture2D" uid="uid://bnps2a01crbv8" path="res://assets/sprites/ui/capacity-bar-ui.png" id="3_frame"]
 [ext_resource type="Script" uid="uid://bye2qxrtc558s" path="res://scripts/ui/hold_button.gd" id="4_hold"]
-[ext_resource type="Shader" path="res://shaders/hold_progress.gdshader" id="4_progress_shader"]
+[ext_resource type="Shader" uid="uid://b7ypugskkl87o" path="res://shaders/hold_progress.gdshader" id="4_progress_shader"]
 [ext_resource type="Texture2D" uid="uid://2dx8sc4766ai" path="res://assets/sprites/ui/turret-upgrade-icons.png" id="5_pm3rh"]
 [ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="5_toggle"]
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="6_ign1u"]
+[ext_resource type="Material" uid="uid://lecq77tvhlrt" path="res://shaders/circulating_gradient_blue.tres" id="7_outline"]
+[ext_resource type="PackedScene" uid="uid://dinfr5rh21ada" path="res://scenes/ui/turret_stats_view.tscn" id="8_stats_view"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="9_anim"]
+[ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="10_kpbou"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_edge"]
+atlas = ExtResource("3_frame")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_outline"]
+atlas = ExtResource("3_frame")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bg"]
+atlas = ExtResource("3_frame")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="LabelSettings" id="LabelSettings_level"]
+font = ExtResource("6_ign1u")
+font_size = 10
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
 atlas = ExtResource("5_pm3rh")
 region = Rect2(34, 10, 12, 12)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_b5pcb"]
+atlas = ExtResource("10_kpbou")
+region = Rect2(0, 0, 16, 16)
+
 [sub_resource type="LabelSettings" id="LabelSettings_spl43"]
 font = ExtResource("6_ign1u")
-font_size = 8
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ign1u"]
-load_path = "res://.godot/imported/turret-upgrade-icons.png-d5dce7cfba7cd781ac94d4ee18a848f9.ctex"
+font_size = 6
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3jpqe"]
-atlas = SubResource("CompressedTexture2D_ign1u")
+atlas = ExtResource("5_pm3rh")
 region = Rect2(18, 10, 12, 12)
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_appear"]
+resource_name = "appear"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.2588163, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_disappear"]
+resource_name = "disappear"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(2.1435478, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_panel"]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"appear": SubResource("Animation_appear"),
+&"disappear": SubResource("Animation_disappear")
+}
 
 [node name="TurretHUD" type="Node" unique_id=1583887513]
 script = ExtResource("1_jrbl1")
@@ -32,55 +108,166 @@ script = ExtResource("1_jrbl1")
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
-mouse_filter = 2
+offset_right = 101.0
+offset_bottom = 96.0
 script = ExtResource("2_panel")
 
-[node name="Actions" type="MarginContainer" parent="CanvasLayer/TurretPanel" unique_id=816033217]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = -32.0
-offset_right = 33.142868
-offset_bottom = 50.0
-mouse_filter = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 5
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/TurretPanel/Actions" unique_id=1867402857]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 4
-alignment = 1
-
-[node name="UpgradeButton" type="TextureButton" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer" unique_id=1903084934 node_paths=PackedStringArray("progress_target")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(12, 12)
-layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("4_hold")
-progress_shader = ExtResource("4_progress_shader")
-progress_target = NodePath("VBoxContainer/TextureRect")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/UpgradeButton" unique_id=1068676192]
+[node name="PanelEdge" type="NinePatchRect" parent="CanvasLayer/TurretPanel" unique_id=54240658]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 0
+texture = SubResource("AtlasTexture_edge")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="PanelOutline" type="NinePatchRect" parent="CanvasLayer/TurretPanel/PanelEdge" unique_id=2111921570]
+unique_name_in_owner = true
+material = ExtResource("7_outline")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_outline")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="PanelBG" type="NinePatchRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline" unique_id=988946980]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_bg")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG" unique_id=1829338896]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin" unique_id=766392789]
+layout_mode = 2
+theme_override_constants/separation = 2
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/UpgradeButton/VBoxContainer" unique_id=42369551]
+[node name="LevelRow" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=68762574]
+layout_mode = 2
+alignment = 1
+
+[node name="LevelLabel" type="Label" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/LevelRow" unique_id=1617841678]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Lv 1"
+label_settings = SubResource("LabelSettings_level")
+
+[node name="StatsOutline" type="NinePatchRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=1310340396]
+unique_name_in_owner = true
+material = ExtResource("7_outline")
+layout_mode = 2
+size_flags_vertical = 3
+texture = SubResource("AtlasTexture_outline")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="StatsBG" type="NinePatchRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline" unique_id=193817991]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_bg")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG" unique_id=920439699]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="TurretStatsView" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin" unique_id=932522057 instance=ExtResource("8_stats_view")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-mouse_filter = 2
+
+[node name="Actions" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=1867402857]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="UpgradeButton" type="TextureButton" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions" unique_id=1903084934 node_paths=PackedStringArray("progress_target")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 22)
+layout_mode = 2
+script = ExtResource("4_hold")
+progress_shader = ExtResource("4_progress_shader")
+progress_target = NodePath("VBoxContainer/TextureRect")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton" unique_id=1068676192]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = -3
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton/VBoxContainer" unique_id=42369551]
+layout_mode = 2
+size_flags_vertical = 3
 texture = SubResource("AtlasTexture_spl43")
+stretch_mode = 5
 
-[node name="UpgradeLabel" type="Label" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/UpgradeButton/VBoxContainer" unique_id=1832294696]
+[node name="PriceRow" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton/VBoxContainer" unique_id=602115804]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -3
+alignment = 1
+
+[node name="PriceIcon" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton/VBoxContainer/PriceRow" unique_id=741231543]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_b5pcb")
+stretch_mode = 5
+
+[node name="UpgradeLabel" type="Label" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton/VBoxContainer/PriceRow" unique_id=1832294696]
 unique_name_in_owner = true
 layout_mode = 2
 text = "15"
@@ -88,42 +275,71 @@ label_settings = SubResource("LabelSettings_spl43")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SellButton" type="TextureButton" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer" unique_id=1549581212 node_paths=PackedStringArray("progress_target")]
+[node name="MaxLabel" type="Label" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions" unique_id=47579786]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(12, 12)
+visible = false
+self_modulate = Color(1, 0.85, 0.3, 1)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 1
+text = "MAX"
+label_settings = SubResource("LabelSettings_spl43")
+vertical_alignment = 1
+
+[node name="SellButton" type="TextureButton" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions" unique_id=1549581212 node_paths=PackedStringArray("progress_target")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 22)
+layout_mode = 2
 script = ExtResource("4_hold")
 progress_shader = ExtResource("4_progress_shader")
 progress_target = NodePath("VBoxContainer/TextureRect")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/SellButton" unique_id=1159413202]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton" unique_id=1159413202]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = -3
 alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/SellButton/VBoxContainer" unique_id=1836151854]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton/VBoxContainer" unique_id=1836151854]
+layout_mode = 2
+size_flags_vertical = 3
+texture = SubResource("AtlasTexture_3jpqe")
+stretch_mode = 5
+
+[node name="PriceRow" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton/VBoxContainer" unique_id=439201132]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-texture = SubResource("AtlasTexture_3jpqe")
+theme_override_constants/separation = -3
+alignment = 1
 
-[node name="SellLabel" type="Label" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/SellButton/VBoxContainer" unique_id=1568251803]
+[node name="PriceIcon" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton/VBoxContainer/PriceRow" unique_id=1556385061]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_b5pcb")
+stretch_mode = 5
+
+[node name="SellLabel" type="Label" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton/VBoxContainer/PriceRow" unique_id=1568251803]
 unique_name_in_owner = true
 layout_mode = 2
 text = "15"
 label_settings = SubResource("LabelSettings_spl43")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="AnimationHandler" type="AnimationPlayer" parent="CanvasLayer/TurretPanel" unique_id=120232337]
+libraries/ = SubResource("AnimationLibrary_panel")
+script = ExtResource("9_anim")
 
 [node name="ToggleMenu" type="Node" parent="." unique_id=488267466]
 script = ExtResource("5_toggle")
-open_on_proximity = true
+open_on_proximity_and_button = true
 close_on_exit_proximity = true
+close_on_toggle_button = true
+close_on_cancel = true
+close_on_combat_phase = true

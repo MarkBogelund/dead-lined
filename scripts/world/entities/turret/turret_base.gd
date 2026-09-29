@@ -28,6 +28,7 @@ var enabled := true
 const MIN_ATTACK_COOLDOWN := 0.5
 var total_invested := 0.0
 var _base_stats: TurretStats
+var _stat_values: TurretStatValues
 var _active := false
 var _repairing := false
 var _selling := false
@@ -68,8 +69,6 @@ func _ready() -> void:
 		_on_combat_started()
 	if game_over_manager:
 		game_over_manager.game_over.connect(_on_game_over)
-	interaction_range.player_entered.connect(_on_player_entered)
-	interaction_range.player_exited.connect(_on_player_exited)
 	health.health_changed.connect(_on_health_changed)
 	repair.repaired.connect(health.heal)
 	if player:
@@ -78,11 +77,13 @@ func _ready() -> void:
 	health_ui.set_level(upgrader.level)
 	if upgrader.is_max_level():
 		_on_maxed()
-	if wave_manager:
-		hud.setup(self, wave_manager)
+	hud.opened.connect(range_indicator.show_indicator)
+	hud.closed.connect(range_indicator.hide_indicator)
+	hud.setup(self)
 
 func initialize_base(stats: TurretStats) -> void:
 	_base_stats = stats
+	_stat_values = TurretStatValues.from_stats(stats)
 	health.initialize(stats.max_health)
 	repair.initialize(stats.repair_cost_per_second, stats.repair_health_per_second)
 	range_indicator.initialize(stats.attack_range)
@@ -98,8 +99,20 @@ func set_purchase_price(price: float) -> void:
 func set_exclusion_radius(radius: float) -> void:
 	exclusion_zone.initialize(radius)
 
+## Called by ShopManager on placement; the upgrade panel outline uses the shop entry's colors.
+func set_panel_colors(start_color: Color, end_color: Color) -> void:
+	hud.set_outline_colors(start_color, end_color)
+
 func get_level() -> int:
 	return upgrader.level
+
+func get_stat_values() -> TurretStatValues:
+	return _stat_values
+
+## The stats the next upgrade would give, or null when maxed.
+func get_next_level_stats() -> TurretStatValues:
+	var upgrade := upgrader.next_upgrade()
+	return _stats_after(upgrade) if upgrade else null
 
 func is_critical() -> bool:
 	return _is_critical and not is_dead()
@@ -187,18 +200,28 @@ func _can_manage() -> bool:
 	return not _selling and not is_dead() and (wave_manager == null or wave_manager.is_build_phase())
 
 ## Upgrade values multiply the base stats (not the previous level); -1 keeps the previous level's value.
+func _stats_after(upgrade: TurretUpgrade) -> TurretStatValues:
+	var next := TurretStatValues.new()
+	next.max_health = roundi(_base_stats.max_health * upgrade.max_health) if upgrade.max_health >= 0.0 else _stat_values.max_health
+	next.damage = roundi(_base_stats.damage * upgrade.damage) if upgrade.damage >= 0.0 else _stat_values.damage
+	next.attack_range = _base_stats.attack_range * upgrade.attack_range if upgrade.attack_range >= 0.0 else _stat_values.attack_range
+	next.attack_cooldown = maxf(MIN_ATTACK_COOLDOWN, _base_stats.attack_cooldown * upgrade.attack_cooldown) if upgrade.attack_cooldown >= 0.0 else _stat_values.attack_cooldown
+	return next
+
 func _on_upgraded(upgrade: TurretUpgrade) -> void:
+	var next := _stats_after(upgrade)
 	if upgrade.max_health >= 0.0:
-		health.set_max_health(roundi(_base_stats.max_health * upgrade.max_health))
+		health.set_max_health(next.max_health)
 	if upgrade.damage >= 0.0:
-		set_damage(roundi(_base_stats.damage * upgrade.damage))
+		set_damage(next.damage)
 	if upgrade.attack_range >= 0.0:
-		set_attack_range(_base_stats.attack_range * upgrade.attack_range)
+		set_attack_range(next.attack_range)
 	if upgrade.attack_cooldown >= 0.0:
 		var cooldown := _base_stats.attack_cooldown * upgrade.attack_cooldown
 		if cooldown < MIN_ATTACK_COOLDOWN:
 			push_warning("%s level %d attack_cooldown %.2f is below MIN_ATTACK_COOLDOWN %.2f; clamping" % [name, upgrader.level, cooldown, MIN_ATTACK_COOLDOWN])
-		set_attack_cooldown(maxf(MIN_ATTACK_COOLDOWN, cooldown))
+		set_attack_cooldown(next.attack_cooldown)
+	_stat_values = next
 	health_ui.set_level(upgrader.level)
 	animation.play_animation("upgrade")
 	if upgrader.is_max_level():
@@ -231,12 +254,6 @@ func _on_game_over() -> void:
 	_active = false
 	enabled = false
 	_on_combat_stopped()
-
-func _on_player_entered() -> void:
-	range_indicator.show_indicator()
-
-func _on_player_exited() -> void:
-	range_indicator.hide_indicator()
 
 ## Subclasses overriding _physics_process must call super._physics_process(delta).
 func _physics_process(delta: float) -> void:

@@ -1,48 +1,110 @@
 extends Control
 class_name TurretPanel
 
-## Per-turret action panel: upgrade/sell hold buttons (level and health live in HealthUIComponent).
+## Per-turret upgrade panel: level, stats, and upgrade/sell hold buttons. Hovering Upgrade previews the next level.
 ## Emits requests only; the turret performs upgrades and sales.
 
 signal upgrade_requested
 signal upgrade_hold_started(hold_duration: float)
 signal upgrade_hold_ended
 signal sell_requested
+signal close_requested
 
-@onready var actions: Control = %Actions
+## Pixels between the turret's screen position and the panel's near edge.
+@export var side_gap := 24.0
+
+@onready var level_label: Label = %LevelLabel
+@onready var stats_view: TurretStatsView = %TurretStatsView
 @onready var upgrade_button: HoldButton = %UpgradeButton
-@onready var sell_button: HoldButton = %SellButton
 @onready var upgrade_label: Label = %UpgradeLabel
+@onready var max_label: Label = %MaxLabel
+@onready var sell_button: HoldButton = %SellButton
 @onready var sell_label: Label = %SellLabel
+@onready var animation_handler: AnimationHandler = $AnimationHandler
+@onready var _outlines: Array[CanvasItem] = [%PanelOutline, %StatsOutline]
 
 var _turret: TurretBase
+var _previewing := false
 
 func _ready() -> void:
 	visible = false
+	set_process(false)
+	_route_mouse(self)
+	# The outline material is shared with other UI, so each panel gets its own copy.
+	for outline in _outlines:
+		outline.material = outline.material.duplicate()
 	upgrade_button.hold_completed.connect(upgrade_requested.emit)
 	upgrade_button.hold_started.connect(func() -> void: upgrade_hold_started.emit(upgrade_button.hold_duration))
 	upgrade_button.hold_ended.connect(upgrade_hold_ended.emit)
 	sell_button.hold_completed.connect(sell_requested.emit)
+	upgrade_button.mouse_entered.connect(_set_previewing.bind(true))
+	upgrade_button.mouse_exited.connect(_set_previewing.bind(false))
+	upgrade_button.focus_entered.connect(_set_previewing.bind(true))
+	upgrade_button.focus_exited.connect(_set_previewing.bind(false))
+	animation_handler.configure_animation("appear", 0, false)
+	animation_handler.configure_animation("disappear", 1, false)
+	animation_handler.animation_finished.connect(_on_animation_finished)
 
 func _process(_delta: float) -> void:
-	if visible:
-		_refresh()
+	_refresh()
 
 func open(turret: TurretBase) -> void:
 	_turret = turret
 	_refresh()
 	visible = true
+	set_process(true)
+	animation_handler.play_animation("appear")
 
 func close() -> void:
-	visible = false
+	_previewing = false
+	set_process(false)
+	animation_handler.play_animation("disappear")
 
-func set_actions_visible(value: bool) -> void:
-	actions.visible = value
+func set_outline_colors(start_color: Color, end_color: Color) -> void:
+	for outline in _outlines:
+		var shader_material := outline.material as ShaderMaterial
+		shader_material.set_shader_parameter("start_color", start_color)
+		shader_material.set_shader_parameter("end_color", end_color)
+
+## anchor_x is the turret's screen x; the panel sits left of it unless that would leave the screen.
+func place_beside(anchor_x: float) -> void:
+	var on_left := anchor_x - side_gap - size.x >= 0.0
+	position = Vector2(-side_gap - size.x if on_left else side_gap, -size.y * 0.5)
+	pivot_offset = Vector2(size.x if on_left else 0.0, size.y * 0.5)
+
+func _gui_input(event: InputEvent) -> void:
+	var mouse_button := event as InputEventMouseButton
+	if not mouse_button or not mouse_button.pressed:
+		return
+	accept_event()
+	if mouse_button.button_index == MOUSE_BUTTON_RIGHT:
+		close_requested.emit()
+
+func _set_previewing(value: bool) -> void:
+	_previewing = value
 
 func _refresh() -> void:
-	upgrade_button.visible = not _turret.is_max_level()
-	if upgrade_button.visible:
+	var maxed := _turret.is_max_level()
+	var preview := _turret.get_next_level_stats() if _previewing and not maxed else null
+	level_label.text = "Lv %d" % (_turret.get_level() + (1 if preview else 0))
+	level_label.self_modulate = stats_view.preview_color if preview else Color.WHITE
+	stats_view.show_stats(_turret.get_stat_values(), preview)
+	upgrade_button.visible = not maxed
+	max_label.visible = maxed
+	if not maxed:
 		upgrade_label.text = "%d" % int(_turret.get_upgrade_cost())
 		upgrade_button.disabled = not _turret.can_upgrade()
 	sell_label.text = "%d" % int(_turret.get_sell_value())
 	sell_button.disabled = not _turret.can_sell()
+
+## The root catches clicks on the panel; buttons pass unhandled ones (e.g. right click) up to it.
+func _route_mouse(node: Node) -> void:
+	for child in node.get_children():
+		var control := child as Control
+		if control:
+			control.mouse_filter = Control.MOUSE_FILTER_PASS if control is BaseButton else Control.MOUSE_FILTER_IGNORE
+		_route_mouse(child)
+
+func _on_animation_finished(anim_name: StringName) -> void:
+	if anim_name == &"disappear":
+		visible = false

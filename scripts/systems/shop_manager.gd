@@ -53,6 +53,7 @@ func _on_turret_placed(placed: Node, turret_entry: TurretEntry) -> void:
 	turrets_placed += 1
 	turret.set_purchase_price(turret_entry.price)
 	turret.set_exclusion_radius(turret_entry.exclusion_radius)
+	turret.set_panel_colors(turret_entry.outline_start_color, turret_entry.outline_end_color)
 	turret_bought.emit(turret_entry.price)
 	turret.died.connect(_on_turret_destroyed)
 	turret.sold.connect(_on_turret_sold)

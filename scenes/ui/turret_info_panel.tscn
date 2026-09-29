@@ -5,8 +5,8 @@
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="3_font"]
 [ext_resource type="Material" uid="uid://lecq77tvhlrt" path="res://shaders/circulating_gradient_blue.tres" id="3_rktw6"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="4_anim"]
-[ext_resource type="Texture2D" uid="uid://dlvo8nkskiyfi" path="res://assets/sprites/ui/turret-shop-icons.png" id="4_hsf30"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yn6dg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/turret_stats_view.tscn" id="5_stats_view"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
 atlas = ExtResource("2_tyyj7")
@@ -39,18 +39,6 @@ region = Rect2(32, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_f8agp"]
 atlas = ExtResource("2_tyyj7")
 region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sjk1b"]
-atlas = ExtResource("4_hsf30")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j21la"]
-atlas = ExtResource("4_hsf30")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hsf30"]
-atlas = ExtResource("4_hsf30")
-region = Rect2(32, 0, 16, 16)
 
 [sub_resource type="Animation" id="Animation_refresh"]
 resource_name = "refresh"
@@ -231,68 +219,11 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="StatsVBox" type="VBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin" unique_id=1678128236]
-layout_mode = 2
-theme_override_constants/separation = 4
-alignment = 1
-
-[node name="HealthRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox" unique_id=1286159159]
+[node name="TurretStatsView" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin" unique_id=1678128236 instance=ExtResource("5_stats_view")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-mouse_filter = 2
-
-[node name="HealthIcon" type="TextureRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/HealthRow" unique_id=1606069759]
-custom_minimum_size = Vector2(10, 10)
-layout_mode = 2
-mouse_filter = 2
-texture = SubResource("AtlasTexture_sjk1b")
-stretch_mode = 5
-
-[node name="HealthLabel" type="Label" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/HealthRow" unique_id=841345764]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0"
-label_settings = SubResource("LabelSettings_stat")
-
-[node name="BottomRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox" unique_id=1702231184]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="DamageRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow" unique_id=732989376]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="DamageIcon" type="TextureRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow/DamageRow" unique_id=320795127]
-custom_minimum_size = Vector2(10, 10)
-layout_mode = 2
-mouse_filter = 2
-texture = SubResource("AtlasTexture_j21la")
-stretch_mode = 5
-
-[node name="DamageLabel" type="Label" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow/DamageRow" unique_id=313832480]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0"
-label_settings = SubResource("LabelSettings_stat")
-
-[node name="SpeedRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow" unique_id=332002439]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="SpeedIcon" type="TextureRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow/SpeedRow" unique_id=325575806]
-custom_minimum_size = Vector2(10, 10)
-layout_mode = 2
-mouse_filter = 2
-texture = SubResource("AtlasTexture_hsf30")
-stretch_mode = 5
-
-[node name="SpeedLabel" type="Label" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow/SpeedRow" unique_id=1728767552]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0s"
-label_settings = SubResource("LabelSettings_stat")
+size_flags_vertical = 4
 
 [node name="LimitLabel" type="Label" parent="." unique_id=415035585]
 unique_name_in_owner = true

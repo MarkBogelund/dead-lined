@@ -42,9 +42,13 @@ var close_fn: Callable
 
 var is_open: bool = false
 
+const PROXIMITY_BUTTON_GROUP := &"proximity_button_menus"
+
 
 func _ready() -> void:
 	_connect_interaction_zone()
+	if open_on_proximity_and_button:
+		add_to_group(PROXIMITY_BUTTON_GROUP)
 	if close_on_combat_phase:
 		var wave_manager := get_tree().get_first_node_in_group("wave_manager") as WaveManager
 		if wave_manager:
@@ -97,9 +101,26 @@ func _handle_open_triggers(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	if open_on_proximity_and_button and event.is_action_pressed(open_action):
-		if interaction_zone and interaction_zone.is_player_in_range():
+		if _wins_proximity_open():
 			open()
 			get_viewport().set_input_as_handled()
+
+## With several proximity menus in range, only the one nearest the player opens; an open one must close first.
+func _wins_proximity_open() -> bool:
+	if not interaction_zone or not interaction_zone.is_player_in_range():
+		return false
+	var player := interaction_zone.get_player()
+	var own_distance := player.global_position.distance_squared_to(interaction_zone.global_position)
+	for node in get_tree().get_nodes_in_group(PROXIMITY_BUTTON_GROUP):
+		var other := node as ToggleMenuComponent
+		if other == self or not other.enabled or not other.interaction_zone:
+			continue
+		if other.is_open:
+			return false
+		if other.interaction_zone.is_player_in_range() \
+				and player.global_position.distance_squared_to(other.interaction_zone.global_position) < own_distance:
+			return false
+	return true
 
 
 func _handle_close_triggers(event: InputEvent) -> void:
