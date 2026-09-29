@@ -32,9 +32,13 @@ region = Rect2(0, 0, 16, 16)
 font = ExtResource("3_font")
 font_size = 8
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bb1o0"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_veohx"]
 atlas = ExtResource("2_tyyj7")
 region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f8agp"]
+atlas = ExtResource("2_tyyj7")
+region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sjk1b"]
 atlas = ExtResource("4_hsf30")
@@ -76,17 +80,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -56.0
-offset_top = -44.0
-offset_right = 56.0
-offset_bottom = 44.0
+offset_left = -66.18182
+offset_top = -52.0
+offset_right = 66.18182
+offset_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(56, 44)
 mouse_filter = 2
 script = ExtResource("1_info")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1545587979]
+[node name="PanelEdge" type="NinePatchRect" parent="." unique_id=1545587979]
 self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -101,7 +105,8 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect" unique_id=1784578735]
+[node name="PanelOutline" type="NinePatchRect" parent="PanelEdge" unique_id=1784578735]
+unique_name_in_owner = true
 material = ExtResource("3_rktw6")
 layout_mode = 1
 anchors_preset = 15
@@ -115,7 +120,7 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/NinePatchRect" unique_id=1100932152]
+[node name="PanelBG" type="NinePatchRect" parent="PanelEdge/PanelOutline" unique_id=1100932152]
 self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
 layout_mode = 1
 anchors_preset = 15
@@ -130,7 +135,7 @@ patch_margin_top = 6
 patch_margin_right = 6
 patch_margin_bottom = 6
 
-[node name="Margin" type="MarginContainer" parent="." unique_id=1466278386]
+[node name="Margin" type="MarginContainer" parent="PanelEdge/PanelOutline/PanelBG" unique_id=1466278386]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -138,55 +143,71 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
 
-[node name="Content" type="VBoxContainer" parent="Margin" unique_id=1043400465]
+[node name="Content" type="VBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin" unique_id=1043400465]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = -4
+theme_override_constants/separation = -2
 alignment = 1
 
-[node name="NameLabel" type="Label" parent="Margin/Content" unique_id=1076786746]
+[node name="NameLabel" type="Label" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=1076786746]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Turret"
 label_settings = SubResource("LabelSettings_name")
 horizontal_alignment = 1
 
-[node name="PriceRow" type="HBoxContainer" parent="Margin/Content" unique_id=1111399319]
+[node name="PriceRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=1111399319]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="PriceIcon" type="TextureRect" parent="Margin/Content/PriceRow" unique_id=72905332]
+[node name="PriceIcon" type="TextureRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/PriceRow" unique_id=72905332]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_yn6dg")
 stretch_mode = 5
 
-[node name="PriceLabel" type="Label" parent="Margin/Content/PriceRow" unique_id=1832019784]
+[node name="PriceLabel" type="Label" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/PriceRow" unique_id=1832019784]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_stat")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="Margin/Content" unique_id=332535646]
-self_modulate = Color(0.08468988, 0.08468995, 0.08468989, 1)
+[node name="StatsOutline" type="NinePatchRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=656588313]
+unique_name_in_owner = true
+material = ExtResource("3_rktw6")
 layout_mode = 2
 size_flags_vertical = 3
-texture = SubResource("AtlasTexture_bb1o0")
+texture = SubResource("AtlasTexture_veohx")
 patch_margin_left = 4
 patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="Margin/Content/NinePatchRect" unique_id=704091539]
+[node name="StatsBG" type="NinePatchRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline" unique_id=1518986424]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+texture = SubResource("AtlasTexture_f8agp")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Margin" type="MarginContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG" unique_id=704091539]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -198,64 +219,64 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer" unique_id=1678128236]
+[node name="StatsVBox" type="VBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin" unique_id=1678128236]
 layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
 
-[node name="HealthRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=1286159159]
+[node name="HealthRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox" unique_id=1286159159]
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 
-[node name="HealthIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/HealthRow" unique_id=1606069759]
+[node name="HealthIcon" type="TextureRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/HealthRow" unique_id=1606069759]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_sjk1b")
 stretch_mode = 5
 
-[node name="HealthLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/HealthRow" unique_id=841345764]
+[node name="HealthLabel" type="Label" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/HealthRow" unique_id=841345764]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_stat")
 
-[node name="BottomRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=1702231184]
+[node name="BottomRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox" unique_id=1702231184]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="DamageRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow" unique_id=732989376]
+[node name="DamageRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow" unique_id=732989376]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="DamageIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow/DamageRow" unique_id=320795127]
+[node name="DamageIcon" type="TextureRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow/DamageRow" unique_id=320795127]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_j21la")
 stretch_mode = 5
 
-[node name="DamageLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow/DamageRow" unique_id=313832480]
+[node name="DamageLabel" type="Label" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow/DamageRow" unique_id=313832480]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_stat")
 
-[node name="SpeedRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow" unique_id=332002439]
+[node name="SpeedRow" type="HBoxContainer" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow" unique_id=332002439]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="SpeedIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow/SpeedRow" unique_id=325575806]
+[node name="SpeedIcon" type="TextureRect" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow/SpeedRow" unique_id=325575806]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_hsf30")
 stretch_mode = 5
 
-[node name="SpeedLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow/SpeedRow" unique_id=1728767552]
+[node name="SpeedLabel" type="Label" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin/StatsVBox/BottomRow/SpeedRow" unique_id=1728767552]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0s"
