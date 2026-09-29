@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hjlmtphi6g0p"
-path="res://.godot/imported/vfx-shapes.png-15c4c889040c92aea0022726230d358f.ctex"
+uid="uid://dqb2ogvxbqcu0"
+path="res://.godot/imported/explosion-vfx-turret.png-38560a3ce199cafd85d63b247dc6da3f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/vfx/vfx-shapes.png"
-dest_files=["res://.godot/imported/vfx-shapes.png-15c4c889040c92aea0022726230d358f.ctex"]
+source_file="res://assets/sprites/shared/explosion-vfx-turret.png"
+dest_files=["res://.godot/imported/explosion-vfx-turret.png-38560a3ce199cafd85d63b247dc6da3f.ctex"]
 
 [params]
 

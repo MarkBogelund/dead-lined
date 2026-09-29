@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/orb.tscn" id="1_orb"]
 [ext_resource type="Script" uid="uid://bqjasswwq5oc4" path="res://scripts/world/entities/shared/capacity_orb.gd" id="2_capacity"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="3_y67we"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/environment/shadow.png" id="4_s1gev"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="4_s1gev"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s1gev"]
 atlas = ExtResource("3_y67we")

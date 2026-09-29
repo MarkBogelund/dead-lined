@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://o4crmgh4cvkq"]
 
 [ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash.gd" id="1_1hc6r"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="2_bu34d"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="2_bu34d"]
 [ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="3_w1v22"]
 [ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="4_dgq4j"]
 

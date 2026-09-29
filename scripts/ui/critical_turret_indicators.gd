@@ -4,7 +4,7 @@ class_name CriticalTurretIndicators
 ## Arrows warning that a turret is critically damaged and pointing the way to it. Each arrow sits next to its
 ## turret on the player's side, and only while the player is far enough away.
 
-@export var arrow_texture: Texture2D = preload("res://assets/sprites/ui/turret_critical_arrow.png")
+@export var arrow_texture: Texture2D
 @export var arrow_color := Color(1.0, 1.0, 1.0, 1.0)
 ## Distance in pixels the arrow keeps from its turret, toward the player.
 @export_range(0.0, 256.0, 1.0) var turret_offset := 48.0
@@ -21,6 +21,8 @@ var _arrows: Dictionary[TurretBase, PixelRotatedSprite] = {}
 var _pulse_time := 0.0
 
 func _ready() -> void:
+	if not arrow_texture:
+		push_error("CriticalTurretIndicators needs arrow_texture assigned in the scene")
 	if shop_manager:
 		shop_manager.turret_bought.connect(_on_turret_bought)
 	else:

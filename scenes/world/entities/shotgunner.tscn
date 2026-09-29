@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="7_los"]
 [ext_resource type="Script" uid="uid://kxqm1yu6myfa" path="res://scripts/world/entities/shared/keep_distance.gd" id="8_keep_distance"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="9_particles"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="10_vfx"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="10_vfx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 11.0
@@ -295,21 +295,21 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_windup_angle"]
+[sub_resource type="CurveTexture" id="CurveTexture_gxu1o"]
 curve = SubResource("Curve_windup_angle")
 
 [sub_resource type="Gradient" id="Gradient_windup"]
 offsets = PackedFloat32Array(0.31566265, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0.5996433, 0.27610233, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_windup"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_r72oh"]
 gradient = SubResource("Gradient_windup")
 
 [sub_resource type="Curve" id="Curve_windup_scale"]
 _data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="CurveTexture" id="CurveTexture_windup_scale"]
+[sub_resource type="CurveTexture" id="CurveTexture_qu4n8"]
 curve = SubResource("Curve_windup_scale")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_windup"]
@@ -319,7 +319,7 @@ emission_shape = 2
 emission_sphere_radius = 2.2
 angle_min = 1.0728835e-05
 angle_max = 20.000011
-angle_curve = SubResource("CurveTexture_windup_angle")
+angle_curve = SubResource("CurveTexture_gxu1o")
 direction = Vector3(0, 0, 0)
 spread = 180.0
 gravity = Vector3(0, 0, 0)
@@ -327,8 +327,8 @@ radial_accel_min = -300.0
 radial_accel_max = -200.0
 scale_min = 0.19999999
 scale_max = 0.5
-scale_curve = SubResource("CurveTexture_windup_scale")
-color_ramp = SubResource("GradientTexture1D_windup")
+scale_curve = SubResource("CurveTexture_qu4n8")
+color_ramp = SubResource("GradientTexture1D_r72oh")
 
 [node name="Shotgunner" unique_id=1200000001 instance=ExtResource("1_base")]
 script = ExtResource("2_script")

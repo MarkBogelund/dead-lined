@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://bypcrn2bs0717"]
 
 [ext_resource type="Script" uid="uid://bbt0clpi8uvre" path="res://scripts/ui/turret_slot.gd" id="1_tslot"]
-[ext_resource type="FontFile" uid="uid://dcf5jkmnj1w5k" path="res://assets/fonts/PixelOperator8.ttf" id="2_tslot"]
 [ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="3_tslot"]
 [ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/ui/seeker-icon.png" id="4_l0mfe"]
+[ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="4_pd32r"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_i8lq4"]
+font = ExtResource("4_pd32r")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pd32r"]
 atlas = ExtResource("4_l0mfe")
@@ -12,6 +15,9 @@ region = Rect2(0, 0, 22, 26)
 [sub_resource type="AtlasTexture" id="AtlasTexture_scrap"]
 atlas = ExtResource("3_tslot")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0138l"]
+font = ExtResource("4_pd32r")
 
 [node name="TurretSlot" type="Control" unique_id=354999974]
 custom_minimum_size = Vector2(64, 64)
@@ -67,9 +73,9 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("2_tslot")
 theme_override_font_sizes/font_size = 8
 text = "Turret"
+label_settings = SubResource("LabelSettings_i8lq4")
 horizontal_alignment = 1
 
 [node name="BuyButton" type="TextureButton" parent="Background/MarginContainer/VBoxContainer" unique_id=761417669]
@@ -98,6 +104,6 @@ stretch_mode = 4
 [node name="PriceLabel" type="Label" parent="Background/MarginContainer/VBoxContainer/PriceRow" unique_id=978919418]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_tslot")
 theme_override_font_sizes/font_size = 8
 text = "0"
+label_settings = SubResource("LabelSettings_0138l")

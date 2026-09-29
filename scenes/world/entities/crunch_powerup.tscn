@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://dkh6t1minj7ss" path="res://scripts/world/entities/shared/crunch_powerup.gd" id="2_powerup"]
 [ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="3_settings"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yxwvc"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/environment/shadow.png" id="5_p65r1"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="6_b5yvb"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_p65r1"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="6_b5yvb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yxwvc"]
 atlas = ExtResource("4_yxwvc")

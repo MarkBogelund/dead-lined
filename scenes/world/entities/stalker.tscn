@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://d4bm6n0cjpvo2" path="res://assets/sprites/enemies/stalker-shadow.png" id="9_shadow"]
 [ext_resource type="Texture2D" uid="uid://bioitf2isi5uq" path="res://assets/sprites/enemies/stalker.png" id="10_sprite"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="11_particles"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="12_vfx"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="12_vfx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 9.0
@@ -187,7 +187,7 @@ _data = {
 &"shoot": SubResource("Animation_shoot")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ag4mk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ihk34"]
 resource_local_to_scene = true
 shader = ExtResource("4_ihk34")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
@@ -418,7 +418,7 @@ target_desired_distance = 12.0
 libraries/stalker = SubResource("StalkerLibrary")
 
 [node name="Visuals" parent="." index="8" unique_id=1100000011]
-material = SubResource("ShaderMaterial_ag4mk")
+material = SubResource("ShaderMaterial_ihk34")
 
 [node name="Shadow" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1725397380]
 modulate = Color(0, 0, 0, 0.19607843)

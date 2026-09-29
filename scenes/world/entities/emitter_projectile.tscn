@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b7guvgjnl7dj3"]
 
 [ext_resource type="PackedScene" uid="uid://lbntiqfct3r5" path="res://scenes/world/entities/projectile_base.tscn" id="1_base"]
-[ext_resource type="Texture2D" uid="uid://c7kpx46shdlsc" path="res://assets/sprites/projectile.png" id="2_i8lq4"]
+[ext_resource type="Texture2D" uid="uid://c7kpx46shdlsc" path="res://assets/sprites/shared/projectile.png" id="2_i8lq4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_emitter"]
 radius = 3.0

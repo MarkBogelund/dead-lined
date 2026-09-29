@@ -20,7 +20,7 @@
 [ext_resource type="Script" uid="uid://ceh6tabl76hf8" path="res://scripts/world/entities/player/aim_indicator.gd" id="19_aimindicator"]
 [ext_resource type="Material" uid="uid://bxeh6alamp27j" path="res://materials/dash_charge_particle_process_material.tres" id="20_windup"]
 [ext_resource type="Script" uid="uid://dtlddhxtx6w20" path="res://scripts/world/entities/player/dash_direction_indicator.gd" id="21_dashdir"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="22_vfx_shapes"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="22_vfx_shapes"]
 
 [sub_resource type="Animation" id="Animation_qlg0r"]
 length = 0.001

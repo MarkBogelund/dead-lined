@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2ghxao4hbj7j"
-path="res://.godot/imported/concept.png-e31dea575cb2d2098178c26dd1282093.ctex"
+uid="uid://dgx2akh6lc25s"
+path="res://.godot/imported/ui-box.png-8c634549da5804c00157f7ede0870e29.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/concept.png"
-dest_files=["res://.godot/imported/concept.png-e31dea575cb2d2098178c26dd1282093.ctex"]
+source_file="res://assets/sprites/_legacy/ui-box.png"
+dest_files=["res://.godot/imported/ui-box.png-8c634549da5804c00157f7ede0870e29.ctex"]
 
 [params]
 

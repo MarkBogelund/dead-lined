@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqxe3o8xta44s"
-path="res://.godot/imported/capacity-bar.png-64ec96631dec0f62a3cbdab03cbf844b.ctex"
+uid="uid://bcfnxifebswso"
+path="res://.godot/imported/shadow.png-c92b060802f5af987ec833f6b17a21fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ui/capacity-bar.png"
-dest_files=["res://.godot/imported/capacity-bar.png-64ec96631dec0f62a3cbdab03cbf844b.ctex"]
+source_file="res://assets/sprites/shared/shadow.png"
+dest_files=["res://.godot/imported/shadow.png-c92b060802f5af987ec833f6b17a21fc.ctex"]
 
 [params]
 

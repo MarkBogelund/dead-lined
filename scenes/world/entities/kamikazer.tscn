@@ -3,10 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/entities/enemy_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://e7tmr32ly7kc" path="res://scripts/world/entities/enemy/kamikazer.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://dfmgppjmpi2ej" path="res://resources/enemies/kamikazer/kamikazer_stats.tres" id="3_stats"]
+[ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_alyi3"]
 [ext_resource type="Texture2D" uid="uid://4ls8qibe4vmq" path="res://assets/sprites/enemies/kamikazer.png" id="4_sprite"]
 [ext_resource type="Texture2D" uid="uid://b8l2frb3h6x77" path="res://assets/sprites/enemies/kamikazer-shadow.png" id="5_shadow"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="6_los"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="7_chargefx"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="7_chargefx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 
@@ -106,6 +107,12 @@ _data = {
 &"charge": SubResource("Animation_charge"),
 &"idle": SubResource("Animation_idle")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_alyi3"]
+resource_local_to_scene = true
+shader = ExtResource("4_alyi3")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xa7qf"]
 atlas = ExtResource("4_sprite")
@@ -279,19 +286,22 @@ shape = SubResource("CircleShape2D_hitbox")
 [node name="AnimationHandler" parent="." index="7" unique_id=1100000010]
 libraries/kamikazer = SubResource("KamikazerLibrary")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) index="0" unique_id=148251673]
+[node name="Visuals" parent="." index="8" unique_id=1100000011]
+material = SubResource("ShaderMaterial_alyi3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=148251673]
 z_index = 6
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_xwavj")
 animation = &"idle"
 
-[node name="ShadowSprite" type="AnimatedSprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) index="1" unique_id=1589682499]
+[node name="ShadowSprite" type="AnimatedSprite2D" parent="Visuals" index="1" unique_id=1589682499]
 modulate = Color(0, 0, 0, 0.19607843)
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_wp5nv")
 animation = &"idle"
 
-[node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(1100000011) index="2" unique_id=2020380487]
+[node name="PointLight2D" type="PointLight2D" parent="Visuals" index="2" unique_id=2020380487]
 position = Vector2(0, -9)
 color = Color(0.3926668, 0.18999998, 0.95, 0.30588236)
 texture = SubResource("GradientTexture2D_fffhc")
