@@ -4,7 +4,7 @@ class_name Emitter
 ## Runs to a random spot away from players/turrets, then stands still and emits a rotating two-sided stream of
 ## projectiles. Flees to a new spot when a target gets close; a hit while emitting pauses emission for hit_cooldown.
 
-enum State { RELOCATE, EMIT }
+enum State {RELOCATE, EMIT}
 
 ## Minimum seconds between spot re-picks, so a spot that can't be made safe doesn't re-roll every frame.
 const REPICK_INTERVAL := 0.5
