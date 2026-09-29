@@ -76,13 +76,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -47.0
-offset_top = -49.2381
-offset_right = 47.0
-offset_bottom = 49.2381
+offset_left = -56.0
+offset_top = -44.0
+offset_right = 56.0
+offset_bottom = 44.0
 grow_horizontal = 2
 grow_vertical = 2
-pivot_offset = Vector2(42, 44)
+pivot_offset = Vector2(56, 44)
 mouse_filter = 2
 script = ExtResource("1_info")
 
@@ -138,10 +138,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 6
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="Content" type="VBoxContainer" parent="Margin" unique_id=1043400465]
 unique_name_in_owner = true
@@ -193,16 +193,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer" unique_id=1678128236]
 layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
 
 [node name="HealthRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=1286159159]
 layout_mode = 2
+size_flags_horizontal = 4
 mouse_filter = 2
 
 [node name="HealthIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/HealthRow" unique_id=1606069759]
@@ -218,35 +221,41 @@ layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_stat")
 
-[node name="DamageRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=732989376]
+[node name="BottomRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=1702231184]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="DamageRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow" unique_id=732989376]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="DamageIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/DamageRow" unique_id=320795127]
+[node name="DamageIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow/DamageRow" unique_id=320795127]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_j21la")
 stretch_mode = 5
 
-[node name="DamageLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/DamageRow" unique_id=313832480]
+[node name="DamageLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow/DamageRow" unique_id=313832480]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_stat")
 
-[node name="SpeedRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=332002439]
+[node name="SpeedRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow" unique_id=332002439]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="SpeedIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/SpeedRow" unique_id=325575806]
+[node name="SpeedIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow/SpeedRow" unique_id=325575806]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_hsf30")
 stretch_mode = 5
 
-[node name="SpeedLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/SpeedRow" unique_id=1728767552]
+[node name="SpeedLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/BottomRow/SpeedRow" unique_id=1728767552]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0s"

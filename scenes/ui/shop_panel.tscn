@@ -71,6 +71,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_j21la")
 card_scene = ExtResource("2_card")
+radius = 96.0
 
 [node name="Content" type="Control" parent="." unique_id=1633142133]
 layout_mode = 1
