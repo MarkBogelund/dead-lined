@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bnu4fvr1hbp1v"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/entities/projectile_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://lbntiqfct3r5" path="res://scenes/world/projectiles/projectile_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="2_texture"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o1bpx"]

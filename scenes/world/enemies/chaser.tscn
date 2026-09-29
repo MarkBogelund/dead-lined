@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dbn6ammn3fpex"]
 
-[ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/entities/enemy_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/enemies/enemy_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://73dnhyc0uhym" path="res://scripts/world/entities/enemy/chaser.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://blw5awhrqlike" path="res://resources/enemies/chaser/chaser_stats.tres" id="3_stats"]
 [ext_resource type="Texture2D" uid="uid://ccp2efd60ustu" path="res://assets/sprites/enemies/chaser.png" id="4_sprite"]

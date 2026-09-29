@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://dg727qsoqbra2"]
 
-[ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/entities/turret_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://k2yjj1j2ubde" path="res://scripts/world/entities/turret/shockwaver.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://ci1dpwdd2x3er" path="res://resources/turrets/shockwaver/shockwaver_stats.tres" id="3_stats"]
 [ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="4_sprite"]
 [ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="6_shockwave"]
-[ext_resource type="Shader" path="res://shaders/shockwave_pixel_art.gdshader" id="6_pixel_shader"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/shockwave_pixel_art.gdshader" id="6_pixel_shader"]
 
 [sub_resource type="Animation" id="Shock"]
 resource_name = "shock"

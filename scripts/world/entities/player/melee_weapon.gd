@@ -1,7 +1,7 @@
 extends Node2D
 class_name MeleeWeapon
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite: Sprite2D = $Graphics
 @onready var trail: Line2D = $Trail
 @onready var glimmer_particles: GPUParticles2D = $GlimmerParticles
 @onready var hitbox: HitboxComponent = $HitboxComponent

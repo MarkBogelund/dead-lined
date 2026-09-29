@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b0eux5l7kvgkc"]
 
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="1_shapes"]
 [ext_resource type="Material" uid="uid://cr3yc8cqa36k" path="res://materials/speed_particle_process_material.tres" id="2_material"]
@@ -7,7 +7,7 @@
 atlas = ExtResource("1_shapes")
 region = Rect2(16, 0, 16, 16)
 
-[node name="SpeedParticles" type="GPUParticles2D"]
+[node name="SpeedParticles" type="GPUParticles2D" unique_id=721926538]
 z_index = 4
 emitting = false
 amount = 45

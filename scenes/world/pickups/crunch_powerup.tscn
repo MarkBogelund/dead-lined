@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cu481a52yhdms"]
 
-[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/entities/orb.tscn" id="1_orb"]
+[ext_resource type="PackedScene" uid="uid://dfdoke3xag1rp" path="res://scenes/world/pickups/orb_base.tscn" id="1_orb"]
 [ext_resource type="Script" uid="uid://dkh6t1minj7ss" path="res://scripts/world/entities/shared/crunch_powerup.gd" id="2_powerup"]
 [ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="3_settings"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yxwvc"]

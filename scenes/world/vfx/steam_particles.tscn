@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://brr8cpo7s6nw5"]
 
 [ext_resource type="Material" uid="uid://cv0hbyh3i0egg" path="res://materials/steam_particle_process_material.tres" id="1_material"]
 
-[node name="SteamParticles" type="GPUParticles2D"]
+[node name="SteamParticles" type="GPUParticles2D" unique_id=1597847161]
 z_index = 14
 emitting = false
 amount = 16

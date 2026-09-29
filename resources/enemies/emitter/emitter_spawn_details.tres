@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemySpawnEntry" format=3 uid="uid://d20ovxmdp055t"]
 
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="1_entry"]
-[ext_resource type="PackedScene" uid="uid://ds3fs4me2eouv" path="res://scenes/world/entities/emitter.tscn" id="2_emitter"]
+[ext_resource type="PackedScene" uid="uid://ds3fs4me2eouv" path="res://scenes/world/enemies/emitter.tscn" id="2_emitter"]
 
 [resource]
 script = ExtResource("1_entry")

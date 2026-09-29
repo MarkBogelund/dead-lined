@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemySpawnEntry" format=3 uid="uid://1betm04mhcru"]
 
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="1_entry"]
-[ext_resource type="PackedScene" uid="uid://cwasadsq2jgp7" path="res://scenes/world/entities/shotgunner.tscn" id="2_shotgunner"]
+[ext_resource type="PackedScene" uid="uid://cwasadsq2jgp7" path="res://scenes/world/enemies/shotgunner.tscn" id="2_shotgunner"]
 
 [resource]
 script = ExtResource("1_entry")

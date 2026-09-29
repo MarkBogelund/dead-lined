@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bpi06o7gy1vi4"]
 
 [ext_resource type="Material" uid="uid://dmgkx87u0f2qi" path="res://materials/windup_particle_process_material.tres" id="1_material"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="2_shapes"]
@@ -7,7 +7,7 @@
 atlas = ExtResource("2_shapes")
 region = Rect2(16, 0, 16, 16)
 
-[node name="WindupParticles" type="GPUParticles2D"]
+[node name="WindupParticles" type="GPUParticles2D" unique_id=2054959803]
 z_index = 14
 emitting = false
 amount = 30

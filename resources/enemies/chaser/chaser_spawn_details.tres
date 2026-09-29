@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EnemySpawnEntry" format=3 uid="uid://bpy3pb1cm1tg1"]
 
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="1_185mx"]
-[ext_resource type="PackedScene" uid="uid://dbn6ammn3fpex" path="res://scenes/world/entities/chaser.tscn" id="1_t316x"]
+[ext_resource type="PackedScene" uid="uid://dbn6ammn3fpex" path="res://scenes/world/enemies/chaser.tscn" id="1_t316x"]
 
 [resource]
 script = ExtResource("1_185mx")

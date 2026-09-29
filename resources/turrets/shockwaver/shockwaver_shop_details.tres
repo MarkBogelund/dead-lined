@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="TurretEntry" format=3 uid="uid://cals7t00fcr3i"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/entities/shockwaver_ghost.tscn" id="1_ghost"]
+[ext_resource type="PackedScene" path="res://scenes/world/turrets/shockwaver_ghost.tscn" id="1_ghost"]
 [ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="2_sprite"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="3_entry"]
-[ext_resource type="PackedScene" uid="uid://dg727qsoqbra2" path="res://scenes/world/entities/shockwaver.tscn" id="4_turret"]
+[ext_resource type="PackedScene" uid="uid://dg727qsoqbra2" path="res://scenes/world/turrets/shockwaver.tscn" id="4_turret"]
 [ext_resource type="Resource" uid="uid://ci1dpwdd2x3er" path="res://resources/turrets/shockwaver/shockwaver_stats.tres" id="5_stats"]
 
 [sub_resource type="AtlasTexture" id="ShockwaverIcon"]

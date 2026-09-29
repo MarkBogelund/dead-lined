@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b5q32ahcm78j2"]
 
-[ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/entities/enemy_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/enemies/enemy_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://e7tmr32ly7kc" path="res://scripts/world/entities/enemy/kamikazer.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://dfmgppjmpi2ej" path="res://resources/enemies/kamikazer/kamikazer_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_alyi3"]

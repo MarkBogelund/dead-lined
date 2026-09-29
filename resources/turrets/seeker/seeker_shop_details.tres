@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="TurretEntry" format=3 uid="uid://bbi5f87py8cnr"]
 
-[ext_resource type="PackedScene" uid="uid://ch3rd301p0tmx" path="res://scenes/world/entities/seeker_ghost.tscn" id="1_vji5u"]
+[ext_resource type="PackedScene" uid="uid://ch3rd301p0tmx" path="res://scenes/world/turrets/seeker_ghost.tscn" id="1_vji5u"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/turrets/seeker.png" id="2_2hyx4"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="3_sfh23"]
-[ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/world/entities/seeker.tscn" id="4_q04sb"]
+[ext_resource type="PackedScene" uid="uid://cjn5bnbk1raxk" path="res://scenes/world/turrets/seeker.tscn" id="4_q04sb"]
 [ext_resource type="Resource" uid="uid://cwq21j4s01byy" path="res://resources/turrets/seeker/seeker_stats.tres" id="5_seekerstats"]
 [ext_resource type="Script" uid="uid://sn3ohxi8m0ho" path="res://scripts/shared/composite_texture_2d.gd" id="6_composite"]
 

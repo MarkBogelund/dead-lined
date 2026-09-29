@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://dpq66p1vi27sr"]
 
-[ext_resource type="Script" uid="uid://da0fvy8p6hv7l" path="res://scripts/world/entities/player/melee_weapon.gd" id="1_jkq8f"]
-[ext_resource type="Texture2D" uid="uid://bnr14l7147w74" path="res://assets/sprites/player/wrench.png" id="2_smgu6"]
-[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="3_7p1yo"]
-[ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="4_grobf"]
-[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="5_7p1yo"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/glitter_particles.tscn" id="7_glitter_particles"]
+[ext_resource type="Script" uid="uid://da0fvy8p6hv7l" path="res://scripts/world/entities/player/melee_weapon.gd" id="1_a0bpa"]
+[ext_resource type="Texture2D" uid="uid://bnr14l7147w74" path="res://assets/sprites/player/wrench.png" id="2_aulmq"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/glitter_particles.tscn" id="3_viiqh"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="4_l4qbn"]
+[ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="5_5o0v0"]
+[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="6_cfxmm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2sq7"]
-atlas = ExtResource("2_smgu6")
+atlas = ExtResource("2_aulmq")
 region = Rect2(7, 0, 10, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xntly"]
-atlas = ExtResource("3_7p1yo")
+atlas = ExtResource("4_l4qbn")
 region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="Gradient" id="Gradient_glimmer"]
@@ -44,15 +44,15 @@ point_count = 3
 radius = 6.0
 height = 48.0
 
-[node name="MeleeWeapon" type="Node2D" unique_id=221936938 groups=["player_attacks"]]
-script = ExtResource("1_jkq8f")
+[node name="Wrench" type="Node2D" unique_id=221936938 groups=["player_attacks"]]
+script = ExtResource("1_a0bpa")
 metadata/_edit_group_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=321923372]
+[node name="Graphics" type="Sprite2D" parent="." unique_id=321923372]
 z_index = 5
 texture = SubResource("AtlasTexture_g2sq7")
 
-[node name="GlimmerParticles" parent="." unique_id=821504766 instance=ExtResource("7_glitter_particles")]
+[node name="GlimmerParticles" parent="." unique_id=821504766 instance=ExtResource("3_viiqh")]
 z_index = 0
 position = Vector2(0, -8)
 emitting = false
@@ -68,13 +68,13 @@ show_behind_parent = true
 position = Vector2(0, -4)
 width = 8.0
 width_curve = SubResource("Curve_grobf")
-script = ExtResource("4_grobf")
+script = ExtResource("5_5o0v0")
 max_length = 15
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=454126189]
 collision_layer = 4
 collision_mask = 25
-script = ExtResource("5_7p1yo")
+script = ExtResource("6_cfxmm")
 damage = 20
 no_damage_group = &"turrets"
 metadata/_custom_type_script = "uid://de8v0knxsnhob"

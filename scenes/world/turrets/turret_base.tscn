@@ -1,20 +1,20 @@
 [gd_scene format=3 uid="uid://bwc8e5jf5vyy1"]
 
-[ext_resource type="Script" uid="uid://ckubhd6ef2yh5" path="res://scripts/world/entities/turret/turret_base.gd" id="1_base"]
-[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="2_health"]
-[ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="3_health_ui"]
-[ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="4_interaction"]
-[ext_resource type="Script" uid="uid://crnamexhvkfv7" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="5_upgrade"]
-[ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="6_repair"]
-[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="7_exclusion"]
-[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="8_range"]
-[ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="9_hud"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="10_animation"]
-[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="11_flash"]
-[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="12_hit"]
-[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="14_hit_flash"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/windup_particles.tscn" id="14_windup"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/steam_particles.tscn" id="17_steam_particles"]
+[ext_resource type="Script" uid="uid://ckubhd6ef2yh5" path="res://scripts/world/entities/turret/turret_base.gd" id="1_q7hb2"]
+[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="2_obbky"]
+[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="3_alai4"]
+[ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="4_w0nmw"]
+[ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="5_a53ak"]
+[ext_resource type="Script" uid="uid://crnamexhvkfv7" path="res://scripts/world/entities/shared/turret_upgrade.gd" id="6_8kwk8"]
+[ext_resource type="Script" uid="uid://crepaircomp01" path="res://scripts/world/entities/shared/repair.gd" id="7_g2n3d"]
+[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="8_ahnjb"]
+[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="9_jbwj1"]
+[ext_resource type="PackedScene" uid="uid://ctsmflabw1lo7" path="res://scenes/ui/turret_hud.tscn" id="10_afiv6"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="11_ero07"]
+[ext_resource type="PackedScene" uid="uid://dnp5kkv3y8qko" path="res://scenes/world/vfx/flash_vfx.tscn" id="12_dndde"]
+[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="13_x0xi1"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/windup_particles.tscn" id="14_bd33e"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/steam_particles.tscn" id="15_lb2rj"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 9.0
@@ -308,60 +308,60 @@ scale_curve = SubResource("UpgradeParticleScaleTexture")
 z_index = 1
 collision_layer = 32
 collision_mask = 19
-script = ExtResource("1_base")
-surface_shader = ExtResource("14_hit_flash")
+script = ExtResource("1_q7hb2")
+surface_shader = ExtResource("2_obbky")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=190497504]
 shape = SubResource("BodyShape")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1825631867]
-script = ExtResource("2_health")
+script = ExtResource("3_alai4")
 
-[node name="HealthUIComponent" parent="." unique_id=782964572 instance=ExtResource("3_health_ui")]
+[node name="HealthUIComponent" parent="." unique_id=782964572 instance=ExtResource("4_w0nmw")]
 position = Vector2(0, -24)
 
 [node name="InteractionZone" type="Area2D" parent="." unique_id=1944962393]
 collision_layer = 0
 collision_mask = 2
-script = ExtResource("4_interaction")
+script = ExtResource("5_a53ak")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionZone" unique_id=372159115]
 shape = SubResource("InteractionShape")
 
 [node name="TurretUpgradeComponent" type="Node" parent="." unique_id=619853979]
-script = ExtResource("5_upgrade")
+script = ExtResource("6_8kwk8")
 
 [node name="RepairComponent" type="Node" parent="." unique_id=2130657369]
-script = ExtResource("6_repair")
+script = ExtResource("7_g2n3d")
 
 [node name="TurretExclusionZone" type="Node2D" parent="." unique_id=2048206458]
-script = ExtResource("7_exclusion")
+script = ExtResource("8_ahnjb")
 
 [node name="RangeIndicator" type="Node2D" parent="." unique_id=248886830]
-script = ExtResource("8_range")
+script = ExtResource("9_jbwj1")
 
-[node name="TurretHUD" parent="." unique_id=1185209340 instance=ExtResource("9_hud")]
+[node name="TurretHUD" parent="." unique_id=1185209340 instance=ExtResource("10_afiv6")]
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1391262364]
 libraries/ = SubResource("BaseLibrary")
-script = ExtResource("10_animation")
+script = ExtResource("11_ero07")
 
-[node name="FlashVfx" parent="." unique_id=850017021 instance=ExtResource("11_flash")]
+[node name="FlashVfx" parent="." unique_id=850017021 instance=ExtResource("12_dndde")]
 scale = Vector2(2, 2)
 
-[node name="HitParticles" parent="." unique_id=567856169 instance=ExtResource("12_hit")]
+[node name="HitParticles" parent="." unique_id=567856169 instance=ExtResource("13_x0xi1")]
 amount = 16
 lifetime = 0.4
 speed_scale = 1.25
 
-[node name="UpgradeParticles" parent="." unique_id=421971253 instance=ExtResource("12_hit")]
+[node name="UpgradeParticles" parent="." unique_id=421971253 instance=ExtResource("13_x0xi1")]
 amount = 24
 lifetime = 0.45
 process_material = SubResource("UpgradeParticleMaterial")
 
-[node name="WindupParticles" parent="." unique_id=1488027812 instance=ExtResource("14_windup")]
+[node name="WindupParticles" parent="." unique_id=1488027812 instance=ExtResource("14_bd33e")]
 texture = null
 
 [node name="Visuals" type="Node2D" parent="." unique_id=1113068187]
 
-[node name="RepairParticles" parent="." unique_id=1720394851 instance=ExtResource("17_steam_particles")]
+[node name="RepairParticles" parent="." unique_id=1720394851 instance=ExtResource("15_lb2rj")]
