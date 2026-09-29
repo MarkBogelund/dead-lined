@@ -6,9 +6,10 @@
 [resource]
 script = ExtResource("1_stats")
 flee_radius = 140.0
-emit_interval = 0.5
+emit_interval = 0.7
+rotation_speed = 45.0
 projectile_speed = 30.0
-max_health = 5
+max_health = 3
 damage = 1
 knockback = 100.0
 move_speed = 100.0

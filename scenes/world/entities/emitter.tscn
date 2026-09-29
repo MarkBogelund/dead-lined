@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="5_projectile"]
 [ext_resource type="Texture2D" uid="uid://c15fsu7l4duyw" path="res://assets/sprites/enemies/emittershadow.png" id="6_khwvf"]
 [ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/entities/shared/safe_spot.gd" id="6_safe_spot"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="10_kwpua"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 9.0
@@ -40,6 +41,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [&"Idle"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_emit"]
@@ -82,6 +95,18 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [&"Idle"]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("WindupParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_idle"]
@@ -152,7 +177,7 @@ _data = {
 &"run": SubResource("Animation_run")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kwpua"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_khwvf"]
 resource_local_to_scene = true
 shader = ExtResource("4_3daig")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
@@ -206,6 +231,50 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxxjd"]
+atlas = ExtResource("10_kwpua")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Curve" id="Curve_p7hwe"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_b36mc"]
+curve = SubResource("Curve_p7hwe")
+
+[sub_resource type="Gradient" id="Gradient_6smu3"]
+offsets = PackedFloat32Array(0.31566265, 0.75301206)
+colors = PackedColorArray(1, 1, 1, 1, 0.2414313, 0.44416484, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_t5mt7"]
+gradient = SubResource("Gradient_6smu3")
+
+[sub_resource type="Curve" id="Curve_ewei8"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_j4bvi"]
+curve = SubResource("Curve_ewei8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_e7p31"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 10, 10)
+emission_shape = 2
+emission_sphere_radius = 3.47
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_b36mc")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -300.0
+radial_accel_max = -200.0
+scale_min = 0.19999999
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_j4bvi")
+color_ramp = SubResource("GradientTexture1D_t5mt7")
+
 [node name="Emitter" unique_id=1300000001 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -220,13 +289,13 @@ shape = SubResource("CircleShape2D_hitbox")
 libraries/emitter = SubResource("EmitterLibrary")
 
 [node name="Visuals" parent="." index="8" unique_id=1100000011]
-material = SubResource("ShaderMaterial_kwpua")
+material = SubResource("ShaderMaterial_khwvf")
 
 [node name="Body" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1300000002]
 z_index = 5
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_ey30h")
-animation = &"Move"
+animation = &"Idle"
 
 [node name="EmitPivot" type="Node2D" parent="Visuals" index="1" unique_id=1300000003]
 
@@ -247,3 +316,12 @@ projectile_scene = ExtResource("5_projectile")
 
 [node name="SafeSpotComponent" type="Node" parent="." index="12" unique_id=1300000007]
 script = ExtResource("6_safe_spot")
+
+[node name="WindupParticles" type="GPUParticles2D" parent="." index="13" unique_id=1915869553]
+z_index = 14
+emitting = false
+amount = 30
+texture = SubResource("AtlasTexture_xxxjd")
+lifetime = 0.5
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_e7p31")
