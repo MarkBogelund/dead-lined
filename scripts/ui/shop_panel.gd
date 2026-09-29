@@ -32,6 +32,7 @@ func _ready() -> void:
 	set_process(false)
 	if not card_scene:
 		push_error("ShopPanel requires card_scene")
+	_ignore_mouse(content)
 	animation_handler.configure_animation("appear", 0, false)
 	animation_handler.configure_animation("disappear", 1, false)
 	animation_handler.animation_finished.connect(_on_animation_finished)
@@ -77,6 +78,7 @@ func _build_cards() -> void:
 	_highlighted = -1
 	for i in _entries.size():
 		var card := card_scene.instantiate() as TurretCard
+		_ignore_mouse(card)
 		cards_root.add_child(card)
 		var direction := Vector2.from_angle(_card_angle(i))
 		card.position = direction * radius
@@ -121,3 +123,11 @@ func _is_available(entry: TurretEntry) -> bool:
 func _on_animation_finished(anim_name: StringName) -> void:
 	if anim_name == &"disappear":
 		visible = false
+
+## Every click must reach this root's _gui_input, however the card and info panel layouts are built.
+func _ignore_mouse(node: Node) -> void:
+	var control := node as Control
+	if control:
+		control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in node.get_children():
+		_ignore_mouse(child)

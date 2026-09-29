@@ -7,6 +7,8 @@
 [ext_resource type="Resource" uid="uid://bomuvf4stnxjw" path="res://resources/waves/wave_settings.tres" id="2_wave_settings"]
 [ext_resource type="PackedScene" uid="uid://s8g2np38nwj7" path="res://scenes/world/environment/enemy_spawner.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bkervm4vmc0wh" path="res://scripts/systems/turret_placer.gd" id="4_ca42v"]
+[ext_resource type="Resource" uid="uid://bqf5k653dcjmr" path="res://resources/turrets/seeker/seeker_2_shop_details.tres" id="5_v2yb1"]
+[ext_resource type="Resource" uid="uid://dat3j36vr6mqs" path="res://resources/turrets/seeker/seeker_3_shop_details.tres" id="6_gxtfn"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/world/environment/shop_station.tscn" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
 [ext_resource type="Script" uid="uid://b2gaurk2muptq" path="res://scripts/systems/score_manager.gd" id="8_score"]
@@ -209,7 +211,7 @@ unique_name_in_owner = true
 script = ExtResource("1_ir15t")
 shop_panel = NodePath("../../UI/ShopPanel")
 shop_station = NodePath("../../World/ShopStation")
-turret_entries = Array[ExtResource("25_tentry")]([ExtResource("14_trtic"), ExtResource("29_shockwaver_shop")])
+turret_entries = Array[ExtResource("25_tentry")]([ExtResource("14_trtic"), ExtResource("29_shockwaver_shop"), ExtResource("5_v2yb1"), ExtResource("6_gxtfn")])
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]

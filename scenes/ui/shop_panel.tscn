@@ -87,6 +87,8 @@ mouse_filter = 2
 [node name="TurretInfoPanel" parent="Content" unique_id=2130820617 instance=ExtResource("3_info")]
 unique_name_in_owner = true
 layout_mode = 1
+offset_left = -56.0
+offset_right = 56.0
 
 [node name="Cards" type="Control" parent="Content" unique_id=600000005]
 unique_name_in_owner = true
