@@ -26,7 +26,7 @@ func _initialize() -> void:
 	_initialize_base(stats)
 	aiming.initialize(stats.aim_speed, stats.aim_tolerance)
 	targeting.configure(stats.targeting)
-	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed)
+	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed, stats.projectile_lifetime)
 	orbit.initialize(stats.preferred_distance, stats.preferred_distance_tolerance, stats.orbit_exit_margin, stats.orbit_lead_angle, stats.orbit_stuck_time, stats.orbit_stuck_distance)
 	targeting.target_changed.connect(func(_new: Node2D, _old: Node2D) -> void: orbit.reset())
 	_speed = stats.move_speed

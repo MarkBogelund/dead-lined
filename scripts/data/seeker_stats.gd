@@ -12,3 +12,5 @@ class_name SeekerStats
 @export var first_shot_delay: float = 1.0
 ## Projectile travel speed in pixels/second.
 @export var projectile_speed: float = 200.0
+## Seconds before a projectile despawns on its own. 0 or less = never.
+@export var projectile_lifetime: float = 2.0

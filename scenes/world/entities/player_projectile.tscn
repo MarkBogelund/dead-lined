@@ -1,104 +1,28 @@
 [gd_scene format=3 uid="uid://bnu4fvr1hbp1v"]
 
-[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/world/entities/shared/projectile.gd" id="1_softn"]
-[ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/explosion_vfx.tscn" id="2_8ngof"]
-[ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="3_y0lj3"]
-[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="4_xw27n"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/projectile_base.tscn" id="1_base"]
+[ext_resource type="Texture2D" uid="uid://cuw2c8x3xxxdi" path="res://assets/sprites/ui/hud_ui.png" id="2_texture"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o1bpx"]
-atlas = ExtResource("3_y0lj3")
+atlas = ExtResource("2_texture")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6q2a6"]
 radius = 6.0
 
-[sub_resource type="Animation" id="Animation_y0lj3"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
-[sub_resource type="Animation" id="Animation_02ber"]
-resource_name = "hit"
-length = 0.4
-step = 0.1
-tracks/0/type = "method"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ExplosionVFX")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"start"
-}]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.4),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"queue_free"
-}]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Sprite2D:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_y0lj3"]
-_data = {
-&"RESET": SubResource("Animation_y0lj3"),
-&"hit": SubResource("Animation_02ber")
-}
-
-[node name="PlayerProjectile" type="Node2D" unique_id=31779294 groups=["projectiles"]]
-script = ExtResource("1_softn")
+[node name="PlayerProjectile" unique_id=31779294 instance=ExtResource("1_base")]
 is_player_projectile = true
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=442925662]
+[node name="HitboxComponent" parent="." unique_id=1400000002]
+collision_layer = 4
+collision_mask = 41
+damage = 5
+no_damage_group = &"turrets"
+
+[node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1400000002) unique_id=1400000003]
+shape = SubResource("CircleShape2D_6q2a6")
+
+[node name="Sprite2D" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) unique_id=442925662]
 z_index = 5
 scale = Vector2(0.49915063, 0.5)
 texture = SubResource("AtlasTexture_o1bpx")
-
-[node name="HitboxComponent" type="Area2D" parent="." unique_id=769139471]
-collision_layer = 4
-collision_mask = 41
-script = ExtResource("4_xw27n")
-damage = 5
-no_damage_group = &"turrets"
-metadata/_custom_type_script = "uid://de8v0knxsnhob"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=356633356]
-shape = SubResource("CircleShape2D_6q2a6")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=722738158]
-libraries/ = SubResource("AnimationLibrary_y0lj3")
-
-[node name="ExplosionVFX" parent="." unique_id=1846526661 instance=ExtResource("2_8ngof")]

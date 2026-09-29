@@ -18,5 +18,7 @@ class_name EmitterStats
 @export var rotation_speed: float = 90.0
 ## Projectile travel speed in pixels/second.
 @export var projectile_speed: float = 45.0
+## Seconds before a projectile despawns on its own. 0 or less = never.
+@export var projectile_lifetime: float = 2.0
 ## Seconds without emitting after being hit while emitting. Keeps counting while it flees.
 @export var hit_cooldown: float = 2.0

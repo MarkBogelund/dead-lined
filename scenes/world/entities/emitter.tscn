@@ -6,7 +6,7 @@
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_3daig"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_shoot"]
 [ext_resource type="Texture2D" uid="uid://m6gx8nblgfu6" path="res://assets/sprites/enemies/emitter.png" id="5_khwvf"]
-[ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/entities/stalker_projectile.tscn" id="5_projectile"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/emitter_projectile.tscn" id="5_projectile"]
 [ext_resource type="Texture2D" uid="uid://c15fsu7l4duyw" path="res://assets/sprites/enemies/emittershadow.png" id="6_khwvf"]
 [ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/entities/shared/safe_spot.gd" id="6_safe_spot"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="10_kwpua"]

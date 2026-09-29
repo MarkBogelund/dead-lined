@@ -39,7 +39,7 @@ func _initialize() -> void:
 	_initialize_base(stats)
 	hitbox.initialize(stats.damage, stats.knockback)
 	# Emission timing is owned here; the component only spawns projectiles.
-	shoot.initialize(0.0, stats.damage, stats.knockback, stats.projectile_speed)
+	shoot.initialize(0.0, stats.damage, stats.knockback, stats.projectile_speed, stats.projectile_lifetime)
 	safe_spot.initialize(stats.spot_candidates, stats.spot_min_target_distance)
 
 func _physics_process(delta: float) -> void:

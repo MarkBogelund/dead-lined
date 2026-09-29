@@ -20,3 +20,5 @@ class_name RangedEnemyStats
 @export var attack_cooldown: float = 0.5
 ## Projectile travel speed in pixels/second.
 @export var projectile_speed: float = 300.0
+## Seconds before a projectile despawns on its own. 0 or less = never.
+@export var projectile_lifetime: float = 2.0

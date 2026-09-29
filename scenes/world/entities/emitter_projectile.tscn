@@ -1,21 +1,21 @@
-[gd_scene format=3 uid="uid://c8hk7vr2ps4qi"]
+[gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/world/entities/projectile_base.tscn" id="1_base"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="2_texture"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hynvp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_emitter"]
 atlas = ExtResource("2_texture")
 region = Rect2(32, 0, 16, 16)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_stalker"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_emitter"]
 radius = 4.0
 
-[sub_resource type="Gradient" id="Gradient_a5opm"]
+[sub_resource type="Gradient" id="Gradient_emitter"]
 offsets = PackedFloat32Array(0, 0.6551724)
 colors = PackedColorArray(1, 0.6660671, 0.42604744, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_hynvp"]
-gradient = SubResource("Gradient_a5opm")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_emitter"]
+gradient = SubResource("Gradient_emitter")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 
@@ -51,13 +51,13 @@ tracks/0/keys = {
 "values": [0.0, 6.283185307179586]
 }
 
-[sub_resource type="AnimationLibrary" id="StalkerProjectileLibrary"]
+[sub_resource type="AnimationLibrary" id="EmitterProjectileLibrary"]
 _data = {
 &"RESET": SubResource("Animation_reset"),
 &"idle": SubResource("Animation_idle")
 }
 
-[node name="StalkerProjectile" unique_id=1720582556 instance=ExtResource("1_base")]
+[node name="EmitterProjectile" unique_id=1500000001 instance=ExtResource("1_base")]
 despawn_on_build_phase = true
 
 [node name="HitboxComponent" parent="." unique_id=1400000002]
@@ -65,15 +65,15 @@ collision_layer = 16
 collision_mask = 35
 
 [node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1400000002) unique_id=1400000003]
-shape = SubResource("CircleShape2D_stalker")
+shape = SubResource("CircleShape2D_emitter")
 
 [node name="AnimationHandler" parent="." unique_id=1400000004]
-libraries/stalker_projectile = SubResource("StalkerProjectileLibrary")
+libraries/emitter_projectile = SubResource("EmitterProjectileLibrary")
 
-[node name="Sprite2D" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) unique_id=743767304]
+[node name="Sprite2D" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) unique_id=1500000002]
 z_index = 5
-texture = SubResource("AtlasTexture_hynvp")
+texture = SubResource("AtlasTexture_emitter")
 
-[node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) unique_id=1447177126]
+[node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(1400000005) unique_id=1500000003]
 energy = 0.2
-texture = SubResource("GradientTexture2D_hynvp")
+texture = SubResource("GradientTexture2D_emitter")
