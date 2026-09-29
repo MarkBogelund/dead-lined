@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ch3rd301p0tmx"]
 
 [ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/world/entities/turret/ghost_turret.gd" id="1_6ve0x"]
-[ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/ui/seeker-icon.png" id="2_6j2aa"]
+[ext_resource type="Texture2D" uid="uid://5muq4jtuqbpg" path="res://assets/sprites/turrets/seeker-icon.png" id="2_6j2aa"]
 [ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="3_6ve0x"]
 [ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="4_range"]
 

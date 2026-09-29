@@ -25,6 +25,7 @@ func _ready() -> void:
 	turret_placer.placement_ended.connect(_on_placement_ended)
 
 	shop_panel.turret_selected.connect(_on_turret_selected)
+	shop_panel.close_requested.connect(func() -> void: shop_station.toggle_menu.close())
 
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -33,7 +34,7 @@ func _ready() -> void:
 
 
 func _configure_shop_toggle() -> void:
-	shop_station.toggle_menu.open_fn = func() -> void: shop_panel.open(turret_entries, player.can_afford)
+	shop_station.toggle_menu.open_fn = func() -> void: shop_panel.open(turret_entries, player.can_afford, turrets_placed >= max_turrets)
 	shop_station.toggle_menu.close_fn = func() -> void: shop_panel.close()
 	shop_station.toggle_menu.menu_control = shop_panel
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5muq4jtuqbpg"
-path="res://.godot/imported/seeker-icon.png-72d10fc8519be2caba29fe74d4bc5bfb.ctex"
+uid="uid://dlvo8nkskiyfi"
+path="res://.godot/imported/turret-shop-icons.png-3dfd8163cdfd5c4351697a8033be074f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/ui/seeker-icon.png"
-dest_files=["res://.godot/imported/seeker-icon.png-72d10fc8519be2caba29fe74d4bc5bfb.ctex"]
+source_file="res://assets/sprites/ui/turret-shop-icons.png"
+dest_files=["res://.godot/imported/turret-shop-icons.png-3dfd8163cdfd5c4351697a8033be074f.ctex"]
 
 [params]
 

@@ -1,0 +1,277 @@
+[gd_scene format=3 uid="uid://11ogqyucyukl"]
+
+[ext_resource type="Script" uid="uid://o0nibchbc2ov" path="res://scripts/ui/turret_info_panel.gd" id="1_info"]
+[ext_resource type="Texture2D" uid="uid://bnps2a01crbv8" path="res://assets/sprites/ui/capacity-bar-ui.png" id="2_tyyj7"]
+[ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="3_font"]
+[ext_resource type="Material" uid="uid://lecq77tvhlrt" path="res://shaders/circulating_gradient_blue.tres" id="3_rktw6"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="4_anim"]
+[ext_resource type="Texture2D" uid="uid://dlvo8nkskiyfi" path="res://assets/sprites/ui/turret-shop-icons.png" id="4_hsf30"]
+[ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yn6dg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
+atlas = ExtResource("2_tyyj7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lqoh"]
+atlas = ExtResource("2_tyyj7")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_00di2"]
+atlas = ExtResource("2_tyyj7")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="LabelSettings" id="LabelSettings_name"]
+font = ExtResource("3_font")
+font_size = 10
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yn6dg"]
+atlas = ExtResource("4_yn6dg")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="LabelSettings" id="LabelSettings_stat"]
+font = ExtResource("3_font")
+font_size = 8
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb1o0"]
+atlas = ExtResource("2_tyyj7")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sjk1b"]
+atlas = ExtResource("4_hsf30")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j21la"]
+atlas = ExtResource("4_hsf30")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hsf30"]
+atlas = ExtResource("4_hsf30")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="Animation" id="Animation_refresh"]
+resource_name = "refresh"
+length = 0.12
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.12),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0.94, 0.94), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_info"]
+_data = {
+&"refresh": SubResource("Animation_refresh")
+}
+
+[node name="TurretInfoPanel" type="Control" unique_id=975905976]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -47.0
+offset_top = -49.2381
+offset_right = 47.0
+offset_bottom = 49.2381
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(42, 44)
+mouse_filter = 2
+script = ExtResource("1_info")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=1545587979]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_spl43")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect" unique_id=1784578735]
+material = ExtResource("3_rktw6")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_0lqoh")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/NinePatchRect" unique_id=1100932152]
+self_modulate = Color(0.16470589, 0.16470589, 0.16470589, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_00di2")
+region_rect = Rect2(0, 0, 32, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1466278386]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="Content" type="VBoxContainer" parent="Margin" unique_id=1043400465]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -4
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="Margin/Content" unique_id=1076786746]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Turret"
+label_settings = SubResource("LabelSettings_name")
+horizontal_alignment = 1
+
+[node name="PriceRow" type="HBoxContainer" parent="Margin/Content" unique_id=1111399319]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="PriceIcon" type="TextureRect" parent="Margin/Content/PriceRow" unique_id=72905332]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_yn6dg")
+stretch_mode = 5
+
+[node name="PriceLabel" type="Label" parent="Margin/Content/PriceRow" unique_id=1832019784]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_stat")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="Margin/Content" unique_id=332535646]
+self_modulate = Color(0.08468988, 0.08468995, 0.08468989, 1)
+layout_mode = 2
+size_flags_vertical = 3
+texture = SubResource("AtlasTexture_bb1o0")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="Margin/Content/NinePatchRect" unique_id=704091539]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer" unique_id=1678128236]
+layout_mode = 2
+
+[node name="HealthRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=1286159159]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HealthIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/HealthRow" unique_id=1606069759]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_sjk1b")
+stretch_mode = 5
+
+[node name="HealthLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/HealthRow" unique_id=841345764]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_stat")
+
+[node name="DamageRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=732989376]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="DamageIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/DamageRow" unique_id=320795127]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_j21la")
+stretch_mode = 5
+
+[node name="DamageLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/DamageRow" unique_id=313832480]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_stat")
+
+[node name="SpeedRow" type="HBoxContainer" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer" unique_id=332002439]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SpeedIcon" type="TextureRect" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/SpeedRow" unique_id=325575806]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_hsf30")
+stretch_mode = 5
+
+[node name="SpeedLabel" type="Label" parent="Margin/Content/NinePatchRect/MarginContainer/VBoxContainer/SpeedRow" unique_id=1728767552]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0s"
+label_settings = SubResource("LabelSettings_stat")
+
+[node name="LimitLabel" type="Label" parent="." unique_id=415035585]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(1, 0.4, 0.4, 1)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = 2.0
+offset_right = 50.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Turret limit reached"
+label_settings = SubResource("LabelSettings_stat")
+horizontal_alignment = 1
+
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=840350695]
+libraries/ = SubResource("AnimationLibrary_info")
+script = ExtResource("4_anim")

@@ -1,31 +1,123 @@
 extends Control
 class_name ShopPanel
 
-signal turret_selected(turret_entry: TurretEntry)
+## Radial turret shop. Cards circle the info panel; the mouse direction from the screen center picks the highlighted card.
 
-@export var _slots: Array[TurretSlot] = []
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+signal turret_selected(turret_entry: TurretEntry)
+signal close_requested
+
+@export var card_scene: PackedScene
+## Distance in pixels from the center to each card.
+@export var radius := 80.0
+## Direction of the first card in degrees (0 = right, -90 = up); the rest follow clockwise.
+@export var start_angle_degrees := -90.0
+## The highlight is kept while the mouse is closer than this to the center.
+@export var dead_zone_radius := 40.0
+
+@onready var content: Control = $Content
+@onready var cards_root: Control = %Cards
+@onready var info_panel: TurretInfoPanel = %TurretInfoPanel
+@onready var animation_handler: AnimationHandler = $AnimationHandler
+
+var _entries: Array[TurretEntry] = []
+var _cards: Array[TurretCard] = []
+var _can_afford_fn: Callable
+var _limit_reached := false
+var _highlighted := -1
+var _is_open := false
 
 func _ready() -> void:
 	visible = false
 	add_to_group("shop_panel")
+	set_process(false)
+	if not card_scene:
+		push_error("ShopPanel requires card_scene")
+	animation_handler.configure_animation("appear", 0, false)
+	animation_handler.configure_animation("disappear", 1, false)
+	animation_handler.animation_finished.connect(_on_animation_finished)
 
-func open(entries: Array[TurretEntry], can_afford_fn: Callable) -> void:
-	for i in _slots.size():
-		var slot := _slots[i]
-		if i < entries.size():
-			var entry := entries[i]
-			slot.visible = true
-			slot.populate(entry, can_afford_fn.call(entry.price))
-			for conn: Dictionary in slot.selected.get_connections():
-				slot.selected.disconnect(conn.callable)
-			slot.selected.connect(func() -> void: turret_selected.emit(entry))
-		else:
-			slot.visible = false
+func open(entries: Array[TurretEntry], can_afford_fn: Callable, limit_reached: bool) -> void:
+	_entries = entries
+	_can_afford_fn = can_afford_fn
+	_limit_reached = limit_reached
+	_build_cards()
+	_is_open = true
 	visible = true
-	animation_player.play(&"appear")
+	set_process(true)
+	animation_handler.play_animation("appear")
+	if not _cards.is_empty():
+		_set_highlighted(maxi(_sector_under_mouse(), 0))
 
 func close() -> void:
-	animation_player.play(&"disappear")
-	await animation_player.animation_finished
-	visible = false
+	_is_open = false
+	set_process(false)
+	animation_handler.play_animation("disappear")
+
+func _process(_delta: float) -> void:
+	var sector := _sector_under_mouse()
+	if sector >= 0:
+		_set_highlighted(sector)
+
+func _gui_input(event: InputEvent) -> void:
+	var mouse_button := event as InputEventMouseButton
+	if not _is_open or not mouse_button or not mouse_button.pressed:
+		return
+	if mouse_button.button_index == MOUSE_BUTTON_LEFT:
+		accept_event()
+		_select_highlighted()
+	elif mouse_button.button_index == MOUSE_BUTTON_RIGHT:
+		accept_event()
+		close_requested.emit()
+
+func _build_cards() -> void:
+	for card in _cards:
+		cards_root.remove_child(card)
+		card.queue_free()
+	_cards.clear()
+	_highlighted = -1
+	for i in _entries.size():
+		var card := card_scene.instantiate() as TurretCard
+		cards_root.add_child(card)
+		var direction := Vector2.from_angle(_card_angle(i))
+		card.position = direction * radius
+		card.populate(_entries[i], _is_available(_entries[i]), direction)
+		_cards.append(card)
+
+## -1 inside the dead zone, otherwise the card whose direction is closest to the mouse.
+func _sector_under_mouse() -> int:
+	if _cards.is_empty():
+		return -1
+	var to_mouse := get_global_mouse_position() - content.global_position
+	if to_mouse.length() < dead_zone_radius:
+		return -1
+	var step := TAU / _cards.size()
+	return posmod(roundi((to_mouse.angle() - deg_to_rad(start_angle_degrees)) / step), _cards.size())
+
+func _card_angle(index: int) -> float:
+	return deg_to_rad(start_angle_degrees) + index * TAU / _entries.size()
+
+func _set_highlighted(index: int) -> void:
+	if index == _highlighted:
+		return
+	if _highlighted >= 0:
+		_cards[_highlighted].set_highlighted(false)
+	_highlighted = index
+	_cards[index].set_highlighted(true)
+	var entry := _entries[index]
+	info_panel.show_entry(entry, _can_afford_fn.call(entry.price), _limit_reached)
+
+func _select_highlighted() -> void:
+	if _highlighted < 0:
+		return
+	var entry := _entries[_highlighted]
+	if not _is_available(entry):
+		_cards[_highlighted].reject()
+		return
+	turret_selected.emit(entry)
+
+func _is_available(entry: TurretEntry) -> bool:
+	return not _limit_reached and _can_afford_fn.call(entry.price)
+
+func _on_animation_finished(anim_name: StringName) -> void:
+	if anim_name == &"disappear":
+		visible = false
