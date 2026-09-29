@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EmitterStats" format=3 uid="uid://cbs13wtkxreni"]
+
+[ext_resource type="Script" uid="uid://bh7p1lpteeb0u" path="res://scripts/data/emitter_stats.gd" id="1_stats"]
+[ext_resource type="Resource" uid="uid://cifxhqdsf4hcy" path="res://resources/enemies/enemy_targeting.tres" id="2_targeting"]
+
+[resource]
+script = ExtResource("1_stats")
+flee_radius = 140.0
+emit_interval = 0.5
+projectile_speed = 30.0
+max_health = 5
+damage = 1
+knockback = 100.0
+move_speed = 100.0
+orb_drop_amount = 6

@@ -103,7 +103,7 @@ Use [turret_base.tscn](scenes/world/entities/turret_base.tscn) as the starting t
 
 ### Creating a new enemy
 
-Use [enemy_base.tscn](scenes/world/entities/enemy_base.tscn) as the starting template (Scene > New Inherited Scene). Chaser, Kamikazer, Stalker and Shotgunner are built this way.
+Use [enemy_base.tscn](scenes/world/entities/enemy_base.tscn) as the starting template (Scene > New Inherited Scene). Chaser, Kamikazer, Stalker, Shotgunner and Emitter are built this way.
 
 1. Keep the base direct-child node names: `CollisionShape2D`, `HitboxComponent` (+ its `CollisionShape2D`), `HealthComponent`, `KnockbackComponent`, `NavigationComponent`, `TargetingComponent`, `OrbDropComponent`, `AnimationHandler`, `Visuals`, `HitParticles`, `FlashVfx`.
 2. Assign a shape to both `CollisionShape2D` nodes; the base leaves them empty on purpose because every enemy has its own size.
@@ -122,6 +122,8 @@ Ranged enemies share `RangedEnemyStats` (preferred distance, aim, shoot range, c
 `ShootComponent` fires `projectile_count` projectiles evenly across `spread_angle` degrees (defaults 1 and 0).
 
 The Shotgunner ([shotgunner.gd](scripts/world/entities/enemy/shotgunner.gd), [shotgunner_stats.tres](resources/enemies/shotgunner/shotgunner_stats.tres)) moves like the pre-orbit Stalker (`KeepDistanceComponent`). Once in range, aimed and off cooldown it stands still with its aim locked and plays the one-shot `windup` animation (body shrinks, overlay builds toward yellow-white via the surface shader's `flash_color`/`flash_amount`), whose Call Method key calls `_execute_shot()` to fire `projectile_count` projectiles across `spread_angle`, then plays `shoot`. The clip can be authored at any length: it is played at `length / windup_duration` speed so the stat sets the real duration. Taking damage during the windup interrupts the clip (so the key never fires) and calls `ShootComponent.start_cooldown()`, so a cancelled shot costs the full `attack_cooldown`. Its library `RESET` restores `flash_color` to white so later hit flashes stay white.
+
+The Emitter ([emitter.gd](scripts/world/entities/enemy/emitter.gd), [emitter_stats.tres](resources/enemies/emitter/emitter_stats.tres)) has two states. `RELOCATE` runs at its high `move_speed` via navigation to a spot chosen by `SafeSpotComponent`, which samples `spot_candidates` random navmesh points (`map_get_random_point`) and returns the first at least `spot_min_target_distance` from every node in its targeting profile's groups (player and turrets), else the safest sample. `EMIT` stands still, rotates `Visuals/EmitPivot` clockwise at `rotation_speed` and every `emit_interval` fires one projectile outward from `LeftMuzzle` and `RightMuzzle` (a two-armed spiral; the body sprite stays upright). A threat within `flee_radius` of the emitter while emitting, or of its destination while running, picks a new spot (re-picks are rate-limited to 0.5 s). A hit while actively emitting starts `hit_cooldown`; that timer runs every frame regardless of state, so time spent fleeing counts and it only waits out the remainder on arrival. Hits while running or recovering don't change behaviour. It deals contact damage through `HitboxComponent`; emission timing is owned by the script, so its `ShootComponent` cooldown is 0.
 
 ### Fail-fast guard policy
 
@@ -206,7 +208,7 @@ Not worth automating: movement feel, animation timing, camera shake, turret-plac
 ```text
 scenes/game.tscn          main scene: Systems / World / UI subtrees
 scripts/systems/          WaveManager, ShopManager, ScoreManager, GameOverManager, TurretPlacer, TimeScaleManager
-scripts/world/entities/   Player, enemies (Chaser/Stalker/Kamikazer/Shotgunner), Turret, shared components
+scripts/world/entities/   Player, enemies (Chaser/Stalker/Kamikazer/Shotgunner/Emitter), Turret, shared components
 scripts/data/             Resource subclasses (stats)
 resources/                .tres stat variants
 scripts/ui/               HUD, shop panel, pause menu, turret panels
