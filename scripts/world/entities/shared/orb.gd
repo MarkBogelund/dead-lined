@@ -7,12 +7,21 @@ class_name Orb
 ## Seconds after launch before the orb stops sliding.
 @export var freeze_delay := 0.3
 
+@export_group("Magnet")
+## Distance at which the player starts pulling the orb in; 0 disables the magnet.
+@export var magnet_radius := 64.0
+@export var magnet_acceleration := 1200.0
+@export var magnet_max_speed := 350.0
+
 var can_collect := false
 
 @onready var detection_area: Area2D = $DetectionArea
 @onready var animation_handler: AnimationHandler = $AnimationHandler
 
 var _wave_manager: WaveManager
+var _magnet_target: Player
+var _settled := false
+var _magnetized := false
 
 func _ready() -> void:
 	add_to_group("orbs")
@@ -27,6 +36,25 @@ func _ready() -> void:
 	_wave_manager = get_tree().get_first_node_in_group("wave_manager") as WaveManager
 	if _wave_manager:
 		_connect_phase_signals(_wave_manager)
+	_magnet_target = get_tree().get_first_node_in_group("player") as Player
+
+func _physics_process(delta: float) -> void:
+	if not _settled or not can_collect or not _magnet_target:
+		return
+	if not _can_attract(_magnet_target):
+		_magnetized = false
+		return
+	var to_player := _magnet_target.global_position - global_position
+	if not _magnetized:
+		if to_player.length() > magnet_radius:
+			return
+		_magnetized = true
+		freeze = false
+	# body_entered never fires if the orb was already inside the player when it became collectable.
+	if detection_area.overlaps_body(_magnet_target):
+		_on_body_entered(_magnet_target)
+		return
+	linear_velocity = linear_velocity.move_toward(to_player.normalized() * magnet_max_speed, magnet_acceleration * delta)
 
 ## Called by OrbDropComponent right after the orb enters the tree.
 func launch(impulse: Vector2) -> void:
@@ -51,11 +79,16 @@ func _is_clearing_phase_active() -> bool:
 func _try_collect(_player: Player) -> bool:
 	return false
 
+## Override: true while the player could collect the orb, so the magnet pulls it in.
+func _can_attract(_player: Player) -> bool:
+	return false
+
 ## Override: presentation once collected. Defaults to the burst-and-vanish pickup.
 func _on_collected(_player: Player) -> void:
 	animation_handler.play_animation("pick_up")
 
 func _on_freeze_timer() -> void:
+	_settled = true
 	freeze = true
 
 func _on_lifetime_timer() -> void:
@@ -68,7 +101,12 @@ func _on_clearing_phase_started() -> void:
 
 func _despawn() -> void:
 	can_collect = false
+	_stop()
 	animation_handler.play_animation("despawn")
+
+func _stop() -> void:
+	_magnetized = false
+	set_deferred("freeze", true)
 
 func _on_animation_finished(anim_name: StringName) -> void:
 	if anim_name == &"despawn" or anim_name == &"pick_up":
@@ -79,4 +117,5 @@ func _on_body_entered(body: Node2D) -> void:
 	if not can_collect or not player or not _try_collect(player):
 		return
 	can_collect = false
+	_stop()
 	_on_collected(player)

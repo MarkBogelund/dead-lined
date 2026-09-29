@@ -322,6 +322,9 @@ func pickup(amount: int) -> void:
 func try_collect_crunch_powerup() -> bool:
 	return not _is_dead and crunch_time.add_charge()
 
+var can_collect_crunch_powerup: bool:
+	get: return not _is_dead and not crunch_time.is_crunch_time_active() and not crunch_time.has_charge()
+
 func _on_turret_placement_started() -> void:
 	shoot.set_enabled(false)
 	melee_weapon.set_enabled(false)

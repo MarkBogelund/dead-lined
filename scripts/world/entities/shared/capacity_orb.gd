@@ -10,3 +10,6 @@ func _try_collect(player: Player) -> bool:
 		return false
 	player.pickup(value)
 	return true
+
+func _can_attract(player: Player) -> bool:
+	return player.can_pickup

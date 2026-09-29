@@ -222,6 +222,7 @@ lock_rotation = true
 linear_damp = 3.0
 script = ExtResource("1_wad1u")
 freeze_delay = 0.5
+magnet_radius = 40.0
 
 [node name="Visuals" type="Node2D" parent="." unique_id=544235218]
 

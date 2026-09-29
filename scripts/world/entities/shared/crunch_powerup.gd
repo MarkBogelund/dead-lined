@@ -18,7 +18,6 @@ func _ready() -> void:
 		return
 	lifetime = settings.lifetime
 	super()
-	set_physics_process(false)
 
 ## Uncollected powerups are cleared the moment combat ends; a carried one goes with the charge.
 func _connect_phase_signals(wave_manager: WaveManager) -> void:
@@ -30,18 +29,22 @@ func _is_clearing_phase_active() -> bool:
 func _try_collect(player: Player) -> bool:
 	return player.try_collect_crunch_powerup()
 
+func _can_attract(player: Player) -> bool:
+	return player.can_collect_crunch_powerup
+
 func _on_collected(player: Player) -> void:
 	_carrier = player
 	_carrier.crunch_time.charge_spent.connect(_on_charge_spent, CONNECT_ONE_SHOT)
 	_carrier.crunch_time.charge_lost.connect(_on_charge_lost, CONNECT_ONE_SHOT)
-	freeze = true
 	$CollisionShape2D.set_deferred("disabled", true)
 	detection_area.set_deferred("monitoring", false)
 	hit_particles.restart()
 	_follow_position = global_position
-	set_physics_process(true)
 
 func _physics_process(delta: float) -> void:
+	if not _carrier:
+		super(delta)
+		return
 	if _carrier.velocity.length() > 1.0:
 		_trail_direction = - _carrier.velocity.normalized()
 	var target := _carrier.global_position + _trail_direction * settings.follow_distance
