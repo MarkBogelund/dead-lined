@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 MenuManager="*res://scripts/systems/menu_manager.gd"
-PostProcessingManager="*res://scripts/systems/post_processing_manager.gd"
+PostProcessingManager="*res://scenes/systems/post_processing_manager.tscn"
 
 [debug]
 

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dpi7tvafhwm14" path="res://scripts/world/entities/turret/turret_hud.gd" id="1_jrbl1"]
 [ext_resource type="Script" uid="uid://bhyhranqhcdwr" path="res://scripts/ui/turret_panel.gd" id="2_panel"]
 [ext_resource type="Script" uid="uid://bye2qxrtc558s" path="res://scripts/ui/hold_button.gd" id="4_hold"]
+[ext_resource type="Shader" path="res://shaders/hold_progress.gdshader" id="4_progress_shader"]
 [ext_resource type="Texture2D" uid="uid://2dx8sc4766ai" path="res://assets/sprites/ui/turret-upgrade-icons.png" id="5_pm3rh"]
 [ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="5_toggle"]
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="6_ign1u"]
@@ -58,6 +59,7 @@ custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("4_hold")
+progress_shader = ExtResource("4_progress_shader")
 progress_target = NodePath("VBoxContainer/TextureRect")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/UpgradeButton" unique_id=1068676192]
@@ -92,6 +94,7 @@ custom_minimum_size = Vector2(12, 12)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("4_hold")
+progress_shader = ExtResource("4_progress_shader")
 progress_target = NodePath("VBoxContainer/TextureRect")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/Actions/HBoxContainer/SellButton" unique_id=1159413202]

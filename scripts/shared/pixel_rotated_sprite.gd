@@ -4,7 +4,7 @@ class_name PixelRotatedSprite
 ## Sprite rotated by pixel_rotate.gdshader on a world-aligned grid, so the art keeps crisp, undeformed
 ## pixels at any angle. Starts hidden; use fade_to() to show it.
 
-const SHADER := preload("res://shaders/pixel_rotate.gdshader")
+@export var pixel_shader: Shader
 
 ## Drawn pointing right; its left edge sits start_offset pixels from this node's origin.
 @export var texture: Texture2D:
@@ -26,8 +26,11 @@ var _fade_tween: Tween
 var _target_alpha := 0.0
 
 func _ready() -> void:
+	if not pixel_shader:
+		push_error("%s requires pixel_shader" % name)
+		return
 	_material = ShaderMaterial.new()
-	_material.shader = SHADER
+	_material.shader = pixel_shader
 	material = _material
 	modulate.a = 0.0
 	hide()

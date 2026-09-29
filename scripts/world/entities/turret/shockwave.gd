@@ -1,8 +1,6 @@
 extends Node2D
 class_name ShockwaveComponent
 
-const PIXEL_ART_SHADER := preload("res://shaders/shockwave_pixel_art.gdshader")
-
 signal windup_started
 signal shockwave_started
 signal shockwave_finished
@@ -24,6 +22,7 @@ var knockback_force := 180.0
 var trigger_on_player := true
 
 @export_group("Presentation")
+@export var pixel_art_shader: Shader
 @export var windup_indicator_color := Color(0.55, 0.25, 0.9, 0.28)
 @export_range(1.0, 8.0, 1.0) var windup_indicator_width := 2.0
 @export_range(0.01, 2.0, 0.01) var windup_indicator_fade_duration := 0.45
@@ -92,10 +91,13 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 func _ready() -> void:
+	if not pixel_art_shader:
+		push_error("ShockwaveComponent requires pixel_art_shader")
+		return
 	# The scene's shape is shared by every Shockwaver; per-turret range upgrades need their own.
 	detection_shape.shape = detection_shape.shape.duplicate()
 	var shader_material := ShaderMaterial.new()
-	shader_material.shader = PIXEL_ART_SHADER
+	shader_material.shader = pixel_art_shader
 	shockwave_visual.material = shader_material
 	_configure_shockwave_visual()
 	shockwave_visual.hide()

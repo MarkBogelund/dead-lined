@@ -224,7 +224,7 @@ func _on_dash_charge_started() -> void:
 	PostProcessingManager.set_screen_effect(
 		PostProcessingManager.DASH_DESATURATION,
 		1.0,
-		PostProcessingManager.SETTINGS.dash_fade_in_duration,
+		PostProcessingManager.settings.dash_fade_in_duration,
 		true)
 	# Scaled so the white ramp completes in dash.get_charge_duration() real seconds despite slow-motion.
 	var length := animation.get_animation("dash_charge").length
@@ -236,7 +236,7 @@ func _on_dash_charge_ended() -> void:
 	PostProcessingManager.set_screen_effect(
 		PostProcessingManager.DASH_DESATURATION,
 		0.0,
-		PostProcessingManager.SETTINGS.dash_fade_out_duration,
+		PostProcessingManager.settings.dash_fade_out_duration,
 		true)
 	animation.stop_animation("dash_charge")
 

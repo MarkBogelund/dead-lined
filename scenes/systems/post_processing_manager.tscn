@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bydnl8mwjw5xj"]
+
+[ext_resource type="Script" uid="uid://dc4lydycqtvyl" path="res://scripts/systems/post_processing_manager.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://dcgvnf6dhuugb" path="res://shaders/post_processing.gdshader" id="2_shader"]
+[ext_resource type="Resource" uid="uid://bu5600ksqb16q" path="res://resources/post_processing_settings.tres" id="3_settings"]
+
+[node name="PostProcessingManager" type="CanvasLayer" unique_id=1160374541]
+script = ExtResource("1_script")
+compositor_shader = ExtResource("2_shader")
+settings = ExtResource("3_settings")

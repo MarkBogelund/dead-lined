@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation.gd" id="5_nav"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="6_targeting"]
 [ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/entities/enemy/orb_drop.gd" id="7_orbdrop"]
+[ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="7_crunch_settings"]
 [ext_resource type="PackedScene" uid="uid://ba7ofk84pf82" path="res://scenes/world/entities/capacity_orb.tscn" id="8_orb"]
 [ext_resource type="PackedScene" uid="uid://cu481a52yhdms" path="res://scenes/world/entities/crunch_powerup.tscn" id="9_powerup"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="10_anim"]
@@ -312,6 +313,7 @@ script = ExtResource("6_targeting")
 script = ExtResource("7_orbdrop")
 orb_scene = ExtResource("8_orb")
 crunch_powerup_scene = ExtResource("9_powerup")
+crunch_settings = ExtResource("7_crunch_settings")
 impulse_max = 250.0
 linear_damp = 5.0
 

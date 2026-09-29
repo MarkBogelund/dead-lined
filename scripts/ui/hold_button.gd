@@ -10,8 +10,7 @@ signal hold_started
 signal hold_ended
 signal hold_completed
 
-const PROGRESS_SHADER := preload("res://shaders/hold_progress.gdshader")
-
+@export var progress_shader: Shader
 @export_range(0.1, 5.0, 0.05) var hold_duration := 0.8
 @export var progress_target: Control
 @export var fill_color := Color(1.0, 1.0, 1.0, 0.35)
@@ -24,8 +23,11 @@ func _ready() -> void:
 	if not progress_target:
 		push_error("%s: HoldButton requires progress_target" % name)
 		return
+	if not progress_shader:
+		push_error("%s: HoldButton requires progress_shader" % name)
+		return
 	_material = ShaderMaterial.new()
-	_material.shader = PROGRESS_SHADER
+	_material.shader = progress_shader
 	_material.set_shader_parameter("fill_color", fill_color)
 	progress_target.material = _material
 	button_down.connect(_on_button_down)

@@ -3,7 +3,7 @@ class_name SeekerStats
 
 @export_group("Seeker")
 ## Rules for choosing between enemies and the player.
-@export var targeting: TargetingProfile = preload("res://resources/turrets/turret_targeting.tres")
+@export var targeting: TargetingProfile
 ## Aim rotation speed in radians/second.
 @export var aim_speed: float = 6.0
 ## Angle in radians the aim may be off and still fire.

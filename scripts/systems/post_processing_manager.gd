@@ -2,8 +2,8 @@ extends CanvasLayer
 
 ## Global source-keyed API for world-only full-screen effects. UI renders on a higher CanvasLayer.
 
-const COMPOSITOR_SHADER := preload("res://shaders/post_processing.gdshader")
-const SETTINGS := preload("res://resources/player/post_processing_settings.tres")
+@export var compositor_shader: Shader
+@export var settings: PostProcessingSettings
 
 const DASH_DESATURATION := &"dash_desaturation"
 const LOW_CAPACITY_DANGER := &"low_capacity_danger"
@@ -32,19 +32,22 @@ var _overlay_pulse_speed := 0.0
 var _overlay_pulse_min := 0.75
 
 func _ready() -> void:
+	if not compositor_shader or not settings:
+		push_error("PostProcessingManager requires compositor_shader and settings")
+		return
 	layer = 1
 	_surface = ColorRect.new()
 	_surface.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_surface)
 	_material = ShaderMaterial.new()
-	_material.shader = COMPOSITOR_SHADER
-	_material.set_shader_parameter("max_desaturation", SETTINGS.dash_max_desaturation)
-	_material.set_shader_parameter("darken", SETTINGS.dash_darken)
-	_material.set_shader_parameter("danger_glitch_intensity", SETTINGS.danger_glitch_intensity)
-	_material.set_shader_parameter("danger_chromatic_aberration", SETTINGS.danger_chromatic_aberration)
-	_material.set_shader_parameter("danger_red_tint", SETTINGS.danger_red_tint)
-	_material.set_shader_parameter("danger_screen_coverage", SETTINGS.danger_screen_coverage)
+	_material.shader = compositor_shader
+	_material.set_shader_parameter("max_desaturation", settings.dash_max_desaturation)
+	_material.set_shader_parameter("darken", settings.dash_darken)
+	_material.set_shader_parameter("danger_glitch_intensity", settings.danger_glitch_intensity)
+	_material.set_shader_parameter("danger_chromatic_aberration", settings.danger_chromatic_aberration)
+	_material.set_shader_parameter("danger_red_tint", settings.danger_red_tint)
+	_material.set_shader_parameter("danger_screen_coverage", settings.danger_screen_coverage)
 	_surface.material = _material
 	_surface.hide()
 
@@ -112,37 +115,37 @@ func reset() -> void:
 
 func update_capacity_effects(capacity: float, maximum: float) -> void:
 	var fraction := clampf(capacity / maximum if maximum > 0.0 else 0.0, 0.0, 1.0)
-	var danger_amount := SETTINGS.danger_strength_curve.sample(fraction) if SETTINGS.danger_strength_curve else 1.0 - fraction
-	if SETTINGS.danger_screen_coverage <= 0.0:
+	var danger_amount := settings.danger_strength_curve.sample(fraction) if settings.danger_strength_curve else 1.0 - fraction
+	if settings.danger_screen_coverage <= 0.0:
 		danger_amount = 0.0
 	set_screen_effect(LOW_CAPACITY_DANGER, danger_amount)
 
-	if fraction <= 0.5 or not SETTINGS.good_capacity_vignette_enabled:
+	if fraction <= 0.5 or not settings.good_capacity_vignette_enabled:
 		clear_color_overlay(CAPACITY_OVERLAY)
 	else:
 		var progress := (fraction - 0.5) / 0.5
-		var intensity := SETTINGS.good_curve.sample(progress) if SETTINGS.good_curve else progress
-		set_color_overlay(CAPACITY_OVERLAY, SETTINGS.good_color, intensity, SETTINGS.capacity_priority)
+		var intensity := settings.good_curve.sample(progress) if settings.good_curve else progress
+		set_color_overlay(CAPACITY_OVERLAY, settings.good_color, intensity, settings.capacity_priority)
 
 func set_crunch_time_overlay(active: bool) -> void:
 	if active:
-		set_effect_parameter(&"crunch_tint_color", SETTINGS.crunch_screen_tint_color)
-		set_effect_parameter(&"crunch_tint_intensity", SETTINGS.crunch_screen_tint_intensity)
-		set_effect_parameter(&"crunch_chromatic_aberration", SETTINGS.crunch_chromatic_aberration)
-		set_effect_parameter(&"crunch_bloom_intensity", SETTINGS.crunch_bloom_intensity)
-		set_effect_parameter(&"crunch_bloom_radius", SETTINGS.crunch_bloom_radius)
-		set_screen_effect(CRUNCH_TIME_SCREEN, 1.0, SETTINGS.crunch_time_fade_duration)
+		set_effect_parameter(&"crunch_tint_color", settings.crunch_screen_tint_color)
+		set_effect_parameter(&"crunch_tint_intensity", settings.crunch_screen_tint_intensity)
+		set_effect_parameter(&"crunch_chromatic_aberration", settings.crunch_chromatic_aberration)
+		set_effect_parameter(&"crunch_bloom_intensity", settings.crunch_bloom_intensity)
+		set_effect_parameter(&"crunch_bloom_radius", settings.crunch_bloom_radius)
+		set_screen_effect(CRUNCH_TIME_SCREEN, 1.0, settings.crunch_time_fade_duration)
 		set_color_overlay(
 			CRUNCH_TIME_OVERLAY,
-			SETTINGS.crunch_overlay_color,
-			SETTINGS.crunch_overlay_intensity,
-			SETTINGS.crunch_time_priority,
-			SETTINGS.crunch_time_fade_duration,
-			SETTINGS.crunch_overlay_pulse_speed,
-			SETTINGS.crunch_overlay_pulse_min)
+			settings.crunch_overlay_color,
+			settings.crunch_overlay_intensity,
+			settings.crunch_time_priority,
+			settings.crunch_time_fade_duration,
+			settings.crunch_overlay_pulse_speed,
+			settings.crunch_overlay_pulse_min)
 	else:
-		set_screen_effect(CRUNCH_TIME_SCREEN, 0.0, SETTINGS.crunch_time_fade_duration)
-		clear_color_overlay(CRUNCH_TIME_OVERLAY, SETTINGS.crunch_time_fade_duration)
+		set_screen_effect(CRUNCH_TIME_SCREEN, 0.0, settings.crunch_time_fade_duration)
+		clear_color_overlay(CRUNCH_TIME_OVERLAY, settings.crunch_time_fade_duration)
 
 func _set_screen_amount(value: float, effect: StringName) -> void:
 	_screen_amounts[effect] = value

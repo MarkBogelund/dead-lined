@@ -32,6 +32,7 @@ attack_cooldown = 0.5
 
 [resource]
 script = ExtResource("1_seekerstats")
+targeting = ExtResource("2_qtbxs")
 aim_speed = 5.0
 aim_tolerance = 0.15
 projectile_speed = 170.0

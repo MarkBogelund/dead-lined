@@ -19,7 +19,7 @@ class_name EnemyStats
 
 @export_group("Targeting")
 ## Rules for choosing between the player and turrets.
-@export var targeting: TargetingProfile = preload("res://resources/enemies/enemy_targeting.tres")
+@export var targeting: TargetingProfile
 
 @export_group("Drops")
 ## Capacity orbs dropped on death.

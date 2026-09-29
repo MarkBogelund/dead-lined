@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="4_sprite"]
 [ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="6_shockwave"]
+[ext_resource type="Shader" path="res://shaders/shockwave_pixel_art.gdshader" id="6_pixel_shader"]
 
 [sub_resource type="Animation" id="Shock"]
 resource_name = "shock"
@@ -167,6 +168,7 @@ libraries/shock = SubResource("ShockLibrary")
 [node name="ShockwaveComponent" type="Node2D" parent="." index="14" unique_id=1355162550]
 z_index = 8
 script = ExtResource("6_shockwave")
+pixel_art_shader = ExtResource("6_pixel_shader")
 windup_indicator_color = Color(0.5647059, 0.96862745, 1, 1)
 shockwave_fade_duration = 0.25
 shockwave_color = Color(0.26999998, 0.9513332, 1, 0.9019608)

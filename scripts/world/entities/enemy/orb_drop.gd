@@ -9,7 +9,7 @@ class_name OrbDropComponent
 @export var impulse_max := 300.0
 ## How quickly dropped orbs slow down (higher = stops faster).
 @export var linear_damp := 3.0
-@export var crunch_settings: CrunchPowerupSettings = preload("res://resources/player/crunch_powerup_settings.tres")
+@export var crunch_settings: CrunchPowerupSettings
 
 var orb_drop_amount := 1
 var crunch_powerup_chance := 0.0

@@ -14,4 +14,5 @@ max_health = 3
 damage = 1
 knockback = 100.0
 move_speed = 100.0
+targeting = ExtResource("2_targeting")
 orb_drop_amount = 6

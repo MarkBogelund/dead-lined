@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://liexy7765b7k" path="res://scenes/ui/hud.tscn" id="1_kvpfn"]
 [ext_resource type="PackedScene" uid="uid://c1up8f3hcb17m" path="res://scenes/world/entities/player.tscn" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://bmidkhfa5not2" path="res://scripts/systems/wave_manager.gd" id="2_kvuet"]
+[ext_resource type="Resource" uid="uid://bomuvf4stnxjw" path="res://resources/waves/wave_settings.tres" id="2_wave_settings"]
 [ext_resource type="PackedScene" uid="uid://s8g2np38nwj7" path="res://scenes/world/spawners/enemy_spawner.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bkervm4vmc0wh" path="res://scripts/systems/turret_placer.gd" id="4_ca42v"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/world/spawners/shop_station.tscn" id="6_p57ef"]
@@ -30,6 +31,7 @@
 [ext_resource type="Script" uid="uid://dwuvwmcnb0y5n" path="res://scripts/world/game_camera.gd" id="30_game_camera"]
 [ext_resource type="Script" uid="uid://bt03k72gubhe" path="res://scripts/world/navigation_map_layer.gd" id="32_navmap"]
 [ext_resource type="Script" uid="uid://bwun4kfd5apsa" path="res://scripts/ui/critical_turret_indicators.gd" id="33_offscreen"]
+[ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="33_pixel_shader"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -218,6 +220,7 @@ metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
+settings = ExtResource("2_wave_settings")
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
 [node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]
@@ -581,6 +584,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("33_offscreen")
 arrow_texture = ExtResource("29_js0lu")
+arrow_shader = ExtResource("33_pixel_shader")
 arrow_color = Color(0.95, 0.17416666, 0, 1)
 turret_offset = 100.0
 min_player_distance = 250.0
