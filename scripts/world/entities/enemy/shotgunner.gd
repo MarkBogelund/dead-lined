@@ -31,7 +31,7 @@ func _initialize() -> void:
 	_initialize_base(stats)
 	aiming.initialize(stats.aim_speed, stats.aim_tolerance)
 	targeting.configure(stats.targeting)
-	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed)
+	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed, stats.projectile_lifetime)
 	shoot.set_spread(stats.projectile_count, stats.spread_angle)
 	keep_distance.initialize(stats.preferred_distance, stats.preferred_distance_tolerance)
 	_speed = stats.move_speed

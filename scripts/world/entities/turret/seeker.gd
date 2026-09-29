@@ -28,7 +28,7 @@ func _initialize() -> void:
 	initialize_base(stats)
 	targeting.initialize(stats.attack_range)
 	targeting.configure(stats.targeting)
-	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed)
+	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed, stats.projectile_lifetime)
 	aiming.initialize(stats.aim_speed, stats.aim_tolerance)
 
 func _on_combat_started() -> void:

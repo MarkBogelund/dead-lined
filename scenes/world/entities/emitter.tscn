@@ -1,0 +1,327 @@
+[gd_scene format=3 uid="uid://ds3fs4me2eouv"]
+
+[ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/entities/enemy_base.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://cx216m8uuykwp" path="res://scripts/world/entities/enemy/emitter.gd" id="2_script"]
+[ext_resource type="Resource" uid="uid://cbs13wtkxreni" path="res://resources/enemies/emitter/emitter_stats.tres" id="3_stats"]
+[ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_3daig"]
+[ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_shoot"]
+[ext_resource type="Texture2D" uid="uid://m6gx8nblgfu6" path="res://assets/sprites/enemies/emitter.png" id="5_khwvf"]
+[ext_resource type="PackedScene" path="res://scenes/world/entities/emitter_projectile.tscn" id="5_projectile"]
+[ext_resource type="Texture2D" uid="uid://c15fsu7l4duyw" path="res://assets/sprites/enemies/emittershadow.png" id="6_khwvf"]
+[ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/entities/shared/safe_spot.gd" id="6_safe_spot"]
+[ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/vfx/vfx-shapes.png" id="10_kwpua"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 9.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hitbox"]
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Body:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Body:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Idle"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_emit"]
+resource_name = "emit"
+length = 0.3
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Body:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.08, 1.08), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Body:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/Body:animation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Idle"]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("WindupParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_idle"]
+resource_name = "idle"
+length = 0.1
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Body:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Idle"]
+}
+
+[sub_resource type="Animation" id="Animation_run"]
+resource_name = "run"
+length = 0.4
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Body:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Move"]
+}
+
+[sub_resource type="AnimationLibrary" id="EmitterLibrary"]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"emit": SubResource("Animation_emit"),
+&"idle": SubResource("Animation_idle"),
+&"run": SubResource("Animation_run")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_khwvf"]
+resource_local_to_scene = true
+shader = ExtResource("4_3daig")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khwvf"]
+atlas = ExtResource("5_khwvf")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwpua"]
+atlas = ExtResource("5_khwvf")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kfjm6"]
+atlas = ExtResource("5_khwvf")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q83n0"]
+atlas = ExtResource("5_khwvf")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_guwpe"]
+atlas = ExtResource("5_khwvf")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ey30h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khwvf")
+}],
+"loop": 1,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kwpua")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kfjm6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q83n0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_guwpe")
+}],
+"loop": 1,
+"name": &"Move",
+"speed": 10.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxxjd"]
+atlas = ExtResource("10_kwpua")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Curve" id="Curve_p7hwe"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_b36mc"]
+curve = SubResource("Curve_p7hwe")
+
+[sub_resource type="Gradient" id="Gradient_6smu3"]
+offsets = PackedFloat32Array(0.31566265, 0.75301206)
+colors = PackedColorArray(1, 1, 1, 1, 0.2414313, 0.44416484, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_t5mt7"]
+gradient = SubResource("Gradient_6smu3")
+
+[sub_resource type="Curve" id="Curve_ewei8"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_j4bvi"]
+curve = SubResource("Curve_ewei8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_e7p31"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 10, 10)
+emission_shape = 2
+emission_sphere_radius = 3.47
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_b36mc")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -300.0
+radial_accel_max = -200.0
+scale_min = 0.19999999
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_j4bvi")
+color_ramp = SubResource("GradientTexture1D_t5mt7")
+
+[node name="Emitter" unique_id=1300000001 instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+stats = ExtResource("3_stats")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=1100000002]
+shape = SubResource("CircleShape2D_body")
+
+[node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1100000003) index="0" unique_id=1100000004]
+shape = SubResource("CircleShape2D_hitbox")
+
+[node name="AnimationHandler" parent="." index="7" unique_id=1100000010]
+libraries/emitter = SubResource("EmitterLibrary")
+
+[node name="Visuals" parent="." index="8" unique_id=1100000011]
+material = SubResource("ShaderMaterial_khwvf")
+
+[node name="Body" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1300000002]
+z_index = 5
+use_parent_material = true
+sprite_frames = SubResource("SpriteFrames_ey30h")
+animation = &"Idle"
+
+[node name="EmitPivot" type="Node2D" parent="Visuals" index="1" unique_id=1300000003]
+
+[node name="LeftMuzzle" type="Marker2D" parent="Visuals/EmitPivot" index="0" unique_id=1300000004]
+position = Vector2(-10, 0)
+
+[node name="RightMuzzle" type="Marker2D" parent="Visuals/EmitPivot" index="1" unique_id=1300000005]
+position = Vector2(10, 0)
+
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="2" unique_id=296194169]
+modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+z_index = 1
+texture = ExtResource("6_khwvf")
+
+[node name="ShootComponent" type="Node" parent="." index="11" unique_id=1300000006]
+script = ExtResource("4_shoot")
+projectile_scene = ExtResource("5_projectile")
+
+[node name="SafeSpotComponent" type="Node" parent="." index="12" unique_id=1300000007]
+script = ExtResource("6_safe_spot")
+
+[node name="WindupParticles" type="GPUParticles2D" parent="." index="13" unique_id=1915869553]
+z_index = 14
+emitting = false
+amount = 30
+texture = SubResource("AtlasTexture_xxxjd")
+lifetime = 0.5
+speed_scale = 2.0
+process_material = SubResource("ParticleProcessMaterial_e7p31")

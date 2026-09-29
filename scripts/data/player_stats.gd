@@ -50,6 +50,8 @@ class_name PlayerStats
 @export var projectile_knockback: int = 200
 ## Projectile travel speed in pixels/second
 @export var projectile_speed: float = 300.0
+## Seconds before a projectile despawns on its own. 0 or less = never.
+@export var projectile_lifetime: float = 2.0
 
 @export_group("Capacity")
 ## Starting capacity value at spawn

@@ -80,7 +80,7 @@ func _initialize() -> void:
 	dash.initialize(stats.dash_min_distance, stats.dash_max_distance, stats.dash_speed, stats.dash_charge_delay, stats.dash_max_charge_time, stats.dash_cooldown)
 	dash_charge_time_scale = stats.dash_charge_time_scale
 	melee_weapon.initialize(stats.slash_damage, stats.slash_knockback, stats.slash_self_knockback, stats.slash_radius, stats.slash_arc_angle, stats.slash_duration, stats.slash_cooldown)
-	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed)
+	shoot.initialize(stats.shoot_cooldown, stats.projectile_damage, stats.projectile_knockback, stats.projectile_speed, stats.projectile_lifetime)
 	capacity.initialize(stats.initial_capacity, stats.max_capacity)
 	crunch_time.initialize(
 		stats.crunch_duration,
