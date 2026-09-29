@@ -11,7 +11,8 @@ class_name TurretCard
 
 const COLOR_UNAVAILABLE := Color(0.5, 0.5, 0.5, 0.8)
 
-@onready var visual: Control = $Visual
+@onready var visual: Control = %Edge
+@onready var outline: CanvasItem = %Outline
 @onready var icon: TextureRect = %Icon
 @onready var animation_handler: AnimationHandler = $AnimationHandler
 
@@ -28,6 +29,9 @@ func _ready() -> void:
 func populate(entry: TurretEntry, available: bool, direction: Vector2) -> void:
 	icon.texture = entry.icon
 	icon.self_modulate = Color.WHITE if available else COLOR_UNAVAILABLE
+	var outline_material := outline.material as ShaderMaterial
+	outline_material.set_shader_parameter("start_color", entry.outline_start_color)
+	outline_material.set_shader_parameter("end_color", entry.outline_end_color)
 	_direction = direction
 	# Gives the first highlight a previous clip to blend from.
 	animation_handler.play_animation("settle")

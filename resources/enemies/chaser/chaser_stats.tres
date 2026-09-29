@@ -9,4 +9,4 @@ max_health = 3
 damage = 5
 move_speed = 50.0
 targeting = ExtResource("2_0genj")
-crunch_powerup_drop_chance = 1.0
+crunch_powerup_drop_chance = 0.01
