@@ -25,7 +25,7 @@ func point_in(direction: Vector2) -> void:
 	if direction.is_zero_approx():
 		return
 	rotation = direction.angle()
-	sprite.rotation = -global_rotation
+	sprite.rotation = - global_rotation
 
 func _sync_sprite() -> void:
 	if not is_node_ready():
