@@ -7,3 +7,4 @@ process_mode = 3
 script = ExtResource("1_input")
 aim_activation_deadzone = 0.6
 aim_release_deadzone = 0.5
+pointing_turn_speed_degrees = 1440.0

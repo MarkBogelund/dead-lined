@@ -7,9 +7,11 @@ enum Device {KEYBOARD_MOUSE, CONTROLLER}
 @export_group("Right Stick Aim")
 @export_range(0.0, 0.95, 0.01) var aim_activation_deadzone := 0.3
 @export_range(0.0, 0.95, 0.01) var aim_release_deadzone := 0.2
+@export_range(0.0, 1440.0, 10.0) var pointing_turn_speed_degrees := 720.0
 
 var active_device := Device.KEYBOARD_MOUSE
 var last_aim_direction := Vector2.RIGHT
+var smoothed_pointing_direction := Vector2.RIGHT
 var _aim_active := false
 
 func _ready() -> void:
@@ -48,11 +50,23 @@ func get_pointing_direction(mouse_delta: Vector2) -> Vector2:
 		return last_aim_direction
 	return mouse_delta.normalized() if not mouse_delta.is_zero_approx() else last_aim_direction
 
-func get_pointing_vector(mouse_delta: Vector2, controller_length: float) -> Vector2:
+func update_smoothed_pointing_direction(mouse_delta: Vector2, delta: float) -> Vector2:
 	get_aim_vector()
+	var target := get_pointing_direction(mouse_delta)
+	if pointing_turn_speed_degrees <= 0.0:
+		smoothed_pointing_direction = target
+	else:
+		var angle := rotate_toward(
+			smoothed_pointing_direction.angle(),
+			target.angle(),
+			deg_to_rad(pointing_turn_speed_degrees) * delta)
+		smoothed_pointing_direction = Vector2.from_angle(angle)
+	return smoothed_pointing_direction
+
+func get_smoothed_pointing_vector(mouse_delta: Vector2, controller_length: float) -> Vector2:
 	if active_device == Device.CONTROLLER:
-		return last_aim_direction * controller_length
-	return mouse_delta
+		return smoothed_pointing_direction * controller_length
+	return smoothed_pointing_direction * mouse_delta.length()
 
 func get_menu_pointing_vector(mouse_delta: Vector2) -> Vector2:
 	return get_menu_navigation_vector() if active_device == Device.CONTROLLER else mouse_delta

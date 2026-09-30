@@ -102,10 +102,10 @@ func _setup_animations() -> void:
 	animation.configure_animation("move", 1, false)
 	animation.configure_animation("slash", 2, true)
 	animation.configure_animation("shoot", 2, true)
-	animation.configure_animation("dash_charge", 2, true)
-	animation.configure_animation("dash", 2, true)
-	animation.configure_animation("take_damage", 3, true)
-	animation.configure_animation("die", 4, true)
+	animation.configure_animation("dash_charge", 3, true)
+	animation.configure_animation("dash", 3, true)
+	animation.configure_animation("take_damage", 4, true)
+	animation.configure_animation("die", 5, true)
 
 func _connect_signals() -> void:
 	# Components
@@ -131,11 +131,11 @@ func _physics_process(delta: float) -> void:
 	_process_movement(delta)
 	_process_locomotion()
 	if not _is_dead:
-		InputManager.get_aim_vector()
 		var mouse_delta := get_global_mouse_position() - global_position
+		var indicator_direction := InputManager.update_smoothed_pointing_direction(mouse_delta, delta)
 		var aim_position := global_position + InputManager.get_pointing_direction(mouse_delta) * 100.0
 		aiming.aim_at(aim_position, 0.0)
-		aim_indicator.point_in(aiming.get_aim_direction())
+		aim_indicator.point_in(indicator_direction)
 		_process_held_primary_attack(aim_position)
 	if dash.is_charging():
 		dash_direction_indicator.point_in(_get_dash_direction())

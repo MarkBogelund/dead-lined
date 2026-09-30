@@ -557,14 +557,11 @@ libraries/ = SubResource("AnimationLibrary_panel")
 script = ExtResource("9_anim")
 
 [node name="Buttons" type="HBoxContainer" parent="CanvasLayer" unique_id=590447778]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -339.0
+anchors_preset = 0
+offset_left = -19.0
 offset_top = 14.0
-offset_right = -301.0
+offset_right = 19.0
 offset_bottom = 43.0
-grow_horizontal = 2
 pivot_offset_ratio = Vector2(0.5, 0)
 size_flags_horizontal = 4
 size_flags_vertical = 4
