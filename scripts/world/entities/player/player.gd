@@ -34,10 +34,6 @@ signal died
 @export_range(0.0, 1.0, 0.01) var dash_charge_zoom_in_duration := 0.2
 @export_range(0.0, 1.0, 0.01) var dash_charge_zoom_out_duration := 0.15
 
-@export_group("Controller Aim")
-@export_range(0.0, 0.95, 0.01) var aim_activation_deadzone := 0.3
-@export_range(0.0, 0.95, 0.01) var aim_release_deadzone := 0.2
-
 var damage_knockback_force := 200.0
 var damage_freeze_duration := 0.1
 var damage_screen_shake_intensity := 0.2
@@ -61,9 +57,6 @@ const TURRET_BODY_LAYER := 6 ## Matches project.godot 2d_physics layer_6 ("Turre
 
 var _conveyor_velocity := Vector2.ZERO
 var _shoot_held := false
-var _using_controller_aim := false
-var _controller_aim_active := false
-var _last_controller_aim_direction := Vector2.RIGHT
 
 func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
 	_conveyor_velocity = conveyor_velocity
@@ -138,29 +131,25 @@ func _physics_process(delta: float) -> void:
 	_process_movement(delta)
 	_process_locomotion()
 	if not _is_dead:
-		var controller_aim := _get_controller_aim_direction()
-		if not controller_aim.is_zero_approx():
-			_using_controller_aim = true
-			_last_controller_aim_direction = controller_aim.normalized()
-		var aim_position := global_position + _last_controller_aim_direction * 100.0 \
-			if _using_controller_aim else get_global_mouse_position()
+		InputManager.get_aim_vector()
+		var mouse_delta := get_global_mouse_position() - global_position
+		var aim_position := global_position + InputManager.get_pointing_direction(mouse_delta) * 100.0
 		aiming.aim_at(aim_position, 0.0)
 		aim_indicator.point_in(aiming.get_aim_direction())
-		_process_held_primary_attack(controller_aim, aim_position)
+		_process_held_primary_attack(aim_position)
 	if dash.is_charging():
 		dash_direction_indicator.point_in(_get_dash_direction())
 	else:
 		dash_direction_indicator.fade_out()
 
 ## Holding the primary action retries the active weapon; each component owns its cooldown.
-func _process_held_primary_attack(controller_aim: Vector2, aim_position: Vector2) -> void:
+func _process_held_primary_attack(aim_position: Vector2) -> void:
 	if get_tree().get_first_node_in_group(&"open_input_blocking_menus"):
 		_shoot_held = false
 		return
-	var controller_attack := not controller_aim.is_zero_approx()
-	if controller_attack:
+	if InputManager.is_continuous_attack_active():
 		_shoot_held = true
-	elif not Input.is_action_pressed("shoot"):
+	elif not Input.is_action_pressed("attack"):
 		_shoot_held = false
 	if not _shoot_held or dash.is_holding():
 		return
@@ -172,16 +161,6 @@ func _process_held_primary_attack(controller_aim: Vector2, aim_position: Vector2
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 		animation.play_animation("shoot")
 
-func _get_controller_aim_direction() -> Vector2:
-	var raw := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down", 0.0)
-	var deadzone := aim_release_deadzone if _controller_aim_active else aim_activation_deadzone
-	if raw.length() <= deadzone:
-		_controller_aim_active = false
-		return Vector2.ZERO
-	_controller_aim_active = true
-	var strength := inverse_lerp(deadzone, 1.0, minf(raw.length(), 1.0))
-	return raw.normalized() * strength
-
 func _get_move_state() -> MoveState:
 	if dash.is_dashing(): return MoveState.DASHING
 	if knockback.is_active(): return MoveState.KNOCKED
@@ -189,7 +168,7 @@ func _get_move_state() -> MoveState:
 	return MoveState.NORMAL
 
 func _process_movement(delta: float) -> void:
-	var input_dir := Input.get_vector("left", "right", "up", "down")
+	var input_dir := InputManager.get_move_vector()
 	knockback.process(delta)
 	match _get_move_state():
 		MoveState.DASHING:
@@ -220,10 +199,8 @@ func _process_locomotion() -> void:
 		_set_facing(velocity.x)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion or event is InputEventMouseButton:
-		_using_controller_aim = false
 	# Armed here, not by polling, so clicks consumed by the UI or turret placer never fire.
-	if event.is_action_pressed("shoot"):
+	if event.is_action_pressed("attack"):
 		_shoot_held = true
 
 	if event.is_action_pressed("crunch_time") and not dash.is_holding():

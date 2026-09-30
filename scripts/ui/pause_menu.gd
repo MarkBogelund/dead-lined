@@ -40,3 +40,8 @@ func _do_close() -> void:
 	animation_player.play(&"disappear")
 	await animation_player.animation_finished
 	visible = false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("interact"):
+		get_viewport().set_input_as_handled()
+		toggle_menu.close()

@@ -33,8 +33,14 @@ func show_stats_with_fade(breakdown: Dictionary) -> void:
 	
 	# Fade in with animation (no need to set modulate, animation handles it)
 	show()
+	restart_button.grab_focus()
 	animation_player.play("fade_in")
 	MenuManager.request_open(&"game_over")
+
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("interact"):
+		get_viewport().set_input_as_handled()
+		_on_restart_pressed()
 
 # Keep original for backward compatibility
 func show_stats(stats: Dictionary) -> void:

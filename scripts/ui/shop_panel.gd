@@ -25,7 +25,6 @@ var _can_afford_fn: Callable
 var _limit_reached := false
 var _highlighted := -1
 var _is_open := false
-var _using_controller := false
 
 func _ready() -> void:
 	visible = false
@@ -61,11 +60,7 @@ func _process(_delta: float) -> void:
 		_set_highlighted(sector)
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		_using_controller = false
-	elif event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		_using_controller = true
-	if not _is_open or not event is InputEventJoypadButton:
+	if not _is_open or InputManager.is_pointer_event(event):
 		return
 	if event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
@@ -104,9 +99,9 @@ func _build_cards() -> void:
 func _sector_under_input() -> int:
 	if _cards.is_empty():
 		return -1
-	var direction := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down") \
-		if _using_controller else get_global_mouse_position() - content.global_position
-	var minimum_length := 0.0 if _using_controller else dead_zone_radius
+	var mouse_delta := get_global_mouse_position() - content.global_position
+	var direction := InputManager.get_menu_pointing_vector(mouse_delta)
+	var minimum_length := 0.0 if InputManager.is_controller_active() else dead_zone_radius
 	if direction.length() <= minimum_length:
 		return -1
 	var step := TAU / _cards.size()

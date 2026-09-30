@@ -32,7 +32,6 @@ var _turret: TurretBase
 var _hover := Hover.NONE
 var _authored_x: float
 var _authored_pivot_x: float
-var _using_controller := false
 
 func _ready() -> void:
 	_authored_x = position.x
@@ -100,11 +99,16 @@ func _gui_input(event: InputEvent) -> void:
 	if mouse_button.button_index == MOUSE_BUTTON_RIGHT:
 		close_requested.emit()
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		_using_controller = false
-	elif event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		_using_controller = true
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event.is_action_pressed("navigate_menu_left") or event.is_action_pressed("navigate_menu_up"):
+		if upgrade_stack.visible:
+			upgrade_button.grab_focus()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("navigate_menu_right") or event.is_action_pressed("navigate_menu_down"):
+		sell_button.grab_focus()
+		get_viewport().set_input_as_handled()
 
 func _set_hover(value: Hover) -> void:
 	if _hover == value:
@@ -123,7 +127,7 @@ func _set_hover(value: Hover) -> void:
 				animation_handler.play_animation("sell_idle")
 
 func _update_pointer_hover() -> void:
-	if _using_controller:
+	if InputManager.is_controller_active():
 		if upgrade_stack.visible and upgrade_button.has_focus():
 			_set_hover(Hover.UPGRADE)
 		elif sell_button.has_focus():

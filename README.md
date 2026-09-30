@@ -40,7 +40,7 @@ The VS Code Godot Tools extension is already configured in [.vscode/settings.jso
 
 ## Controls
 
-Input is defined as semantic actions in [project.godot](project.godot). `Input.get_vector()` supplies radial deadzones for both sticks. Player right-stick aim adds scene-tunable hysteresis (`aim_activation_deadzone` defaults to 0.30, `aim_release_deadzone` to 0.20), so release noise cannot overwrite the last intentional aim direction. PlayStation L3/R3 conventionally means clicking a stick; the controls below use the left and right stick directions, not those clicks.
+Input is defined as semantic actions in [project.godot](project.godot). Gameplay consumes `attack`, `interact`, and the other named actions rather than physical keys or buttons. Menu direction is four rebindable actions (`navigate_menu_up/down/left/right`) because navigation is a vector, not a scalar action. The same applies to right-stick attack: `InputManager` combines the scalar `attack` action (mouse or controller buttons) with active `aim_up/down/left/right` intent; do not bind opposite directions of one analog axis directly to `attack`, because their action states conflict. `InputManager` supplies movement, aim, menu-navigation, and pointer intent; tracks the active input device; and applies radial right-stick hysteresis (0.30 activation, 0.20 release), so release noise cannot overwrite the last intentional aim direction. PlayStation L3/R3 conventionally means clicking a stick; the controls below use the left and right stick directions, not those clicks.
 
 | Action | Keyboard and mouse | Controller |
 | --- | --- | --- |
@@ -54,7 +54,11 @@ Input is defined as semantic actions in [project.godot](project.godot). `Input.g
 | Repair turret | Right mouse button | Not assigned yet |
 | Pause | P | Not assigned yet |
 
-The radial shop follows the active mouse or right-stick direction; Cross confirms its highlighted turret and Circle closes it. Turret upgrade/sell buttons use Godot UI focus navigation and retain their hold-to-confirm behavior. Open world menus join `open_input_blocking_menus`, preventing right-stick aiming from firing through them. Mouse motion switches menu highlighting back to mouse input, while a joypad event switches it to controller input.
+The radial shop follows the active mouse or `navigate_menu_*` direction; `interact` confirms its highlighted turret and `cancel` closes it. Turret upgrade/sell buttons use the same navigation actions and retain their hold-to-confirm behavior through `interact`. Pause Resume and Game Over Restart also use `interact`. Open world menus join `open_input_blocking_menus`, preventing attacks from firing through them. `InputManager.device_changed` is the shared hook for future input-glyph switching.
+
+To edit bindings in Godot, open **Project > Project Settings > Input Map**, search for an action such as `attack`, and expand it. Each action lists keyboard, mouse, and controller events together; use the plus button to add another event and the trash button beside an event to remove it. The project actions are `up/down/left/right`, `aim_up/down/left/right`, `attack`, `interact`, `open`, `repair`, `cancel`, `dash`, `crunch_time`, `pause`, `skip_build_phase`, and `navigate_menu_up/down/left/right`. If Project Settings was already open while `project.godot` changed externally, close and reopen the dialog; restart the editor if it still shows stale actions.
+
+Analog behavior that is not a physical binding lives in [input_manager.tscn](scenes/systems/input_manager.tscn). Open that scene from the FileSystem dock, select its `InputManager` root, and tune **Right Stick Aim > Aim Activation Deadzone** and **Aim Release Deadzone** in the Inspector. Release must be less than or equal to activation. The Autoload tab only registers the scene; edit the scene itself rather than trying to inspect the running singleton there.
 
 Controller rollout plan:
 
@@ -71,12 +75,12 @@ Four layers, signals flow **outward/upward**, direct calls flow **downward** to 
 
 ```text
 UI          → reacts to signals, never mutates gameplay state directly
-Systems     → WaveManager, ShopManager, ScoreManager, GameOverManager, TimeScaleManager (scene-local); MenuManager and PostProcessingManager (autoloads)
+Systems     → WaveManager, ShopManager, ScoreManager, GameOverManager, TimeScaleManager (scene-local); MenuManager, PostProcessingManager, and InputManager (autoloads)
 World       → Player / enemies / turrets — orchestrator scripts composing components
 Data        → Resource (.tres) subclasses — stats, never hold logic
 ```
 
-Two infrastructure autoloads exist: `MenuManager` ([scripts/systems/menu_manager.gd](scripts/systems/menu_manager.gd)) and `PostProcessingManager` ([scenes/systems/post_processing_manager.tscn](scenes/systems/post_processing_manager.tscn), script [scripts/systems/post_processing_manager.gd](scripts/systems/post_processing_manager.gd)). The post-processing scene assigns its shader and settings resource in the Inspector. Gameplay systems remain scene-local under [scenes/game.tscn](scenes/game.tscn), because this is a single-session game — a global signal bus for everything would add indirection without benefit here.
+Three infrastructure autoloads exist: `MenuManager` ([scripts/systems/menu_manager.gd](scripts/systems/menu_manager.gd)), `PostProcessingManager` ([scenes/systems/post_processing_manager.tscn](scenes/systems/post_processing_manager.tscn), script [scripts/systems/post_processing_manager.gd](scripts/systems/post_processing_manager.gd)), and `InputManager` ([scenes/systems/input_manager.tscn](scenes/systems/input_manager.tscn), script [scripts/systems/input_manager.gd](scripts/systems/input_manager.gd)). `InputManager` owns physical-device interpretation, active-device state, radial stick processing, and normalized movement/aim/menu intent; feature owners still decide whether an action is allowed and consume events at their existing gameplay or UI propagation layer. The post-processing and input-manager scenes expose their tuning in the Inspector. Gameplay systems remain scene-local under [scenes/game.tscn](scenes/game.tscn), because this is a single-session game — a global signal bus for everything would add indirection without benefit here.
 
 `TimeScaleManager` ([scripts/systems/time_scale_manager.gd](scripts/systems/time_scale_manager.gd)) is the only writer of `Engine.time_scale`. Callers `request(source, scale)` / `release(source)` by `StringName`; the slowest active request wins, and `freeze(duration)` is a timed request at 0. This lets hitstop and dash slow-motion overlap without one resetting the other. It resets time to 1.0 when it leaves the tree.
 
