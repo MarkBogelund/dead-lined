@@ -67,6 +67,7 @@ func _ready() -> void:
 	animation_handler.animation_finished.connect(_on_animation_finished)
 
 func _process(_delta: float) -> void:
+	_update_pointer_hover()
 	_refresh()
 
 func open(turret: TurretBase) -> void:
@@ -108,6 +109,7 @@ func _gui_input(event: InputEvent) -> void:
 func _set_hover(value: Hover) -> void:
 	if _hover == value:
 		return
+	var previous_hover := _hover
 	_hover = value
 	match value:
 		Hover.UPGRADE:
@@ -115,13 +117,30 @@ func _set_hover(value: Hover) -> void:
 		Hover.SELL:
 			animation_handler.play_animation("sell_hover")
 		Hover.NONE:
-			return
+			if previous_hover == Hover.UPGRADE:
+				animation_handler.play_animation("upgrade_idle")
+			elif previous_hover == Hover.SELL:
+				animation_handler.play_animation("sell_idle")
+
+func _update_pointer_hover() -> void:
+	if upgrade_button.has_focus():
+		_set_hover(Hover.UPGRADE)
+		return
+	if sell_button.has_focus():
+		_set_hover(Hover.SELL)
+		return
+	var mouse_position := get_global_mouse_position()
+	if upgrade_button.get_global_rect().has_point(mouse_position):
+		_set_hover(Hover.UPGRADE)
+	elif sell_button.get_global_rect().has_point(mouse_position):
+		_set_hover(Hover.SELL)
+	else:
+		_set_hover(Hover.NONE)
 
 ## Ignores exits from a button that is no longer the hovered one.
 func _clear_hover(value: Hover) -> void:
 	if _hover == value:
-		_hover = Hover.NONE
-		animation_handler.play_animation("upgrade_idle" if value == Hover.UPGRADE else "sell_idle")
+		_set_hover(Hover.NONE)
 
 func _refresh() -> void:
 	var maxed := _turret.is_max_level()
