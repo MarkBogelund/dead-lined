@@ -4,7 +4,7 @@
 
 [resource]
 shader = ExtResource("1_sieu7")
-shader_parameter/start_color = Color(0.28268802, 0.6998668, 0.6713415, 1)
+shader_parameter/start_color = Color(0.28235295, 0.69803923, 0.67058825, 1)
 shader_parameter/end_color = Color(0.60784316, 0.84705883, 0.7176471, 1)
 shader_parameter/pulse_speed = 6.0
 shader_parameter/pulse_width = 264.0

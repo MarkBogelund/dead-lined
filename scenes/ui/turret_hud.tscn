@@ -376,13 +376,23 @@ region = Rect2(16, 0, 16, 16)
 atlas = ExtResource("10_orb_icon")
 region = Rect2(4, 4, 8, 8)
 
-[sub_resource type="LabelSettings" id="LabelSettings_price"]
+[sub_resource type="LabelSettings" id="LabelSettings_b5pcb"]
 font = ExtResource("6_font")
-font_size = 6
+font_size = 8
+font_color = Color(1, 0.34117648, 0.33333334, 1)
+outline_size = 4
+outline_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sell"]
 atlas = ExtResource("5_button_icons")
 region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="LabelSettings" id="LabelSettings_price"]
+font = ExtResource("6_font")
+font_size = 8
+font_color = Color(0, 0.8117647, 0.61960787, 1)
+outline_size = 4
+outline_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
 [node name="TurretHUD" type="Node" unique_id=1583887513]
 script = ExtResource("1_jrbl1")
@@ -421,7 +431,7 @@ patch_margin_bottom = 4
 script = ExtResource("2_panel")
 
 [node name="PanelBG" type="NinePatchRect" parent="CanvasLayer/TurretPanel" unique_id=988946980]
-self_modulate = Color(0.16, 0.16, 0.16, 0.62352943)
+self_modulate = Color(0.16, 0.16, 0.16, 0.78431374)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -456,6 +466,7 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="HealthIcon" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelBG/Margin/StatsVBox/HealthRow" unique_id=611556688]
+modulate = Color(0, 0.8117647, 0.61960787, 1)
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -478,6 +489,7 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="DamageIcon" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelBG/Margin/StatsVBox/DamageRow" unique_id=1883329144]
+modulate = Color(1, 0.34117648, 0.33333334, 1)
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -500,6 +512,7 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="SpeedIcon" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelBG/Margin/StatsVBox/SpeedRow" unique_id=2000922990]
+modulate = Color(0.23980051, 0.683872, 0.79601616, 1)
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -522,6 +535,7 @@ theme_override_constants/separation = 2
 alignment = 1
 
 [node name="RangeIcon" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelBG/Margin/StatsVBox/RangeRow" unique_id=2123749998]
+modulate = Color(0.94, 0.56713337, 0.282, 1)
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -543,14 +557,18 @@ libraries/ = SubResource("AnimationLibrary_panel")
 script = ExtResource("9_anim")
 
 [node name="Buttons" type="HBoxContainer" parent="CanvasLayer" unique_id=590447778]
-offset_left = -17.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -339.0
 offset_top = 14.0
-offset_right = 17.0
-offset_bottom = 41.0
+offset_right = -301.0
+offset_bottom = 43.0
+grow_horizontal = 2
 pivot_offset_ratio = Vector2(0.5, 0)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 6
 alignment = 1
 
 [node name="UpgradeStack" type="VBoxContainer" parent="CanvasLayer/Buttons" unique_id=481919577]
@@ -567,6 +585,7 @@ progress_shader = ExtResource("4_progress_shader")
 progress_target = NodePath("Icon")
 
 [node name="Icon" type="TextureRect" parent="CanvasLayer/Buttons/UpgradeStack/UpgradeButton" unique_id=2084809027]
+modulate = Color(0, 0.8117647, 0.61960787, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -596,7 +615,7 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"
-label_settings = SubResource("LabelSettings_price")
+label_settings = SubResource("LabelSettings_b5pcb")
 
 [node name="SellStack" type="VBoxContainer" parent="CanvasLayer/Buttons" unique_id=1913980828]
 layout_mode = 2
@@ -612,6 +631,7 @@ progress_shader = ExtResource("4_progress_shader")
 progress_target = NodePath("Icon")
 
 [node name="Icon" type="TextureRect" parent="CanvasLayer/Buttons/SellStack/SellButton" unique_id=147624883]
+modulate = Color(1, 0.34117648, 0.33333334, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

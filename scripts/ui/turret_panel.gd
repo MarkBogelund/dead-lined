@@ -10,9 +10,6 @@ signal upgrade_hold_ended
 signal sell_requested
 signal close_requested
 
-## Price row color while hovering Upgrade (orbs spent) and Sell (orbs gained).
-@export var cost_color := Color(1.0, 0.35, 0.35)
-@export var refund_color := Color(0.45, 1.0, 0.45)
 @export var preview_color := Color(0.45, 1.0, 0.45)
 
 enum Hover {NONE, UPGRADE, SELL}
@@ -53,12 +50,8 @@ func _ready() -> void:
 	buttons.gui_input.connect(_gui_input)
 	upgrade_button.mouse_entered.connect(_set_hover.bind(Hover.UPGRADE))
 	upgrade_button.mouse_exited.connect(_clear_hover.bind(Hover.UPGRADE))
-	upgrade_button.focus_entered.connect(_set_hover.bind(Hover.UPGRADE))
-	upgrade_button.focus_exited.connect(_clear_hover.bind(Hover.UPGRADE))
 	sell_button.mouse_entered.connect(_set_hover.bind(Hover.SELL))
 	sell_button.mouse_exited.connect(_clear_hover.bind(Hover.SELL))
-	sell_button.focus_entered.connect(_set_hover.bind(Hover.SELL))
-	sell_button.focus_exited.connect(_clear_hover.bind(Hover.SELL))
 	animation_handler.configure_animation("appear", 0, false)
 	animation_handler.configure_animation("disappear", 1, false)
 	animation_handler.configure_animation("upgrade_hover", 2, false)
@@ -122,12 +115,6 @@ func _set_hover(value: Hover) -> void:
 				animation_handler.play_animation("sell_idle")
 
 func _update_pointer_hover() -> void:
-	if upgrade_button.has_focus():
-		_set_hover(Hover.UPGRADE)
-		return
-	if sell_button.has_focus():
-		_set_hover(Hover.SELL)
-		return
 	var mouse_position := get_global_mouse_position()
 	if upgrade_stack.visible and upgrade_button.get_global_rect().has_point(mouse_position):
 		_set_hover(Hover.UPGRADE)
@@ -153,7 +140,8 @@ func _refresh() -> void:
 	if not maxed:
 		upgrade_button.disabled = not _turret.can_upgrade()
 	sell_button.disabled = not _turret.can_sell()
-	_refresh_prices(maxed)
+	upgrade_price_label.text = "%d" % int(_turret.get_upgrade_cost())
+	sell_price_label.text = "%d" % int(_turret.get_sell_value())
 
 func _set_stat(label: Label, current_value: String, preview_value: String) -> void:
 	var changed := not preview_value.is_empty() and preview_value != current_value
@@ -162,14 +150,6 @@ func _set_stat(label: Label, current_value: String, preview_value: String) -> vo
 
 func _format_cooldown(seconds: float) -> String:
 	return "%ss" % snappedf(seconds, 0.01)
-
-func _refresh_prices(maxed: bool) -> void:
-	if _hover == Hover.UPGRADE and not maxed:
-		upgrade_price_label.text = "%d" % int(_turret.get_upgrade_cost())
-		upgrade_price_label.self_modulate = cost_color
-	if _hover == Hover.SELL:
-		sell_price_label.text = "%d" % int(_turret.get_sell_value())
-		sell_price_label.self_modulate = refund_color
 
 ## The root catches clicks on the panel; buttons pass unhandled ones (e.g. right click) up to it.
 func _route_mouse(node: Node) -> void:
