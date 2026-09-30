@@ -21,11 +21,11 @@ enum Hover {NONE, UPGRADE, SELL}
 @onready var damage_label: Label = %DamageLabel
 @onready var speed_label: Label = %SpeedLabel
 @onready var range_label: Label = %RangeLabel
-@onready var actions: Control = $"../Actions"
+@onready var buttons: Control = $"../Buttons"
 @onready var upgrade_button: HoldButton = %UpgradeButton
 @onready var upgrade_price_row: Control = %UpgradePriceRow
 @onready var upgrade_price_label: Label = %UpgradePriceLabel
-@onready var max_label: Label = %MaxLabel
+@onready var upgrade_stack: Control = $"../Buttons/UpgradeStack"
 @onready var sell_button: HoldButton = %SellButton
 @onready var sell_price_row: Control = %SellPriceRow
 @onready var sell_price_label: Label = %SellPriceLabel
@@ -33,19 +33,24 @@ enum Hover {NONE, UPGRADE, SELL}
 
 var _turret: TurretBase
 var _hover := Hover.NONE
+var _authored_x: float
+var _authored_pivot_x: float
 
 func _ready() -> void:
+	_authored_x = position.x
+	_authored_pivot_x = pivot_offset.x
 	_set_shown(false)
 	set_process(false)
 	_route_mouse(self)
-	_route_mouse(actions)
+	_route_mouse(buttons)
+	buttons.mouse_filter = Control.MOUSE_FILTER_STOP
 	# The outline material is shared with other UI, so each panel gets its own copy.
 	material = material.duplicate()
 	upgrade_button.hold_completed.connect(upgrade_requested.emit)
 	upgrade_button.hold_started.connect(func() -> void: upgrade_hold_started.emit(upgrade_button.hold_duration))
 	upgrade_button.hold_ended.connect(upgrade_hold_ended.emit)
 	sell_button.hold_completed.connect(sell_requested.emit)
-	actions.gui_input.connect(_gui_input)
+	buttons.gui_input.connect(_gui_input)
 	upgrade_button.mouse_entered.connect(_set_hover.bind(Hover.UPGRADE))
 	upgrade_button.mouse_exited.connect(_clear_hover.bind(Hover.UPGRADE))
 	upgrade_button.focus_entered.connect(_set_hover.bind(Hover.UPGRADE))
@@ -86,7 +91,12 @@ func set_outline_colors(start_color: Color, end_color: Color) -> void:
 	var shader_material := material as ShaderMaterial
 	shader_material.set_shader_parameter("start_color", start_color)
 	shader_material.set_shader_parameter("end_color", end_color)
-
+## Mirrors the scene-authored placement around the turret (x = 0) when it would leave the screen.
+func flip_if_offscreen(turret_screen_x: float) -> void:
+	var left := turret_screen_x + _authored_x
+	var flipped := left < 0.0 or left + size.x > get_viewport_rect().size.x
+	position.x = - _authored_x - size.x if flipped else _authored_x
+	pivot_offset.x = size.x - _authored_pivot_x if flipped else _authored_pivot_x
 func _gui_input(event: InputEvent) -> void:
 	var mouse_button := event as InputEventMouseButton
 	if not mouse_button or not mouse_button.pressed:
@@ -119,7 +129,7 @@ func _update_pointer_hover() -> void:
 		_set_hover(Hover.SELL)
 		return
 	var mouse_position := get_global_mouse_position()
-	if upgrade_button.get_global_rect().has_point(mouse_position):
+	if upgrade_stack.visible and upgrade_button.get_global_rect().has_point(mouse_position):
 		_set_hover(Hover.UPGRADE)
 	elif sell_button.get_global_rect().has_point(mouse_position):
 		_set_hover(Hover.SELL)
@@ -139,8 +149,7 @@ func _refresh() -> void:
 	_set_stat(damage_label, str(current_stats.damage), str(preview.damage) if preview else "")
 	_set_stat(speed_label, _format_cooldown(current_stats.attack_cooldown), _format_cooldown(preview.attack_cooldown) if preview else "")
 	_set_stat(range_label, str(roundi(current_stats.attack_range)), str(roundi(preview.attack_range)) if preview else "")
-	upgrade_button.visible = not maxed
-	max_label.visible = maxed
+	upgrade_stack.visible = not maxed
 	if not maxed:
 		upgrade_button.disabled = not _turret.can_upgrade()
 	sell_button.disabled = not _turret.can_sell()
@@ -174,7 +183,7 @@ func _on_animation_finished(anim_name: StringName) -> void:
 	if anim_name == &"disappear":
 		_set_shown(false)
 
-## Actions is a sibling so it can be placed independently, but it opens and closes with the panel.
+## Buttons is a sibling so it can be placed independently, but it opens and closes with the panel.
 func _set_shown(value: bool) -> void:
 	visible = value
-	actions.visible = value
+	buttons.visible = value

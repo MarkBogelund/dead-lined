@@ -59,7 +59,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradeButton:scale")
+tracks/1/path = NodePath("../Buttons/UpgradeStack/UpgradeButton:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -71,7 +71,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../Actions/Buttons/SellStack/SellButton:scale")
+tracks/2/path = NodePath("../Buttons/SellStack/SellButton:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -83,7 +83,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradePriceRow:modulate:a")
+tracks/3/path = NodePath("../Buttons/UpgradeStack/UpgradePriceRow:modulate:a")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -95,7 +95,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("../Actions/Buttons/SellStack/SellPriceRow:modulate:a")
+tracks/4/path = NodePath("../Buttons/SellStack/SellPriceRow:modulate:a")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -107,7 +107,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradePriceRow:scale")
+tracks/5/path = NodePath("../Buttons/UpgradeStack/UpgradePriceRow:scale")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -119,7 +119,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("../Actions/Buttons/SellStack/SellPriceRow:scale")
+tracks/6/path = NodePath("../Buttons/SellStack/SellPriceRow:scale")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -131,7 +131,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("../Actions:scale")
+tracks/7/path = NodePath("../Buttons:scale")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -159,7 +159,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Actions:scale")
+tracks/1/path = NodePath("../Buttons:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -187,7 +187,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Actions:scale")
+tracks/1/path = NodePath("../Buttons:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -203,7 +203,7 @@ length = 0.14
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = false
-tracks/0/path = NodePath("../Actions/Buttons/SellStack/SellButton:scale")
+tracks/0/path = NodePath("../Buttons/SellStack/SellButton:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -215,7 +215,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Actions/Buttons/SellStack/SellPriceRow:modulate:a")
+tracks/1/path = NodePath("../Buttons/SellStack/SellPriceRow:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -227,7 +227,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../Actions/Buttons/SellStack/SellPriceRow:scale")
+tracks/2/path = NodePath("../Buttons/SellStack/SellPriceRow:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -243,7 +243,7 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = false
-tracks/0/path = NodePath("../Actions/Buttons/SellStack/SellButton:scale")
+tracks/0/path = NodePath("../Buttons/SellStack/SellButton:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -255,7 +255,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Actions/Buttons/SellStack/SellPriceRow:modulate:a")
+tracks/1/path = NodePath("../Buttons/SellStack/SellPriceRow:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -267,7 +267,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../Actions/Buttons/SellStack/SellPriceRow:scale")
+tracks/2/path = NodePath("../Buttons/SellStack/SellPriceRow:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -283,7 +283,7 @@ length = 0.14
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = false
-tracks/0/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradeButton:scale")
+tracks/0/path = NodePath("../Buttons/UpgradeStack/UpgradeButton:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -295,7 +295,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradePriceRow:modulate:a")
+tracks/1/path = NodePath("../Buttons/UpgradeStack/UpgradePriceRow:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -307,7 +307,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradePriceRow:scale")
+tracks/2/path = NodePath("../Buttons/UpgradeStack/UpgradePriceRow:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -323,7 +323,7 @@ length = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = false
-tracks/0/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradeButton:scale")
+tracks/0/path = NodePath("../Buttons/UpgradeStack/UpgradeButton:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -335,7 +335,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradePriceRow:modulate:a")
+tracks/1/path = NodePath("../Buttons/UpgradeStack/UpgradePriceRow:modulate:a")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -347,7 +347,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("../Actions/Buttons/UpgradeStack/UpgradePriceRow:scale")
+tracks/2/path = NodePath("../Buttons/UpgradeStack/UpgradePriceRow:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -370,7 +370,7 @@ _data = {
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_upgrade"]
 atlas = ExtResource("5_button_icons")
-region = Rect2(34, 10, 12, 12)
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_orb"]
 atlas = ExtResource("10_orb_icon")
@@ -378,11 +378,11 @@ region = Rect2(4, 4, 8, 8)
 
 [sub_resource type="LabelSettings" id="LabelSettings_price"]
 font = ExtResource("6_font")
-font_size = 8
+font_size = 6
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sell"]
 atlas = ExtResource("5_button_icons")
-region = Rect2(18, 10, 12, 12)
+region = Rect2(0, 0, 16, 16)
 
 [node name="TurretHUD" type="Node" unique_id=1583887513]
 script = ExtResource("1_jrbl1")
@@ -542,35 +542,22 @@ vertical_alignment = 1
 libraries/ = SubResource("AnimationLibrary_panel")
 script = ExtResource("9_anim")
 
-[node name="Actions" type="Control" parent="CanvasLayer" unique_id=1867402857]
-custom_minimum_size = Vector2(52, 32)
-layout_mode = 3
-anchors_preset = 0
-offset_left = -26.0
-offset_top = 19.0
-offset_right = 26.0
-offset_bottom = 51.0
-pivot_offset = Vector2(26, 0)
+[node name="Buttons" type="HBoxContainer" parent="CanvasLayer" unique_id=590447778]
+offset_left = -17.0
+offset_top = 14.0
+offset_right = 17.0
+offset_bottom = 41.0
+pivot_offset_ratio = Vector2(0.5, 0)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-
-[node name="Buttons" type="HBoxContainer" parent="CanvasLayer/Actions" unique_id=590447778]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 6
-alignment = 1
-
-[node name="UpgradeStack" type="VBoxContainer" parent="CanvasLayer/Actions/Buttons" unique_id=481919577]
-layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="UpgradeButton" type="TextureButton" parent="CanvasLayer/Actions/Buttons/UpgradeStack" unique_id=309995922 node_paths=PackedStringArray("progress_target")]
+[node name="UpgradeStack" type="VBoxContainer" parent="CanvasLayer/Buttons" unique_id=481919577]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="UpgradeButton" type="TextureButton" parent="CanvasLayer/Buttons/UpgradeStack" unique_id=309995922 node_paths=PackedStringArray("progress_target")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
@@ -579,7 +566,7 @@ script = ExtResource("4_hold")
 progress_shader = ExtResource("4_progress_shader")
 progress_target = NodePath("Icon")
 
-[node name="Icon" type="TextureRect" parent="CanvasLayer/Actions/Buttons/UpgradeStack/UpgradeButton" unique_id=2084809027]
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Buttons/UpgradeStack/UpgradeButton" unique_id=2084809027]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -590,7 +577,7 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_upgrade")
 stretch_mode = 5
 
-[node name="UpgradePriceRow" type="HBoxContainer" parent="CanvasLayer/Actions/Buttons/UpgradeStack" unique_id=1750195069]
+[node name="UpgradePriceRow" type="HBoxContainer" parent="CanvasLayer/Buttons/UpgradeStack" unique_id=1750195069]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -598,34 +585,24 @@ mouse_filter = 2
 theme_override_constants/separation = 1
 alignment = 1
 
-[node name="OrbIcon" type="TextureRect" parent="CanvasLayer/Actions/Buttons/UpgradeStack/UpgradePriceRow" unique_id=645939309]
+[node name="OrbIcon" type="TextureRect" parent="CanvasLayer/Buttons/UpgradeStack/UpgradePriceRow" unique_id=645939309]
 custom_minimum_size = Vector2(8, 8)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_orb")
 stretch_mode = 5
 
-[node name="UpgradePriceLabel" type="Label" parent="CanvasLayer/Actions/Buttons/UpgradeStack/UpgradePriceRow" unique_id=1040793795]
+[node name="UpgradePriceLabel" type="Label" parent="CanvasLayer/Buttons/UpgradeStack/UpgradePriceRow" unique_id=1040793795]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_price")
 
-[node name="MaxLabel" type="Label" parent="CanvasLayer/Actions/Buttons" unique_id=2064509211]
-unique_name_in_owner = true
-visible = false
-self_modulate = Color(1, 0.85, 0.3, 1)
-layout_mode = 2
-text = "MAX"
-label_settings = SubResource("LabelSettings_price")
-vertical_alignment = 1
-
-[node name="SellStack" type="VBoxContainer" parent="CanvasLayer/Actions/Buttons" unique_id=1913980828]
+[node name="SellStack" type="VBoxContainer" parent="CanvasLayer/Buttons" unique_id=1913980828]
 layout_mode = 2
 theme_override_constants/separation = 2
-alignment = 1
 
-[node name="SellButton" type="TextureButton" parent="CanvasLayer/Actions/Buttons/SellStack" unique_id=1695340069 node_paths=PackedStringArray("progress_target")]
+[node name="SellButton" type="TextureButton" parent="CanvasLayer/Buttons/SellStack" unique_id=1695340069 node_paths=PackedStringArray("progress_target")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
@@ -634,7 +611,7 @@ script = ExtResource("4_hold")
 progress_shader = ExtResource("4_progress_shader")
 progress_target = NodePath("Icon")
 
-[node name="Icon" type="TextureRect" parent="CanvasLayer/Actions/Buttons/SellStack/SellButton" unique_id=147624883]
+[node name="Icon" type="TextureRect" parent="CanvasLayer/Buttons/SellStack/SellButton" unique_id=147624883]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -645,7 +622,7 @@ mouse_filter = 2
 texture = SubResource("AtlasTexture_sell")
 stretch_mode = 5
 
-[node name="SellPriceRow" type="HBoxContainer" parent="CanvasLayer/Actions/Buttons/SellStack" unique_id=1728275852]
+[node name="SellPriceRow" type="HBoxContainer" parent="CanvasLayer/Buttons/SellStack" unique_id=1728275852]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -653,14 +630,14 @@ mouse_filter = 2
 theme_override_constants/separation = 1
 alignment = 1
 
-[node name="OrbIcon" type="TextureRect" parent="CanvasLayer/Actions/Buttons/SellStack/SellPriceRow" unique_id=341025944]
+[node name="OrbIcon" type="TextureRect" parent="CanvasLayer/Buttons/SellStack/SellPriceRow" unique_id=341025944]
 custom_minimum_size = Vector2(8, 8)
 layout_mode = 2
 mouse_filter = 2
 texture = SubResource("AtlasTexture_orb")
 stretch_mode = 5
 
-[node name="SellPriceLabel" type="Label" parent="CanvasLayer/Actions/Buttons/SellStack/SellPriceRow" unique_id=1986415748]
+[node name="SellPriceLabel" type="Label" parent="CanvasLayer/Buttons/SellStack/SellPriceRow" unique_id=1986415748]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0"

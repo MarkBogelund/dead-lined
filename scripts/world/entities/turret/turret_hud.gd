@@ -41,6 +41,7 @@ func _process(_delta: float) -> void:
 	if not is_instance_valid(_turret):
 		return
 	canvas_layer.offset = _turret.get_viewport().get_canvas_transform() * _turret.global_position
+	panel.flip_if_offscreen(canvas_layer.offset.x)
 
 func _on_turret_sold(_refund: float) -> void:
 	_on_turret_removed()
