@@ -1,4 +1,4 @@
-extends Control
+extends NinePatchRect
 class_name TurretPanel
 
 ## Per-turret upgrade panel: level, stats, and upgrade/sell hold buttons. Hovering Upgrade previews the next level.
@@ -30,19 +30,17 @@ enum Hover {NONE, UPGRADE, SELL}
 @onready var sell_price_row: Control = %SellPriceRow
 @onready var sell_price_label: Label = %SellPriceLabel
 @onready var animation_handler: AnimationHandler = $AnimationHandler
-@onready var _outlines: Array[CanvasItem] = [%PanelOutline]
 
 var _turret: TurretBase
 var _hover := Hover.NONE
 
 func _ready() -> void:
-	visible = false
+	_set_shown(false)
 	set_process(false)
 	_route_mouse(self)
 	_route_mouse(actions)
 	# The outline material is shared with other UI, so each panel gets its own copy.
-	for outline in _outlines:
-		outline.material = outline.material.duplicate()
+	material = material.duplicate()
 	upgrade_button.hold_completed.connect(upgrade_requested.emit)
 	upgrade_button.hold_started.connect(func() -> void: upgrade_hold_started.emit(upgrade_button.hold_duration))
 	upgrade_button.hold_ended.connect(upgrade_hold_ended.emit)
@@ -71,7 +69,7 @@ func _process(_delta: float) -> void:
 func open(turret: TurretBase) -> void:
 	_turret = turret
 	_refresh()
-	visible = true
+	_set_shown(true)
 	set_process(true)
 	animation_handler.play_animation("appear")
 
@@ -85,10 +83,9 @@ func close() -> void:
 	animation_handler.play_animation("disappear")
 
 func set_outline_colors(start_color: Color, end_color: Color) -> void:
-	for outline in _outlines:
-		var shader_material := outline.material as ShaderMaterial
-		shader_material.set_shader_parameter("start_color", start_color)
-		shader_material.set_shader_parameter("end_color", end_color)
+	var shader_material := material as ShaderMaterial
+	shader_material.set_shader_parameter("start_color", start_color)
+	shader_material.set_shader_parameter("end_color", end_color)
 
 func _gui_input(event: InputEvent) -> void:
 	var mouse_button := event as InputEventMouseButton
@@ -175,4 +172,9 @@ func _route_mouse(node: Node) -> void:
 
 func _on_animation_finished(anim_name: StringName) -> void:
 	if anim_name == &"disappear":
-		visible = false
+		_set_shown(false)
+
+## Actions is a sibling so it can be placed independently, but it opens and closes with the panel.
+func _set_shown(value: bool) -> void:
+	visible = value
+	actions.visible = value
