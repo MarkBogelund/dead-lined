@@ -13,6 +13,7 @@ var active_device := Device.KEYBOARD_MOUSE
 var last_aim_direction := Vector2.RIGHT
 var smoothed_pointing_direction := Vector2.RIGHT
 var _aim_active := false
+var _attack_consumed_until_release := false
 
 func _ready() -> void:
 	if aim_release_deadzone > aim_activation_deadzone:
@@ -40,10 +41,10 @@ func get_aim_vector() -> Vector2:
 	var strength := inverse_lerp(deadzone, 1.0, minf(raw.length(), 1.0))
 	return last_aim_direction * strength
 
-func get_menu_navigation_vector() -> Vector2:
+func get_radial_menu_vector() -> Vector2:
 	return Input.get_vector(
-		"navigate_menu_left", "navigate_menu_right",
-		"navigate_menu_up", "navigate_menu_down")
+		"radial_menu_left", "radial_menu_right",
+		"radial_menu_up", "radial_menu_down")
 
 func get_pointing_direction(mouse_delta: Vector2) -> Vector2:
 	if active_device == Device.CONTROLLER:
@@ -69,7 +70,7 @@ func get_smoothed_pointing_vector(mouse_delta: Vector2, controller_length: float
 	return smoothed_pointing_direction * mouse_delta.length()
 
 func get_menu_pointing_vector(mouse_delta: Vector2) -> Vector2:
-	return get_menu_navigation_vector() if active_device == Device.CONTROLLER else mouse_delta
+	return get_radial_menu_vector() if active_device == Device.CONTROLLER else mouse_delta
 
 func is_controller_active() -> bool:
 	return active_device == Device.CONTROLLER
@@ -77,9 +78,19 @@ func is_controller_active() -> bool:
 func is_pointer_event(event: InputEvent) -> bool:
 	return event is InputEventMouseButton
 
+func consume_attack_until_release() -> void:
+	_attack_consumed_until_release = true
+
+func is_attack_consumed() -> bool:
+	if _attack_consumed_until_release and not _is_raw_attack_active():
+		_attack_consumed_until_release = false
+	return _attack_consumed_until_release
+
 func is_continuous_attack_active() -> bool:
-	return Input.is_action_pressed("attack") \
-		or active_device == Device.CONTROLLER and _aim_active
+	return not is_attack_consumed() and _is_raw_attack_active()
+
+func _is_raw_attack_active() -> bool:
+	return Input.is_action_pressed("attack")
 
 func _set_active_device(value: Device) -> void:
 	if active_device == value:

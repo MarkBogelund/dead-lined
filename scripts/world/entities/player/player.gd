@@ -144,6 +144,9 @@ func _physics_process(delta: float) -> void:
 
 ## Holding the primary action retries the active weapon; each component owns its cooldown.
 func _process_held_primary_attack(aim_position: Vector2) -> void:
+	if InputManager.is_attack_consumed():
+		_shoot_held = false
+		return
 	if get_tree().get_first_node_in_group(&"open_input_blocking_menus"):
 		_shoot_held = false
 		return

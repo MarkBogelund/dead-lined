@@ -99,17 +99,6 @@ func _gui_input(event: InputEvent) -> void:
 	if mouse_button.button_index == MOUSE_BUTTON_RIGHT:
 		close_requested.emit()
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not visible:
-		return
-	if event.is_action_pressed("navigate_menu_left") or event.is_action_pressed("navigate_menu_up"):
-		if upgrade_stack.visible:
-			upgrade_button.grab_focus()
-		get_viewport().set_input_as_handled()
-	elif event.is_action_pressed("navigate_menu_right") or event.is_action_pressed("navigate_menu_down"):
-		sell_button.grab_focus()
-		get_viewport().set_input_as_handled()
-
 func _set_hover(value: Hover) -> void:
 	if _hover == value:
 		return

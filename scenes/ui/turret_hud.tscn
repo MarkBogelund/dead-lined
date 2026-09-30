@@ -379,7 +379,6 @@ region = Rect2(4, 4, 8, 8)
 [sub_resource type="LabelSettings" id="LabelSettings_b5pcb"]
 font = ExtResource("6_font")
 font_size = 8
-font_color = Color(1, 0.34117648, 0.33333334, 1)
 outline_size = 4
 outline_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
@@ -390,7 +389,6 @@ region = Rect2(0, 0, 16, 16)
 [sub_resource type="LabelSettings" id="LabelSettings_price"]
 font = ExtResource("6_font")
 font_size = 8
-font_color = Color(0, 0.8117647, 0.61960787, 1)
 outline_size = 4
 outline_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
@@ -557,7 +555,6 @@ libraries/ = SubResource("AnimationLibrary_panel")
 script = ExtResource("9_anim")
 
 [node name="Buttons" type="HBoxContainer" parent="CanvasLayer" unique_id=590447778]
-anchors_preset = 0
 offset_left = -19.0
 offset_top = 14.0
 offset_right = 19.0
