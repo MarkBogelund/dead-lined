@@ -34,6 +34,10 @@ signal died
 @export_range(0.0, 1.0, 0.01) var dash_charge_zoom_in_duration := 0.2
 @export_range(0.0, 1.0, 0.01) var dash_charge_zoom_out_duration := 0.15
 
+@export_group("Controller Aim")
+@export_range(0.0, 0.95, 0.01) var aim_activation_deadzone := 0.3
+@export_range(0.0, 0.95, 0.01) var aim_release_deadzone := 0.2
+
 var damage_knockback_force := 200.0
 var damage_freeze_duration := 0.1
 var damage_screen_shake_intensity := 0.2
@@ -58,6 +62,7 @@ const TURRET_BODY_LAYER := 6 ## Matches project.godot 2d_physics layer_6 ("Turre
 var _conveyor_velocity := Vector2.ZERO
 var _shoot_held := false
 var _using_controller_aim := false
+var _controller_aim_active := false
 var _last_controller_aim_direction := Vector2.RIGHT
 
 func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
@@ -168,7 +173,14 @@ func _process_held_primary_attack(controller_aim: Vector2, aim_position: Vector2
 		animation.play_animation("shoot")
 
 func _get_controller_aim_direction() -> Vector2:
-	return Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
+	var raw := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down", 0.0)
+	var deadzone := aim_release_deadzone if _controller_aim_active else aim_activation_deadzone
+	if raw.length() <= deadzone:
+		_controller_aim_active = false
+		return Vector2.ZERO
+	_controller_aim_active = true
+	var strength := inverse_lerp(deadzone, 1.0, minf(raw.length(), 1.0))
+	return raw.normalized() * strength
 
 func _get_move_state() -> MoveState:
 	if dash.is_dashing(): return MoveState.DASHING

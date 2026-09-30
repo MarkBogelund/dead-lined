@@ -40,7 +40,7 @@ The VS Code Godot Tools extension is already configured in [.vscode/settings.jso
 
 ## Controls
 
-Input is defined as semantic actions in [project.godot](project.godot). `Input.get_vector()` supplies radial deadzones for both sticks. PlayStation L3/R3 conventionally means clicking a stick; the controls below use the left and right stick directions, not those clicks.
+Input is defined as semantic actions in [project.godot](project.godot). `Input.get_vector()` supplies radial deadzones for both sticks. Player right-stick aim adds scene-tunable hysteresis (`aim_activation_deadzone` defaults to 0.30, `aim_release_deadzone` to 0.20), so release noise cannot overwrite the last intentional aim direction. PlayStation L3/R3 conventionally means clicking a stick; the controls below use the left and right stick directions, not those clicks.
 
 | Action | Keyboard and mouse | Controller |
 | --- | --- | --- |
