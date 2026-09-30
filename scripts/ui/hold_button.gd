@@ -47,6 +47,17 @@ func _process(delta: float) -> void:
 		hold_ended.emit()
 		hold_completed.emit()
 
+func _input(event: InputEvent) -> void:
+	if not has_focus() or not is_visible_in_tree() or InputManager.is_pointer_event(event):
+		return
+	if event.is_action_pressed("interact"):
+		get_viewport().set_input_as_handled()
+		if not _holding:
+			_on_button_down()
+	elif event.is_action_released("interact"):
+		get_viewport().set_input_as_handled()
+		_cancel_hold()
+
 func _on_button_down() -> void:
 	_holding = true
 	hold_started.emit()

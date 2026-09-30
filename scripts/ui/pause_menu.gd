@@ -18,6 +18,7 @@ func _ready() -> void:
 	toggle_menu.process_mode = Node.PROCESS_MODE_ALWAYS
 	toggle_menu.open_on_button = true
 	toggle_menu.close_on_toggle_button = true
+	toggle_menu.close_on_cancel = true
 	toggle_menu.open_action = &"pause"
 	toggle_menu.open_fn = _do_open
 	toggle_menu.close_fn = _do_close
@@ -30,6 +31,7 @@ func _do_open() -> void:
 	animation_player.stop()
 	get_tree().paused = true
 	visible = true
+	resume_button.grab_focus()
 	animation_player.play(&"appear")
 
 
@@ -38,3 +40,8 @@ func _do_close() -> void:
 	animation_player.play(&"disappear")
 	await animation_player.animation_finished
 	visible = false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("interact"):
+		get_viewport().set_input_as_handled()
+		toggle_menu.close()

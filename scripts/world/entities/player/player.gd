@@ -102,10 +102,10 @@ func _setup_animations() -> void:
 	animation.configure_animation("move", 1, false)
 	animation.configure_animation("slash", 2, true)
 	animation.configure_animation("shoot", 2, true)
-	animation.configure_animation("dash_charge", 2, true)
-	animation.configure_animation("dash", 2, true)
-	animation.configure_animation("take_damage", 3, true)
-	animation.configure_animation("die", 4, true)
+	animation.configure_animation("dash_charge", 3, true)
+	animation.configure_animation("dash", 3, true)
+	animation.configure_animation("take_damage", 4, true)
+	animation.configure_animation("die", 5, true)
 
 func _connect_signals() -> void:
 	# Components
@@ -131,24 +131,34 @@ func _physics_process(delta: float) -> void:
 	_process_movement(delta)
 	_process_locomotion()
 	if not _is_dead:
-		aiming.aim_at(get_global_mouse_position(), 0.0)
-		aim_indicator.point_in(aiming.get_aim_direction())
-		_process_held_primary_attack()
+		var mouse_delta := get_global_mouse_position() - global_position
+		var indicator_direction := InputManager.update_smoothed_pointing_direction(mouse_delta, delta)
+		var aim_position := global_position + InputManager.get_pointing_direction(mouse_delta) * 100.0
+		aiming.aim_at(aim_position, 0.0)
+		aim_indicator.point_in(indicator_direction)
+		_process_held_primary_attack(aim_position)
 	if dash.is_charging():
 		dash_direction_indicator.point_in(_get_dash_direction())
 	else:
 		dash_direction_indicator.fade_out()
 
 ## Holding the primary action retries the active weapon; each component owns its cooldown.
-func _process_held_primary_attack() -> void:
-	if not Input.is_action_pressed("shoot"):
+func _process_held_primary_attack(aim_position: Vector2) -> void:
+	if InputManager.is_attack_consumed():
+		_shoot_held = false
+		return
+	if get_tree().get_first_node_in_group(&"open_input_blocking_menus"):
+		_shoot_held = false
+		return
+	if InputManager.is_continuous_attack_active():
+		_shoot_held = true
+	elif not Input.is_action_pressed("attack"):
 		_shoot_held = false
 	if not _shoot_held or dash.is_holding():
 		return
 	if crunch_time.is_crunch_time_active():
-		var mouse_position := get_global_mouse_position()
-		if melee_weapon.try_slash(mouse_position):
-			_set_facing(mouse_position.x - global_position.x)
+		if melee_weapon.try_slash(aim_position):
+			_set_facing(aim_position.x - global_position.x)
 			animation.play_animation("slash")
 		return
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
@@ -161,7 +171,7 @@ func _get_move_state() -> MoveState:
 	return MoveState.NORMAL
 
 func _process_movement(delta: float) -> void:
-	var input_dir := Input.get_vector("left", "right", "up", "down")
+	var input_dir := InputManager.get_move_vector()
 	knockback.process(delta)
 	match _get_move_state():
 		MoveState.DASHING:
@@ -193,7 +203,7 @@ func _process_locomotion() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Armed here, not by polling, so clicks consumed by the UI or turret placer never fire.
-	if event.is_action_pressed("shoot"):
+	if event.is_action_pressed("attack"):
 		_shoot_held = true
 
 	if event.is_action_pressed("crunch_time") and not dash.is_holding():

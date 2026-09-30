@@ -895,11 +895,11 @@ fade_duration = 0.1
 
 [node name="AimIndicator" type="Node2D" parent="." unique_id=254607644]
 z_index = 4
-position = Vector2(24, 0)
 script = ExtResource("19_aimindicator")
 texture = ExtResource("19_1esm0")
-distance = 32.0
-color = Color(0.9613809, 0.61137724, 1.1551381e-06, 1)
+distance = 36.0
+
+[node name="Sprite2D" type="Sprite2D" parent="AimIndicator" unique_id=1516499894]
 
 [node name="Flash" type="ColorRect" parent="." unique_id=462082651]
 visible = false

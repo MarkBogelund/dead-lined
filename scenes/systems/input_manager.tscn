@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bkb2oblhixi30"]
+
+[ext_resource type="Script" uid="uid://bfngr5tr0x8dx" path="res://scripts/systems/input_manager.gd" id="1_input"]
+
+[node name="InputManager" type="Node" unique_id=1837176373]
+process_mode = 3
+script = ExtResource("1_input")
+aim_activation_deadzone = 0.6
+aim_release_deadzone = 0.5
+pointing_turn_speed_degrees = 1440.0

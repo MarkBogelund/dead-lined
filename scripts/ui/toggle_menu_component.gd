@@ -43,6 +43,7 @@ var close_fn: Callable
 var is_open: bool = false
 
 const PROXIMITY_BUTTON_GROUP := &"proximity_button_menus"
+const INPUT_BLOCKING_GROUP := &"open_input_blocking_menus"
 
 
 func _ready() -> void:
@@ -65,6 +66,7 @@ func open() -> void:
 	if is_open:
 		return
 	is_open = true
+	add_to_group(INPUT_BLOCKING_GROUP)
 	if open_fn.is_valid():
 		open_fn.call()
 	opened.emit()
@@ -74,6 +76,7 @@ func close() -> void:
 	if not is_open:
 		return
 	is_open = false
+	remove_from_group(INPUT_BLOCKING_GROUP)
 	if close_fn.is_valid():
 		close_fn.call()
 	closed.emit()

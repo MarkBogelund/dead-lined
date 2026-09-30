@@ -1,23 +1,35 @@
 extends Node2D
 class_name AimIndicator
 
-## Pixel-art aim marker: orbits the player on whole pixels and never rotates, so the texture stays upright.
+## Freely rotating aim pivot whose sprite counter-rotates to remain globally upright.
 
 @export var texture: Texture2D:
 	set(value):
 		texture = value
-		queue_redraw()
-@export_range(1.0, 64.0, 1.0) var distance := 24.0
+		_sync_sprite()
+@export_range(1.0, 64.0, 1.0) var distance := 24.0:
+	set(value):
+		distance = value
+		_sync_sprite()
 @export var color := Color(1.0, 1.0, 1.0, 1.0):
 	set(value):
 		color = value
-		queue_redraw()
+		_sync_sprite()
+
+@onready var sprite: Sprite2D = $Sprite2D
+
+func _ready() -> void:
+	_sync_sprite()
 
 func point_in(direction: Vector2) -> void:
-	position = (direction.normalized() * distance).round()
-
-func _draw() -> void:
-	if not texture:
+	if direction.is_zero_approx():
 		return
-	# Floored so odd-sized textures still land on whole pixels.
-	draw_texture(texture, (-texture.get_size() * 0.5).floor(), color)
+	rotation = direction.angle()
+	sprite.rotation = - global_rotation
+
+func _sync_sprite() -> void:
+	if not is_node_ready():
+		return
+	sprite.texture = texture
+	sprite.position = Vector2(distance, 0.0)
+	sprite.modulate = color

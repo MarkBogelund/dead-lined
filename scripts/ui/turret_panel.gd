@@ -69,6 +69,7 @@ func open(turret: TurretBase) -> void:
 	_refresh()
 	_set_shown(true)
 	set_process(true)
+	(upgrade_button if upgrade_stack.visible else sell_button).grab_focus()
 	animation_handler.play_animation("appear")
 
 func close() -> void:
@@ -115,6 +116,14 @@ func _set_hover(value: Hover) -> void:
 				animation_handler.play_animation("sell_idle")
 
 func _update_pointer_hover() -> void:
+	if InputManager.is_controller_active():
+		if upgrade_stack.visible and upgrade_button.has_focus():
+			_set_hover(Hover.UPGRADE)
+		elif sell_button.has_focus():
+			_set_hover(Hover.SELL)
+		else:
+			_set_hover(Hover.NONE)
+		return
 	var mouse_position := get_global_mouse_position()
 	if upgrade_stack.visible and upgrade_button.get_global_rect().has_point(mouse_position):
 		_set_hover(Hover.UPGRADE)

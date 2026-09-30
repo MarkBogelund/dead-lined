@@ -15,7 +15,8 @@ var active := false
 
 func _process(_delta: float) -> void:
 	if active and ghost_turret and player:
-		var direction := get_global_mouse_position() - player.position
+		var mouse_delta := get_global_mouse_position() - player.position
+		var direction := InputManager.get_smoothed_pointing_vector(mouse_delta, max_place_distance)
 		if direction.length() > max_place_distance:
 			direction = direction.normalized() * max_place_distance
 		ghost_turret.global_position = player.position + direction
@@ -26,6 +27,7 @@ func _input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("interact"):
 		get_viewport().set_input_as_handled()
+		InputManager.consume_attack_until_release()
 		_place()
 	elif event.is_action_pressed("cancel"):
 		get_viewport().set_input_as_handled()

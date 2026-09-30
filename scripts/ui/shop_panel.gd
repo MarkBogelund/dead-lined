@@ -47,7 +47,7 @@ func open(entries: Array[TurretEntry], can_afford_fn: Callable, limit_reached: b
 	set_process(true)
 	animation_handler.play_animation("appear")
 	if not _cards.is_empty():
-		_set_highlighted(maxi(_sector_under_mouse(), 0))
+		_set_highlighted(maxi(_sector_under_input(), 0))
 
 func close() -> void:
 	_is_open = false
@@ -55,9 +55,19 @@ func close() -> void:
 	animation_handler.play_animation("disappear")
 
 func _process(_delta: float) -> void:
-	var sector := _sector_under_mouse()
+	var sector := _sector_under_input()
 	if sector >= 0:
 		_set_highlighted(sector)
+
+func _input(event: InputEvent) -> void:
+	if not _is_open or InputManager.is_pointer_event(event):
+		return
+	if event.is_action_pressed("interact"):
+		get_viewport().set_input_as_handled()
+		_select_highlighted()
+	elif event.is_action_pressed("cancel"):
+		get_viewport().set_input_as_handled()
+		close_requested.emit()
 
 func _gui_input(event: InputEvent) -> void:
 	var mouse_button := event as InputEventMouseButton
@@ -85,15 +95,17 @@ func _build_cards() -> void:
 		card.populate(_entries[i], _is_available(_entries[i]), direction)
 		_cards.append(card)
 
-## -1 inside the dead zone, otherwise the card whose direction is closest to the mouse.
-func _sector_under_mouse() -> int:
+## -1 inside the dead zone, otherwise the card closest to the active pointer direction.
+func _sector_under_input() -> int:
 	if _cards.is_empty():
 		return -1
-	var to_mouse := get_global_mouse_position() - content.global_position
-	if to_mouse.length() < dead_zone_radius:
+	var mouse_delta := get_global_mouse_position() - content.global_position
+	var direction := InputManager.get_menu_pointing_vector(mouse_delta)
+	var minimum_length := 0.0 if InputManager.is_controller_active() else dead_zone_radius
+	if direction.length() <= minimum_length:
 		return -1
 	var step := TAU / _cards.size()
-	return posmod(roundi((to_mouse.angle() - deg_to_rad(start_angle_degrees)) / step), _cards.size())
+	return posmod(roundi((direction.angle() - deg_to_rad(start_angle_degrees)) / step), _cards.size())
 
 func _card_angle(index: int) -> float:
 	return deg_to_rad(start_angle_degrees) + index * TAU / _entries.size()
