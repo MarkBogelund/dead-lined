@@ -108,7 +108,7 @@ Leftover capacity orbs stay through the build phase so they can still be collect
 - **Chaser:** Approaches from a personal flanking offset, then closes directly for contact damage and bounces back after a hit.
 - **Kamikazer:** Seeks until it has line of sight, locks into a straight charge, and explodes on contact with the player or a turret; a missed or blocked charge must decelerate or recover before trying again.
 - **Stalker:** Maintains a preferred distance, circles its target while it has line of sight, and fires telegraphed, aimed projectiles.
-- **Shotgunner:** Maintains distance, then stops for a readable windup before firing a projectile fan; taking damage during the windup cancels the shot and starts its cooldown.
+- **Shotgunner:** Maintains distance, then stops for a readable windup before firing a projectile fan; firing knocks it backward and briefly confuses it before it relocates. A confused indicator remains visible for every attack cooldown, including when damage cancels its windup.
 - **Emitter:** Relocates to a safe spot away from threats, then stands still and fires a rotating two-sided projectile stream; nearby threats make it flee, and hits briefly pause active emission.
 
 **Design Goal:** Slow, readable attacks allow skill-based dodging. Mix of enemy types creates tactical variety.
