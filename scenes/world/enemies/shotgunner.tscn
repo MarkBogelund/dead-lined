@@ -11,8 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://ciiaetgaecjx1" path="res://assets/sprites/enemies/shotgunner-shadow.png" id="7_aq71u"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="7_los"]
 [ext_resource type="Script" uid="uid://kxqm1yu6myfa" path="res://scripts/world/entities/shared/keep_distance.gd" id="8_keep_distance"]
-[ext_resource type="Texture2D" uid="uid://kwtjsdcjuhji" path="res://assets/sprites/enemies/stunned.png" id="8_rv2tf"]
-[ext_resource type="Script" uid="uid://bpllxanfymems" path="res://scripts/world/entities/shared/confused.gd" id="9_confused"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/confused_component.tscn" id="9_confused"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="9_l6coj"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="9_particles"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="10_vfx"]
@@ -290,42 +289,6 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rv2tf"]
-atlas = ExtResource("8_rv2tf")
-region = Rect2(0, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l6coj"]
-atlas = ExtResource("8_rv2tf")
-region = Rect2(24, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_h57d3"]
-atlas = ExtResource("8_rv2tf")
-region = Rect2(48, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gyylo"]
-atlas = ExtResource("8_rv2tf")
-region = Rect2(72, 0, 24, 24)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_spl43"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rv2tf")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_l6coj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_h57d3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gyylo")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 10.0
-}]
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h57d3"]
 resource_local_to_scene = true
 shader = ExtResource("9_l6coj")
@@ -420,14 +383,8 @@ modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
 texture = ExtResource("7_aq71u")
 
-[node name="ConfusedSprite" type="AnimatedSprite2D" parent="Visuals" index="3" unique_id=1696946684]
-visible = false
-modulate = Color(1, 1, 1, 0.78431374)
-z_index = 5
+[node name="ConfusedSprite" parent="Visuals" index="3" instance=ExtResource("9_confused")]
 position = Vector2(0, -2)
-sprite_frames = SubResource("SpriteFrames_spl43")
-frame_progress = 0.84444547
-script = ExtResource("9_confused")
 
 [node name="Flash" parent="." index="10" unique_id=1756477109]
 material = SubResource("ShaderMaterial_h57d3")

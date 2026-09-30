@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/entities/shared/safe_spot.gd" id="9_nv6my"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/windup_particles.tscn" id="10_q8s65"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="11_glhh8"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/confused_component.tscn" id="12_confused"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 9.0
@@ -350,6 +351,9 @@ position = Vector2(10, 0)
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
 texture = ExtResource("6_pxiuf")
+
+[node name="ConfusedSprite" parent="Visuals" index="3" instance=ExtResource("12_confused")]
+position = Vector2(0, -2)
 
 [node name="HitParticles" parent="." index="9" unique_id=1586402119]
 process_material = SubResource("ParticleProcessMaterial_1esm0")

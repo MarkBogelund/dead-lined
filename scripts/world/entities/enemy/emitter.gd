@@ -16,6 +16,7 @@ const REPICK_INTERVAL := 0.5
 @onready var left_muzzle: Node2D = $Visuals/EmitPivot/LeftMuzzle
 @onready var right_muzzle: Node2D = $Visuals/EmitPivot/RightMuzzle
 @onready var body_sprite: AnimatedSprite2D = $Visuals/Body
+@onready var confused: ConfusedComponent = $Visuals/ConfusedSprite
 
 @export var stats: EmitterStats
 
@@ -133,3 +134,7 @@ func buff_damage(multiplier: float) -> void:
 func _before_handle_damage() -> void:
 	if is_emitting():
 		_emit_cooldown = stats.hit_cooldown
+		confused.start_confusion(stats.hit_cooldown)
+
+func _before_handle_death() -> void:
+	confused.stop_confusion()
