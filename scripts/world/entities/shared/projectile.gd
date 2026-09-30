@@ -25,6 +25,7 @@ func _ready() -> void:
 	if animation.has_configured_animation("idle"):
 		animation.play_animation("idle")
 	hitbox.hit_target.connect(_on_hit_target)
+	hitbox.hit_area_target.connect(_on_hit_area_target)
 	hitbox.damage = _damage
 	hitbox.knockback = _knockback
 	if _lifetime > 0.0:
@@ -46,6 +47,12 @@ func despawn() -> void:
 
 func _on_hit_target(_target: Node) -> void:
 	_resolve_hit()
+
+func _on_hit_area_target(target: Node) -> void:
+	if not is_player_projectile or not target.has_method("receive_player_projectile_hit"):
+		return
+	if bool(target.call(&"receive_player_projectile_hit")):
+		_resolve_hit()
 
 func receive_wrench_hit() -> bool:
 	if is_player_projectile or _is_resolving_hit:

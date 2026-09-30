@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://cbnqhx552ue1l"]
+
+[ext_resource type="Texture2D" uid="uid://dctueislee8te" path="res://assets/sprites/environment/lever.png" id="1_i1aue"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="2_1dwqt"]
+[ext_resource type="Script" uid="uid://g2g3dtukumt7" path="res://scripts/world/environment/lever.gd" id="3_lever"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_js0lu"]
+atlas = ExtResource("1_i1aue")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gxtfn"]
+atlas = ExtResource("1_i1aue")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_twgab"]
+atlas = ExtResource("1_i1aue")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_02fa5"]
+atlas = ExtResource("1_i1aue")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nepv3"]
+atlas = ExtResource("1_i1aue")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_spl43"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_js0lu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gxtfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_twgab")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_02fa5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nepv3")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="Animation" id="Animation_js0lu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_gxtfn"]
+resource_name = "swing_left"
+length = 0.26666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03333334, 0.06666668, 0.16666669, 0.2666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [4, 3, 2, 1, 0]
+}
+
+[sub_resource type="Animation" id="Animation_twgab"]
+resource_name = "swing_right"
+length = 0.26666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.03333334, 0.06666667, 0.16666667, 0.26666668),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_twgab"]
+_data = {
+&"RESET": SubResource("Animation_js0lu"),
+&"swing_left": SubResource("Animation_gxtfn"),
+&"swing_right": SubResource("Animation_twgab")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_spl43"]
+radius = 13.038404
+
+[sub_resource type="Gradient" id="Gradient_f5wuv"]
+offsets = PackedFloat32Array(0.24668436, 0.7161804)
+colors = PackedColorArray(0.55100006, 0.8436, 0.95, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_js0lu"]
+gradient = SubResource("Gradient_f5wuv")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Lever" type="Node2D" unique_id=2049430126]
+z_index = 10
+script = ExtResource("3_lever")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=133880804]
+position = Vector2(0, -4)
+sprite_frames = SubResource("SpriteFrames_spl43")
+frame = 1
+
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1037709432]
+libraries/ = SubResource("AnimationLibrary_twgab")
+script = ExtResource("2_1dwqt")
+metadata/_custom_type_script = "uid://cq7h5m3f8n2jk"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1254648302]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1213005027]
+shape = SubResource("CircleShape2D_spl43")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=549343643]
+color = Color(0.7522579, 0.48737758, 9.62615e-07, 1)
+energy = 0.4
+texture = SubResource("GradientTexture2D_js0lu")

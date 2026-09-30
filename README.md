@@ -223,6 +223,8 @@ Conveyor belts are inline `Area2D` components in the level scene, not standalone
 
 Build-phase duration is configured in [resources/wave_settings.tres](resources/waves/wave_settings.tres) as `build_phase_duration`.
 
+The phase lever ([lever.tscn](scenes/world/environment/lever.tscn), [lever.gd](scripts/world/environment/lever.gd)) listens directly to `WaveManager` phase signals. Build phase sets its editable `build_phase_color` (green) and plays low-priority `swing_left`; combat phase sets `combat_phase_color` (red) and plays locking, higher-priority `swing_right`. During build phase, its Area2D opts into the generic player-projectile `receive_player_projectile_hit()` contract; an accepted hit calls `WaveManager.skip_build_phase()`, resolves that projectile, and ignores duplicate requests until the next build phase. In combat the contract returns false, so player projectiles pass through.
+
 Each `EnemySpawner` builds a finite shuffled queue from [resources/waves/enemy_spawn_stats.tres](resources/waves/enemy_spawn_stats.tres) and spawns it at the configured interval. Each enemy entry owns its enabled state, introduction wave, base amount, multiplicative per-wave amount growth, and cumulative health multiplier interval. Counts are per spawner.
 
 Combat ends only after every spawner finishes its queue and all spawned enemies are dead (not on a timer—victory requires clearing enemies). Pickups remain during build phase and are cleared when the next combat phase begins.

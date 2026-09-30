@@ -46,6 +46,7 @@ Survive increasingly difficult rounds of buggy hostile drones by dodging their a
 - Sell turrets by holding Sell (refunds 75% of everything spent on that turret, capped at max capacity)
 - Repair damaged turrets by when in proximity, in build or combat phase (drains capacity while repairing)
 - Collect leftover enemy capacity orbs
+- Shoot the green, left-positioned lever to end the build phase and start combat early
 
 **Risk/Reward:**
 - Building costs capacity but reduces enemy density
