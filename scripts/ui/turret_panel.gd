@@ -10,8 +10,6 @@ signal upgrade_hold_ended
 signal sell_requested
 signal close_requested
 
-## Pixels between the turret's screen position and the panel's near edge.
-@export var side_gap := 24.0
 ## Price row color while hovering Upgrade (orbs spent) and Sell (orbs gained).
 @export var cost_color := Color(1.0, 0.35, 0.35)
 @export var refund_color := Color(0.45, 1.0, 0.45)
@@ -91,12 +89,6 @@ func set_outline_colors(start_color: Color, end_color: Color) -> void:
 		var shader_material := outline.material as ShaderMaterial
 		shader_material.set_shader_parameter("start_color", start_color)
 		shader_material.set_shader_parameter("end_color", end_color)
-
-## anchor_x is the turret's screen x; the panel sits left of it unless that would leave the screen.
-func place_beside(anchor_x: float) -> void:
-	var on_left := anchor_x - side_gap - size.x >= 0.0
-	position = Vector2(-side_gap - size.x if on_left else side_gap, -size.y * 0.5)
-	pivot_offset = Vector2(size.x if on_left else 0.0, size.y * 0.5)
 
 func _gui_input(event: InputEvent) -> void:
 	var mouse_button := event as InputEventMouseButton

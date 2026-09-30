@@ -1,7 +1,8 @@
 extends Node
 class_name TurretHUD
 
-## Owns the turret's upgrade panel: opens on proximity + open action in build phase, placed beside the turret.
+## Owns the turret's upgrade panel: opens on proximity + open action in build phase.
+## The CanvasLayer origin follows the turret, so panel and button placement is authored in the scene.
 ## Forwards panel requests to the turret.
 
 signal opened
@@ -9,10 +10,13 @@ signal closed
 
 @onready var panel: TurretPanel = %TurretPanel
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
-@onready var actions: Control = $CanvasLayer/Actions
 @onready var toggle_menu: ToggleMenuComponent = $ToggleMenu
 
 var _turret: TurretBase = null
+
+func _ready() -> void:
+	# Editor-only reference for laying out the HUD around a turret.
+	$CanvasLayer/TurretPreview.queue_free()
 
 func setup(turret: TurretBase) -> void:
 	_turret = turret
@@ -37,8 +41,6 @@ func _process(_delta: float) -> void:
 	if not is_instance_valid(_turret):
 		return
 	canvas_layer.offset = _turret.get_viewport().get_canvas_transform() * _turret.global_position
-	panel.place_beside(canvas_layer.offset.x)
-	actions.position = Vector2(-actions.size.x * 0.5, 28.0)
 
 func _on_turret_sold(_refund: float) -> void:
 	_on_turret_removed()
