@@ -10,14 +10,14 @@ For development setup and code architecture, see [README.md](README.md).
 ## 🎮 Game Overview: Core, Twist, Hook
 
 ### The Hook (Elevator Pitch)
-**"Dodge bullet patterns while managing unreliable turrets that also shoot you."**
+**A bullet hell tower defence game where your turrets target you too.**
 
-A single-resource arcade game where you survive by dodging incoming projectiles and strategically placing turrets to reduce enemy density. The catch: your turrets are buggy and attack indiscriminately—including you. Upgrade them fully to make them reliable.
-
+Survive increasingly difficult rounds of buggy hostile drones by dodging their attacks. Spend your own capacity on building a cohort of turrets to aid your defense, however, turrets are also buggy and target you as well. Managing your capacity and turret setup can quickly become chaotic, and loss of all capacity leads to burn out.
 ### Core Gameplay
-1. **Free-Fire Dodging** — Shoot enemies infinitely and fast (0.25s cooldown, 0 capacity cost). Dodging bullet patterns is the primary skill loop.
-2. **Turret Strategy** — Place turrets during build phases to multiply your firepower. Costs capacity. Risky because they shoot at you too.
-3. **Crunch Time Mode** — Pick up a rare powerup dropped by enemies, then activate it to become invincible, switch to the wrench as your only weapon, and gain combat buffs.
+1. **Dodging**: Use movement and dashing to dodge incoming attacks from drones or turrets. Lure drones away from your turrets, when they are under heavy attack. 
+2. **Manage Turrets** : Spend capactity on placing and upgrading turrets during Lunch Time to multiply your firepower. Keep them alive by luring enemies away and repairing the turret, when they are low on capacity. 
+3. **Fire your weapon**: You have a weak free fire weapon, which can be used to defend yourself, but is to weak to rely on.
+3. **Crunch Time Mode**: Pick up a rare powerup dropped by enemies, then activate it to become invincible, switch to the wrench as your only weapon, and gain combat buffs.
 
 ### The Unique Twist
 **Turrets as Double-Edged Sword:**
@@ -42,10 +42,10 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 
 **What you do:**
 - Place new turrets (costs capacity)
-- Upgrade existing turrets by holding Upgrade on the turret panel (costs capacity; each level applies an unannounced buff)
+- Upgrade existing turrets by holding Upgrade on the turret panel (costs capacity; each level applies a buff)
 - Sell turrets by holding Sell (refunds 75% of everything spent on that turret, capped at max capacity)
-- Repair damaged turrets by holding Left Shift inside their radius, in build or combat phase (drains capacity while repairing)
-- Collect leftover enemy drops
+- Repair damaged turrets by when in proximity, in build or combat phase (drains capacity while repairing)
+- Collect leftover enemy capacity orbs
 
 **Risk/Reward:**
 - Building costs capacity but reduces enemy density
@@ -56,7 +56,7 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 **Duration:** Ends when all enemies in the wave are destroyed
 
 **What you do:**
-- Dodge incoming projectiles (PRIMARY SKILL)
+- Dodge incoming attacks (PRIMARY SKILL)
 - Pull aggro off turrets: enemies always go for the player within 100 px, and only switch to a turret when it is more than 80 px closer than the player (they come back once the player is within 40 px of the turret's distance)
 - Dash: the player is invincible from the moment dash is pressed until the dash ends. A quick tap (released within 0.15 s) is a normal 120 px dash. Holding longer charges it: time slows (0.5×, still steering), the player glows white, and releasing dashes in the movement direction (or facing direction when standing still). Distance grows linearly from 120 px to 300 px at 0.5 s after the press (real time, auto-fires). No shooting or activating Crunch Time while the button is held.
 - Shoot enemies freely (0.25s cooldown, 0 capacity cost)
@@ -70,7 +70,9 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 
 **Activation:** Press Crunch Time (C) during combat while carrying the powerup. It is used up on activation and lasts 5 seconds. No capacity cost.
 
-**Losing it:** The carried powerup disappears if the player is hit, or when the round ends unused. Uncollected powerups disappear as soon as combat ends, or after their lifetime. Leftover orbs stay through the build phase so they can still be collected, and clear when the next wave starts.
+**Losing it:** The carried powerup disappears if the player is hit, or when the round ends unused. Uncollected powerups disappear as soon as combat ends, or after their lifetime. 
+
+Leftover capacity orbs stay through the build phase so they can still be collected, and clear when the next wave starts.
 
 **Effect:**
 - Invincibility
@@ -96,45 +98,28 @@ A single-resource arcade game where you survive by dodging incoming projectiles 
 
 **Strategic Tension:** Build turrets to help combat, but every turret spends the same capacity that keeps you alive.
 
-**Death Condition:** Capacity reaches 0% → Player burns out and dies.
+**Death Condition:** Capacity reaches 0% → Player burns out and Game Over.
 
 ---
 
 ## 👾 Enemies & Combat
 
 ### Enemy Types
-- **Stalker (Ranged):** Maintains distance and fires slow, readable projectiles. Drops a medium number of orbs.
-- **Chaser (Melee):** Rushes and pressures the player or nearby turrets. Drops a few orbs.
-- **Kamikazer:** Commits to a charge and self-destructs on contact. High burst damage and lower frequency.
+- **Chaser:** Approaches from a personal flanking offset, then closes directly for contact damage and bounces back after a hit.
+- **Kamikazer:** Seeks until it has line of sight, locks into a straight charge, and explodes on contact with the player or a turret; a missed or blocked charge must decelerate or recover before trying again.
+- **Stalker:** Maintains a preferred distance, circles its target while it has line of sight, and fires telegraphed, aimed projectiles.
+- **Shotgunner:** Maintains distance, then stops for a readable windup before firing a projectile fan; taking damage during the windup cancels the shot and starts its cooldown.
+- **Emitter:** Relocates to a safe spot away from threats, then stands still and fires a rotating two-sided projectile stream; nearby threats make it flee, and hits briefly pause active emission.
 
-**Design Goal:** Slow, readable projectiles allow skill-based dodging. Mix of enemy types creates tactical variety.
+**Design Goal:** Slow, readable attacks allow skill-based dodging. Mix of enemy types creates tactical variety.
 
 Each wave uses a finite enemy roster. Enemy types can enter on different waves, grow in count independently, and receive type-specific periodic health increases.
 
-### Turrets
-**Seeker:**
-- Rotates toward target, fires powerful projectiles
-- **Problem:** Shoots both drones AND you (buggy software)
-- **Solution:** Upgrade to max level ("MAX") → stops aiming at you; stray shots can still hit
-- **Cost:** Building and upgrading cost capacity
-- **Benefit:** Reduces enemy count, multiplies your firepower
+### Turret Types
+- **Seeker:** Rotates toward the best visible target, telegraphs its shot, and fires a powerful aimed projectile along a clear line of sight.
+- **Shockwaver:** Triggers when a target enters its radius, telegraphs a pulse, then expands a doughnut-shaped shockwave that damages each reached target once and knocks enemies outward; it trades directional reach for local crowd control.
 
-**Shockwaver:**
-- Detects enemies or the player entering its max range (the same radius the shockwave expands to)
-- Telegraphs, then emits an expanding doughnut-shaped shockwave
-- Damages every target reached by the ring once per pulse
-- Knocks enemies back from the turret as the ring reaches them
-- Allows the player to dash through the moving wavefront with correct timing
-- Trades directional range for local crowd control around the turret
-- Upgrades can raise health, damage, blast radius and pulse rate; at max level the player no longer triggers it, but its pulses still damage the player
-
----
-
-## 📐 Map & Visuals
-
-- **Camera:** Zoomed out for better visibility of incoming projectile patterns
-- **Map Size:** Expanded playable area to support dodge patterns and turret positioning strategy
-- **Theme:** Dark-comedy corporate setting (CentriCore facility); pixel-art aesthetic
+Turret at max level stops targeting the player. 
 
 ---
 
@@ -153,11 +138,11 @@ When you die, your score determines the company's financial penalty. Higher scor
 ## ✅ Design Alignment Checklist
 
 When adding features, ask:
-- [ ] Does this support dodging as the primary skill?
-- [ ] Does this create meaningful capacity decisions?
-- [ ] Does this reinforce the "buggy turrets" theme?
-- [ ] Does this fit the dark-comedy tone?
-- [ ] Is this the simplest implementation that works?
+-  Does this support dodging as the primary skill?
+-  Does this create meaningful capacity decisions?
+-  Does this reinforce the "buggy turrets" theme?
+-  Does this fit the dark-comedy tone?
+-  Is this the simplest implementation that works?
 
 If you answer "no" to any, reconsider or remove the feature. Focus beats feature bloat.
 
