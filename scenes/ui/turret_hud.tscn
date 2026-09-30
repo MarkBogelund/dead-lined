@@ -415,7 +415,7 @@ region_rect = Rect2(7, 14, 22, 28)
 
 [node name="TurretPanel" type="NinePatchRect" parent="CanvasLayer" unique_id=1743102423]
 unique_name_in_owner = true
-self_modulate = Color(1, 1, 1, 0.78431374)
+self_modulate = Color(1, 1, 1, 0.88235295)
 material = ExtResource("7_outline")
 offset_left = -64.0
 offset_top = -32.0
@@ -431,7 +431,7 @@ patch_margin_bottom = 4
 script = ExtResource("2_panel")
 
 [node name="PanelBG" type="NinePatchRect" parent="CanvasLayer/TurretPanel" unique_id=988946980]
-self_modulate = Color(0.16, 0.16, 0.16, 0.78431374)
+self_modulate = Color(0.16, 0.16, 0.16, 0.88235295)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
