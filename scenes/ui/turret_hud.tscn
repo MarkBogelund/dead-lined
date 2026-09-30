@@ -341,7 +341,7 @@ region = Rect2(4, 4, 8, 8)
 
 [sub_resource type="LabelSettings" id="LabelSettings_price"]
 font = ExtResource("6_font")
-font_size = 8
+font_size = 6
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sell"]
 atlas = ExtResource("5_button_icons")
@@ -534,7 +534,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 6
 alignment = 1
 
 [node name="UpgradeStack" type="VBoxContainer" parent="CanvasLayer/Actions/Buttons" unique_id=481919577]
