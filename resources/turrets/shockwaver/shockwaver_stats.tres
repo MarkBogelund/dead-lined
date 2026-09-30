@@ -5,26 +5,26 @@
 
 [sub_resource type="Resource" id="Upgrade1"]
 script = ExtResource("2_upgrade")
-cost = 25.0
+cost = 1.0
 max_health = 1.125
 attack_range = 1.11
 
 [sub_resource type="Resource" id="Upgrade2"]
 script = ExtResource("2_upgrade")
-cost = 35.0
+cost = 1.0
 damage = 2.0
 attack_cooldown = 0.67
 
 [sub_resource type="Resource" id="Resource_nmlpx"]
 script = ExtResource("2_upgrade")
-cost = 45.0
+cost = 1.0
 max_health = 1.25
 attack_range = 1.39
 metadata/_custom_type_script = "uid://d0774ofuob1o8"
 
 [sub_resource type="Resource" id="Resource_qtbxs"]
 script = ExtResource("2_upgrade")
-cost = 55.0
+cost = 1.0
 max_health = 1.375
 damage = 4.0
 attack_range = 1.67

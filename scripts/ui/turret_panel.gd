@@ -12,19 +12,24 @@ signal close_requested
 
 ## Pixels between the turret's screen position and the panel's near edge.
 @export var side_gap := 24.0
+## Price row color while hovering Upgrade (orbs spent) and Sell (orbs gained).
+@export var cost_color := Color(1.0, 0.35, 0.35)
+@export var refund_color := Color(0.45, 1.0, 0.45)
+
+enum Hover { NONE, UPGRADE, SELL }
 
 @onready var level_label: Label = %LevelLabel
 @onready var stats_view: TurretStatsView = %TurretStatsView
+@onready var price_row: Control = %PriceRow
+@onready var price_label: Label = %PriceLabel
 @onready var upgrade_button: HoldButton = %UpgradeButton
-@onready var upgrade_label: Label = %UpgradeLabel
 @onready var max_label: Label = %MaxLabel
 @onready var sell_button: HoldButton = %SellButton
-@onready var sell_label: Label = %SellLabel
 @onready var animation_handler: AnimationHandler = $AnimationHandler
 @onready var _outlines: Array[CanvasItem] = [%PanelOutline, %StatsOutline]
 
 var _turret: TurretBase
-var _previewing := false
+var _hover := Hover.NONE
 
 func _ready() -> void:
 	visible = false
@@ -37,10 +42,14 @@ func _ready() -> void:
 	upgrade_button.hold_started.connect(func() -> void: upgrade_hold_started.emit(upgrade_button.hold_duration))
 	upgrade_button.hold_ended.connect(upgrade_hold_ended.emit)
 	sell_button.hold_completed.connect(sell_requested.emit)
-	upgrade_button.mouse_entered.connect(_set_previewing.bind(true))
-	upgrade_button.mouse_exited.connect(_set_previewing.bind(false))
-	upgrade_button.focus_entered.connect(_set_previewing.bind(true))
-	upgrade_button.focus_exited.connect(_set_previewing.bind(false))
+	upgrade_button.mouse_entered.connect(_set_hover.bind(Hover.UPGRADE))
+	upgrade_button.mouse_exited.connect(_clear_hover.bind(Hover.UPGRADE))
+	upgrade_button.focus_entered.connect(_set_hover.bind(Hover.UPGRADE))
+	upgrade_button.focus_exited.connect(_clear_hover.bind(Hover.UPGRADE))
+	sell_button.mouse_entered.connect(_set_hover.bind(Hover.SELL))
+	sell_button.mouse_exited.connect(_clear_hover.bind(Hover.SELL))
+	sell_button.focus_entered.connect(_set_hover.bind(Hover.SELL))
+	sell_button.focus_exited.connect(_clear_hover.bind(Hover.SELL))
 	animation_handler.configure_animation("appear", 0, false)
 	animation_handler.configure_animation("disappear", 1, false)
 	animation_handler.animation_finished.connect(_on_animation_finished)
@@ -56,7 +65,7 @@ func open(turret: TurretBase) -> void:
 	animation_handler.play_animation("appear")
 
 func close() -> void:
-	_previewing = false
+	_hover = Hover.NONE
 	set_process(false)
 	animation_handler.play_animation("disappear")
 
@@ -80,22 +89,38 @@ func _gui_input(event: InputEvent) -> void:
 	if mouse_button.button_index == MOUSE_BUTTON_RIGHT:
 		close_requested.emit()
 
-func _set_previewing(value: bool) -> void:
-	_previewing = value
+func _set_hover(value: Hover) -> void:
+	_hover = value
+
+## Ignores exits from a button that is no longer the hovered one.
+func _clear_hover(value: Hover) -> void:
+	if _hover == value:
+		_hover = Hover.NONE
 
 func _refresh() -> void:
 	var maxed := _turret.is_max_level()
-	var preview := _turret.get_next_level_stats() if _previewing and not maxed else null
+	var preview := _turret.get_next_level_stats() if _hover == Hover.UPGRADE and not maxed else null
 	level_label.text = "Lv %d" % (_turret.get_level() + (1 if preview else 0))
 	level_label.self_modulate = stats_view.preview_color if preview else Color.WHITE
 	stats_view.show_stats(_turret.get_stat_values(), preview)
 	upgrade_button.visible = not maxed
 	max_label.visible = maxed
 	if not maxed:
-		upgrade_label.text = "%d" % int(_turret.get_upgrade_cost())
 		upgrade_button.disabled = not _turret.can_upgrade()
-	sell_label.text = "%d" % int(_turret.get_sell_value())
 	sell_button.disabled = not _turret.can_sell()
+	_refresh_price(maxed)
+
+## Hidden with alpha rather than visible so the panel keeps its size.
+func _refresh_price(maxed: bool) -> void:
+	var showing_upgrade := _hover == Hover.UPGRADE and not maxed
+	var showing_sell := _hover == Hover.SELL
+	price_row.modulate.a = 1.0 if showing_upgrade or showing_sell else 0.0
+	if showing_upgrade:
+		price_label.text = "-%d" % int(_turret.get_upgrade_cost())
+		price_label.self_modulate = cost_color
+	elif showing_sell:
+		price_label.text = "+%d" % int(_turret.get_sell_value())
+		price_label.self_modulate = refund_color
 
 ## The root catches clicks on the panel; buttons pass unhandled ones (e.g. right click) up to it.
 func _route_mouse(node: Node) -> void:

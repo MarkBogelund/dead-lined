@@ -33,10 +33,6 @@ font_size = 10
 atlas = ExtResource("5_pm3rh")
 region = Rect2(34, 10, 12, 12)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_b5pcb"]
-atlas = ExtResource("10_kpbou")
-region = Rect2(0, 0, 16, 16)
-
 [sub_resource type="LabelSettings" id="LabelSettings_spl43"]
 font = ExtResource("6_ign1u")
 font_size = 6
@@ -44,6 +40,14 @@ font_size = 6
 [sub_resource type="AtlasTexture" id="AtlasTexture_3jpqe"]
 atlas = ExtResource("5_pm3rh")
 region = Rect2(18, 10, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lqoh"]
+atlas = ExtResource("10_kpbou")
+region = Rect2(4, 4, 8, 8)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0lqoh"]
+font = ExtResource("6_ign1u")
+font_size = 8
 
 [sub_resource type="Animation" id="Animation_reset"]
 length = 0.001
@@ -108,8 +112,9 @@ script = ExtResource("1_jrbl1")
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 0
+offset_top = -11.0
 offset_right = 101.0
-offset_bottom = 96.0
+offset_bottom = 107.0
 script = ExtResource("2_panel")
 
 [node name="PanelEdge" type="NinePatchRect" parent="CanvasLayer/TurretPanel" unique_id=54240658]
@@ -162,14 +167,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 10
 
 [node name="Content" type="VBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin" unique_id=766392789]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = -2
 alignment = 1
 
 [node name="LevelRow" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=68762574]
@@ -181,6 +186,10 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Lv 1"
 label_settings = SubResource("LabelSettings_level")
+
+[node name="Control" type="Control" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=301221063]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
 
 [node name="StatsOutline" type="NinePatchRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=1310340396]
 unique_name_in_owner = true
@@ -214,66 +223,44 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="TurretStatsView" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin" unique_id=932522057 instance=ExtResource("8_stats_view")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+
+[node name="Control2" type="Control" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=1014617195]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
 
 [node name="Actions" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=1867402857]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="UpgradeButton" type="TextureButton" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions" unique_id=1903084934 node_paths=PackedStringArray("progress_target")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(16, 22)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("4_hold")
 progress_shader = ExtResource("4_progress_shader")
-progress_target = NodePath("VBoxContainer/TextureRect")
+progress_target = NodePath("TextureRect")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton" unique_id=1068676192]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton" unique_id=42369551]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = -3
-alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton/VBoxContainer" unique_id=42369551]
-layout_mode = 2
 size_flags_vertical = 3
 texture = SubResource("AtlasTexture_spl43")
 stretch_mode = 5
-
-[node name="PriceRow" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton/VBoxContainer" unique_id=602115804]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = -3
-alignment = 1
-
-[node name="PriceIcon" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton/VBoxContainer/PriceRow" unique_id=741231543]
-custom_minimum_size = Vector2(10, 10)
-layout_mode = 2
-mouse_filter = 2
-texture = SubResource("AtlasTexture_b5pcb")
-stretch_mode = 5
-
-[node name="UpgradeLabel" type="Label" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/UpgradeButton/VBoxContainer/PriceRow" unique_id=1832294696]
-unique_name_in_owner = true
-layout_mode = 2
-text = "15"
-label_settings = SubResource("LabelSettings_spl43")
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MaxLabel" type="Label" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions" unique_id=47579786]
 unique_name_in_owner = true
@@ -289,48 +276,40 @@ vertical_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(16, 22)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("4_hold")
 progress_shader = ExtResource("4_progress_shader")
-progress_target = NodePath("VBoxContainer/TextureRect")
+progress_target = NodePath("TextureRect")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton" unique_id=1159413202]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton" unique_id=1836151854]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = -3
-alignment = 1
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton/VBoxContainer" unique_id=1836151854]
-layout_mode = 2
 size_flags_vertical = 3
 texture = SubResource("AtlasTexture_3jpqe")
 stretch_mode = 5
 
-[node name="PriceRow" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton/VBoxContainer" unique_id=439201132]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_constants/separation = -3
-alignment = 1
-
-[node name="PriceIcon" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton/VBoxContainer/PriceRow" unique_id=1556385061]
-custom_minimum_size = Vector2(10, 10)
-layout_mode = 2
-mouse_filter = 2
-texture = SubResource("AtlasTexture_b5pcb")
-stretch_mode = 5
-
-[node name="SellLabel" type="Label" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/Actions/SellButton/VBoxContainer/PriceRow" unique_id=1568251803]
+[node name="PriceRow" type="HBoxContainer" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content" unique_id=898648321]
 unique_name_in_owner = true
 layout_mode = 2
-text = "15"
-label_settings = SubResource("LabelSettings_spl43")
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/PriceRow" unique_id=1695601478]
+custom_minimum_size = Vector2(9, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_0lqoh")
+stretch_mode = 3
+
+[node name="PriceLabel" type="Label" parent="CanvasLayer/TurretPanel/PanelEdge/PanelOutline/PanelBG/Margin/Content/PriceRow" unique_id=1862938178]
+unique_name_in_owner = true
+layout_mode = 2
+text = "25"
+label_settings = SubResource("LabelSettings_0lqoh")
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="CanvasLayer/TurretPanel" unique_id=120232337]
 libraries/ = SubResource("AnimationLibrary_panel")

@@ -25,6 +25,19 @@ atlas = ExtResource("3_icons")
 region = Rect2(24, 0, 12, 12)
 
 [node name="TurretStatsView" type="GridContainer" unique_id=257776274]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_top = -13.0
+offset_right = 37.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 mouse_filter = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 2
@@ -32,6 +45,7 @@ columns = 2
 script = ExtResource("1_view")
 
 [node name="HealthRow" type="HBoxContainer" parent="." unique_id=1054036135]
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 2
@@ -45,11 +59,14 @@ stretch_mode = 5
 
 [node name="HealthLabel" type="Label" parent="HealthRow" unique_id=44144298]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_stat")
+horizontal_alignment = 1
 
 [node name="DamageRow" type="HBoxContainer" parent="." unique_id=652188636]
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 2
@@ -63,11 +80,14 @@ stretch_mode = 5
 
 [node name="DamageLabel" type="Label" parent="DamageRow" unique_id=119832898]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_stat")
+horizontal_alignment = 1
 
 [node name="RangeRow" type="HBoxContainer" parent="." unique_id=1736131531]
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 2
@@ -81,11 +101,14 @@ stretch_mode = 5
 
 [node name="RangeLabel" type="Label" parent="RangeRow" unique_id=238172196]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_stat")
+horizontal_alignment = 1
 
 [node name="SpeedRow" type="HBoxContainer" parent="." unique_id=1058464497]
+custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 2
@@ -99,6 +122,8 @@ stretch_mode = 5
 
 [node name="SpeedLabel" type="Label" parent="SpeedRow" unique_id=1988710995]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(18, 0)
 layout_mode = 2
 text = "0s"
 label_settings = SubResource("LabelSettings_stat")
+horizontal_alignment = 1

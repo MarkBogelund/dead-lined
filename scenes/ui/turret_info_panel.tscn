@@ -6,7 +6,7 @@
 [ext_resource type="Material" uid="uid://lecq77tvhlrt" path="res://shaders/circulating_gradient_blue.tres" id="3_rktw6"]
 [ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="4_anim"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yn6dg"]
-[ext_resource type="PackedScene" path="res://scenes/ui/turret_stats_view.tscn" id="5_stats_view"]
+[ext_resource type="PackedScene" uid="uid://dinfr5rh21ada" path="res://scenes/ui/turret_stats_view.tscn" id="5_stats_view"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
 atlas = ExtResource("2_tyyj7")
@@ -214,16 +214,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
 [node name="TurretStatsView" parent="PanelEdge/PanelOutline/PanelBG/Margin/Content/StatsOutline/StatsBG/Margin" unique_id=1678128236 instance=ExtResource("5_stats_view")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 6
+size_flags_vertical = 6
 
 [node name="LimitLabel" type="Label" parent="." unique_id=415035585]
 unique_name_in_owner = true
