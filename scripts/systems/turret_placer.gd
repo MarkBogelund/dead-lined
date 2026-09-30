@@ -15,7 +15,9 @@ var active := false
 
 func _process(_delta: float) -> void:
 	if active and ghost_turret and player:
-		var direction := get_global_mouse_position() - player.position
+		var controller_aim := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
+		var direction := controller_aim * max_place_distance \
+			if not controller_aim.is_zero_approx() else get_global_mouse_position() - player.position
 		if direction.length() > max_place_distance:
 			direction = direction.normalized() * max_place_distance
 		ghost_turret.global_position = player.position + direction

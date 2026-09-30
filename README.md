@@ -38,6 +38,33 @@ The VS Code Godot Tools extension is already configured in [.vscode/settings.jso
 
 ---
 
+## Controls
+
+Input is defined as semantic actions in [project.godot](project.godot). `Input.get_vector()` supplies radial deadzones for both sticks. PlayStation L3/R3 conventionally means clicking a stick; the controls below use the left and right stick directions, not those clicks.
+
+| Action | Keyboard and mouse | Controller |
+| --- | --- | --- |
+| Move | WASD / arrow keys | Left stick |
+| Aim and primary attack | Mouse + left mouse button | Right stick direction |
+| Dash | Space | R2 |
+| Start combat phase | B | Triangle |
+| Confirm / place turret | Left mouse button | Cross |
+| Open contextual menu / activate powerup | E | Cross |
+| Cancel placement / close menu | Esc | Circle |
+| Repair turret | Right mouse button | Not assigned yet |
+| Pause | P | Not assigned yet |
+
+The radial shop follows the active mouse or right-stick direction; Cross confirms its highlighted turret and Circle closes it. Turret upgrade/sell buttons use Godot UI focus navigation and retain their hold-to-confirm behavior. Open world menus join `open_input_blocking_menus`, preventing right-stick aiming from firing through them. Mouse motion switches menu highlighting back to mouse input, while a joypad event switches it to controller input.
+
+Controller rollout plan:
+
+1. **Implemented foundation:** left-stick movement, right-stick aim/held primary attack, right-stick turret placement, radial-shop selection, R2 dash, Triangle phase start, Cross contextual confirmation, Circle cancellation, and initial menu focus.
+2. **Choose remaining buttons:** assign repair (recommended L2) and pause (recommended Options). These are deliberately unbound until the layout is confirmed.
+3. **Polish and accessibility:** add live keyboard/controller glyph swapping, controller rebinding, adjustable stick deadzones, aim sensitivity/response settings, and optional vibration.
+4. **Manual controller pass:** verify Bluetooth device recognition, stick drift, diagonal movement speed, shooting/slashing while rotating the right stick, charged dash press/release, every shop/placement flow, turret upgrade/sell holds, pause/game-over focus, and seamless switching between mouse and controller.
+
+---
+
 ## Architecture
 
 Four layers, signals flow **outward/upward**, direct calls flow **downward** to owned children only:

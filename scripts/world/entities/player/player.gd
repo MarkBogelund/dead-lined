@@ -57,6 +57,8 @@ const TURRET_BODY_LAYER := 6 ## Matches project.godot 2d_physics layer_6 ("Turre
 
 var _conveyor_velocity := Vector2.ZERO
 var _shoot_held := false
+var _using_controller_aim := false
+var _last_controller_aim_direction := Vector2.RIGHT
 
 func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
 	_conveyor_velocity = conveyor_velocity
@@ -131,28 +133,42 @@ func _physics_process(delta: float) -> void:
 	_process_movement(delta)
 	_process_locomotion()
 	if not _is_dead:
-		aiming.aim_at(get_global_mouse_position(), 0.0)
+		var controller_aim := _get_controller_aim_direction()
+		if not controller_aim.is_zero_approx():
+			_using_controller_aim = true
+			_last_controller_aim_direction = controller_aim.normalized()
+		var aim_position := global_position + _last_controller_aim_direction * 100.0 \
+			if _using_controller_aim else get_global_mouse_position()
+		aiming.aim_at(aim_position, 0.0)
 		aim_indicator.point_in(aiming.get_aim_direction())
-		_process_held_primary_attack()
+		_process_held_primary_attack(controller_aim, aim_position)
 	if dash.is_charging():
 		dash_direction_indicator.point_in(_get_dash_direction())
 	else:
 		dash_direction_indicator.fade_out()
 
 ## Holding the primary action retries the active weapon; each component owns its cooldown.
-func _process_held_primary_attack() -> void:
-	if not Input.is_action_pressed("shoot"):
+func _process_held_primary_attack(controller_aim: Vector2, aim_position: Vector2) -> void:
+	if get_tree().get_first_node_in_group(&"open_input_blocking_menus"):
+		_shoot_held = false
+		return
+	var controller_attack := not controller_aim.is_zero_approx()
+	if controller_attack:
+		_shoot_held = true
+	elif not Input.is_action_pressed("shoot"):
 		_shoot_held = false
 	if not _shoot_held or dash.is_holding():
 		return
 	if crunch_time.is_crunch_time_active():
-		var mouse_position := get_global_mouse_position()
-		if melee_weapon.try_slash(mouse_position):
-			_set_facing(mouse_position.x - global_position.x)
+		if melee_weapon.try_slash(aim_position):
+			_set_facing(aim_position.x - global_position.x)
 			animation.play_animation("slash")
 		return
 	if shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction()):
 		animation.play_animation("shoot")
+
+func _get_controller_aim_direction() -> Vector2:
+	return Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
 
 func _get_move_state() -> MoveState:
 	if dash.is_dashing(): return MoveState.DASHING
@@ -192,6 +208,8 @@ func _process_locomotion() -> void:
 		_set_facing(velocity.x)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion or event is InputEventMouseButton:
+		_using_controller_aim = false
 	# Armed here, not by polling, so clicks consumed by the UI or turret placer never fire.
 	if event.is_action_pressed("shoot"):
 		_shoot_held = true
