@@ -62,6 +62,8 @@ class_name PlayerStats
 @export_group("Crunch Time")
 ## Duration of crunch time in seconds
 @export var crunch_duration: float = 5.0
+## Seconds of invincibility retained after Crunch Time buffs and visuals end.
+@export_range(0.0, 5.0, 0.05) var post_crunch_invincibility_duration := 0.5
 ## Slash damage multiplier while crunch time is active
 @export var damage_multiplier: float = 2.0
 ## Slash radius multiplier while crunch time is active

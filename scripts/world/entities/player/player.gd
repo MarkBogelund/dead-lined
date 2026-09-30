@@ -57,6 +57,7 @@ const TURRET_BODY_LAYER := 6 ## Matches project.godot 2d_physics layer_6 ("Turre
 
 var _conveyor_velocity := Vector2.ZERO
 var _shoot_held := false
+var _post_crunch_invincibility_timer := 0.0
 
 func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
 	_conveyor_velocity = conveyor_velocity
@@ -127,6 +128,7 @@ func _connect_signals() -> void:
 	dash.dash_started.connect(_handle_dash_started)
 
 func _physics_process(delta: float) -> void:
+	_post_crunch_invincibility_timer = maxf(0.0, _post_crunch_invincibility_timer - delta)
 	_sync_body_layer()
 	_process_movement(delta)
 	_process_locomotion()
@@ -317,7 +319,9 @@ func _handle_death(from_position: Vector2) -> void:
 	died.emit()
 
 func _is_invincible() -> bool:
-	return crunch_time.is_crunch_time_active() or dash.is_invincible()
+	return crunch_time.is_crunch_time_active() \
+		or _post_crunch_invincibility_timer > 0.0 \
+		or dash.is_invincible()
 
 func can_afford(price: float) -> bool:
 	return capacity.can_afford(price)
@@ -344,12 +348,15 @@ func _on_turret_placement_ended() -> void:
 	melee_weapon.set_enabled(crunch_time.is_crunch_time_active())
 
 func _on_crunch_time_started(buffs: Dictionary) -> void:
+	_post_crunch_invincibility_timer = 0.0
 	melee_weapon.set_crunch_time_active(true, buffs)
 	melee_weapon.set_enabled(true)
 	movement.set_crunch_time_active(true, buffs["speed"])
 	crunch_shine_particles.emitting = true
 
 func _on_crunch_time_ended(buffs: Dictionary, _duration: float) -> void:
+	if not _is_dead:
+		_post_crunch_invincibility_timer = stats.post_crunch_invincibility_duration
 	melee_weapon.set_enabled(false)
 	melee_weapon.set_crunch_time_active(false, buffs)
 	movement.set_crunch_time_active(false, buffs["speed"])

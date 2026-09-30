@@ -76,7 +76,7 @@ Survive increasingly difficult rounds of buggy hostile drones by dodging their a
 Leftover capacity orbs stay through the build phase so they can still be collected, and clear when the next wave starts.
 
 **Effect:**
-- Invincibility
+- Invincibility during Crunch Time and for 0.5 seconds after it ends
 - Wrench becomes your only weapon (shooting disabled)
 - Combat buffs: 3x damage, faster swings, 2x radius, 1.5x speed
 

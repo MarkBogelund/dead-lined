@@ -12,6 +12,7 @@ shoot_cooldown = 0.5
 projectile_damage = 1
 projectile_knockback = 150
 initial_capacity = 100.0
+post_crunch_invincibility_duration = 1.0
 damage_multiplier = 1.5
 arc_angle_multiplier = 2.0
 damage_freeze_duration = 0.15
