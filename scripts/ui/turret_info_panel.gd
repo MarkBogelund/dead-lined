@@ -11,7 +11,10 @@ const COLOR_UNAVAILABLE := Color(0.6, 0.6, 0.6, 1.0)
 
 @onready var name_label: Label = %NameLabel
 @onready var price_label: Label = %PriceLabel
-@onready var stats_view: TurretStatsView = %TurretStatsView
+@onready var health_label: Label = %HealthLabel
+@onready var damage_label: Label = %DamageLabel
+@onready var speed_label: Label = %SpeedLabel
+@onready var range_label: Label = %RangeLabel
 @onready var limit_label: Label = %LimitLabel
 @onready var content: Control = %Content
 @onready var animation_handler: AnimationHandler = $AnimationHandler
@@ -35,7 +38,10 @@ func show_entry(entry: TurretEntry, can_afford: bool, limit_reached: bool) -> vo
 	_set_outline_colors(entry.outline_start_color, entry.outline_end_color)
 	name_label.text = entry.name
 	price_label.text = str(entry.price)
-	stats_view.show_stats(TurretStatValues.from_stats(entry.stats))
+	_set_stat(health_label, str(entry.stats.max_health))
+	_set_stat(damage_label, str(entry.stats.damage))
+	_set_stat(speed_label, _format_cooldown(entry.stats.attack_cooldown))
+	_set_stat(range_label, str(roundi(entry.stats.attack_range)))
 	price_label.self_modulate = Color.WHITE if can_afford else Color.RED
 	content.modulate = Color.WHITE if can_afford and not limit_reached else COLOR_UNAVAILABLE
 	limit_label.visible = limit_reached
@@ -58,3 +64,9 @@ func _set_outline_fill(value: float) -> void:
 		var shader_material := outline.material as ShaderMaterial
 		shader_material.set_shader_parameter("start_color", _from_start.lerp(_to_start, value))
 		shader_material.set_shader_parameter("end_color", _from_end.lerp(_to_end, value))
+
+func _set_stat(label: Label, value: String) -> void:
+	label.text = value
+
+func _format_cooldown(seconds: float) -> String:
+	return "%ss" % snappedf(seconds, 0.01)

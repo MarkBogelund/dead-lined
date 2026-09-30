@@ -9,6 +9,7 @@ signal closed
 
 @onready var panel: TurretPanel = %TurretPanel
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
+@onready var actions: Control = $CanvasLayer/Actions
 @onready var toggle_menu: ToggleMenuComponent = $ToggleMenu
 
 var _turret: TurretBase = null
@@ -37,6 +38,7 @@ func _process(_delta: float) -> void:
 		return
 	canvas_layer.offset = _turret.get_viewport().get_canvas_transform() * _turret.global_position
 	panel.place_beside(canvas_layer.offset.x)
+	actions.position = Vector2(-actions.size.x * 0.5, 28.0)
 
 func _on_turret_sold(_refund: float) -> void:
 	_on_turret_removed()
