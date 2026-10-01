@@ -13,6 +13,12 @@ class_name AimingComponent
 ## Optional Node2D to visually rotate (e.g., turret canon)
 @export var visual_node: Node2D = null
 
+## Optional presentation nodes for a side-perspective cannon.
+@export var feet_path: NodePath
+@export var graphic_path: NodePath
+@export_range(0.0, 1440.0, 10.0) var visual_turn_speed_degrees := 720.0
+@export_range(-180.0, 180.0, 1.0) var visual_forward_angle_degrees := 0.0
+
 ## Optional spawn point for projectiles. Falls back to pivot if not set.
 @export var muzzle: Node2D = null
 
@@ -21,6 +27,22 @@ class_name AimingComponent
 
 ## Current aim angle in radians
 var current_angle := 0.0
+var feet: Sprite2D
+var graphic: Sprite2D
+var _visual_target_rotation := 0.0
+
+func _ready() -> void:
+	feet = get_node_or_null(feet_path) as Sprite2D
+	graphic = get_node_or_null(graphic_path) as Sprite2D
+	if visual_node:
+		_visual_target_rotation = visual_node.global_rotation
+
+func _process(delta: float) -> void:
+	if visual_node:
+		visual_node.global_rotation = rotate_toward(
+			visual_node.global_rotation,
+			_visual_target_rotation,
+			deg_to_rad(visual_turn_speed_degrees) * delta)
 
 func initialize(s_aim_speed: float, s_accuracy_angle: float) -> void:
 	aim_speed = s_aim_speed
@@ -34,7 +56,10 @@ func _get_pivot() -> Vector2:
 
 ## Aim at a target position
 func aim_at(target_pos: Vector2, delta: float) -> void:
-	var target_angle := (target_pos - _get_pivot()).angle()
+	var target_offset := target_pos - _get_pivot()
+	if target_offset.is_zero_approx():
+		return
+	var target_angle := target_offset.angle()
 	
 	if aim_speed <= 0.0:
 		current_angle = target_angle
@@ -42,7 +67,12 @@ func aim_at(target_pos: Vector2, delta: float) -> void:
 		current_angle = lerp_angle(current_angle, target_angle, aim_speed * delta)
 	
 	if visual_node:
-		visual_node.rotation = current_angle + visual_offset
+		_visual_target_rotation = target_angle + visual_forward_angle_degrees
+		if feet:
+			feet.flip_h = target_offset.x < 0.0
+		if graphic:
+			graphic.flip_h = false
+			graphic.flip_v = target_offset.x < 0.0
 
 ## Get the current aim angle in radians
 func get_current_angle() -> float:

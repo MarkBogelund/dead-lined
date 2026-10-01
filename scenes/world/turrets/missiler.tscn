@@ -9,7 +9,6 @@
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="6_aiming"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_vboif"]
 [ext_resource type="Texture2D" uid="uid://dq55pmiufvrpi" path="res://assets/sprites/turrets/missiler.png" id="7_40blp"]
-[ext_resource type="Script" uid="uid://cahnani2lih1y" path="res://scripts/world/entities/shared/visuals_turn.gd" id="7_visuals_turn"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="8_r3erc"]
 
 [sub_resource type="Animation" id="Launch"]
@@ -105,7 +104,7 @@ region = Rect2(0, 0, 24, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0lqoh"]
 atlas = ExtResource("7_40blp")
-region = Rect2(24, 0, 24, 24)
+region = Rect2(24, 0, 24, 19)
 
 [node name="Missiler" unique_id=900000001 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
@@ -125,6 +124,7 @@ material = SubResource("ShaderMaterial_r3erc")
 texture = SubResource("AtlasTexture_spl43")
 
 [node name="Canon" type="Node2D" parent="Visuals" index="1" unique_id=2068276166]
+position = Vector2(0, -2)
 
 [node name="Graphic" type="Sprite2D" parent="Visuals/Canon" index="0" unique_id=1356551114]
 texture = SubResource("AtlasTexture_0lqoh")
@@ -138,12 +138,10 @@ amount = 20
 [node name="TargetingComponent" type="Node" parent="." index="14" unique_id=900000002]
 script = ExtResource("5_targeting")
 
-[node name="AimingComponent" type="Node" parent="." index="15" unique_id=900000003]
+[node name="AimingComponent" type="Node" parent="." index="15" unique_id=900000003 node_paths=PackedStringArray("visual_node")]
 script = ExtResource("6_aiming")
-muzzle = NodePath("../Visuals/Canon/Muzzle")
-
-[node name="VisualsTurnComponent" type="Node2D" parent="." index="16" unique_id=900000006]
-script = ExtResource("7_visuals_turn")
+visual_node = NodePath("../Visuals/Canon")
 feet_path = NodePath("../Visuals/Feet")
-canon_path = NodePath("../Visuals/Canon/Graphic")
-turn_speed_degrees = 540.0
+graphic_path = NodePath("../Visuals/Canon/Graphic")
+visual_turn_speed_degrees = 540.0
+muzzle = NodePath("../Visuals/Canon/Muzzle")

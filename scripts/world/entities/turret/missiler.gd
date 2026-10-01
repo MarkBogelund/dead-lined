@@ -3,7 +3,6 @@ class_name Missiler
 
 @onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
-@onready var visuals_turn: VisualsTurnComponent = $VisualsTurnComponent
 @onready var muzzle: Marker2D = $Visuals/Canon/Muzzle
 
 @export var stats: MissilerStats
@@ -45,7 +44,6 @@ func _process(delta: float) -> void:
 	var target := targeting.get_best_target(global_position, _is_valid_target)
 	if not target:
 		return
-	visuals_turn.turn_to(target.global_position)
 	aiming.aim_at(target.global_position, delta)
 	if aiming.is_aimed_at(target.global_position):
 		_begin_charge(target.global_position)
@@ -57,7 +55,7 @@ func _begin_charge(impact_position: Vector2) -> void:
 	if not animation.play_animation("launch", -1, animation.get_animation_length("launch") / stats.charge_duration):
 		return
 	_locked_impact = impact_position
-	visuals_turn.turn_to(_locked_impact)
+	aiming.aim_at(_locked_impact, 0.0)
 	_strike = mortar_scene.instantiate() as MortarStrike
 	get_tree().current_scene.add_child(_strike)
 	_strike.setup(_locked_impact, stats.blast_radius, stats.ring_thickness, stats.expansion_duration, _damage, stats.knockback)

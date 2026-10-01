@@ -37,6 +37,5 @@ max_health = 80
 damage = 25
 knockback = 160.0
 attack_range = 220.0
-attack_cooldown = 4.0
 upgrades = Array[ExtResource("3_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Upgrade3"), SubResource("Upgrade4")])
 repair_health_per_second = 40.0

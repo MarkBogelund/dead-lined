@@ -4,7 +4,6 @@ class_name Turret
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
-@onready var visuals_turn: VisualsTurnComponent = $VisualsTurnComponent
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 
 ## Stats
@@ -55,7 +54,6 @@ func _process(delta: float) -> void:
 	if line_of_sight.debug_draw:
 		line_of_sight.can_see(global_position, target.global_position)
 	
-	visuals_turn.turn_to(target.global_position)
 	aiming.aim_at(target.global_position, delta)
 	
 	if aiming.is_aimed_at(target.global_position) and _shoot_delay <= 0.0 and not _telegraphing and shoot.is_ready():
