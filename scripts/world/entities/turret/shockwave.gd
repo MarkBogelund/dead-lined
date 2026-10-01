@@ -20,6 +20,8 @@ var damage := 20
 var knockback_force := 180.0
 ## False = the player no longer starts a pulse, but pulses still damage the player.
 var trigger_on_player := true
+## False lets an external owner call execute_shockwave() at a locked impact point.
+@export var auto_trigger := true
 
 @export_group("Presentation")
 @export var pixel_art_shader: Shader
@@ -70,7 +72,7 @@ func _physics_process(delta: float) -> void:
 		return
 	match _state:
 		State.READY:
-			if _has_trigger_target():
+			if auto_trigger and _has_trigger_target():
 				_enter_windup()
 		State.WINDUP:
 			_state_time += delta
@@ -138,7 +140,8 @@ func cancel_windup() -> void:
 	queue_redraw()
 
 func execute_shockwave() -> void:
-	if not _enabled or _state != State.WINDUP:
+	var manual_ready := not auto_trigger and _state == State.READY
+	if not _enabled or (_state != State.WINDUP and not manual_ready):
 		return
 	_state = State.EXPANDING
 	_state_time = 0.0

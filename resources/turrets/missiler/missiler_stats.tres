@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="MissilerStats" format=3 uid="uid://ps1ie8v0htvh"]
+
+[ext_resource type="Script" uid="uid://duna1c65dorl7" path="res://scripts/data/missiler_stats.gd" id="1_stats"]
+[ext_resource type="Resource" uid="uid://b6y1jjauy4x2y" path="res://resources/turrets/turret_targeting.tres" id="2_targeting"]
+[ext_resource type="Script" uid="uid://d0774ofuob1o8" path="res://scripts/data/turret_upgrade_level.gd" id="3_upgrade"]
+
+[sub_resource type="Resource" id="Upgrade1"]
+script = ExtResource("3_upgrade")
+cost = 25.0
+max_health = 1.15
+attack_range = 1.12
+
+[sub_resource type="Resource" id="Upgrade2"]
+script = ExtResource("3_upgrade")
+cost = 35.0
+damage = 1.8
+attack_cooldown = 0.82
+
+[sub_resource type="Resource" id="Upgrade3"]
+script = ExtResource("3_upgrade")
+cost = 45.0
+max_health = 1.3
+attack_range = 1.3
+
+[sub_resource type="Resource" id="Upgrade4"]
+script = ExtResource("3_upgrade")
+cost = 55.0
+max_health = 1.5
+damage = 3.0
+attack_range = 1.55
+attack_cooldown = 0.68
+
+[resource]
+script = ExtResource("1_stats")
+targeting = ExtResource("2_targeting")
+max_health = 80
+damage = 25
+knockback = 160.0
+attack_range = 220.0
+attack_cooldown = 4.0
+upgrades = Array[ExtResource("3_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Upgrade3"), SubResource("Upgrade4")])
+repair_health_per_second = 40.0

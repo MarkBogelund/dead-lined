@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/entities/turret/mortar_strike.gd" id="1_mortar"]
+[ext_resource type="Script" path="res://scripts/world/entities/turret/shockwave.gd" id="2_wave"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="3_shader"]
+
+[sub_resource type="CircleShape2D" id="ImpactShape"]
+radius = 1.0
+
+[node name="MortarStrike" type="Node2D"]
+script = ExtResource("1_mortar")
+
+[node name="RadialWaveComponent" type="Node2D" parent="."]
+script = ExtResource("2_wave")
+pixel_art_shader = ExtResource("3_shader")
+auto_trigger = false
+
+[node name="DetectionArea" type="Area2D" parent="RadialWaveComponent"]
+collision_layer = 0
+collision_mask = 10
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RadialWaveComponent/DetectionArea"]
+shape = SubResource("ImpactShape")
+
+[node name="ShockwaveVisual" type="ColorRect" parent="RadialWaveComponent"]
+visible = false
+mouse_filter = 2
