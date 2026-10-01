@@ -3,17 +3,18 @@
 [ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://d4bq2mxs03kui" path="res://scripts/world/entities/turret/missiler.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://ps1ie8v0htvh" path="res://resources/turrets/missiler/missiler_stats.tres" id="3_stats"]
-[ext_resource type="PackedScene" path="res://scenes/world/turrets/mortar_strike.tscn" id="4_mortar"]
+[ext_resource type="PackedScene" uid="uid://c3opx1lx86uvq" path="res://scenes/world/turrets/mortar_strike.tscn" id="4_mortar"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="5_40blp"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="5_targeting"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="6_aiming"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_vboif"]
 [ext_resource type="Texture2D" uid="uid://dq55pmiufvrpi" path="res://assets/sprites/turrets/missiler.png" id="7_40blp"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="8_r3erc"]
+[ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="11_r3erc"]
 
 [sub_resource type="Animation" id="Launch"]
 resource_name = "launch"
-length = 0.45
+length = 0.6
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -21,7 +22,7 @@ tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.45),
+"times": PackedFloat32Array(0.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -35,10 +36,10 @@ tracks/1/path = NodePath("Visuals:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.45),
-"transitions": PackedFloat32Array(0.5, 1, 1),
+"times": PackedFloat32Array(0, 0.4, 0.4666667, 0.5),
+"transitions": PackedFloat32Array(2, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.88, 0.88), Vector2(1, 1)]
+"values": [Vector2(1, 1), Vector2(0.88, 0.88), Vector2(1.1, 1.1), Vector2(1, 1)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -47,10 +48,34 @@ tracks/2/path = NodePath("Visuals:material:shader_parameter/flash_amount")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.35, 0.45),
-"transitions": PackedFloat32Array(0.5, 1, 1),
+"times": PackedFloat32Array(0, 0.4, 0.43333334),
+"transitions": PackedFloat32Array(2, 1, 1),
 "update": 0,
 "values": [0.0, 1.0, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("WindupParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.40000004),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals/Canon/Muzzle/ShootParticles:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.40000004),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="MissilerLibrary"]
@@ -58,7 +83,7 @@ _data = {
 &"launch": SubResource("Launch")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vboif"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3erc"]
 resource_local_to_scene = true
 shader = ExtResource("5_40blp")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -69,7 +94,7 @@ shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3erc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3vq3"]
 resource_local_to_scene = true
 shader = ExtResource("6_vboif")
 shader_parameter/gold_amount = 0.0
@@ -110,23 +135,27 @@ region = Rect2(24, 0, 24, 19)
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
 mortar_scene = ExtResource("4_mortar")
+death_burnout_progress = 1.0
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/missiler = SubResource("MissilerLibrary")
 
 [node name="Flash" parent="." index="10" unique_id=850017021]
-material = SubResource("ShaderMaterial_vboif")
-
-[node name="Visuals" parent="." index="13" unique_id=1113068187]
 material = SubResource("ShaderMaterial_r3erc")
 
+[node name="Visuals" parent="." index="13" unique_id=1113068187]
+material = SubResource("ShaderMaterial_b3vq3")
+
 [node name="Feet" type="Sprite2D" parent="Visuals" index="0" unique_id=1356975428]
+use_parent_material = true
 texture = SubResource("AtlasTexture_spl43")
 
 [node name="Canon" type="Node2D" parent="Visuals" index="1" unique_id=2068276166]
+use_parent_material = true
 position = Vector2(0, -2)
 
 [node name="Graphic" type="Sprite2D" parent="Visuals/Canon" index="0" unique_id=1356551114]
+use_parent_material = true
 texture = SubResource("AtlasTexture_0lqoh")
 
 [node name="Muzzle" type="Marker2D" parent="Visuals/Canon" index="1" unique_id=900000005]
@@ -146,3 +175,5 @@ feet_path = NodePath("../Visuals/Feet")
 graphic_path = NodePath("../Visuals/Canon/Graphic")
 visual_turn_freedom_degrees = 60.0
 muzzle = NodePath("../Visuals/Canon/Muzzle")
+
+[node name="WindupParticles" parent="." index="18" unique_id=2054959803 instance=ExtResource("11_r3erc")]

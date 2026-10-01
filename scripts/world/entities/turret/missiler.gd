@@ -58,7 +58,7 @@ func _begin_charge(impact_position: Vector2) -> void:
 	aiming.aim_at(_locked_impact, 0.0)
 	_strike = mortar_scene.instantiate() as MortarStrike
 	get_tree().current_scene.add_child(_strike)
-	_strike.setup(_locked_impact, stats.blast_radius, stats.ring_thickness, stats.expansion_duration, _damage, stats.knockback)
+	_strike.setup(_locked_impact, stats.blast_radius, stats.expansion_duration, _damage, stats.knockback)
 	_charging = true
 
 func _launch_strike() -> void:

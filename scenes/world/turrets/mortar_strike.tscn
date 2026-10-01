@@ -1,28 +1,65 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://c3opx1lx86uvq"]
 
-[ext_resource type="Script" path="res://scripts/world/entities/turret/mortar_strike.gd" id="1_mortar"]
-[ext_resource type="Script" path="res://scripts/world/entities/turret/shockwave.gd" id="2_wave"]
+[ext_resource type="Script" uid="uid://ddcw46m8pk2jd" path="res://scripts/world/entities/turret/mortar_strike.gd" id="1_mortar"]
+[ext_resource type="Texture2D" uid="uid://dvpb83qdpks8q" path="res://assets/sprites/shared/mortar.png" id="2_8pcp2"]
+[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="2_wave"]
+[ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="3_4fu3r"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="3_shader"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_shadow"]
+
+[sub_resource type="Gradient" id="Gradient_f5wuv"]
+offsets = PackedFloat32Array(0.24668436, 0.7161804)
+colors = PackedColorArray(0.55100006, 0.8436, 0.95, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4fu3r"]
+gradient = SubResource("Gradient_f5wuv")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="CircleShape2D" id="ImpactShape"]
 radius = 1.0
 
-[node name="MortarStrike" type="Node2D"]
+[node name="MortarStrike" type="Node2D" unique_id=505213409]
 script = ExtResource("1_mortar")
+marker_color = Color(1, 0.3483333, 0.14999998, 0.19607843)
 
-[node name="RadialWaveComponent" type="Node2D" parent="."]
+[node name="Shell" type="Sprite2D" parent="." unique_id=505213410]
+z_index = 4
+texture = ExtResource("2_8pcp2")
+
+[node name="SpeedParticles" parent="Shell" unique_id=721926538 instance=ExtResource("3_4fu3r")]
+position = Vector2(-6, 0)
+rotation = 3.1415927
+emitting = true
+
+[node name="PointLight2D" type="PointLight2D" parent="Shell" unique_id=529392874]
+color = Color(0.9733675, 0.33196202, 0, 1)
+energy = 0.6
+texture = SubResource("GradientTexture2D_4fu3r")
+
+[node name="Shadow" type="Sprite2D" parent="." unique_id=505213411]
+modulate = Color(0, 0, 0, 0.45)
+z_index = 3
+texture = ExtResource("5_shadow")
+
+[node name="RadialWaveComponent" type="Node2D" parent="." unique_id=189277128]
 script = ExtResource("2_wave")
-pixel_art_shader = ExtResource("3_shader")
 auto_trigger = false
+pixel_art_shader = ExtResource("3_shader")
+shockwave_fade_duration = 0.25
+shockwave_color = Color(1, 0.72, 0.52, 0.9019608)
+pixel_size = 1.0
+center_line_thickness = 3
+center_line_color = Color(1, 0.9216387, 0.824227, 0.9019608)
 
-[node name="DetectionArea" type="Area2D" parent="RadialWaveComponent"]
+[node name="DetectionArea" type="Area2D" parent="RadialWaveComponent" unique_id=183947220]
 collision_layer = 0
 collision_mask = 10
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RadialWaveComponent/DetectionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RadialWaveComponent/DetectionArea" unique_id=1043454306]
 shape = SubResource("ImpactShape")
 
-[node name="ShockwaveVisual" type="ColorRect" parent="RadialWaveComponent"]
+[node name="ShockwaveVisual" type="ColorRect" parent="RadialWaveComponent" unique_id=692571687]
 visible = false
 mouse_filter = 2

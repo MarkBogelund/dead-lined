@@ -123,7 +123,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("WindupParticles:emitting")
+tracks/8/path = NodePath("UpgradeWindupParticles:emitting")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -250,6 +250,18 @@ tracks/8/keys = {
 "update": 0,
 "values": [0.0, 1.0]
 }
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Visuals:material:shader_parameter/flash_amount")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
 
 [sub_resource type="Animation" id="Repair"]
 resource_name = "repair"
@@ -332,16 +344,12 @@ _data = {
 &"upgrade_charge": SubResource("UpgradeCharge")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_surface"]
-resource_local_to_scene = true
-shader = ExtResource("2_obbky")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
 resource_local_to_scene = true
 shader = ExtResource("12_pixel_ring")
-shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/shockwave_color = Color(1, 1, 1, 1)
 shader_parameter/current_radius = 16.0
-shader_parameter/ring_thickness = 4.0
+shader_parameter/ring_thickness = 3.0
 shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
@@ -376,6 +384,35 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.2
 scale_max = 0.4
 scale_curve = SubResource("UpgradeParticleScaleTexture")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_surface"]
+resource_local_to_scene = true
+shader = ExtResource("2_obbky")
+shader_parameter/gold_amount = 0.0
+shader_parameter/gold_dark = Color(0.42, 0.25, 0.04, 1)
+shader_parameter/gold_light = Color(1, 0.86, 0.36, 1)
+shader_parameter/gold_blend = 0.6
+shader_parameter/shine_color = Color(1, 0.97, 0.82, 1)
+shader_parameter/shine_strength = 0.85
+shader_parameter/shine_width = 2.0
+shader_parameter/shine_speed = 70.0
+shader_parameter/shine_interval = 2.2
+shader_parameter/sparkle_density = 0.05
+shader_parameter/sparkle_speed = 1.3
+shader_parameter/damage_amount = 0.0
+shader_parameter/damage_dark = Color(0.16, 0.03, 0.05, 1)
+shader_parameter/damage_light = Color(0.85, 0.22, 0.18, 1)
+shader_parameter/tint_min = 0.5
+shader_parameter/tint_max = 0.9
+shader_parameter/tint_pulse_speed = 1.2
+shader_parameter/damage_darkness = 0.2
+shader_parameter/crack_color = Color(0.08, 0.02, 0.03, 1)
+shader_parameter/crack_density = 0.12
+shader_parameter/crack_size = 2.0
+shader_parameter/glitch_interval = 0.3
+shader_parameter/glitch_duty = 0.35
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
 
 [node name="TurretBase" type="StaticBody2D" unique_id=973555640]
 z_index = 1
@@ -445,4 +482,4 @@ material = SubResource("ShaderMaterial_surface")
 
 [node name="RepairParticles" parent="." unique_id=1720394851 instance=ExtResource("15_lb2rj")]
 
-[node name="WindupParticles" parent="." unique_id=2054959803 instance=ExtResource("14_bd33e")]
+[node name="UpgradeWindupParticles" parent="." unique_id=2054959803 instance=ExtResource("14_bd33e")]

@@ -33,12 +33,14 @@ attack_cooldown = 0.68
 [resource]
 script = ExtResource("1_stats")
 targeting = ExtResource("2_targeting")
+minimum_range = 90.0
 charge_duration = 0.8
 flight_duration = 1.0
 arc_height = 40.0
 max_health = 80
-damage = 25
+damage = 15
 knockback = 160.0
 attack_range = 220.0
+attack_cooldown = 3.0
 upgrades = Array[ExtResource("3_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Upgrade3"), SubResource("Upgrade4")])
 repair_health_per_second = 40.0

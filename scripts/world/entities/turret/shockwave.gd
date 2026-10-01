@@ -4,6 +4,7 @@ class_name ShockwaveComponent
 signal windup_started
 signal shockwave_started
 signal shockwave_finished
+signal shockwave_fade_finished
 
 enum State {READY, WINDUP, EXPANDING, COOLDOWN}
 
@@ -51,6 +52,14 @@ func configure(p_max_range: float, p_ring_thickness: float, p_cooldown: float, p
 	knockback_force = maxf(0.0, p_knockback_force)
 	_apply_radius()
 
+func configure_manual(p_max_range: float, p_expansion_duration: float, p_damage: int, p_knockback_force: float) -> void:
+	max_range = maxf(0.0, p_max_range)
+	expansion_duration = maxf(0.01, p_expansion_duration)
+	damage = maxi(0, p_damage)
+	knockback_force = maxf(0.0, p_knockback_force)
+	cooldown = shockwave_fade_duration
+	_apply_radius()
+
 func set_max_range(value: float) -> void:
 	max_range = maxf(0.0, value)
 	_apply_radius()
@@ -89,6 +98,7 @@ func _physics_process(delta: float) -> void:
 				_state = State.READY
 				_state_time = 0.0
 				shockwave_visual.hide()
+				shockwave_fade_finished.emit()
 	if _state == State.WINDUP or _state == State.EXPANDING:
 		queue_redraw()
 
