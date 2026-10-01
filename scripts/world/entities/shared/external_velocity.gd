@@ -4,7 +4,7 @@ class_name ExternalVelocityComponent
 var _velocities: Dictionary[int, Vector2] = {}
 
 func set_velocity(source_id: int, value: Vector2) -> void:
-	if value.is_zero_approx():
+	if not value.is_finite() or value.is_zero_approx():
 		_velocities.erase(source_id)
 	else:
 		_velocities[source_id] = value

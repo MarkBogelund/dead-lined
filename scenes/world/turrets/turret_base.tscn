@@ -75,7 +75,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("WindupParticles:emitting")
+tracks/4/path = NodePath("RepairParticles:emitting")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -87,46 +87,34 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("RepairParticles:emitting")
+tracks/5/path = NodePath(".:upgrade_whiteness")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [0.0]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath(".:upgrade_whiteness")
+tracks/6/path = NodePath("Flash:visible")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
+"update": 1,
+"values": [false]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Flash:visible")
+tracks/7/path = NodePath("Flash:material:shader_parameter/current_radius")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("Flash:material:shader_parameter/current_radius")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -310,18 +298,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [0.0, 1.0]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("WindupParticles:emitting")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
 
 [sub_resource type="AnimationLibrary" id="BaseLibrary"]
 _data = {
@@ -378,6 +354,7 @@ z_index = 1
 collision_layer = 32
 collision_mask = 19
 script = ExtResource("1_q7hb2")
+hit_flash_duration = 0.25
 surface_shader = ExtResource("2_obbky")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=190497504]
@@ -435,9 +412,8 @@ amount = 24
 lifetime = 0.45
 process_material = SubResource("UpgradeParticleMaterial")
 
-[node name="WindupParticles" parent="." unique_id=1488027812 instance=ExtResource("14_bd33e")]
-texture = null
-
 [node name="Visuals" type="Node2D" parent="." unique_id=1113068187]
 
 [node name="RepairParticles" parent="." unique_id=1720394851 instance=ExtResource("15_lb2rj")]
+
+[node name="WindupParticles" parent="." unique_id=2054959803 instance=ExtResource("14_bd33e")]

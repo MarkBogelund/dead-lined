@@ -131,14 +131,20 @@ func _apply_pull() -> void:
 		var body_id := body.get_instance_id()
 		still_affected[body_id] = true
 		_affected[body_id] = body
-		var distance := global_position.distance_to(body.global_position)
+		var pull_offset := global_position - body.global_position
+		if not pull_offset.is_finite():
+			body.call(&"clear_external_velocity", _source_id)
+			continue
+		var distance := pull_offset.length()
 		if distance <= inner_dead_zone:
 			body.call(&"clear_external_velocity", _source_id)
 			continue
-		var distance_ratio := clampf(inverse_lerp(inner_dead_zone, max_range, distance), 0.0, 1.0)
+		var pull_span := max_range - inner_dead_zone
+		var distance_ratio := clampf((distance - inner_dead_zone) / pull_span, 0.0, 1.0) \
+			if pull_span > 0.0001 else 0.0
 		var multiplier := player_pull_multiplier if body.is_in_group("player") else enemy_pull_multiplier
 		var strength := pull_speed * multiplier * lerpf(1.0, edge_pull_fraction, distance_ratio)
-		body.call(&"set_external_velocity", _source_id, body.global_position.direction_to(global_position) * strength)
+		body.call(&"set_external_velocity", _source_id, pull_offset / distance * strength)
 	for body_id: int in _affected.keys():
 		if still_affected.has(body_id):
 			continue
