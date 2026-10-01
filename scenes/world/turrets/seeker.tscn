@@ -114,15 +114,18 @@ libraries/seeker = SubResource("SeekerLibrary")
 material = SubResource("ShaderMaterial_ks0gs")
 
 [node name="Sprite2D" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="0" unique_id=1616948861]
+use_parent_material = true
 z_index = 1
 texture = ExtResource("10_sprite")
 region_enabled = true
 region_rect = Rect2(35, 14, 28, 25)
 
 [node name="Canon" type="Node2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="1" unique_id=1152611148]
+use_parent_material = true
 position = Vector2(0, -4)
 
 [node name="Graphics" type="Sprite2D" parent="Visuals/Canon" index="0" unique_id=1415741924]
+use_parent_material = true
 z_index = 5
 texture = ExtResource("10_sprite")
 offset = Vector2(0, 5)
