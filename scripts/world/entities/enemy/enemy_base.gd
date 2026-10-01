@@ -5,6 +5,7 @@ signal died
 
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var knockback: KnockbackComponent = $KnockbackComponent
+@onready var external_velocity: ExternalVelocityComponent = $ExternalVelocityComponent
 @onready var health: HealthComponent = $HealthComponent
 @onready var orb_drop: OrbDropComponent = $OrbDropComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -39,10 +40,20 @@ func is_riding_conveyor() -> bool:
 	return _conveyor_velocity != Vector2.ZERO
 
 ## Passenger mode: on a belt the enemy stops walking and is carried, so it never fights a faster belt.
-func _add_conveyor_velocity() -> void:
-	if not is_riding_conveyor():
+func set_external_velocity(source_id: int, value: Vector2) -> void:
+	external_velocity.set_velocity(source_id, value)
+
+func clear_external_velocity(source_id: int) -> void:
+	external_velocity.clear_velocity(source_id)
+
+func _apply_environment_velocity() -> void:
+	if knockback.is_active():
+		if is_riding_conveyor():
+			velocity += _conveyor_velocity
 		return
-	velocity = knockback.velocity + _conveyor_velocity if knockback.is_active() else _conveyor_velocity
+	if is_riding_conveyor():
+		velocity = _conveyor_velocity
+	velocity += external_velocity.get_total_velocity()
 
 func play_spawn_intro(target_position: Vector2, duration: float) -> void:
 	_spawn_intro_active = true

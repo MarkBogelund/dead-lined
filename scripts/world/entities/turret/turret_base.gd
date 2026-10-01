@@ -16,7 +16,6 @@ signal sold(refund: float)
 @onready var range_indicator: RangeIndicator = $RangeIndicator
 @onready var visuals: Node2D = $Visuals
 @onready var body_collision: CollisionShape2D = $CollisionShape2D
-@onready var body_visual: CanvasItem = _get_body_visual()
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
@@ -36,25 +35,18 @@ var _sell_refund_ratio := 0.0
 var _stops_targeting_player_when_maxed := false
 var _hit_flash_tween: Tween
 var _is_critical := false
+var _death_burnout_active := false
 
 @export_group("Presentation")
 @export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
 ## Health fraction at or below which the turret looks broken and gets an off-screen indicator.
 @export_range(0.0, 1.0, 0.05) var critical_health_ratio := 0.25
-## How long the critical red takes to burn out to white once the turret dies.
-@export_range(0.01, 2.0, 0.01) var death_burnout_duration := 0.2
-## Keyed by the upgrade_charge / upgrade animations; drives the surface shader's flash_amount.
-@export_range(0.0, 1.0, 0.01) var upgrade_whiteness := 0.0:
-	set = _set_upgrade_whiteness
+## Keyed by the die animation; maps critical damage 1->0 and white flash 0->1.
+@export_range(0.0, 1.0, 0.01) var death_burnout_progress := 0.0:
+	set = _set_death_burnout_progress
 ## turret_surface.gdshader: combines the hit flash and gold shine effects (see shaders/include/).
 @export var surface_shader: Shader
 @export_range(0.05, 2.0, 0.05) var sell_fade_duration := 0.25
-
-func _get_body_visual() -> CanvasItem:
-	var sprite := get_node_or_null("Visuals/Sprite2D") as CanvasItem
-	if sprite:
-		return sprite
-	return get_node_or_null("Visuals/AnimatedSprite2D") as CanvasItem
 
 func _ready() -> void:
 	add_to_group("turrets")
@@ -160,12 +152,12 @@ func start_upgrade_charge(hold_duration: float) -> void:
 func stop_upgrade_charge() -> void:
 	animation.stop_animation("upgrade_charge")
 
-# Skips unchanged values so RESET doesn't cancel a running hit flash.
-func _set_upgrade_whiteness(value: float) -> void:
-	if is_equal_approx(value, upgrade_whiteness):
+func _set_death_burnout_progress(value: float) -> void:
+	death_burnout_progress = value
+	if not _death_burnout_active:
 		return
-	upgrade_whiteness = value
 	for shader_material: ShaderMaterial in _get_surface_materials():
+		shader_material.set_shader_parameter("damage_amount", 1.0 - value)
 		shader_material.set_shader_parameter("flash_amount", value)
 
 func get_sell_value() -> float:
@@ -326,42 +318,28 @@ func _configure_surface_materials() -> void:
 	if not surface_shader:
 		push_error("TurretBase requires a surface_shader for hit flash and gold shine")
 		return
-	_assign_surface_material(body_visual)
-	_assign_surface_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem)
-
-func _assign_surface_material(visual: CanvasItem) -> void:
-	if not visual:
-		return
-	var shader_material := visual.material as ShaderMaterial
+	var shader_material := visuals.material as ShaderMaterial
 	if not shader_material:
-		shader_material = ShaderMaterial.new()
-	visual.material = shader_material
+		push_error("TurretBase Visuals requires a local turret surface ShaderMaterial")
+		return
 	shader_material.shader = surface_shader
 
 func _get_surface_materials() -> Array[ShaderMaterial]:
 	var surface_materials: Array[ShaderMaterial] = []
-	_add_surface_material(body_visual, surface_materials)
-	_add_surface_material(get_node_or_null("Visuals/Canon/Graphics") as CanvasItem, surface_materials)
-	return surface_materials
-
-func _add_surface_material(visual: CanvasItem, surface_materials: Array[ShaderMaterial]) -> void:
-	var shader_material := visual.material as ShaderMaterial if visual else null
+	var shader_material := visuals.material as ShaderMaterial
 	if shader_material:
 		surface_materials.append(shader_material)
+	return surface_materials
 
 func _before_death_animation() -> void:
 	pass
 
 ## Runs alongside the die animation: the critical red fades out as the sprite flashes white.
 func _play_death_burnout() -> void:
-	if not _is_critical:
-		return
+	_death_burnout_active = _is_critical
 	if _hit_flash_tween:
 		_hit_flash_tween.kill()
-	var tween := create_tween().set_parallel()
-	for shader_material: ShaderMaterial in _get_surface_materials():
-		tween.tween_property(shader_material, "shader_parameter/damage_amount", 0.0, death_burnout_duration)
-		tween.tween_property(shader_material, "shader_parameter/flash_amount", 1.0, death_burnout_duration)
+	_set_death_burnout_progress(0.0)
 
 func _handle_death() -> void:
 	_before_death_animation()

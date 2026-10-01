@@ -61,7 +61,7 @@ func _physics_process(delta: float) -> void:
 				_process_emit(delta)
 
 	knockback.process(delta)
-	_add_conveyor_velocity()
+	_apply_environment_velocity()
 	move_and_slide()
 
 func _should_relocate(threats: Array[Node2D]) -> bool:

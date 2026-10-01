@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 
 	knockback.process(delta)
-	_add_conveyor_velocity()
+	_apply_environment_velocity()
 	move_and_slide()
 
 ## Target plus the flank offset, scaled from full (far) to zero (close) so every chaser converges on the target itself.

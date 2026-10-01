@@ -398,6 +398,7 @@ script = ExtResource("1_jrbl1")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1650106890]
 
 [node name="TurretPreview" type="Node2D" parent="CanvasLayer" unique_id=1446130920]
+visible = false
 
 [node name="Body" type="Sprite2D" parent="CanvasLayer/TurretPreview" unique_id=2045140274]
 texture = ExtResource("11_preview")

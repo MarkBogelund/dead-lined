@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bnu4fvr1hbp1v" path="res://scenes/world/projectiles/player_projectile.tscn" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://dlrnady7rm2bb" path="res://assets/sprites/player/player-sheet.png" id="2_tuyoq"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_dqkch"]
+[ext_resource type="Script" uid="uid://vnxu7aeydrpf" path="res://scripts/world/entities/shared/external_velocity.gd" id="4_external"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="5_tuyoq"]
 [ext_resource type="PackedScene" uid="uid://o4crmgh4cvkq" path="res://scenes/world/player/dash.tscn" id="10_4enbs"]
 [ext_resource type="Script" uid="uid://cdc3yx122ruc6" path="res://scripts/world/entities/player/movement.gd" id="10_b6tgf"]
@@ -835,6 +836,9 @@ script = ExtResource("2_74ekq")
 
 [node name="KnockbackComponent" type="Node" parent="." unique_id=948374991]
 script = ExtResource("4_dqkch")
+
+[node name="ExternalVelocityComponent" type="Node" parent="." unique_id=1928367151]
+script = ExtResource("4_external")
 metadata/_custom_type_script = "uid://cpb5ljtmgjbw8"
 
 [node name="ShootComponent" type="Node" parent="." unique_id=904350876]

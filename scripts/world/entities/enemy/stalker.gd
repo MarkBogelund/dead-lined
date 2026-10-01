@@ -61,7 +61,7 @@ func _physics_process(delta: float) -> void:
 			_face_target(body_sprite, target.global_position)
 	
 	knockback.process(delta)
-	_add_conveyor_velocity()
+	_apply_environment_velocity()
 	move_and_slide()
 
 func _begin_telegraph() -> void:

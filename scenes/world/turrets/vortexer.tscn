@@ -1,0 +1,166 @@
+[gd_scene format=3 uid="uid://dubljk44k0e6a"]
+
+[ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://hgsnf28l0iiv" path="res://scripts/world/entities/turret/vortexer.gd" id="2_script"]
+[ext_resource type="Resource" uid="uid://gy2f0ousx2x" path="res://resources/turrets/vortexer/vortexer_stats.tres" id="3_stats"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_ot8ax"]
+[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="5_hd4u5"]
+[ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
+[ext_resource type="Script" uid="uid://dg72pcx56tco0" path="res://scripts/world/entities/turret/magnetic_field.gd" id="6_field"]
+[ext_resource type="Texture2D" uid="uid://bvbj6yjifao5j" path="res://assets/sprites/turrets/vortexer.png" id="6_ot8ax"]
+
+[sub_resource type="Animation" id="Pulse"]
+resource_name = "pulse"
+length = 0.6
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MagneticFieldComponent")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"execute_pull"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6),
+"transitions": PackedFloat32Array(0.5, 1.8660663, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals:material:shader_parameter/flash_amount")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.06666667, 0.5, 0.6),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="PulseLibrary"]
+_data = {
+&"pulse": SubResource("Pulse")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2usbx"]
+resource_local_to_scene = true
+shader = ExtResource("4_ot8ax")
+shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/current_radius = 16.0
+shader_parameter/ring_thickness = 4.0
+shader_parameter/pixel_size = 2.0
+shader_parameter/center_line_thickness = 1.0
+shader_parameter/center_line_color = Color(1, 1, 1, 1)
+shader_parameter/canvas_size = Vector2(40, 40)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ee2qn"]
+resource_local_to_scene = true
+shader = ExtResource("5_hd4u5")
+shader_parameter/gold_amount = 0.0
+shader_parameter/gold_dark = Color(0.42, 0.25, 0.04, 1)
+shader_parameter/gold_light = Color(1, 0.86, 0.36, 1)
+shader_parameter/gold_blend = 0.6
+shader_parameter/shine_color = Color(1, 0.97, 0.82, 1)
+shader_parameter/shine_strength = 0.85
+shader_parameter/shine_width = 2.0
+shader_parameter/shine_speed = 70.0
+shader_parameter/shine_interval = 2.2
+shader_parameter/sparkle_density = 0.05
+shader_parameter/sparkle_speed = 1.3
+shader_parameter/damage_amount = 0.0
+shader_parameter/damage_dark = Color(0.16, 0.03, 0.05, 1)
+shader_parameter/damage_light = Color(0.85, 0.22, 0.18, 1)
+shader_parameter/tint_min = 0.5
+shader_parameter/tint_max = 0.9
+shader_parameter/tint_pulse_speed = 1.2
+shader_parameter/damage_darkness = 0.2
+shader_parameter/crack_color = Color(0.08, 0.02, 0.03, 1)
+shader_parameter/crack_density = 0.12
+shader_parameter/crack_size = 2.0
+shader_parameter/glitch_interval = 0.3
+shader_parameter/glitch_duty = 0.35
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hd4u5"]
+atlas = ExtResource("6_ot8ax")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_spl43"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hd4u5")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="DetectionShape"]
+radius = 110.0
+
+[node name="Vortexer" unique_id=600983979 instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+stats = ExtResource("3_stats")
+death_burnout_progress = 1.0
+
+[node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
+health_component = NodePath("../HealthComponent")
+
+[node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
+libraries/vortexer = SubResource("PulseLibrary")
+
+[node name="Flash" parent="." index="10" unique_id=850017021]
+material = SubResource("ShaderMaterial_2usbx")
+
+[node name="Visuals" parent="." index="13" unique_id=1113068187]
+material = SubResource("ShaderMaterial_ee2qn")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1128852253]
+z_index = 1
+use_parent_material = true
+sprite_frames = SubResource("SpriteFrames_spl43")
+
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=2077226136]
+modulate = Color(0, 0, 0, 0.46)
+texture = ExtResource("5_shadow")
+
+[node name="MagneticFieldComponent" type="Node2D" parent="." index="14" unique_id=504814838]
+script = ExtResource("6_field")
+windup_color = Color(0.46060002, 0.94, 0.81216, 0.5882353)
+pull_color = Color(0.5639618, 0.99779314, 0.8162863, 0.5882353)
+
+[node name="DetectionArea" type="Area2D" parent="MagneticFieldComponent" index="0" unique_id=1123578361]
+collision_layer = 0
+collision_mask = 10
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MagneticFieldComponent/DetectionArea" index="0" unique_id=659442236]
+shape = SubResource("DetectionShape")

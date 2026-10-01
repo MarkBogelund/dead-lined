@@ -70,7 +70,7 @@ func _physics_process(delta: float) -> void:
 			charge_particles.emitting = false
 
 	knockback.process(delta)
-	_add_conveyor_velocity()
+	_apply_environment_velocity()
 	move_and_slide()
 
 	if _state == State.CHARGE and get_slide_collision_count() > 0:
