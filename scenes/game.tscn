@@ -35,6 +35,7 @@
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="33_pixel_shader"]
 [ext_resource type="Resource" uid="uid://ddcryh3afnftq" path="res://resources/turrets/attractor/attractor_shop_details.tres" id="34_attractor_shop"]
 [ext_resource type="Resource" uid="uid://cmgjanc7g4nwq" path="res://resources/turrets/missiler/missiler_shop_details.tres" id="35_missiler_shop"]
+[ext_resource type="Resource" uid="uid://d1pgybqufu4jx" path="res://resources/turrets/beamer/beamer_shop_details.tres" id="36_beamer_shop"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -212,7 +213,7 @@ unique_name_in_owner = true
 script = ExtResource("1_ir15t")
 shop_panel = NodePath("../../UI/ShopPanel")
 shop_station = NodePath("../../World/ShopStation")
-turret_entries = Array[ExtResource("25_tentry")]([ExtResource("14_trtic"), ExtResource("29_shockwaver_shop"), ExtResource("34_attractor_shop"), ExtResource("35_missiler_shop")])
+turret_entries = Array[ExtResource("25_tentry")]([ExtResource("14_trtic"), ExtResource("29_shockwaver_shop"), ExtResource("34_attractor_shop"), ExtResource("35_missiler_shop"), ExtResource("36_beamer_shop")])
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]

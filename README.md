@@ -123,6 +123,10 @@ Turret upgrades and selling use one upgrade panel per turret ([turret_hud.tscn](
 
 Transient turret behavior animations key `Visuals:material:shader_parameter/flash_amount` directly; upgrade, upgrade charge, and Attractor pulse currently use this previewable contract. Death burnout timing is likewise authored in `die` through `death_burnout_progress`, while persistent critical/max-level state and concurrent hit feedback remain code-owned.
 
+### Beamer
+
+[beamer.tscn](scenes/world/turrets/beamer.tscn) is registered through [beamer_shop_details.tres](resources/turrets/beamer/beamer_shop_details.tres). `BeamComponent` ([beam.gd](scripts/world/entities/turret/beam.gd)) owns its continuous circular sweep, first-hit target lock, capped tracking speed, one-time windup, rectangular overlap volume, per-target damage interval, and world-geometry occlusion check. The beam stays active through combat and returns to sweeping when its locked target dies, moves outside range, is occluded, or gets farther than `lock_break_distance` from the beam. Base damage is 1 every 0.15 seconds; knockback is limited to enemies. The default range is 150, sweep speed 65 degrees per second, tracking speed 32 degrees per second, and lock-break distance 5 pixels; all are Inspector-editable. Beam geometry uses collision layer mask 10 for player/enemy bodies, and its ray query checks world layer 1 so walls block damage. The turret and shop icon currently reuse a tinted Shockwaver atlas frame until dedicated Beamer art is available.
+
 ### Creating a new turret
 
 `AimingComponent` owns both gameplay aiming and optional cannon presentation: it uses the same `aim_speed` for smooth Canon-pivot rotation, flips the Graphic vertically when the turret changes side, and flips Feet horizontally. `visual_turn_freedom_degrees` is the total visual arc around the outward direction (`180` = +/-90°, `90` = +/-45°); cannon sprites are authored facing right at zero rotation. Targeting, accuracy, and firing remain in the same component contract.

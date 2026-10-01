@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/entities/turret/ghost_turret.gd" id="1_ghost"]
+[ext_resource type="Texture2D" path="res://assets/sprites/turrets/shockwaver.png" id="2_sprite"]
+[ext_resource type="Script" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="3_exclusion"]
+[ext_resource type="Script" path="res://scripts/world/entities/turret/range_indicator.gd" id="4_range"]
+
+[sub_resource type="AtlasTexture" id="BeamerGhostTexture"]
+atlas = ExtResource("2_sprite")
+region = Rect2(0, 0, 24, 26)
+
+[sub_resource type="CircleShape2D" id="GhostCollisionShape"]
+radius = 16.0
+
+[node name="GhostTurret" type="Area2D"]
+collision_layer = 0
+collision_mask = 35
+script = ExtResource("1_ghost")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.4, 0.85, 1, 0.7)
+z_index = 12
+position = Vector2(0, 3)
+texture = SubResource("BeamerGhostTexture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("GhostCollisionShape")
+
+[node name="TurretExclusionZone" type="Node2D" parent="."]
+script = ExtResource("3_exclusion")
+exclusion_color = Color(0.2, 0.75, 1, 0.35)
+invalid_color = Color(1, 0.1, 0.1, 0.35)
+
+[node name="RangeIndicator" type="Node2D" parent="."]
+script = ExtResource("4_range")
+color = Color(0.3, 0.9, 1, 0.35)

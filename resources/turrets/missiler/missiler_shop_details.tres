@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TurretEntry" format=3 uid="uid://cmgjanc7g4nwq"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/turrets/missiler_ghost.tscn" id="1_ghost"]
+[ext_resource type="PackedScene" uid="uid://20qwx60nc7g4" path="res://scenes/world/turrets/missiler_ghost.tscn" id="1_ghost"]
 [ext_resource type="Texture2D" uid="uid://42smwfswv6py" path="res://assets/sprites/turrets/missiler-icon.png" id="2_tjp5u"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="3_entry"]
 [ext_resource type="PackedScene" uid="uid://d1m71tbt4bpcc" path="res://scenes/world/turrets/missiler.tscn" id="4_turret"]
