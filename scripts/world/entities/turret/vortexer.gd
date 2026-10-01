@@ -28,8 +28,9 @@ func _before_death_animation() -> void:
 	magnetic_field.set_enabled(false)
 
 func _stop_targeting_player() -> void:
-	magnetic_field.affect_player = false
-
+	# magnetic_field.affect_player = false
+	pass
+	
 func _on_field_windup_started() -> void:
 	var speed := animation.get_animation_length("pulse") / stats.windup_duration
 	if not animation.play_animation("pulse", -1, speed):

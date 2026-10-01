@@ -132,7 +132,7 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 ### Turret Types
 - **Seeker:** Rotates toward the best visible target, telegraphs its shot, and fires a powerful aimed projectile along a clear line of sight.
 - **Shockwaver:** Triggers when a target enters its radius, telegraphs a pulse, then expands a doughnut-shaped shockwave that damages each reached target once and knocks enemies outward; it trades directional reach for local crowd control.
-- **Vortexer:** A high-health control turret that emits readable magnetic pulses, dealing light damage and pulling enemies and the player toward it with distance falloff; dashing ignores the pull, and max level stops affecting the player.
+- **Vortexer:** A high-health control turret that emits readable magnetic pulses, dealing no damage but pulling enemies and the player toward it with distance falloff; dashing ignores the pull, and max level stops affecting the player.
 
 ### Unfinished Turrets
 - **Buffer:** Deals little or no damage but strengthens nearby turrets, rewarding formations while multiplying their friendly-fire danger; weak when isolated and multiple auras should not stack.

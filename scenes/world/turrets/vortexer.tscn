@@ -68,7 +68,7 @@ _data = {
 &"pulse": SubResource("Pulse")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2usbx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hd4u5"]
 resource_local_to_scene = true
 shader = ExtResource("4_ot8ax")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -79,7 +79,7 @@ shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ee2qn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2usbx"]
 resource_local_to_scene = true
 shader = ExtResource("5_hd4u5")
 shader_parameter/gold_amount = 0.0
@@ -138,10 +138,10 @@ health_component = NodePath("../HealthComponent")
 libraries/vortexer = SubResource("PulseLibrary")
 
 [node name="Flash" parent="." index="10" unique_id=850017021]
-material = SubResource("ShaderMaterial_2usbx")
+material = SubResource("ShaderMaterial_hd4u5")
 
 [node name="Visuals" parent="." index="13" unique_id=1113068187]
-material = SubResource("ShaderMaterial_ee2qn")
+material = SubResource("ShaderMaterial_2usbx")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1128852253]
 z_index = 1

@@ -17,13 +17,13 @@ attack_cooldown = 0.83
 
 [sub_resource type="Resource" id="Upgrade3"]
 script = ExtResource("2_upgrade")
-cost = 45.0
+cost = 1.0
 max_health = 1.35
 attack_range = 1.3
 
 [sub_resource type="Resource" id="Upgrade4"]
 script = ExtResource("2_upgrade")
-cost = 55.0
+cost = 1.0
 max_health = 1.6
 damage = 4.0
 attack_range = 1.55
