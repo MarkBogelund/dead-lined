@@ -10,6 +10,7 @@
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_vboif"]
 [ext_resource type="Texture2D" uid="uid://dq55pmiufvrpi" path="res://assets/sprites/turrets/missiler.png" id="7_40blp"]
 [ext_resource type="Script" uid="uid://cahnani2lih1y" path="res://scripts/world/entities/shared/visuals_turn.gd" id="7_visuals_turn"]
+[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="8_r3erc"]
 
 [sub_resource type="Animation" id="Launch"]
 resource_name = "launch"
@@ -123,11 +124,16 @@ material = SubResource("ShaderMaterial_r3erc")
 [node name="Feet" type="Sprite2D" parent="Visuals" index="0" unique_id=1356975428]
 texture = SubResource("AtlasTexture_spl43")
 
-[node name="Canon" type="Sprite2D" parent="Visuals" index="1" unique_id=1356551114]
+[node name="Canon" type="Node2D" parent="Visuals" index="1" unique_id=2068276166]
+
+[node name="Graphic" type="Sprite2D" parent="Visuals/Canon" index="0" unique_id=1356551114]
 texture = SubResource("AtlasTexture_0lqoh")
 
-[node name="Muzzle" type="Marker2D" parent="Visuals/Canon" index="0" unique_id=900000005]
+[node name="Muzzle" type="Marker2D" parent="Visuals/Canon" index="1" unique_id=900000005]
 position = Vector2(16, 0)
+
+[node name="ShootParticles" parent="Visuals/Canon/Muzzle" index="0" unique_id=1586402119 instance=ExtResource("8_r3erc")]
+amount = 20
 
 [node name="TargetingComponent" type="Node" parent="." index="14" unique_id=900000002]
 script = ExtResource("5_targeting")
@@ -139,5 +145,5 @@ muzzle = NodePath("../Visuals/Canon/Muzzle")
 [node name="VisualsTurnComponent" type="Node2D" parent="." index="16" unique_id=900000006]
 script = ExtResource("7_visuals_turn")
 feet_path = NodePath("../Visuals/Feet")
-canon_path = NodePath("../Visuals/Canon")
-canon_turn_degrees = 45.0
+canon_path = NodePath("../Visuals/Canon/Graphic")
+turn_speed_degrees = 540.0

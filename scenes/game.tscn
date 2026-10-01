@@ -29,12 +29,12 @@
 [ext_resource type="Resource" uid="uid://dfqqng3tkvdcl" path="res://resources/waves/conveyor_settings.tres" id="28_conveyor_settings"]
 [ext_resource type="Texture2D" uid="uid://dm6l6sh3twh0" path="res://assets/sprites/ui/turret_death_indicator.png" id="29_js0lu"]
 [ext_resource type="Resource" uid="uid://cals7t00fcr3i" path="res://resources/turrets/shockwaver/shockwaver_shop_details.tres" id="29_shockwaver_shop"]
-[ext_resource type="Resource" path="res://resources/turrets/vortexer/vortexer_shop_details.tres" id="34_vortexer_shop"]
-[ext_resource type="Resource" path="res://resources/turrets/missiler/missiler_shop_details.tres" id="35_missiler_shop"]
 [ext_resource type="Script" uid="uid://dwuvwmcnb0y5n" path="res://scripts/world/game_camera.gd" id="30_game_camera"]
 [ext_resource type="Script" uid="uid://bt03k72gubhe" path="res://scripts/world/navigation_map_layer.gd" id="32_navmap"]
 [ext_resource type="Script" uid="uid://bwun4kfd5apsa" path="res://scripts/ui/critical_turret_indicators.gd" id="33_offscreen"]
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="33_pixel_shader"]
+[ext_resource type="Resource" uid="uid://ddcryh3afnftq" path="res://resources/turrets/vortexer/vortexer_shop_details.tres" id="34_vortexer_shop"]
+[ext_resource type="Resource" uid="uid://cmgjanc7g4nwq" path="res://resources/turrets/missiler/missiler_shop_details.tres" id="35_missiler_shop"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
