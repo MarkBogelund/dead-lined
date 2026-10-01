@@ -1,7 +1,7 @@
 extends TurretStats
-class_name VortexerStats
+class_name AttractorStats
 
-@export_group("Vortexer")
+@export_group("Attractor")
 ## Seconds between windup start and magnetic activation.
 @export_range(0.05, 5.0, 0.05) var windup_duration := 0.6
 ## Seconds the magnetic pull remains active.

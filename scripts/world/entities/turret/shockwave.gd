@@ -4,6 +4,7 @@ class_name ShockwaveComponent
 signal windup_started
 signal shockwave_started
 signal shockwave_finished
+signal shockwave_fade_finished
 
 enum State {READY, WINDUP, EXPANDING, COOLDOWN}
 
@@ -20,6 +21,8 @@ var damage := 20
 var knockback_force := 180.0
 ## False = the player no longer starts a pulse, but pulses still damage the player.
 var trigger_on_player := true
+## False lets an external owner call execute_shockwave() at a locked impact point.
+@export var auto_trigger := true
 
 @export_group("Presentation")
 @export var pixel_art_shader: Shader
@@ -49,6 +52,14 @@ func configure(p_max_range: float, p_ring_thickness: float, p_cooldown: float, p
 	knockback_force = maxf(0.0, p_knockback_force)
 	_apply_radius()
 
+func configure_manual(p_max_range: float, p_expansion_duration: float, p_damage: int, p_knockback_force: float) -> void:
+	max_range = maxf(0.0, p_max_range)
+	expansion_duration = maxf(0.01, p_expansion_duration)
+	damage = maxi(0, p_damage)
+	knockback_force = maxf(0.0, p_knockback_force)
+	cooldown = shockwave_fade_duration
+	_apply_radius()
+
 func set_max_range(value: float) -> void:
 	max_range = maxf(0.0, value)
 	_apply_radius()
@@ -70,7 +81,7 @@ func _physics_process(delta: float) -> void:
 		return
 	match _state:
 		State.READY:
-			if _has_trigger_target():
+			if auto_trigger and _has_trigger_target():
 				_enter_windup()
 		State.WINDUP:
 			_state_time += delta
@@ -87,6 +98,7 @@ func _physics_process(delta: float) -> void:
 				_state = State.READY
 				_state_time = 0.0
 				shockwave_visual.hide()
+				shockwave_fade_finished.emit()
 	if _state == State.WINDUP or _state == State.EXPANDING:
 		queue_redraw()
 
@@ -138,7 +150,8 @@ func cancel_windup() -> void:
 	queue_redraw()
 
 func execute_shockwave() -> void:
-	if not _enabled or _state != State.WINDUP:
+	var manual_ready := not auto_trigger and _state == State.READY
+	if not _enabled or (_state != State.WINDUP and not manual_ready):
 		return
 	_state = State.EXPANDING
 	_state_time = 0.0

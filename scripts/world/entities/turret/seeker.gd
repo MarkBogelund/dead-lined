@@ -23,8 +23,6 @@ func _initialize() -> void:
 	if not stats:
 		push_error("%s requires a SeekerStats resource" % name)
 		return
-	aiming.visual_node = $Visuals/Canon
-	aiming.muzzle = $Visuals/Canon/Graphics/Muzzle
 	initialize_base(stats)
 	targeting.initialize(stats.attack_range)
 	targeting.configure(stats.targeting)

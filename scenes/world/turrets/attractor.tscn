@@ -1,13 +1,13 @@
-[gd_scene format=3 uid="uid://d3ufl26vo2d27"]
+[gd_scene format=3 uid="uid://dubljk44k0e6a"]
 
 [ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
-[ext_resource type="Script" path="res://scripts/world/entities/turret/vortexer.gd" id="2_script"]
-[ext_resource type="Resource" path="res://resources/turrets/vortexer/vortexer_stats.tres" id="3_stats"]
+[ext_resource type="Script" uid="uid://hgsnf28l0iiv" path="res://scripts/world/entities/turret/attractor.gd" id="2_script"]
+[ext_resource type="Resource" uid="uid://gy2f0ousx2x" path="res://resources/turrets/attractor/attractor_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_ot8ax"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="5_hd4u5"]
 [ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
 [ext_resource type="Script" uid="uid://dg72pcx56tco0" path="res://scripts/world/entities/turret/magnetic_field.gd" id="6_field"]
-[ext_resource type="Texture2D" path="res://assets/sprites/turrets/vortexer.png" id="6_ot8ax"]
+[ext_resource type="Texture2D" uid="uid://bvbj6yjifao5j" path="res://assets/sprites/turrets/attractor.png" id="6_ot8ax"]
 
 [sub_resource type="Animation" id="Pulse"]
 resource_name = "pulse"
@@ -126,7 +126,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="DetectionShape"]
 radius = 110.0
 
-[node name="Vortexer" unique_id=600983979 instance=ExtResource("1_base")]
+[node name="Attractor" unique_id=600983979 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
 death_burnout_progress = 1.0
@@ -135,7 +135,7 @@ death_burnout_progress = 1.0
 health_component = NodePath("../HealthComponent")
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
-libraries/vortexer = SubResource("PulseLibrary")
+libraries/attractor = SubResource("PulseLibrary")
 
 [node name="Flash" parent="." index="10" unique_id=850017021]
 material = SubResource("ShaderMaterial_hd4u5")

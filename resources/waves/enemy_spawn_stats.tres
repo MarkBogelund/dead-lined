@@ -11,4 +11,4 @@
 [resource]
 script = ExtResource("1_spawn_stats")
 entries = Array[ExtResource("2_spawn_entry")]([ExtResource("3_chaser"), ExtResource("4_stalker"), ExtResource("5_kamikazer"), ExtResource("6_shotgunner"), ExtResource("7_emitter")])
-time_between_spawns = 1.5
+time_between_spawns = 30.0

@@ -132,11 +132,11 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 ### Turret Types
 - **Seeker:** Rotates toward the best visible target, telegraphs its shot, and fires a powerful aimed projectile along a clear line of sight.
 - **Shockwaver:** Triggers when a target enters its radius, telegraphs a pulse, then expands a doughnut-shaped shockwave that damages each reached target once and knocks enemies outward; it trades directional reach for local crowd control.
-- **Vortexer:** A high-health control turret that emits readable magnetic pulses, dealing no damage but pulling enemies and the player toward it with distance falloff; dashing ignores the pull, and max level stops affecting the player.
+- **Attractor:** A high-health control turret that emits readable magnetic pulses, dealing no damage but pulling enemies and the player toward it with distance falloff; dashing ignores the pull, and max level stops affecting the player.
+- **Missiler:** Slowly locks a distant impact position, telegraphs its blast radius, then launches a mortar shell that creates an expanding damaging ring; it is strong against stationary groups but weak inside its minimum range and against enemies that leave the marker.
 
 ### Unfinished Turrets
 - **Buffer:** Deals little or no damage but strengthens nearby turrets, rewarding formations while multiplying their friendly-fire danger; weak when isolated and multiple auras should not stack.
-- **Missiler:** Slowly locks a distant impact position, telegraphs its blast radius, then launches a mortar shell that creates an expanding damaging ring; strong against stationary groups but weak inside a minimum range and against enemies that leave the marker.
 - **Beamer:** Sweeps a long continuous damage beam around itself, dealing damage over time to crossed targets; heat downtime creates safe gaps, and it trades priority-target burst for sustained area denial.
 - **Sniper:** Slowly acquires a distant target, freezes a visible firing line, then releases a piercing high-damage shot; its minimum range, slow rotation, long reload, and inability to redirect after locking make misses costly.
 - **Interceptor:** Tracks and destroys projectiles within a limited arc until it overheats; it protects turret formations from ranged enemies but offers little against body threats and may also intercept player shots until max level.

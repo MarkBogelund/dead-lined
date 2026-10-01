@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvbj6yjifao5j"
-path="res://.godot/imported/vortexer.png-2051ddb351546e59f750ac0d9f408e2d.ctex"
+uid="uid://42smwfswv6py"
+path="res://.godot/imported/missiler-icon.png-dd2009257e58f507fea45ced4f209598.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/turrets/vortexer.png"
-dest_files=["res://.godot/imported/vortexer.png-2051ddb351546e59f750ac0d9f408e2d.ctex"]
+source_file="res://assets/sprites/turrets/missiler-icon.png"
+dest_files=["res://.godot/imported/missiler-icon.png-dd2009257e58f507fea45ced4f209598.ctex"]
 
 [params]
 
