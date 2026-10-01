@@ -112,6 +112,19 @@ Leftover capacity orbs stay through the build phase so they can still be collect
 - **Shotgunner:** Maintains distance, then stops for a readable windup before firing a projectile fan; firing knocks it backward and briefly confuses it before it relocates. A confused indicator remains visible for every attack cooldown, including when damage cancels its windup.
 - **Emitter:** Relocates to a safe spot away from threats, then stands still and fires a rotating two-sided projectile stream; nearby threats make it flee, and hits briefly pause active emission with a confused indicator.
 
+### Unfinished Enemies
+- **Saboteur:** Approaches a turret and channels a visible tether that gradually slows or temporarily disables it; damage interrupts and confuses the Saboteur, asking the player to defend important formations before the channel completes.
+- **Blinker:** Marks a destination, vanishes without attacking, then reappears and fires a readable radial burst; the landing marker gives the player time to evade, while teleporting disrupts slow locks and mortar markers but persistent area control catches it after arrival.
+
+### Unfinished Boss Enemies
+Every fifth combat wave selects one boss at random from the unlocked boss pool and adds it to that wave. The boss materializes at a random valid map position after a clear spawn telegraph; the position must be reachable and must not overlap the player, a turret, or blocking geometry.
+
+Bosses are tankier than normal enemies and each has one clear mechanic that changes the player's positioning, target priority, or evasion route while turrets remain the main damage source.
+
+- **Bulwark:** A slow, high-health boss with directional frontal armor that turns toward the player and reduces, rather than blocks, incoming frontal damage. The player baits its facing away from the main turret formation so turrets can attack exposed sides; sustained turret fire temporarily breaks the armor, while rings, explosions, piercing shots, and displacement bypass or disrupt it.
+- **Multiplier:** Stops for an interruptible telegraph before releasing capped groups of simple melee drones. The player survives and kites the adds through turret coverage while deciding when to interrupt the next spawn; Shockwaver, Beamer, and Missiler control the swarm while sustained and priority turrets continue damaging the boss.
+- **Bombarder:** A slow, high-health artillery boss that locks sequences of clearly marked impact circles around the player's current or predicted route, then lands shells that create expanding blast rings. The player plans a path through the fixed markers, leads barrages away from turret formations, and dashes through bad overlaps while turrets damage the boss continuously; each barrage ends with a short recovery before the next telegraph.
+
 **Design Goal:** Slow, readable attacks allow skill-based dodging. Mix of enemy types creates tactical variety.
 
 Each wave uses a finite enemy roster. Enemy types can enter on different waves, grow in count independently, and receive type-specific periodic health increases.
@@ -119,6 +132,15 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 ### Turret Types
 - **Seeker:** Rotates toward the best visible target, telegraphs its shot, and fires a powerful aimed projectile along a clear line of sight.
 - **Shockwaver:** Triggers when a target enters its radius, telegraphs a pulse, then expands a doughnut-shaped shockwave that damages each reached target once and knocks enemies outward; it trades directional reach for local crowd control.
+
+### Unfinished Turrets
+- **Buffer:** Deals little or no damage but strengthens nearby turrets, rewarding formations while multiplying their friendly-fire danger; weak when isolated and multiple auras should not stack.
+- **Missiler:** Slowly locks a distant impact position, telegraphs its blast radius, then launches a mortar shell that creates an expanding damaging ring; strong against stationary groups but weak inside a minimum range and against enemies that leave the marker.
+- **Vortexer:** A high-health control turret that emits readable magnetic pulses, pulling enemies and the player toward it with distance falloff; it clusters targets for other turrets but contributes little direct damage and can draw melee threats onto itself.
+- **Beamer:** Sweeps a long continuous damage beam around itself, dealing damage over time to crossed targets; heat downtime creates safe gaps, and it trades priority-target burst for sustained area denial.
+- **Sniper:** Slowly acquires a distant target, freezes a visible firing line, then releases a piercing high-damage shot; its minimum range, slow rotation, long reload, and inability to redirect after locking make misses costly.
+- **Interceptor:** Tracks and destroys projectiles within a limited arc until it overheats; it protects turret formations from ranged enemies but offers little against body threats and may also intercept player shots until max level.
+- **Slower:** Periodically projects a visible field that slows enemies and the player but deals little or no damage; pulse downtime and the risk of hindering the player make placement important, while dashing ignores the slow.
 
 Turret at max level stops targeting the player. 
 
