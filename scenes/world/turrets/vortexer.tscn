@@ -1,0 +1,94 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/world/entities/turret/vortexer.gd" id="2_script"]
+[ext_resource type="Resource" path="res://resources/turrets/vortexer/vortexer_stats.tres" id="3_stats"]
+[ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="4_placeholder"]
+[ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
+[ext_resource type="Script" path="res://scripts/world/entities/turret/magnetic_field.gd" id="6_field"]
+
+[sub_resource type="Animation" id="Pulse"]
+resource_name = "pulse"
+length = 0.6
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MagneticFieldComponent")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"execute_pull"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.45, 0.6),
+"transitions": PackedFloat32Array(0.5, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.88, 0.88), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="PulseLibrary"]
+_data = {
+&"pulse": SubResource("Pulse")
+}
+
+[sub_resource type="CircleShape2D" id="DetectionShape"]
+radius = 110.0
+
+[sub_resource type="AtlasTexture" id="PlaceholderTexture"]
+atlas = ExtResource("4_placeholder")
+region = Rect2(0, 0, 24, 26)
+
+[node name="Vortexer" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+stats = ExtResource("3_stats")
+
+[node name="HealthUIComponent" parent="." index="2"]
+health_component = NodePath("../HealthComponent")
+
+[node name="AnimationHandler" parent="." index="9"]
+libraries/vortexer = SubResource("PulseLibrary")
+
+[node name="MagneticFieldComponent" type="Node2D" parent="." index="14"]
+z_index = 0
+script = ExtResource("6_field")
+
+[node name="DetectionArea" type="Area2D" parent="MagneticFieldComponent" index="0"]
+collision_layer = 0
+collision_mask = 10
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MagneticFieldComponent/DetectionArea" index="0"]
+shape = SubResource("DetectionShape")
+
+[node name="Sprite2D" type="Sprite2D" parent="Visuals" index="0"]
+modulate = Color(0.2, 1, 0.78, 1)
+z_index = 1
+position = Vector2(0, 3)
+texture = SubResource("PlaceholderTexture")
+
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="1"]
+modulate = Color(0, 0, 0, 0.46)
+texture = ExtResource("5_shadow")

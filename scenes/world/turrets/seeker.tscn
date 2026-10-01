@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://ci6t3dum71ion" path="res://scripts/world/entities/turret/seeker.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://cwq21j4s01byy" path="res://resources/turrets/seeker/seeker_stats.tres" id="3_stats"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_ks0gs"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/entities/shared/shoot.gd" id="4_shoot"]
 [ext_resource type="PackedScene" uid="uid://dl22tx6cs3xwt" path="res://scenes/world/projectiles/turret_projectile.tscn" id="5_projectile"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="6_targeting"]
@@ -83,6 +84,17 @@ _data = {
 &"shoot": SubResource("Shoot")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e5ss5"]
+resource_local_to_scene = true
+shader = ExtResource("4_ks0gs")
+shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/current_radius = 16.0
+shader_parameter/ring_thickness = 4.0
+shader_parameter/pixel_size = 2.0
+shader_parameter/center_line_thickness = 1.0
+shader_parameter/center_line_color = Color(1, 1, 1, 1)
+shader_parameter/canvas_size = Vector2(40, 40)
+
 [node name="Seeker" unique_id=2138402404 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -97,6 +109,9 @@ z_index = -1
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/seeker = SubResource("SeekerLibrary")
+
+[node name="Flash" parent="." index="10" unique_id=850017021]
+material = SubResource("ShaderMaterial_e5ss5")
 
 [node name="ShootComponent" type="Node" parent="." index="14" unique_id=877670392]
 script = ExtResource("4_shoot")

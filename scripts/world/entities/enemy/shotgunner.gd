@@ -60,7 +60,7 @@ func _physics_process(delta: float) -> void:
 		_process_movement(delta)
 
 	knockback.process(delta)
-	_add_conveyor_velocity()
+	_apply_environment_velocity()
 	move_and_slide()
 
 func _process_movement(delta: float) -> void:

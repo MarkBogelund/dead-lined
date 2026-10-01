@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="2_hitbox"]
 [ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/entities/shared/health.gd" id="3_health"]
 [ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/entities/shared/knockback.gd" id="4_knockback"]
+[ext_resource type="Script" path="res://scripts/world/entities/shared/external_velocity.gd" id="4_external"]
 [ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/entities/shared/navigation.gd" id="5_nav"]
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="6_targeting"]
 [ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="7_crunch_settings"]
@@ -377,6 +378,9 @@ script = ExtResource("3_health")
 
 [node name="KnockbackComponent" type="Node" parent="." unique_id=1100000006]
 script = ExtResource("4_knockback")
+
+[node name="ExternalVelocityComponent" type="Node" parent="."]
+script = ExtResource("4_external")
 
 [node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1100000007]
 path_desired_distance = 4.0

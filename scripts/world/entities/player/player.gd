@@ -12,6 +12,7 @@ signal died
 
 @onready var capacity: CapacityComponent = $CapacityComponent
 @onready var knockback: KnockbackComponent = $KnockbackComponent
+@onready var external_velocity: ExternalVelocityComponent = $ExternalVelocityComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
 @onready var animation: AnimationHandler = $AnimationHandler
@@ -65,8 +66,14 @@ func set_conveyor_velocity(conveyor_velocity: Vector2) -> void:
 func clear_conveyor_velocity() -> void:
 	_conveyor_velocity = Vector2.ZERO
 
-func _add_conveyor_velocity() -> void:
-	velocity += _conveyor_velocity
+func set_external_velocity(source_id: int, value: Vector2) -> void:
+	if dash.is_invincible():
+		external_velocity.clear_velocity(source_id)
+	else:
+		external_velocity.set_velocity(source_id, value)
+
+func clear_external_velocity(source_id: int) -> void:
+	external_velocity.clear_velocity(source_id)
 
 func _ready() -> void:
 	_initialize()
@@ -179,12 +186,12 @@ func _process_movement(delta: float) -> void:
 		MoveState.DASHING:
 			_base_velocity = Vector2.ZERO
 			velocity = dash.step_dash(delta)
-			_add_conveyor_velocity()
+			velocity += _conveyor_velocity
 			move_and_slide()
 		MoveState.KNOCKED:
 			_base_velocity = Vector2.ZERO
 			velocity = knockback.velocity
-			_add_conveyor_velocity()
+			velocity += _conveyor_velocity
 			move_and_slide()
 		MoveState.FROZEN:
 			_base_velocity = Vector2.ZERO
@@ -192,7 +199,7 @@ func _process_movement(delta: float) -> void:
 			move_and_slide()
 		MoveState.NORMAL:
 			_base_velocity = movement.calculate_velocity(_base_velocity, input_dir, delta)
-			velocity = _base_velocity + _conveyor_velocity
+			velocity = _base_velocity + _conveyor_velocity + external_velocity.get_total_velocity()
 			move_and_slide()
 
 func _process_locomotion() -> void:
