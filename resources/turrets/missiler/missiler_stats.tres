@@ -33,7 +33,7 @@ attack_cooldown = 0.68
 [resource]
 script = ExtResource("1_stats")
 targeting = ExtResource("2_targeting")
-minimum_range = 90.0
+minimum_range = 50.0
 charge_duration = 0.8
 flight_duration = 1.0
 arc_height = 40.0

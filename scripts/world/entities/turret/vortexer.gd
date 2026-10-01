@@ -17,6 +17,7 @@ func _initialize() -> void:
 		return
 	initialize_base(stats)
 	magnetic_field.configure(stats)
+	range_indicator.initialize(stats.attack_range, stats.inner_dead_zone)
 
 func _on_combat_started() -> void:
 	magnetic_field.set_enabled(true)
@@ -44,7 +45,7 @@ func set_damage(value: int) -> void:
 
 func set_attack_range(value: float) -> void:
 	magnetic_field.set_max_range(value)
-	range_indicator.initialize(value)
+	range_indicator.initialize(value, stats.inner_dead_zone)
 
 func set_attack_cooldown(value: float) -> void:
 	magnetic_field.cooldown = value

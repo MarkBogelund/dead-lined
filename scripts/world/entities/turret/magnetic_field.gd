@@ -177,13 +177,15 @@ func _exit_tree() -> void:
 	_clear_affected()
 
 func _draw() -> void:
+	var ring_width := maxf(1.0, max_range - inner_dead_zone)
+	var ring_radius := (max_range + inner_dead_zone) * 0.5
 	if _state == State.WINDUP:
 		var progress := minf(_state_time / windup_duration, 1.0)
-		draw_circle(Vector2.ZERO, max_range, Color(windup_color, windup_color.a * progress))
+		draw_arc(Vector2.ZERO, ring_radius, 0.0, TAU, 96, Color(windup_color, windup_color.a * progress), ring_width)
 		draw_arc(Vector2.ZERO, lerpf(max_range, inner_dead_zone, progress), 0.0, TAU, 96, pull_color, line_width)
 	elif _state == State.PULLING:
 		var phase := fmod(_state_time * 2.5, 1.0)
-		draw_circle(Vector2.ZERO, max_range, Color(pull_color, pull_color.a * 0.16))
+		draw_arc(Vector2.ZERO, ring_radius, 0.0, TAU, 96, Color(pull_color, pull_color.a * 0.16), ring_width)
 		for offset: float in [0.0, 0.33, 0.66]:
 			var radius := lerpf(max_range, inner_dead_zone, fmod(phase + offset, 1.0))
 			draw_arc(Vector2.ZERO, radius, 0.0, TAU, 96, pull_color, line_width)

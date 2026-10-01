@@ -34,6 +34,7 @@ func _initialize() -> void:
 	initialize_base(stats)
 	_attack_cooldown = stats.attack_cooldown
 	_damage = stats.damage
+	range_indicator.initialize(stats.attack_range, stats.minimum_range)
 
 func _process(delta: float) -> void:
 	if not is_turret_active():
@@ -98,7 +99,7 @@ func set_damage(value: int) -> void:
 
 func set_attack_range(value: float) -> void:
 	targeting.max_range = value
-	range_indicator.initialize(value)
+	range_indicator.initialize(value, stats.minimum_range)
 
 func set_attack_cooldown(value: float) -> void:
 	_attack_cooldown = value
