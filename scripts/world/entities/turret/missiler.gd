@@ -3,7 +3,6 @@ class_name Missiler
 
 @onready var targeting: TargetingComponent = $TargetingComponent
 @onready var aiming: AimingComponent = $AimingComponent
-@onready var muzzle: Marker2D = $Visuals/Canon/Muzzle
 
 @export var stats: MissilerStats
 @export var mortar_scene: PackedScene
@@ -14,6 +13,7 @@ var _damage := 25
 var _charging := false
 var _locked_impact := Vector2.ZERO
 var _strike: MortarStrike
+var muzzle: Marker2D
 
 func _ready() -> void:
 	_initialize()
@@ -29,7 +29,7 @@ func _initialize() -> void:
 		return
 	targeting.initialize(stats.attack_range)
 	targeting.configure(stats.targeting)
-	aiming.muzzle = muzzle
+	muzzle = aiming.muzzle
 	aiming.initialize(5.0, 0.15)
 	initialize_base(stats)
 	_attack_cooldown = stats.attack_cooldown

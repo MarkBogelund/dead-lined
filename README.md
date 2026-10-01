@@ -125,7 +125,7 @@ Transient turret behavior animations key `Visuals:material:shader_parameter/flas
 
 ### Creating a new turret
 
-`AimingComponent` owns both gameplay aiming and optional cannon presentation: it smoothly rotates the Canon pivot toward the target, flips the Graphic vertically when the turret changes side, and flips Feet horizontally. `visual_turn_freedom_degrees` is the total visual arc around the outward direction (`180` = +/-90°, `90` = +/-45°); `visual_forward_angle_degrees` matches each turret's authored cannon orientation. Targeting, accuracy, and firing remain in the same component contract.
+`AimingComponent` owns both gameplay aiming and optional cannon presentation: it uses the same `aim_speed` for smooth Canon-pivot rotation, flips the Graphic vertically when the turret changes side, and flips Feet horizontally. `visual_turn_freedom_degrees` is the total visual arc around the outward direction (`180` = +/-90°, `90` = +/-45°); cannon sprites are authored facing right at zero rotation. Targeting, accuracy, and firing remain in the same component contract.
 
 1. Duplicate `turret_base.tscn` and save it as the new turret scene. Keep the common direct-child node names unchanged: `HealthComponent`, `HealthUIComponent`, `InteractionZone`, `TurretUpgradeComponent`, `RepairComponent`, `TurretExclusionZone`, `RangeIndicator`, `TurretHUD`, `AnimationHandler`, `Flash`, `HitParticles`, `WindupParticles`, `RepairParticles`, and `Visuals`.
 2. Replace or add the turret artwork below `Visuals`. Put the main body at `Visuals/Sprite2D` or `Visuals/AnimatedSprite2D`; put a rotating cannon at `Visuals/Canon` and its artwork at `Visuals/Canon/Graphics` when the turret has one. Do not move `Visuals`, because inherited animations target that node.

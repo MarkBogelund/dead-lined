@@ -16,16 +16,11 @@ class_name AimingComponent
 ## Optional presentation nodes for a side-perspective cannon.
 @export var feet_path: NodePath
 @export var graphic_path: NodePath
-@export_range(0.0, 1440.0, 10.0) var visual_turn_speed_degrees := 720.0
 ## Total visual cannon freedom around the outward side; 180 = +/-90 degrees, 90 = +/-45 degrees.
 @export_range(0.0, 180.0, 1.0) var visual_turn_freedom_degrees := 180.0
-@export_range(-180.0, 180.0, 1.0) var visual_forward_angle_degrees := 0.0
 
 ## Optional spawn point for projectiles. Falls back to pivot if not set.
 @export var muzzle: Node2D = null
-
-## Rotation offset for visual node (e.g., -PI/2 for sprites facing up)
-@export var visual_offset := 0.0
 
 ## Current aim angle in radians
 var current_angle := 0.0
@@ -44,7 +39,7 @@ func _process(delta: float) -> void:
 		visual_node.global_rotation = rotate_toward(
 			visual_node.global_rotation,
 			_visual_target_rotation,
-			deg_to_rad(visual_turn_speed_degrees) * delta)
+			maxf(0.0, aim_speed) * delta)
 
 func initialize(s_aim_speed: float, s_accuracy_angle: float) -> void:
 	aim_speed = s_aim_speed
@@ -69,7 +64,6 @@ func aim_at(target_pos: Vector2, delta: float) -> void:
 		current_angle = lerp_angle(current_angle, target_angle, aim_speed * delta)
 	
 	if visual_node:
-		_visual_target_rotation = target_angle + visual_forward_angle_degrees
 		if feet:
 			feet.flip_h = target_offset.x < 0.0
 		if graphic:
@@ -79,7 +73,7 @@ func aim_at(target_pos: Vector2, delta: float) -> void:
 		var relative_angle := angle_difference(outward_angle, target_offset.angle())
 		var half_freedom := deg_to_rad(visual_turn_freedom_degrees) * 0.5
 		relative_angle = clampf(relative_angle, -half_freedom, half_freedom)
-		_visual_target_rotation = outward_angle + relative_angle + deg_to_rad(visual_forward_angle_degrees)
+		_visual_target_rotation = outward_angle + relative_angle
 
 ## Get the current aim angle in radians
 func get_current_angle() -> float:
