@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bvbj6yjifao5j"
-path="res://.godot/imported/vortexer.png-2051ddb351546e59f750ac0d9f408e2d.ctex"
+path="res://.godot/imported/attractor.png-80135814f8dff12e6f46e4a0db3a4ccf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/turrets/vortexer.png"
-dest_files=["res://.godot/imported/vortexer.png-2051ddb351546e59f750ac0d9f408e2d.ctex"]
+source_file="res://assets/sprites/turrets/attractor.png"
+dest_files=["res://.godot/imported/attractor.png-80135814f8dff12e6f46e4a0db3a4ccf.ctex"]
 
 [params]
 

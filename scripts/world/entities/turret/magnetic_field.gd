@@ -38,7 +38,7 @@ func _ready() -> void:
 	detection_shape.shape = detection_shape.shape.duplicate()
 	_apply_radius()
 
-func configure(stats: VortexerStats) -> void:
+func configure(stats: AttractorStats) -> void:
 	max_range = maxf(0.0, stats.attack_range)
 	cooldown = maxf(0.0, stats.attack_cooldown)
 	windup_duration = maxf(0.05, stats.windup_duration)

@@ -1,9 +1,9 @@
 extends TurretBase
-class_name Vortexer
+class_name Attractor
 
 @onready var magnetic_field: MagneticFieldComponent = $MagneticFieldComponent
 
-@export var stats: VortexerStats
+@export var stats: AttractorStats
 
 func _ready() -> void:
 	_initialize()
@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func _initialize() -> void:
 	if not stats:
-		push_error("%s requires a VortexerStats resource" % name)
+		push_error("%s requires an AttractorStats resource" % name)
 		return
 	initialize_base(stats)
 	magnetic_field.configure(stats)

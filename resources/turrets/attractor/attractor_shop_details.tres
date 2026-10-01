@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="TurretEntry" format=3 uid="uid://ddcryh3afnftq"]
 
-[ext_resource type="PackedScene" uid="uid://cdf2yj51n6fnc" path="res://scenes/world/turrets/vortexer_ghost.tscn" id="1_ghost"]
-[ext_resource type="Texture2D" uid="uid://bvbj6yjifao5j" path="res://assets/sprites/turrets/vortexer.png" id="2_dil1d"]
+[ext_resource type="PackedScene" uid="uid://cdf2yj51n6fnc" path="res://scenes/world/turrets/attractor_ghost.tscn" id="1_ghost"]
+[ext_resource type="Texture2D" uid="uid://bvbj6yjifao5j" path="res://assets/sprites/turrets/attractor.png" id="2_dil1d"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="3_entry"]
-[ext_resource type="PackedScene" uid="uid://dubljk44k0e6a" path="res://scenes/world/turrets/vortexer.tscn" id="4_turret"]
-[ext_resource type="Resource" uid="uid://gy2f0ousx2x" path="res://resources/turrets/vortexer/vortexer_stats.tres" id="5_stats"]
+[ext_resource type="PackedScene" uid="uid://dubljk44k0e6a" path="res://scenes/world/turrets/attractor.tscn" id="4_turret"]
+[ext_resource type="Resource" uid="uid://gy2f0ousx2x" path="res://resources/turrets/attractor/attractor_stats.tres" id="5_stats"]
 
 [resource]
 script = ExtResource("3_entry")
-name = "Vortexer"
+name = "Attractor"
 icon = ExtResource("2_dil1d")
 price = 25
 turret_scene = ExtResource("4_turret")
