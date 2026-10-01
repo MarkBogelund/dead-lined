@@ -8,7 +8,8 @@
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="5_targeting"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="6_aiming"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_vboif"]
-[ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="7_sprite"]
+[ext_resource type="Texture2D" uid="uid://dq55pmiufvrpi" path="res://assets/sprites/turrets/missiler.png" id="7_40blp"]
+[ext_resource type="Script" uid="uid://cahnani2lih1y" path="res://scripts/world/entities/shared/visuals_turn.gd" id="7_visuals_turn"]
 
 [sub_resource type="Animation" id="Launch"]
 resource_name = "launch"
@@ -57,7 +58,7 @@ _data = {
 &"launch": SubResource("Launch")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3erc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vboif"]
 resource_local_to_scene = true
 shader = ExtResource("5_40blp")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -68,7 +69,7 @@ shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3vq3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3erc"]
 resource_local_to_scene = true
 shader = ExtResource("6_vboif")
 shader_parameter/gold_amount = 0.0
@@ -97,20 +98,13 @@ shader_parameter/glitch_duty = 0.35
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 
-[sub_resource type="AtlasTexture" id="MissilerTexture"]
-atlas = ExtResource("7_sprite")
-region = Rect2(0, 0, 24, 26)
+[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
+atlas = ExtResource("7_40blp")
+region = Rect2(0, 0, 24, 24)
 
-[sub_resource type="SpriteFrames" id="MissilerFrames"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("MissilerTexture")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 5.0
-}]
+[sub_resource type="AtlasTexture" id="AtlasTexture_0lqoh"]
+atlas = ExtResource("7_40blp")
+region = Rect2(24, 0, 24, 24)
 
 [node name="Missiler" unique_id=900000001 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
@@ -121,23 +115,29 @@ mortar_scene = ExtResource("4_mortar")
 libraries/missiler = SubResource("MissilerLibrary")
 
 [node name="Flash" parent="." index="10" unique_id=850017021]
-material = SubResource("ShaderMaterial_r3erc")
+material = SubResource("ShaderMaterial_vboif")
 
 [node name="Visuals" parent="." index="13" unique_id=1113068187]
-material = SubResource("ShaderMaterial_b3vq3")
+material = SubResource("ShaderMaterial_r3erc")
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=900000004]
-z_index = 1
-use_parent_material = true
-sprite_frames = SubResource("MissilerFrames")
+[node name="Feet" type="Sprite2D" parent="Visuals" index="0" unique_id=1356975428]
+texture = SubResource("AtlasTexture_spl43")
 
-[node name="Muzzle" type="Marker2D" parent="Visuals" index="1" unique_id=900000005]
-position = Vector2(0, -14)
+[node name="Canon" type="Sprite2D" parent="Visuals" index="1" unique_id=1356551114]
+texture = SubResource("AtlasTexture_0lqoh")
+
+[node name="Muzzle" type="Marker2D" parent="Visuals/Canon" index="0" unique_id=900000005]
+position = Vector2(16, 0)
 
 [node name="TargetingComponent" type="Node" parent="." index="14" unique_id=900000002]
 script = ExtResource("5_targeting")
 
 [node name="AimingComponent" type="Node" parent="." index="15" unique_id=900000003]
 script = ExtResource("6_aiming")
-visual_node = NodePath("../Visuals")
-muzzle = NodePath("../Visuals/Muzzle")
+muzzle = NodePath("../Visuals/Canon/Muzzle")
+
+[node name="VisualsTurnComponent" type="Node2D" parent="." index="16" unique_id=900000006]
+script = ExtResource("7_visuals_turn")
+feet_path = NodePath("../Visuals/Feet")
+canon_path = NodePath("../Visuals/Canon")
+canon_turn_degrees = 45.0
