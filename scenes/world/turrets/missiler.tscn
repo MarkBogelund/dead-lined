@@ -10,6 +10,7 @@
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_vboif"]
 [ext_resource type="Texture2D" uid="uid://dq55pmiufvrpi" path="res://assets/sprites/turrets/missiler.png" id="7_40blp"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="8_r3erc"]
+[ext_resource type="Texture2D" uid="uid://c7kpx46shdlsc" path="res://assets/sprites/shared/projectile.png" id="9_r3erc"]
 
 [sub_resource type="Animation" id="Launch"]
 resource_name = "launch"
@@ -135,6 +136,9 @@ position = Vector2(16, 0)
 [node name="ShootParticles" parent="Visuals/Canon/Muzzle" index="0" unique_id=1586402119 instance=ExtResource("8_r3erc")]
 amount = 20
 
+[node name="Sprite2D" type="Sprite2D" parent="Visuals/Canon/Muzzle" index="1" unique_id=1397904826]
+texture = ExtResource("9_r3erc")
+
 [node name="TargetingComponent" type="Node" parent="." index="14" unique_id=900000002]
 script = ExtResource("5_targeting")
 
@@ -144,4 +148,4 @@ visual_node = NodePath("../Visuals/Canon")
 feet_path = NodePath("../Visuals/Feet")
 graphic_path = NodePath("../Visuals/Canon/Graphic")
 visual_turn_speed_degrees = 540.0
-muzzle = NodePath("../Visuals/Canon/Muzzle")
+visual_turn_freedom_degrees = 60.0

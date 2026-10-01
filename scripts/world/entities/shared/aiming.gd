@@ -17,6 +17,8 @@ class_name AimingComponent
 @export var feet_path: NodePath
 @export var graphic_path: NodePath
 @export_range(0.0, 1440.0, 10.0) var visual_turn_speed_degrees := 720.0
+## Total visual cannon freedom around the outward side; 180 = +/-90 degrees, 90 = +/-45 degrees.
+@export_range(0.0, 180.0, 1.0) var visual_turn_freedom_degrees := 180.0
 @export_range(-180.0, 180.0, 1.0) var visual_forward_angle_degrees := 0.0
 
 ## Optional spawn point for projectiles. Falls back to pivot if not set.
@@ -73,6 +75,11 @@ func aim_at(target_pos: Vector2, delta: float) -> void:
 		if graphic:
 			graphic.flip_h = false
 			graphic.flip_v = target_offset.x < 0.0
+		var outward_angle := PI if target_offset.x < 0.0 else 0.0
+		var relative_angle := angle_difference(outward_angle, target_offset.angle())
+		var half_freedom := deg_to_rad(visual_turn_freedom_degrees) * 0.5
+		relative_angle = clampf(relative_angle, -half_freedom, half_freedom)
+		_visual_target_rotation = outward_angle + relative_angle + deg_to_rad(visual_forward_angle_degrees)
 
 ## Get the current aim angle in radians
 func get_current_angle() -> float:
