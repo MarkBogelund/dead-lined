@@ -9,9 +9,12 @@ func _ready() -> void:
 	_initialize()
 	beam.windup_started.connect(_on_windup_started)
 	beam.firing_started.connect(_on_firing_started)
-	animation.configure_animation("windup", 1, false)
-	animation.configure_animation("fire", 1, false)
+	animation.configure_animation("idle", 1, true)
+	animation.configure_animation("windup", 2, false)
+	animation.configure_animation("fire", 3, false)
 	super._ready()
+	if not is_turret_active():
+		animation.play_animation("idle")
 
 func _initialize() -> void:
 	if not stats:
@@ -27,6 +30,7 @@ func _on_combat_stopped() -> void:
 	beam.set_enabled(false)
 	animation.stop_animation("fire")
 	animation.stop_animation("windup")
+	animation.play_animation("idle")
 
 func _before_death_animation() -> void:
 	_on_combat_stopped()

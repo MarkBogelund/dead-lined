@@ -4,14 +4,33 @@
 [ext_resource type="Script" uid="uid://c03qqxwjb2j1y" path="res://scripts/world/entities/turret/beamer.gd" id="2_beamer"]
 [ext_resource type="Resource" uid="uid://dsrmd4nsu8na1" path="res://resources/turrets/beamer/beamer_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_6gvdm"]
-[ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="4_sprite"]
 [ext_resource type="Script" uid="uid://bvshu8nj4mgvv" path="res://scripts/world/entities/turret/beam.gd" id="5_beam"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_736xw"]
+[ext_resource type="Texture2D" uid="uid://dv38ca2ap3wph" path="res://assets/sprites/turrets/beamer.png" id="7_6gvdm"]
+[ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="7_bwlqj"]
+[ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="8_pixel_rotate"]
+
+[sub_resource type="Animation" id="Animation_ume4x"]
+resource_name = "RESET"
+length = 0.23333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BeamComponent/SpeedParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Fire"]
 resource_name = "fire"
-length = 0.5
+length = 0.4
 loop_mode = 1
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -19,10 +38,64 @@ tracks/0/path = NodePath("Visuals:material:shader_parameter/flash_amount")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.25, 0.5),
+"times": PackedFloat32Array(0, 0.2, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [0.0, 0.35, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/Body:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.19999999, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:material:shader_parameter/flash_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(5.968213e-06, 0.66591686, 0.88343793, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BeamComponent/SpeedParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_6gvdm"]
+resource_name = "idle"
+length = 0.4
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
 }
 
 [sub_resource type="Animation" id="Windup"]
@@ -55,7 +128,9 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="BeamerLibrary"]
 _data = {
+&"RESET": SubResource("Animation_ume4x"),
 &"fire": SubResource("Fire"),
+&"idle": SubResource("Animation_6gvdm"),
 &"windup": SubResource("Windup")
 }
 
@@ -69,6 +144,34 @@ shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
+
+[sub_resource type="Gradient" id="Gradient_ume4x"]
+offsets = PackedFloat32Array(0.39473686, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.2, 0.8509804, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bwlqj"]
+gradient = SubResource("Gradient_ume4x")
+
+[sub_resource type="Curve" id="Curve_cd42n"]
+_data = [Vector2(0.8287672, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.28181815), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_78ntu"]
+curve = SubResource("Curve_cd42n")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gcvlj"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 3.0
+direction = Vector3(0, 0, 0)
+spread = 30.0
+initial_velocity_min = 5.0
+initial_velocity_max = 40.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.099999994
+scale_max = 0.29999998
+scale_curve = SubResource("CurveTexture_78ntu")
+color_ramp = SubResource("GradientTexture1D_bwlqj")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bwlqj"]
 resource_local_to_scene = true
@@ -99,9 +202,41 @@ shader_parameter/glitch_duty = 0.35
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 
-[sub_resource type="AtlasTexture" id="BeamerBody"]
-atlas = ExtResource("4_sprite")
-region = Rect2(0, 0, 24, 26)
+[sub_resource type="AtlasTexture" id="AtlasTexture_bwlqj"]
+atlas = ExtResource("7_6gvdm")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cd42n"]
+atlas = ExtResource("7_6gvdm")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_78ntu"]
+atlas = ExtResource("7_6gvdm")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gcvlj"]
+atlas = ExtResource("7_6gvdm")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_spl43"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bwlqj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cd42n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_78ntu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gcvlj")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 10.0
+}]
 
 [node name="Beamer" unique_id=493092891 instance=ExtResource("1_base")]
 script = ExtResource("2_beamer")
@@ -116,6 +251,8 @@ material = SubResource("ShaderMaterial_ume4x")
 [node name="BeamComponent" type="Node2D" parent="." index="14" unique_id=1684563345]
 z_index = 8
 script = ExtResource("5_beam")
+pixel_rotate_shader = ExtResource("8_pixel_rotate")
+beam_color = Color(0.2, 0.8509804, 1, 1)
 
 [node name="BeamArea" type="Area2D" parent="BeamComponent" index="0" unique_id=1890326660]
 collision_layer = 0
@@ -124,27 +261,14 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BeamComponent/BeamArea" index="0" unique_id=1571762856]
 
-[node name="BeamVisual" type="Node2D" parent="BeamComponent" index="1" unique_id=163008843]
-visible = false
-
-[node name="BeamGlow" type="Line2D" parent="BeamComponent/BeamVisual" index="0" unique_id=1090662112]
-points = PackedVector2Array(0, 0, 180, 0)
-width = 14.0
-default_color = Color(0.2, 0.85, 1, 0.3)
-begin_cap_mode = 2
-end_cap_mode = 2
-
-[node name="BeamCore" type="Line2D" parent="BeamComponent/BeamVisual" index="1" unique_id=1798783769]
-points = PackedVector2Array(0, 0, 180, 0)
-width = 5.0
-default_color = Color(0.85, 1, 1, 0.95)
-begin_cap_mode = 2
-end_cap_mode = 2
+[node name="SpeedParticles" parent="BeamComponent" index="1" unique_id=721926538 instance=ExtResource("7_bwlqj")]
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_gcvlj")
 
 [node name="Visuals" parent="." index="15" unique_id=1113068187]
 material = SubResource("ShaderMaterial_bwlqj")
 
-[node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=640413589]
+[node name="Body" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=593199491]
 modulate = Color(0.75, 0.95, 1, 1)
 use_parent_material = true
-texture = SubResource("BeamerBody")
+sprite_frames = SubResource("SpriteFrames_spl43")

@@ -1,23 +1,23 @@
 [gd_resource type="Resource" script_class="TurretEntry" format=3 uid="uid://d1pgybqufu4jx"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/turrets/beamer_ghost.tscn" id="1_ghost"]
-[ext_resource type="Texture2D" uid="uid://cidyl4ulxkbbh" path="res://assets/sprites/turrets/shockwaver.png" id="2_sprite"]
+[ext_resource type="PackedScene" uid="uid://bx0nr41vua54v" path="res://scenes/world/turrets/beamer_ghost.tscn" id="1_ghost"]
+[ext_resource type="Texture2D" uid="uid://dv38ca2ap3wph" path="res://assets/sprites/turrets/beamer.png" id="2_p8k7k"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="3_entry"]
-[ext_resource type="PackedScene" path="res://scenes/world/turrets/beamer.tscn" id="4_turret"]
+[ext_resource type="PackedScene" uid="uid://bjndpqr77avl0" path="res://scenes/world/turrets/beamer.tscn" id="4_turret"]
 [ext_resource type="Resource" uid="uid://dsrmd4nsu8na1" path="res://resources/turrets/beamer/beamer_stats.tres" id="5_stats"]
 
-[sub_resource type="AtlasTexture" id="BeamerIcon"]
-atlas = ExtResource("2_sprite")
-region = Rect2(0, 0, 24, 26)
+[sub_resource type="AtlasTexture" id="AtlasTexture_rxa02"]
+atlas = ExtResource("2_p8k7k")
+region = Rect2(0, 0, 24, 24)
 
 [resource]
 script = ExtResource("3_entry")
 name = "Beamer"
-icon = SubResource("BeamerIcon")
+icon = SubResource("AtlasTexture_rxa02")
 price = 25
 turret_scene = ExtResource("4_turret")
 ghost_scene = ExtResource("1_ghost")
 stats = ExtResource("5_stats")
-outline_start_color = Color(0.2, 0.75, 1, 1)
-outline_end_color = Color(0.75, 0.95, 1, 1)
+outline_start_color = Color(5.198121e-06, 0.8181859, 0.5770026, 1)
+outline_end_color = Color(0.6084321, 0.99999994, 0.8939449, 1)
 exclusion_radius = 70.0

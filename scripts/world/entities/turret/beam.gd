@@ -8,9 +8,19 @@ enum State {IDLE, WINDUP, FIRING}
 
 @onready var beam_area: Area2D = $BeamArea
 @onready var beam_shape: CollisionShape2D = $BeamArea/CollisionShape2D
-@onready var beam_visual: Node2D = $BeamVisual
-@onready var beam_glow: Line2D = $BeamVisual/BeamGlow
-@onready var beam_core: Line2D = $BeamVisual/BeamCore
+@onready var speed_particles: GPUParticles2D = $SpeedParticles
+
+@export var pixel_rotate_shader: Shader
+@export var beam_color: Color = Color(0.2, 0.85, 1.0, 1.0):
+	set(value):
+		beam_color = value
+		if is_instance_valid(_beam_visual):
+			_beam_visual.texture = _create_beam_texture()
+@export var beam_center_color: Color = Color(0.85, 1.0, 1.0, 1.0):
+	set(value):
+		beam_center_color = value
+		if is_instance_valid(_beam_visual):
+			_beam_visual.texture = _create_beam_texture()
 
 var beam_length := 180.0
 var beam_width := 12.0
@@ -28,11 +38,23 @@ var _state_time := 0.0
 var _sweep_angle := 0.0
 var _locked_target: Node2D
 var _target_cooldowns: Dictionary[int, float] = {}
+var _beam_visual: PixelRotatedSprite
+
+const BEAM_START_OFFSET := 6.0
+const BEAM_TEXTURE_HEIGHT := 16
+const BEAM_EDGE_RADIUS := 8.0
 
 func _ready() -> void:
 	beam_shape.shape = RectangleShape2D.new()
+	if not pixel_rotate_shader:
+		push_error("%s requires pixel_rotate_shader" % name)
+		return
+	_beam_visual = PixelRotatedSprite.new()
+	_beam_visual.name = "BeamVisual"
+	_beam_visual.pixel_shader = pixel_rotate_shader
+	_beam_visual.start_offset = BEAM_START_OFFSET
+	add_child(_beam_visual)
 	_update_geometry()
-	beam_visual.hide()
 
 func configure(p_range: float, p_width: float, p_damage_interval: float, p_windup_duration: float, p_lock_break_distance: float, p_damage: int, p_knockback: float, p_sweep_speed_degrees: float, p_tracking_speed_degrees: float) -> void:
 	beam_length = maxf(1.0, p_range)
@@ -55,9 +77,10 @@ func set_enabled(value: bool) -> void:
 	_target_cooldowns.clear()
 	if not value:
 		_state = State.IDLE
-		beam_visual.hide()
+		_beam_visual.fade_to(0.0)
 		return
 	_state = State.WINDUP
+	_beam_visual.fade_to(0.0)
 	windup_started.emit()
 
 func set_range(value: float) -> void:
@@ -79,7 +102,7 @@ func _physics_process(delta: float) -> void:
 				_state = State.FIRING
 				_state_time = 0.0
 				_target_cooldowns.clear()
-				beam_visual.show()
+				_beam_visual.fade_to(1.0)
 				firing_started.emit()
 		State.FIRING:
 			_damage_overlapped_targets(delta)
@@ -89,14 +112,40 @@ func _update_geometry() -> void:
 		return
 	var shape := beam_shape.shape as RectangleShape2D
 	shape.size = Vector2(beam_length, beam_width)
-	beam_glow.points = PackedVector2Array([Vector2.ZERO, Vector2(beam_length, 0.0)])
-	beam_core.points = beam_glow.points
+	_beam_visual.texture = _create_beam_texture()
 	_update_sweep_transforms()
 
 func _update_sweep_transforms() -> void:
-	beam_visual.rotation = _sweep_angle
 	beam_area.global_rotation = global_rotation + _sweep_angle
 	beam_area.global_position = global_position + Vector2(beam_length * 0.5, 0.0).rotated(global_rotation + _sweep_angle)
+	speed_particles.position = Vector2.ZERO
+	speed_particles.rotation = _sweep_angle
+	if is_instance_valid(_beam_visual):
+		_beam_visual.point_at(_sweep_angle)
+
+func _create_beam_texture() -> Texture2D:
+	var texture_width := maxi(1, ceili(beam_length - BEAM_START_OFFSET))
+	var image := Image.create(texture_width, BEAM_TEXTURE_HEIGHT, false, Image.FORMAT_RGBA8)
+	var center_y := float(BEAM_TEXTURE_HEIGHT) * 0.5
+	var segment_start := minf(BEAM_EDGE_RADIUS, float(texture_width) * 0.5)
+	var segment_end := maxf(segment_start, float(texture_width) - BEAM_EDGE_RADIUS)
+	for y in range(BEAM_TEXTURE_HEIGHT):
+		for x in range(texture_width):
+			var sample_x := float(x) + 0.5
+			var closest_x := clampf(sample_x, segment_start, segment_end)
+			var distance := Vector2(sample_x - closest_x, float(y) + 0.5 - center_y).length()
+			if distance > BEAM_EDGE_RADIUS:
+				continue
+			if distance <= 2.0:
+				var core_color := beam_center_color
+				core_color.a *= 0.95
+				image.set_pixel(x, y, core_color)
+			else:
+				var glow_alpha := lerpf(0.4, 0.12, (distance - 2.0) / (BEAM_EDGE_RADIUS - 2.0))
+				var glow_color := beam_color
+				glow_color.a *= glow_alpha
+				image.set_pixel(x, y, glow_color)
+	return ImageTexture.create_from_image(image)
 
 func _update_aim(delta: float) -> void:
 	if is_instance_valid(_locked_target):
