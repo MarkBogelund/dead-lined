@@ -48,4 +48,3 @@ func set_damage(value: int) -> void:
 func set_attack_range(value: float) -> void:
 	beam.set_range(value)
 	range_indicator.initialize(value)
-

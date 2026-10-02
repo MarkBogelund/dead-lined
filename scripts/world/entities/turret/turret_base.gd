@@ -16,6 +16,7 @@ signal sold(refund: float)
 @onready var range_indicator: RangeIndicator = $RangeIndicator
 @onready var visuals: Node2D = $Visuals
 @onready var body_collision: CollisionShape2D = $CollisionShape2D
+@onready var repair_animation: AnimationPlayer = $RepairAnimationPlayer
 
 @onready var wave_manager: WaveManager = get_tree().get_first_node_in_group("wave_manager")
 @onready var game_over_manager: GameOverManager = get_tree().get_first_node_in_group("game_over_manager")
@@ -231,7 +232,6 @@ func _stop_targeting_player() -> void:
 func _configure_base_animations() -> void:
 	animation.configure_animation("upgrade_charge", 2, true)
 	animation.configure_animation("upgrade", 3, true)
-	animation.configure_animation("repair", 3, true)
 	animation.configure_animation("die", 4, true)
 
 func _on_combat_phase_started(_wave: int) -> void:
@@ -255,10 +255,8 @@ func _update_repair(delta: float) -> void:
 	if _can_hold_repair(delta):
 		if not _repairing:
 			_repairing = true
-			# Pauses turret behavior; resumed in _stop_repairing().
-			_on_combat_stopped()
+			repair_animation.play("repair")
 		repair.try_repair(delta, player.capacity.get_current())
-		animation.play_animation("repair")
 	elif _repairing:
 		_stop_repairing()
 
@@ -274,9 +272,7 @@ func _can_hold_repair(delta: float) -> bool:
 func _stop_repairing() -> void:
 	_repairing = false
 	repair.reset()
-	animation.stop_animation("repair")
-	if is_turret_active():
-		_on_combat_started()
+	repair_animation.play("RESET")
 
 func _on_combat_started() -> void:
 	pass
@@ -285,7 +281,7 @@ func _on_combat_stopped() -> void:
 	pass
 
 func is_turret_active() -> bool:
-	return _active and enabled and not is_dead() and not _repairing
+	return _active and enabled and not is_dead()
 
 func was_hit(amount: int, _knockback_force: float, _from_position: Vector2) -> void:
 	if is_dead() or _selling:
@@ -342,6 +338,8 @@ func _play_death_burnout() -> void:
 	_set_death_burnout_progress(0.0)
 
 func _handle_death() -> void:
+	if _repairing:
+		_stop_repairing()
 	_before_death_animation()
 	remove_from_group("turrets")
 	_play_death_burnout()

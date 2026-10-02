@@ -263,35 +263,6 @@ tracks/9/keys = {
 "values": [0.0, 1.0]
 }
 
-[sub_resource type="Animation" id="Repair"]
-resource_name = "repair"
-length = 0.6
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(0, 1, 0, 1), Color(1, 1, 1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("RepairParticles:emitting")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
 [sub_resource type="Animation" id="Upgrade"]
 resource_name = "upgrade"
 length = 0.45
@@ -339,9 +310,70 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Reset"),
 &"die": SubResource("Death"),
-&"repair": SubResource("Repair"),
 &"upgrade": SubResource("Upgrade"),
 &"upgrade_charge": SubResource("UpgradeCharge")
+}
+
+[sub_resource type="Animation" id="RepairReset"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RepairParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Repair"]
+resource_name = "repair"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.2, 0.55, 1, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RepairParticles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="RepairLibrary"]
+_data = {
+&"RESET": SubResource("RepairReset"),
+&"repair": SubResource("Repair")
 }
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_flash"]
@@ -456,6 +488,9 @@ script = ExtResource("9_jbwj1")
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1391262364]
 libraries/ = SubResource("BaseLibrary")
 script = ExtResource("11_ero07")
+
+[node name="RepairAnimationPlayer" type="AnimationPlayer" parent="." unique_id=1899524048]
+libraries/ = SubResource("RepairLibrary")
 
 [node name="Flash" type="ColorRect" parent="." unique_id=850017021]
 visible = false
