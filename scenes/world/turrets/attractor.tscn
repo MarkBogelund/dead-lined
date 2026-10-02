@@ -41,22 +41,10 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WindupParticles:emitting")
+tracks/2/path = NodePath("Visuals:material:shader_parameter/flash_amount")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.6),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Visuals:material:shader_parameter/flash_amount")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0.06666667, 0.5, 0.6),
 "transitions": PackedFloat32Array(0.5, 2, 1),
 "update": 0,
@@ -68,7 +56,7 @@ _data = {
 &"pulse": SubResource("Pulse")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hd4u5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2c5k4"]
 resource_local_to_scene = true
 shader = ExtResource("4_ot8ax")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -79,7 +67,10 @@ shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2usbx"]
+[sub_resource type="CircleShape2D" id="DetectionShape"]
+radius = 110.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qjmdj"]
 resource_local_to_scene = true
 shader = ExtResource("5_hd4u5")
 shader_parameter/gold_amount = 0.0
@@ -123,9 +114,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="DetectionShape"]
-radius = 110.0
-
 [node name="Attractor" unique_id=600983979 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -137,20 +125,8 @@ health_component = NodePath("../HealthComponent")
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/attractor = SubResource("PulseLibrary")
 
-[node name="Flash" parent="." index="10" unique_id=850017021]
-material = SubResource("ShaderMaterial_hd4u5")
-
-[node name="Visuals" parent="." index="13" unique_id=1113068187]
-material = SubResource("ShaderMaterial_2usbx")
-
-[node name="Sprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1128852253]
-z_index = 1
-use_parent_material = true
-sprite_frames = SubResource("SpriteFrames_spl43")
-
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=2077226136]
-modulate = Color(0, 0, 0, 0.46)
-texture = ExtResource("5_shadow")
+[node name="Flash" parent="." index="11" unique_id=850017021]
+material = SubResource("ShaderMaterial_2c5k4")
 
 [node name="MagneticFieldComponent" type="Node2D" parent="." index="14" unique_id=504814838]
 script = ExtResource("6_field")
@@ -164,3 +140,15 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MagneticFieldComponent/DetectionArea" index="0" unique_id=659442236]
 shape = SubResource("DetectionShape")
+
+[node name="Visuals" parent="." index="15" unique_id=1113068187]
+material = SubResource("ShaderMaterial_qjmdj")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1128852253]
+z_index = 1
+use_parent_material = true
+sprite_frames = SubResource("SpriteFrames_spl43")
+
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=2077226136]
+modulate = Color(0, 0, 0, 0.46)
+texture = ExtResource("5_shadow")
