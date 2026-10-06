@@ -38,6 +38,9 @@ func _on_shockwave_windup_started() -> void:
 func get_damage_value() -> int:
 	return shockwave.damage
 
+func get_attack_cooldown_progress() -> float:
+	return shockwave.get_cooldown_progress()
+
 func set_damage(value: int) -> void:
 	shockwave.damage = value
 

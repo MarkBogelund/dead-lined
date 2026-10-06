@@ -40,6 +40,9 @@ func _on_field_windup_started() -> void:
 func get_damage_value() -> int:
 	return magnetic_field.damage
 
+func get_attack_cooldown_progress() -> float:
+	return magnetic_field.get_cooldown_progress()
+
 func set_damage(value: int) -> void:
 	magnetic_field.damage = value
 

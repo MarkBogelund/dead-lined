@@ -64,6 +64,18 @@ func set_max_range(value: float) -> void:
 	max_range = maxf(0.0, value)
 	_apply_radius()
 
+func get_cooldown_progress() -> float:
+	var cycle_duration := expansion_duration + cooldown
+	if cycle_duration <= 0.0:
+		return 1.0
+	match _state:
+		State.EXPANDING:
+			return clampf(_state_time / cycle_duration, 0.0, 1.0)
+		State.COOLDOWN:
+			return clampf((expansion_duration + _state_time) / cycle_duration, 0.0, 1.0)
+		_:
+			return 1.0
+
 func _apply_radius() -> void:
 	var circle := detection_shape.shape as CircleShape2D
 	if circle:

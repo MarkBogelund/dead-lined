@@ -37,6 +37,11 @@ func set_enabled(enabled: bool) -> void:
 func is_ready() -> bool:
 	return _shoot_timer <= 0.0 and shooting_activated
 
+func get_cooldown_progress() -> float:
+	if shoot_cooldown <= 0.0:
+		return 1.0
+	return clampf(1.0 - _shoot_timer / shoot_cooldown, 0.0, 1.0)
+
 func start_cooldown() -> void:
 	_shoot_timer = shoot_cooldown
 

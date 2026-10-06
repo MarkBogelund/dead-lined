@@ -61,6 +61,18 @@ func set_max_range(value: float) -> void:
 	inner_dead_zone = minf(inner_dead_zone, max_range)
 	_apply_radius()
 
+func get_cooldown_progress() -> float:
+	var cycle_duration := pull_duration + cooldown
+	if cycle_duration <= 0.0:
+		return 1.0
+	match _state:
+		State.PULLING:
+			return clampf(_state_time / cycle_duration, 0.0, 1.0)
+		State.COOLDOWN:
+			return clampf((pull_duration + _state_time) / cycle_duration, 0.0, 1.0)
+		_:
+			return 1.0
+
 func _apply_radius() -> void:
 	var circle := detection_shape.shape as CircleShape2D
 	if circle:

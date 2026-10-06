@@ -10,6 +10,7 @@ class_name Missiler
 var _cooldown := 0.0
 var _attack_cooldown := 4.0
 var _damage := 25
+var _has_fired := false
 var _charging := false
 var _locked_impact := Vector2.ZERO
 var _strike: MortarStrike
@@ -71,6 +72,7 @@ func _launch_strike() -> void:
 	_charging = false
 	aiming.unlock_aim()
 	_cooldown = _attack_cooldown
+	_has_fired = true
 
 func _cancel_charge() -> void:
 	if not _charging:
@@ -84,6 +86,7 @@ func _cancel_charge() -> void:
 
 func _on_combat_started() -> void:
 	_cooldown = 0.0
+	_has_fired = false
 
 func _on_combat_stopped() -> void:
 	_cancel_charge()
@@ -96,6 +99,11 @@ func _stop_targeting_player() -> void:
 
 func get_damage_value() -> int:
 	return _damage
+
+func get_attack_cooldown_progress() -> float:
+	if not _has_fired or _attack_cooldown <= 0.0:
+		return 1.0
+	return clampf(1.0 - _cooldown / _attack_cooldown, 0.0, 1.0)
 
 func set_damage(value: int) -> void:
 	_damage = value

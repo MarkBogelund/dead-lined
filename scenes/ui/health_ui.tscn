@@ -18,14 +18,25 @@ modulate = Color(1, 1, 1, 0.88235295)
 z_index = 9
 texture = ExtResource("2_frame")
 
-[node name="Fill" type="ColorRect" parent="." unique_id=324297094]
+[node name="HealthFill" type="ColorRect" parent="." unique_id=324297094]
 z_index = 10
-offset_left = -5.0
+offset_left = -4.0000005
 offset_top = -1.0
-offset_right = 13.0
+offset_right = 13.708368
 offset_bottom = 1.0
+scale = Vector2(0.9599982, 1)
 mouse_filter = 2
 color = Color(0.45490196, 0.79607844, 0.49019608, 1)
+
+[node name="CooldownFill" type="ColorRect" parent="." unique_id=139133066]
+z_index = 10
+offset_left = -4.0
+offset_top = 1.0
+offset_right = 13.708366
+offset_bottom = 2.0
+scale = Vector2(0.9599982, 1)
+mouse_filter = 2
+color = Color(0.85904986, 0.85504586, 0.8550441, 1)
 
 [node name="LevelLabel" type="Label" parent="." unique_id=324297095]
 z_index = 10

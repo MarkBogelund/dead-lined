@@ -86,6 +86,9 @@ func _before_death_animation() -> void:
 func get_damage_value() -> int:
 	return shoot.projectile_damage
 
+func get_attack_cooldown_progress() -> float:
+	return shoot.get_cooldown_progress()
+
 func set_damage(value: int) -> void:
 	shoot.projectile_damage = value
 

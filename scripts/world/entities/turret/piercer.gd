@@ -14,6 +14,7 @@ var _attack_cooldown := 0.0
 var _cooldown_remaining := 0.0
 var _charging := false
 var _laser_active := false
+var _has_fired := false
 var _charge_remaining := 0.0
 var _locked_origin := Vector2.ZERO
 var _locked_direction := Vector2.RIGHT
@@ -37,6 +38,8 @@ func _initialize() -> void:
 	_attack_cooldown = stats.attack_cooldown
 
 func _process(delta: float) -> void:
+	if _has_fired and is_turret_active():
+		_cooldown_remaining = maxf(0.0, _cooldown_remaining - delta)
 	if _charging:
 		if not is_turret_active():
 			_cancel_charge()
@@ -49,7 +52,8 @@ func _process(delta: float) -> void:
 		return
 	if not is_turret_active():
 		return
-	_cooldown_remaining = maxf(0.0, _cooldown_remaining - delta)
+	if not _has_fired:
+		_cooldown_remaining = maxf(0.0, _cooldown_remaining - delta)
 	var target := targeting.get_best_target(global_position, _is_visible_target)
 	if not target:
 		return
@@ -79,6 +83,7 @@ func _fire_locked_shot() -> void:
 	animation.stop_animation("charge")
 	_laser_active = true
 	laser.fire(_locked_origin, _locked_direction, _damage, stats.knockback, self)
+	_has_fired = true
 	_cooldown_remaining = _attack_cooldown
 
 func _on_laser_visual_finished() -> void:
@@ -97,6 +102,7 @@ func _cancel_charge() -> void:
 	aiming.unlock_aim()
 
 func _on_combat_started() -> void:
+	_has_fired = false
 	_cooldown_remaining = stats.first_shot_delay
 
 func _on_combat_stopped() -> void:
@@ -114,6 +120,11 @@ func _stop_targeting_player() -> void:
 
 func get_damage_value() -> int:
 	return _damage
+
+func get_attack_cooldown_progress() -> float:
+	if not _has_fired or _attack_cooldown <= 0.0:
+		return 1.0
+	return clampf(1.0 - _cooldown_remaining / _attack_cooldown, 0.0, 1.0)
 
 func set_damage(value: int) -> void:
 	_damage = value

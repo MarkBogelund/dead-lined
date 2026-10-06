@@ -6,16 +6,21 @@ class_name HealthUIComponent
 @export var health_component: HealthComponent
 @export var offset := Vector2(0, -18)
 
-@onready var fill: ColorRect = $Fill
+@onready var fill: ColorRect = $HealthFill
+@onready var cooldown_fill: ColorRect = $CooldownFill
 @onready var level_label: Label = $LevelLabel
 
-## Width of the bar interior in turret-health-ui.png (pixels 11..29).
-const BAR_WIDTH := 19.0
+var _full_bar_width := 0.0
 
 func _ready() -> void:
 	position = offset
+	_full_bar_width = fill.size.x
+	set_cooldown_progress(1.0)
 	if health_component:
 		_connect_health_component()
+
+func set_cooldown_progress(progress: float) -> void:
+	cooldown_fill.size.x = _full_bar_width * clampf(progress, 0.0, 1.0)
 
 func set_level(level: int) -> void:
 	level_label.text = "%d" % level
@@ -43,4 +48,4 @@ func _on_health_changed(current: int, maximum: int) -> void:
 
 func _update_health_bar(current: int, maximum: int) -> void:
 	var ratio := float(current) / float(maximum) if maximum > 0 else 0.0
-	fill.size.x = BAR_WIDTH * clampf(ratio, 0.0, 1.0)
+	fill.size.x = _full_bar_width * clampf(ratio, 0.0, 1.0)
