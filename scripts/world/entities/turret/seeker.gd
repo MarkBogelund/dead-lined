@@ -33,7 +33,7 @@ func _on_combat_started() -> void:
 	_shoot_delay = stats.first_shot_delay
 
 func _on_combat_stopped() -> void:
-	_telegraphing = false
+	_cancel_telegraph()
 
 func _stop_targeting_player() -> void:
 	targeting.set_group_enabled(&"player", false)
@@ -65,14 +65,23 @@ func _begin_telegraph() -> void:
 	if not animation.play_animation("shoot"):
 		return
 	_telegraphing = true
+	aiming.lock_aim()
 
 ## Called by AnimationPlayer Call Method track at the fire keyframe
 func _execute_shot() -> void:
+	if not _telegraphing:
+		return
 	shoot.try_shoot(aiming.get_muzzle_position(), aiming.get_aim_direction())
 	_telegraphing = false
+	aiming.unlock_aim()
+
+func _cancel_telegraph() -> void:
+	_telegraphing = false
+	animation.stop_animation("shoot")
+	aiming.unlock_aim()
 
 func _before_death_animation() -> void:
-	_telegraphing = false
+	_cancel_telegraph()
 
 func get_damage_value() -> int:
 	return shoot.projectile_damage

@@ -27,6 +27,7 @@ var current_angle := 0.0
 var feet: Sprite2D
 var graphic: Sprite2D
 var _visual_target_rotation := 0.0
+var _aim_locked := false
 
 func _ready() -> void:
 	feet = get_node_or_null(feet_path) as Sprite2D
@@ -35,7 +36,7 @@ func _ready() -> void:
 		_visual_target_rotation = visual_node.global_rotation
 
 func _process(delta: float) -> void:
-	if visual_node:
+	if visual_node and not _aim_locked:
 		visual_node.global_rotation = rotate_toward(
 			visual_node.global_rotation,
 			_visual_target_rotation,
@@ -51,8 +52,24 @@ func _get_pivot() -> Vector2:
 		return visual_node.global_position
 	return (get_parent() as Node2D).global_position
 
+func lock_aim() -> void:
+	_aim_locked = true
+
+func unlock_aim() -> void:
+	_aim_locked = false
+	if visual_node:
+		_visual_target_rotation = visual_node.global_rotation
+
+func is_visual_aim_settled(tolerance := 0.01) -> bool:
+	return not visual_node or absf(angle_difference(visual_node.global_rotation, _visual_target_rotation)) <= tolerance
+
+func get_visual_aim_direction() -> Vector2:
+	return Vector2.from_angle(visual_node.global_rotation) if visual_node else get_aim_direction()
+
 ## Aim at a target position
 func aim_at(target_pos: Vector2, delta: float) -> void:
+	if _aim_locked:
+		return
 	var target_offset := target_pos - _get_pivot()
 	if target_offset.is_zero_approx():
 		return

@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="PiercerStats" format=3 uid="uid://77absmtmeffs"]
+
+[ext_resource type="Script" uid="uid://coyfon8ogpwdo" path="res://scripts/data/piercer_stats.gd" id="1_stats"]
+[ext_resource type="Script" uid="uid://d0774ofuob1o8" path="res://scripts/data/turret_upgrade_level.gd" id="2_upgrade"]
+[ext_resource type="Resource" uid="uid://b6y1jjauy4x2y" path="res://resources/turrets/turret_targeting.tres" id="3_targeting"]
+
+[sub_resource type="Resource" id="Upgrade1"]
+script = ExtResource("2_upgrade")
+cost = 30.0
+max_health = 1.15
+attack_range = 1.12
+
+[sub_resource type="Resource" id="Upgrade2"]
+script = ExtResource("2_upgrade")
+cost = 40.0
+damage = 1.6
+attack_cooldown = 0.85
+
+[sub_resource type="Resource" id="Upgrade3"]
+script = ExtResource("2_upgrade")
+cost = 50.0
+max_health = 1.3
+attack_range = 1.3
+
+[sub_resource type="Resource" id="Upgrade4"]
+script = ExtResource("2_upgrade")
+cost = 65.0
+max_health = 1.5
+damage = 2.4
+attack_range = 1.55
+attack_cooldown = 0.7
+
+[resource]
+script = ExtResource("1_stats")
+targeting = ExtResource("3_targeting")
+aim_speed = 3.0
+aim_tolerance = 0.2
+charge_duration = 0.5
+max_health = 150
+damage = 40
+knockback = 180.0
+attack_range = 320.0
+attack_cooldown = 2.5
+upgrades = Array[ExtResource("2_upgrade")]([SubResource("Upgrade1"), SubResource("Upgrade2"), SubResource("Upgrade3"), SubResource("Upgrade4")])
+repair_health_per_second = 35.0

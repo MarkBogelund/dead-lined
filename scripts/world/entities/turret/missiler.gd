@@ -57,6 +57,7 @@ func _begin_charge(impact_position: Vector2) -> void:
 		return
 	_locked_impact = impact_position
 	aiming.aim_at(_locked_impact, 0.0)
+	aiming.lock_aim()
 	_strike = mortar_scene.instantiate() as MortarStrike
 	get_tree().current_scene.add_child(_strike)
 	_strike.setup(_locked_impact, stats.blast_radius, stats.expansion_duration, _damage, stats.knockback)
@@ -68,6 +69,7 @@ func _launch_strike() -> void:
 	_strike.launch(muzzle.global_position, stats.flight_duration, stats.arc_height)
 	_strike = null
 	_charging = false
+	aiming.unlock_aim()
 	_cooldown = _attack_cooldown
 
 func _cancel_charge() -> void:
@@ -77,6 +79,7 @@ func _cancel_charge() -> void:
 	if is_instance_valid(_strike):
 		_strike.queue_free()
 	_strike = null
+	aiming.unlock_aim()
 	animation.stop_animation("launch")
 
 func _on_combat_started() -> void:

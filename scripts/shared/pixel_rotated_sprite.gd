@@ -1,6 +1,8 @@
 extends Node2D
 class_name PixelRotatedSprite
 
+signal fade_finished(target_alpha: float)
+
 ## Sprite rotated by pixel_rotate.gdshader on a world-aligned grid, so the art keeps crisp, undeformed
 ## pixels at any angle. Starts hidden; use fade_to() to show it.
 
@@ -48,8 +50,12 @@ func fade_to(target_alpha: float) -> void:
 	visible = true
 	_fade_tween = create_tween()
 	_fade_tween.tween_property(self, "modulate:a", target_alpha, fade_duration)
+	_fade_tween.finished.connect(_on_fade_finished.bind(target_alpha))
+
+func _on_fade_finished(target_alpha: float) -> void:
 	if is_zero_approx(target_alpha):
-		_fade_tween.finished.connect(hide)
+		hide()
+	fade_finished.emit(target_alpha)
 
 func _draw() -> void:
 	if not texture:

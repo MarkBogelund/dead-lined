@@ -1,0 +1,207 @@
+[gd_scene format=3 uid="uid://dyffil1kqnk62"]
+
+[ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://cuit1fmjws2sm" path="res://scripts/world/entities/turret/piercer.gd" id="2_piercer"]
+[ext_resource type="Resource" uid="uid://77absmtmeffs" path="res://resources/turrets/piercer/piercer_stats.tres" id="3_stats"]
+[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="5_surface"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="6_flash"]
+[ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="7_targeting"]
+[ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="8_aiming"]
+[ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="9_los"]
+[ext_resource type="Script" uid="uid://c3nw3v0hjji0r" path="res://scripts/world/entities/turret/piercer_laser.gd" id="10_laser"]
+[ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="11_pixel_rotate"]
+[ext_resource type="Texture2D" uid="uid://d08xahl78n2eb" path="res://assets/sprites/turrets/piercer.png" id="12_l7wt6"]
+[ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="12_windup"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="13_558d3"]
+[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="13_tg0dl"]
+
+[sub_resource type="Animation" id="PiercerReset"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WindupParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Charge"]
+resource_name = "charge"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WindupParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7, 0.73333335, 0.8),
+"transitions": PackedFloat32Array(2, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.9, 0.9), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:material:shader_parameter/flash_amount")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.73333335, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/Canon/Muzzle/ShootParticles:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.73333335),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="PiercerLibrary"]
+_data = {
+&"RESET": SubResource("PiercerReset"),
+&"charge": SubResource("Charge")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tg0dl"]
+resource_local_to_scene = true
+shader = ExtResource("6_flash")
+shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/current_radius = 16.0
+shader_parameter/ring_thickness = 4.0
+shader_parameter/pixel_size = 2.0
+shader_parameter/center_line_thickness = 1.0
+shader_parameter/center_line_color = Color(1, 1, 1, 1)
+shader_parameter/canvas_size = Vector2(40, 40)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ee2k1"]
+resource_local_to_scene = true
+shader = ExtResource("5_surface")
+shader_parameter/gold_amount = 0.0
+shader_parameter/gold_dark = Color(0.42, 0.25, 0.04, 1)
+shader_parameter/gold_light = Color(1, 0.86, 0.36, 1)
+shader_parameter/gold_blend = 0.6
+shader_parameter/shine_color = Color(1, 0.97, 0.82, 1)
+shader_parameter/shine_strength = 0.85
+shader_parameter/shine_width = 2.0
+shader_parameter/shine_speed = 70.0
+shader_parameter/shine_interval = 2.2
+shader_parameter/sparkle_density = 0.05
+shader_parameter/sparkle_speed = 1.3
+shader_parameter/damage_amount = 0.0
+shader_parameter/damage_dark = Color(0.16, 0.03, 0.05, 1)
+shader_parameter/damage_light = Color(0.85, 0.22, 0.18, 1)
+shader_parameter/tint_min = 0.5
+shader_parameter/tint_max = 0.9
+shader_parameter/tint_pulse_speed = 1.2
+shader_parameter/damage_darkness = 0.2
+shader_parameter/crack_color = Color(0.08, 0.02, 0.03, 1)
+shader_parameter/crack_density = 0.12
+shader_parameter/crack_size = 2.0
+shader_parameter/glitch_interval = 0.3
+shader_parameter/glitch_duty = 0.35
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
+
+[sub_resource type="AtlasTexture" id="PiercerBodyTexture"]
+atlas = ExtResource("12_l7wt6")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="PiercerCannonTexture"]
+atlas = ExtResource("12_l7wt6")
+region = Rect2(24, 0, 24, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
+atlas = ExtResource("13_558d3")
+region = Rect2(16, 0, 16, 16)
+
+[node name="Piercer" unique_id=429404891 instance=ExtResource("1_base")]
+script = ExtResource("2_piercer")
+stats = ExtResource("3_stats")
+
+[node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
+libraries/piercer = SubResource("PiercerLibrary")
+
+[node name="Flash" parent="." index="11" unique_id=850017021]
+material = SubResource("ShaderMaterial_tg0dl")
+
+[node name="TargetingComponent" type="Node" parent="." index="14" unique_id=696958485]
+script = ExtResource("7_targeting")
+
+[node name="AimingComponent" type="Node" parent="." index="15" unique_id=1539037024 node_paths=PackedStringArray("visual_node", "muzzle")]
+script = ExtResource("8_aiming")
+visual_node = NodePath("../Visuals/Canon")
+feet_path = NodePath("../Visuals/Body")
+graphic_path = NodePath("../Visuals/Canon/Graphic")
+muzzle = NodePath("../Visuals/Canon/Muzzle")
+
+[node name="LineOfSightComponent" type="Node2D" parent="." index="16" unique_id=1509584037]
+script = ExtResource("9_los")
+ray_offset = 3.0
+
+[node name="LaserComponent" type="Node2D" parent="." index="17" unique_id=1701361494]
+z_index = 8
+script = ExtResource("10_laser")
+pixel_rotate_shader = ExtResource("11_pixel_rotate")
+laser_width = 10.0
+center_line_thickness = 3.0
+center_color = Color(0.9999997, 0.97398525, 0.9437064, 1)
+edge_color = Color(1, 0.6975, 0.45, 0.9019608)
+fade_out_delay = 0.15000000000000002
+laser_fade_duration = 0.1
+telegraph_alpha = 0.1
+
+[node name="WindupParticles" parent="." index="18" unique_id=1092367219 instance=ExtResource("12_windup")]
+
+[node name="Visuals" parent="." index="19" unique_id=1113068187]
+material = SubResource("ShaderMaterial_ee2k1")
+
+[node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=45399720]
+z_index = 1
+use_parent_material = true
+texture = SubResource("PiercerBodyTexture")
+
+[node name="Canon" type="Node2D" parent="Visuals" index="1" unique_id=2113167190]
+use_parent_material = true
+position = Vector2(0, -3)
+
+[node name="Graphic" type="Sprite2D" parent="Visuals/Canon" index="0" unique_id=702007436]
+z_index = 2
+use_parent_material = true
+texture = SubResource("PiercerCannonTexture")
+
+[node name="Muzzle" type="Marker2D" parent="Visuals/Canon" index="1" unique_id=1945119161]
+position = Vector2(10, 0)
+
+[node name="ShootParticles" parent="Visuals/Canon/Muzzle" index="0" unique_id=1586402119 instance=ExtResource("13_tg0dl")]
+amount = 20
+
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="2" unique_id=523892853]
+modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+position = Vector2(0, 12)
+texture = SubResource("AtlasTexture_spl43")
