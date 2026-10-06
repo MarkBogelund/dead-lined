@@ -42,7 +42,7 @@ Survive increasingly difficult rounds of buggy hostile drones by dodging their a
 
 **What you do:**
 - Place new turrets (costs capacity)
-- Upgrade existing turrets by holding Upgrade on the turret panel (costs capacity; each level applies a buff)
+- Reprogram existing turrets by holding the button on the turret panel (costs capacity; each level applies a buff)
 - Sell turrets by holding Sell (refunds 75% of everything spent on that turret, capped at max capacity)
 - Repair damaged turrets by when in proximity, in build or combat phase (drains capacity while repairing)
 - Collect leftover enemy capacity orbs
@@ -66,21 +66,13 @@ Survive increasingly difficult rounds of buggy hostile drones by dodging their a
 
 **Escalation:** Each wave spawns more enemies, faster bullets, higher difficulty
 
-### Crunch Time (Power-Up Mode)
-**Powerup:** Each enemy has a small chance (2% by default, set per enemy type) to drop a Crunch Time powerup: an orb with its own look that lasts longer on the ground. Every turret standing on the map raises that chance (+2% each, capped at +15%), so a turret-heavy board — which is harder to dodge in — hands out more escapes. Touching it picks it up and it trails behind the player. Only one can be carried, and none can be picked up while Crunch Time is running; the rest stay on the ground.
+### Powerups
+Enemies have a powerup drop chance (2% by default, configurable per enemy type). Each turret on the map adds 1 percentage point, up to a +10-point cap. If a drop succeeds, its type is selected by the chances below; these draft weights sum to 100%. Touch to collect. Uncollected powerups disappear when combat ends or their lifetime expires. No powerups drop during Crunch Time. Capacity orbs are separate: leftovers survive the build phase and clear when the next wave begins.
 
-**Activation:** Press Crunch Time (C) during combat while carrying the powerup. It is used up on activation and lasts 5 seconds. No capacity cost.
-
-**Losing it:** The carried powerup disappears if the player is hit, or when the round ends unused. Uncollected powerups disappear as soon as combat ends, or after their lifetime. 
-
-Leftover capacity orbs stay through the build phase so they can still be collected, and clear when the next wave starts.
-
-**Effect:**
-- Invincibility during Crunch Time and for 0.5 seconds after it ends
-- Wrench becomes your only weapon (shooting disabled)
-- Combat buffs: 3x damage, faster swings, 2x radius, 1.5x speed
-
-**Caveat:** You must be aggressive and close-range, and no powerups drop while Crunch Time is active. Orbs are suppressed too, unless the playtest toggle `drop_orbs_during_crunch_time` is enabled.
+- **Crunch Time — 20%:** Carry one charge and activate it during combat; no powerups can be collected while it is active. For 5 seconds, the player is invincible, uses only the wrench, deals 3x damage, swings faster, has 2x radius, and moves 1.5x faster, followed by 0.5 seconds of invincibility. Taking a hit or ending the round with an unused charge loses it.
+- **Maintenance — 20%:** Temporarily lets the player repair nearby turrets without spending capacity.
+- **Sandwich — 40%:** Immediately restores player capacity.
+- **Trail — 20%:** Temporarily makes dashes leave a damaging trail that hurts enemies.
 
 ---
 
@@ -92,7 +84,7 @@ Leftover capacity orbs stay through the build phase so they can still be collect
 |--------|------|--------|
 | Take damage | 1-20% | Direct deduction |
 | Build turret | 10-20% | Strategy cost |
-| Upgrade turret | Escalates | Reliability cost |
+| Reprogram turret | Escalates | Reliability cost |
 | Sell turret | Refund | Returns 75% of the turret's total cost |
 | Repair turret | Continuous | Restores turret health while held |
 | Collect orbs | +5-10% | Resource generation |
@@ -116,7 +108,8 @@ Leftover capacity orbs stay through the build phase so they can still be collect
 - **Saboteur:** Approaches a turret and channels a visible tether that gradually slows or temporarily disables it; damage interrupts and confuses the Saboteur, asking the player to defend important formations before the channel completes.
 - **Blinker:** Marks a destination, vanishes without attacking, then reappears and fires a readable radial burst; the landing marker gives the player time to evade, while teleporting disrupts slow locks and mortar markers but persistent area control catches it after arrival.
 
-- **Ricocheter**: Shoots ricocheting projectiles in a circle pattern at a fixel interval. Drifts randomly around the map.: 
+- **Ricocheter**: Shoots ricocheting projectiles in a circle pattern at a fixel interval. Drifts randomly around the map.:
+- **Surrounder**: Fast enemy that tries to circle around the player and leaves a deadly trail, that damages the player 
 ### Unfinished Boss Enemies
 Every fifth combat wave selects one boss at random from the unlocked boss pool and adds it to that wave. The boss materializes at a random valid map position after a clear spawn telegraph; the position must be reachable and must not overlap the player, a turret, or blocking geometry.
 
@@ -145,7 +138,7 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 
 - **Honer**: Slow version of the seeker that
 shoots honing shots that targets the target and only dissapears after certain time or if the turning angle for the projectile gets too large.
-- **Honer**: Buffs the nearby turrets stats 
+- **Buffer**: Buffs the nearby turrets stats 
 
 At max level, turrets stop targeting the player, but their attacks and fields can still affect them.
 
