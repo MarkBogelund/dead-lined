@@ -250,7 +250,7 @@ func _on_game_over() -> void:
 ## Subclasses overriding _physics_process must call super._physics_process(delta).
 func _physics_process(delta: float) -> void:
 	_update_repair(delta)
-	health_ui.set_cooldown_progress(get_attack_cooldown_progress())
+	health_ui.set_cooldown_progress(get_attack_cooldown_progress() if is_turret_active() else 1.0)
 
 func _update_repair(delta: float) -> void:
 	if _can_hold_repair(delta):
