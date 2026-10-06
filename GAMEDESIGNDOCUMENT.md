@@ -132,17 +132,17 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 ### Turret Types
 - **Seeker:** Rotates toward the best visible target, telegraphs its shot, and fires a powerful aimed projectile along a clear line of sight.
 - **Shockwaver:** Triggers when a target enters its radius, telegraphs a pulse, then expands a doughnut-shaped shockwave that damages each reached target once and knocks enemies outward; it trades directional reach for local crowd control.
-- **Attractor:** A high-health control turret that emits readable magnetic pulses, dealing no damage but pulling enemies and the player toward it with distance falloff; dashing ignores the pull, and max level stops affecting the player.
+- **Attractor:** A high-health control turret that emits readable magnetic pulses, dealing no damage but pulling nearby enemies and the player toward it with distance falloff; dashing ignores the pull.
 - **Missiler:** Slowly locks a distant impact position, telegraphs its blast radius, then launches a mortar shell that creates an expanding damaging ring; it is strong against stationary groups but weak inside its minimum range and against enemies that leave the marker.
 - **Beamer:** Continuously sweeps a low-damage beam around itself, then slowly locks onto the first target it hits; if the target escapes more than a small distance from the beam, dies, or leaves range, the beam resumes sweeping. Its shortened range and limited tracking speed reward movement and evasive play.
 
 ### Unfinished Turrets
-- **Buffer:** Deals little or no damage but strengthens nearby turrets, rewarding formations while multiplying their friendly-fire danger; weak when isolated and multiple auras should not stack.
-- **Sniper:** Slowly acquires a distant target, freezes a visible firing line, then releases a piercing high-damage shot; its minimum range, slow rotation, long reload, and inability to redirect after locking make misses costly.
-- **Interceptor:** Tracks and destroys projectiles within a limited arc until it overheats; it protects turret formations from ranged enemies but offers little against body threats and may also intercept player shots until max level.
-- **Slower:** Periodically projects a visible field that slows enemies and the player but deals little or no damage; pulse downtime and the risk of hindering the player make placement important, while dashing ignores the slow.
+- **Piercer:** Slowly aims at the first enemy in line of sight, locks its direction for a 0.8-second charge, then fires an instant, fixed-width piercing laser through everything in its path.
+- **Repulsor:** The Attractor's inverse: an active, all-direction field that pushes nearby enemies and projectiles away, providing displacement and shielding without dealing damage.
+- **Trapper:** Periodically places visible stationary traps in a fixed pattern within range; traps explode on contact, are capped, and disappear when the round ends.
+- **Linker:** Targets the closest enemy within short range, charges for one second, then instantly chains through nearby enemies with no chain limit and damages every enemy in the chain when it fires.
 
-Turret at max level stops targeting the player. 
+At max level, turrets stop targeting the player, but their attacks and fields can still affect them.
 
 ---
 
