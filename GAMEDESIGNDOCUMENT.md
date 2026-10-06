@@ -116,6 +116,7 @@ Leftover capacity orbs stay through the build phase so they can still be collect
 - **Saboteur:** Approaches a turret and channels a visible tether that gradually slows or temporarily disables it; damage interrupts and confuses the Saboteur, asking the player to defend important formations before the channel completes.
 - **Blinker:** Marks a destination, vanishes without attacking, then reappears and fires a readable radial burst; the landing marker gives the player time to evade, while teleporting disrupts slow locks and mortar markers but persistent area control catches it after arrival.
 
+- **Ricocheter**: Shoots ricocheting projectiles in a circle pattern at a fixel interval. Drifts randomly around the map.: 
 ### Unfinished Boss Enemies
 Every fifth combat wave selects one boss at random from the unlocked boss pool and adds it to that wave. The boss materializes at a random valid map position after a clear spawn telegraph; the position must be reachable and must not overlap the player, a turret, or blocking geometry.
 
@@ -141,6 +142,10 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 - **Repulsor:** The Attractor's inverse: an active, all-direction field that pushes nearby enemies and projectiles away, providing displacement and shielding without dealing damage.
 - **Trapper:** Periodically places visible stationary traps in a fixed pattern within range; traps explode on contact, are capped, and disappear when the round ends.
 - **Linker:** Targets the closest enemy within short range, charges for one second, then instantly chains through nearby enemies with no chain limit and damages every enemy in the chain when it fires.
+
+- **Honer**: Slow version of the seeker that
+shoots honing shots that targets the target and only dissapears after certain time or if the turning angle for the projectile gets too large.
+- **Honer**: Buffs the nearby turrets stats 
 
 At max level, turrets stop targeting the player, but their attacks and fields can still affect them.
 
