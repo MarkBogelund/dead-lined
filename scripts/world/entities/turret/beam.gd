@@ -3,8 +3,9 @@ class_name BeamComponent
 
 signal windup_started
 signal firing_started
+signal overheated
 
-enum State {IDLE, WINDUP, FIRING}
+enum State {IDLE, WINDUP, FIRING, COOLDOWN}
 
 @onready var beam_area: Area2D = $BeamArea
 @onready var beam_shape: CollisionShape2D = $BeamArea/CollisionShape2D
@@ -20,10 +21,13 @@ var damage := 4
 var knockback := 0.0
 var sweep_speed := deg_to_rad(45.0)
 var tracking_speed := deg_to_rad(24.0)
+var max_tracking_duration := 5.0
+var attack_cooldown := 0.15
 
 var _enabled := false
 var _state := State.IDLE
 var _state_time := 0.0
+var _tracking_time := 0.0
 var _sweep_angle := 0.0
 var _locked_target: Node2D
 var _target_cooldowns: Dictionary[int, float] = {}
@@ -32,7 +36,7 @@ func _ready() -> void:
 	beam_shape.shape = RectangleShape2D.new()
 	_update_geometry()
 
-func configure(p_range: float, p_width: float, p_damage_interval: float, p_windup_duration: float, p_lock_break_distance: float, p_damage: int, p_knockback: float, p_sweep_speed_degrees: float, p_tracking_speed_degrees: float) -> void:
+func configure(p_range: float, p_width: float, p_damage_interval: float, p_windup_duration: float, p_lock_break_distance: float, p_damage: int, p_knockback: float, p_sweep_speed_degrees: float, p_tracking_speed_degrees: float, p_max_tracking_duration: float = 5.0, p_attack_cooldown: float = 0.15) -> void:
 	beam_length = maxf(1.0, p_range)
 	beam_width = maxf(1.0, p_width)
 	damage_interval = maxf(0.05, p_damage_interval)
@@ -42,6 +46,8 @@ func configure(p_range: float, p_width: float, p_damage_interval: float, p_windu
 	knockback = maxf(0.0, p_knockback)
 	sweep_speed = deg_to_rad(p_sweep_speed_degrees)
 	tracking_speed = deg_to_rad(p_tracking_speed_degrees)
+	max_tracking_duration = maxf(0.05, p_max_tracking_duration)
+	attack_cooldown = maxf(0.0, p_attack_cooldown)
 	_update_geometry()
 
 func set_enabled(value: bool) -> void:
@@ -49,6 +55,7 @@ func set_enabled(value: bool) -> void:
 		return
 	_enabled = value
 	_state_time = 0.0
+	_tracking_time = 0.0
 	_locked_target = null
 	_target_cooldowns.clear()
 	if not value:
@@ -66,12 +73,24 @@ func set_range(value: float) -> void:
 func set_damage(value: int) -> void:
 	damage = maxi(0, value)
 
+func get_cooldown_progress() -> float:
+	if _state != State.COOLDOWN or attack_cooldown <= 0.0:
+		return 1.0
+	return clampf(_state_time / attack_cooldown, 0.0, 1.0)
+
 func _physics_process(delta: float) -> void:
 	if not _enabled:
 		return
+	_state_time += delta
+	if _state == State.COOLDOWN:
+		if _state_time >= attack_cooldown:
+			_state = State.WINDUP
+			_state_time = 0.0
+			_tracking_time = 0.0
+			windup_started.emit()
+		return
 	_update_aim(delta)
 	_update_sweep_transforms()
-	_state_time += delta
 	match _state:
 		State.WINDUP:
 			if _state_time >= windup_duration:
@@ -81,7 +100,21 @@ func _physics_process(delta: float) -> void:
 				laser_graphics.fade_to(1.0)
 				firing_started.emit()
 		State.FIRING:
+			if is_instance_valid(_locked_target):
+				_tracking_time += delta
+				if _tracking_time >= max_tracking_duration:
+					_overheat()
+					return
 			_damage_overlapped_targets(delta)
+
+func _overheat() -> void:
+	_state = State.COOLDOWN
+	_state_time = 0.0
+	_locked_target = null
+	_target_cooldowns.clear()
+	laser_graphics.fade_to(0.0)
+	speed_particles.emitting = false
+	overheated.emit()
 
 func _update_geometry() -> void:
 	if not is_node_ready():

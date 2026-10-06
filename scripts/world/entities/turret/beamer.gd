@@ -9,6 +9,7 @@ func _ready() -> void:
 	_initialize()
 	beam.windup_started.connect(_on_windup_started)
 	beam.firing_started.connect(_on_firing_started)
+	beam.overheated.connect(_on_overheated)
 	animation.configure_animation("idle", 1, true)
 	animation.configure_animation("windup", 2, false)
 	animation.configure_animation("fire", 3, false)
@@ -21,7 +22,7 @@ func _initialize() -> void:
 		push_error("%s requires a BeamerStats resource" % name)
 		return
 	initialize_base(stats)
-	beam.configure(stats.attack_range, stats.beam_width, stats.damage_interval, stats.windup_duration, stats.lock_break_distance, stats.damage, stats.knockback, stats.sweep_speed_degrees, stats.tracking_speed_degrees)
+	beam.configure(stats.attack_range, stats.beam_width, stats.damage_interval, stats.windup_duration, stats.lock_break_distance, stats.damage, stats.knockback, stats.sweep_speed_degrees, stats.tracking_speed_degrees, stats.max_tracking_duration, stats.attack_cooldown)
 
 func _on_combat_started() -> void:
 	beam.set_enabled(true)
@@ -42,6 +43,16 @@ func _on_windup_started() -> void:
 
 func _on_firing_started() -> void:
 	animation.play_animation("fire")
+
+func _on_overheated() -> void:
+	animation.stop_animation("fire")
+	animation.play_animation("idle")
+
+func get_attack_cooldown_progress() -> float:
+	return beam.get_cooldown_progress()
+
+func set_attack_cooldown(value: float) -> void:
+	beam.attack_cooldown = maxf(0.0, value)
 
 func get_damage_value() -> int:
 	return beam.damage

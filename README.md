@@ -125,6 +125,8 @@ Transient turret behavior animations key `Visuals:material:shader_parameter/flas
 
 ### Beamer
 
+`BeamerStats.max_tracking_duration` limits accumulated target-tracking time per firing cycle (default 5 seconds; sweeping does not add heat). `BeamComponent` enters `COOLDOWN` on overheating, releases its lock, stops damage, and fades the beam out. After `attack_cooldown` it resets heat and starts a fresh windup before firing again. Switching or briefly losing targets does not reset heat. The component signals `overheated` upward so Beamer stops the firing animation; its cooldown HUD and cooldown upgrades use the same component-owned timer.
+
 [beamer.tscn](scenes/world/turrets/beamer.tscn) is registered through [beamer_shop_details.tres](resources/turrets/beamer/beamer_shop_details.tres). `BeamComponent` ([beam.gd](scripts/world/entities/turret/beam.gd)) owns its continuous circular sweep, first-hit target lock, capped tracking speed, windup, overlap checks, per-target damage intervals, and occlusion. Shared [LaserGraphics](scripts/world/entities/shared/laser_graphics.gd) renders and fades the pixelated rounded beam; Beamer drives its direction and length. It returns to sweeping when its locked target dies, leaves range, is occluded, or moves beyond `lock_break_distance`. Base damage is 1 every 0.15 seconds; knockback is limited to enemies. Beam geometry checks world layer 1 so walls block damage. The turret and shop icon reuse a tinted Shockwaver atlas frame until dedicated Beamer art is available.
 
 ### Piercer
