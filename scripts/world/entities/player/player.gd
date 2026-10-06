@@ -289,9 +289,9 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 func _on_melee_hit_obstacle(hit_position: Vector2, self_knockback_force: float) -> void:
 	knockback.apply(hit_position, self_knockback_force)
 
-func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
+func _handle_damage(from_position: Vector2, _knockback_force: float) -> void:
 	# Apply knockback
-	knockback.apply(from_position, knockback_force)
+	knockback.apply(from_position, damage_knockback_force)
 	
 	# Impact effects
 	time_scale_manager.freeze(damage_freeze_duration)

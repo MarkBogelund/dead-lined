@@ -3,6 +3,7 @@ class_name LinkerComponent
 
 signal chain_started
 signal chain_fired(target_count: int)
+signal chain_cancelled
 
 enum State {READY, CHARGING, COOLDOWN}
 
@@ -53,7 +54,8 @@ func get_cooldown_progress() -> float:
 	return clampf(1.0 - _cooldown_remaining / attack_cooldown, 0.0, 1.0)
 
 func _physics_process(delta: float) -> void:
-	_update_chain_visuals()
+	if _state != State.CHARGING:
+		_update_chain_visuals()
 	if not _enabled:
 		return
 	match _state:
@@ -100,9 +102,11 @@ func _extend_chain(chain: Array[Node2D]) -> void:
 		previous_position = next_target.global_position
 
 func _extend_charging_chain() -> void:
+	_trim_broken_links()
 	var previous_count := _chain_targets.size()
 	_extend_chain(_chain_targets)
 	if _chain_targets.size() == previous_count:
+		_update_chain_visuals()
 		return
 	for index in range(previous_count, _chain_targets.size()):
 		_chain_positions.append(_chain_targets[index].global_position)
@@ -110,6 +114,26 @@ func _extend_charging_chain() -> void:
 	if is_instance_valid(_hop_range_indicator):
 		_hop_range_indicator.hide_indicator()
 	_update_chain_visuals()
+
+func _trim_broken_links() -> void:
+	var previous_position := global_position
+	for index in _chain_targets.size():
+		var target := _chain_targets[index]
+		if is_instance_valid(target) and _is_eligible_target(target) \
+				and target.global_position.is_finite() \
+				and previous_position.distance_squared_to(target.global_position) <= link_range * link_range:
+			previous_position = target.global_position
+			continue
+		_chain_targets.resize(index)
+		_chain_positions.resize(index + 1)
+		while _link_visuals.size() > index:
+			var segment: LaserGraphics = _link_visuals.pop_back()
+			if is_instance_valid(segment):
+				segment.hide()
+				segment.queue_free()
+		if is_instance_valid(_hop_range_indicator):
+			_hop_range_indicator.hide_indicator()
+		return
 
 func _get_candidates() -> Array[Node2D]:
 	var candidates: Array[Node2D] = []
@@ -173,6 +197,9 @@ func _fire_chain() -> void:
 		var target_knockback := knockback if target.is_in_group("enemies") or target.is_in_group("player") else 0.0
 		target.was_hit(damage, target_knockback, global_position)
 		damaged_count += 1
+	if damaged_count == 0:
+		cancel_charge()
+		return
 	_state = State.COOLDOWN
 	_cooldown_remaining = attack_cooldown
 	_has_fired = true
@@ -235,6 +262,7 @@ func cancel_charge() -> void:
 	_chain_targets.clear()
 	_chain_positions.clear()
 	_clear_link_visuals()
+	chain_cancelled.emit()
 
 func _clear_link_visuals() -> void:
 	_clear_hop_range_indicator()

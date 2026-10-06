@@ -9,6 +9,7 @@ func _ready() -> void:
 	_initialize()
 	linker.chain_started.connect(_on_chain_started)
 	linker.chain_fired.connect(_on_chain_fired)
+	linker.chain_cancelled.connect(_on_chain_cancelled)
 	animation.configure_animation("charge", 2, true)
 	super._ready()
 
@@ -38,6 +39,9 @@ func _on_chain_started() -> void:
 		linker.cancel_charge()
 
 func _on_chain_fired(_target_count: int) -> void:
+	animation.stop_animation("charge")
+
+func _on_chain_cancelled() -> void:
 	animation.stop_animation("charge")
 
 func get_damage_value() -> int:

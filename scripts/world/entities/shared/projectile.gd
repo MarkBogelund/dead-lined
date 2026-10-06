@@ -73,6 +73,7 @@ func set_orientation(pos: Vector2, rot: float, dir: Vector2) -> void:
 	global_position = pos
 	rotation = rot
 	direction = dir
+	$HitboxComponent.knockback_direction = dir
 
 func deflect_away_from(origin: Vector2) -> bool:
 	if _is_resolving_hit or _is_despawning:
@@ -83,6 +84,7 @@ func deflect_away_from(origin: Vector2) -> bool:
 			return false
 		away_direction = - direction
 	direction = away_direction.normalized()
+	hitbox.knockback_direction = direction
 	rotation = direction.angle()
 	return true
 	

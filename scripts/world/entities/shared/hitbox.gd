@@ -8,6 +8,8 @@ class_name HitboxComponent
 @export var enabled := true
 @export var no_damage_group: StringName = &""
 
+var knockback_direction := Vector2.ZERO
+
 signal hit_target(target: Node)
 signal hit_area_target(target: Node)
 
@@ -24,7 +26,10 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	var should_damage := no_damage_group.is_empty() or not body.is_in_group(no_damage_group)
 	if should_damage and body.has_method("was_hit"):
-		body.was_hit(damage, knockback, global_position)
+		var hit_origin := global_position
+		if knockback_direction.is_finite() and not knockback_direction.is_zero_approx():
+			hit_origin = body.global_position - knockback_direction
+		body.was_hit(damage, knockback, hit_origin)
 	hit_target.emit(body)
 
 func _on_area_entered(area: Area2D) -> void:
