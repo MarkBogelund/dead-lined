@@ -7,6 +7,22 @@
 [ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="6_shockwave"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="6_pixel_shader"]
+[ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="7_windup"]
+
+[sub_resource type="Animation" id="ShockReset"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WindupParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Shock"]
 resource_name = "shock"
@@ -77,6 +93,7 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="ShockLibrary"]
 _data = {
+&"RESET": SubResource("ShockReset"),
 &"shock": SubResource("Shock")
 }
 
@@ -197,3 +214,5 @@ frame = 8
 [node name="Shadow" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(1113068187) index="1" unique_id=2051251831]
 modulate = Color(0, 0, 0, 0.46)
 texture = ExtResource("5_shadow")
+
+[node name="WindupParticles" parent="." instance=ExtResource("7_windup")]

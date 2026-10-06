@@ -12,6 +12,22 @@
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="9_los"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/turrets/seeker.png" id="10_sprite"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="12_shoot_particles"]
+[ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="13_windup"]
+
+[sub_resource type="Animation" id="SeekerReset"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WindupParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Shoot"]
 resource_name = "shoot"
@@ -58,6 +74,7 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="SeekerLibrary"]
 _data = {
+&"RESET": SubResource("SeekerReset"),
 &"shoot": SubResource("Shoot")
 }
 
@@ -167,3 +184,5 @@ muzzle = NodePath("../Visuals/Canon/Muzzle")
 [node name="LineOfSightComponent" type="Node2D" parent="." index="17" unique_id=2076623582]
 script = ExtResource("9_los")
 ray_offset = 3.0
+
+[node name="WindupParticles" parent="." instance=ExtResource("13_windup")]
