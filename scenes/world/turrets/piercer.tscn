@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="12_windup"]
 [ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="13_558d3"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="13_tg0dl"]
+[ext_resource type="Script" uid="uid://m2e3t7ghg6ru" path="res://scripts/world/entities/shared/laser_graphics.gd" id="14_laser_graphics"]
 
 [sub_resource type="Animation" id="PiercerReset"]
 resource_name = "RESET"
@@ -88,7 +89,7 @@ _data = {
 &"charge": SubResource("Charge")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tg0dl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ee2k1"]
 resource_local_to_scene = true
 shader = ExtResource("6_flash")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -99,7 +100,7 @@ shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ee2k1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jay3e"]
 resource_local_to_scene = true
 shader = ExtResource("5_surface")
 shader_parameter/gold_amount = 0.0
@@ -148,7 +149,7 @@ stats = ExtResource("3_stats")
 libraries/piercer = SubResource("PiercerLibrary")
 
 [node name="Flash" parent="." index="11" unique_id=850017021]
-material = SubResource("ShaderMaterial_tg0dl")
+material = SubResource("ShaderMaterial_ee2k1")
 
 [node name="TargetingComponent" type="Node" parent="." index="14" unique_id=696958485]
 script = ExtResource("7_targeting")
@@ -167,19 +168,23 @@ ray_offset = 3.0
 [node name="LaserComponent" type="Node2D" parent="." index="17" unique_id=1701361494]
 z_index = 8
 script = ExtResource("10_laser")
+fade_out_delay = 0.15000000000000002
+laser_fade_duration = 0.1
+telegraph_alpha = 0.1
+
+[node name="LaserGraphics" type="Node2D" parent="LaserComponent" index="0" unique_id=213124918]
+script = ExtResource("14_laser_graphics")
 pixel_rotate_shader = ExtResource("11_pixel_rotate")
 laser_width = 10.0
 center_line_thickness = 3.0
 center_color = Color(0.9999997, 0.97398525, 0.9437064, 1)
 edge_color = Color(1, 0.6975, 0.45, 0.9019608)
-fade_out_delay = 0.15000000000000002
-laser_fade_duration = 0.1
-telegraph_alpha = 0.1
+fade_duration = 0.18
 
 [node name="WindupParticles" parent="." index="18" unique_id=1092367219 instance=ExtResource("12_windup")]
 
 [node name="Visuals" parent="." index="19" unique_id=1113068187]
-material = SubResource("ShaderMaterial_ee2k1")
+material = SubResource("ShaderMaterial_jay3e")
 
 [node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=45399720]
 z_index = 1
@@ -196,7 +201,7 @@ use_parent_material = true
 texture = SubResource("PiercerCannonTexture")
 
 [node name="Muzzle" type="Marker2D" parent="Visuals/Canon" index="1" unique_id=1945119161]
-position = Vector2(10, 0)
+position = Vector2(9, 0)
 
 [node name="ShootParticles" parent="Visuals/Canon/Muzzle" index="0" unique_id=1586402119 instance=ExtResource("13_tg0dl")]
 amount = 20

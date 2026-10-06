@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="7_bwlqj"]
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="8_pixel_rotate"]
 [ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="10_bwlqj"]
+[ext_resource type="Script" path="res://scripts/world/entities/shared/laser_graphics.gd" id="11_laser_graphics"]
 
 [sub_resource type="Animation" id="Animation_ume4x"]
 resource_name = "RESET"
@@ -256,8 +257,6 @@ material = SubResource("ShaderMaterial_cd42n")
 [node name="BeamComponent" type="Node2D" parent="." index="14" unique_id=1684563345]
 z_index = 8
 script = ExtResource("5_beam")
-pixel_rotate_shader = ExtResource("8_pixel_rotate")
-beam_color = Color(0.2, 0.8509804, 1, 1)
 
 [node name="BeamArea" type="Area2D" parent="BeamComponent" index="0" unique_id=1890326660]
 collision_layer = 0
@@ -269,6 +268,15 @@ monitorable = false
 [node name="SpeedParticles" parent="BeamComponent" index="1" unique_id=721926538 instance=ExtResource("7_bwlqj")]
 amount = 20
 process_material = SubResource("ParticleProcessMaterial_gcvlj")
+
+[node name="LaserGraphics" type="Node2D" parent="BeamComponent" index="2"]
+script = ExtResource("11_laser_graphics")
+pixel_rotate_shader = ExtResource("8_pixel_rotate")
+start_offset = 6.0
+laser_width = 16.0
+center_line_thickness = 4.0
+center_color = Color(0.85, 1, 1, 0.95)
+edge_color = Color(0.2, 0.85, 1, 0.4)
 
 [node name="Visuals" parent="." index="15" unique_id=1113068187]
 material = SubResource("ShaderMaterial_78ntu")
