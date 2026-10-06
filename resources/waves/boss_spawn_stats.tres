@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EnemySpawnStats" format=3 uid="uid://caesk066ldnur"]
+
+[ext_resource type="Script" uid="uid://cij678d51rire" path="res://scripts/data/enemy_spawn_stats.gd" id="1"]
+[ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="2"]
+[ext_resource type="Resource" uid="uid://xeux7dgus2i2" path="res://resources/enemies/bulwark/bulwark_spawn.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+entries = Array[ExtResource("2")]([ExtResource("3")])

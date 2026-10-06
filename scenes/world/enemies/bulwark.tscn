@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://bm4t4aeqdrg8b"]
+
+[ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/enemies/enemy_base.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://c4e7mc1s0e4vo" path="res://scripts/world/entities/enemy/bulwark.gd" id="2_script"]
+[ext_resource type="Resource" path="res://resources/enemies/bulwark/bulwark_stats.tres" id="3_stats"]
+[ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_fqq7r"]
+[ext_resource type="Texture2D" uid="uid://brvere8c7ptay" path="res://assets/sprites/enemies/bulwark.png" id="4_sprite"]
+[ext_resource type="Script" uid="uid://bmcbv1et14jsw" path="res://scripts/world/entities/shared/directional_armor.gd" id="5_armor"]
+[ext_resource type="Script" uid="uid://6csgd8d4wd7j" path="res://scripts/world/entities/shared/directional_armor_visual.gd" id="6_visual"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="7_u8e02"]
+[ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="7_ui"]
+
+[sub_resource type="CircleShape2D" id="BodyShape"]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id="ContactShape"]
+radius = 16.0
+
+[sub_resource type="Animation" id="Reset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Idle"]
+resource_name = "idle"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -1), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="BulwarkLibrary"]
+_data = {
+&"RESET": SubResource("Reset"),
+&"idle": SubResource("Idle")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fqq7r"]
+resource_local_to_scene = true
+shader = ExtResource("4_fqq7r")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u8e02"]
+resource_local_to_scene = true
+shader = ExtResource("7_u8e02")
+shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/current_radius = 15.0
+shader_parameter/ring_thickness = 2.0
+shader_parameter/pixel_size = 2.0
+shader_parameter/center_line_thickness = 1.0
+shader_parameter/center_line_color = Color(1, 1, 1, 1)
+shader_parameter/canvas_size = Vector2(40, 40)
+
+[node name="Bulwark" unique_id=1595451548 node_paths=PackedStringArray("armor", "armor_visual", "health_ui", "body_sprite") instance=ExtResource("1_base")]
+collision_mask = 35
+script = ExtResource("2_script")
+stats = ExtResource("3_stats")
+armor = NodePath("DirectionalArmorComponent")
+armor_visual = NodePath("Visuals/ArmorVisual")
+health_ui = NodePath("HealthUIComponent")
+body_sprite = NodePath("Visuals/Body")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=1100000002]
+shape = SubResource("BodyShape")
+
+[node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1100000003) index="0" unique_id=1100000004]
+shape = SubResource("ContactShape")
+
+[node name="AnimationHandler" parent="." index="8" unique_id=1100000010]
+libraries/bulwark = SubResource("BulwarkLibrary")
+
+[node name="Visuals" parent="." index="9" unique_id=1100000011]
+material = SubResource("ShaderMaterial_fqq7r")
+
+[node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=2058733834]
+use_parent_material = true
+texture = ExtResource("4_sprite")
+
+[node name="ArmorVisual" type="Node2D" parent="Visuals" index="1" unique_id=1515643854]
+z_index = 2
+script = ExtResource("6_visual")
+
+[node name="Flash" parent="." index="11" unique_id=1756477109]
+material = SubResource("ShaderMaterial_u8e02")
+
+[node name="DirectionalArmorComponent" type="Node2D" parent="." index="12" unique_id=307248675]
+script = ExtResource("5_armor")
+
+[node name="HealthUIComponent" parent="." index="13" unique_id=290090362 node_paths=PackedStringArray("health_component") instance=ExtResource("7_ui")]
+position = Vector2(0, -20)
+health_component = NodePath("../HealthComponent")
+offset = Vector2(0, -26)
+cooldown_color = Color(0.95, 0.12, 0.12, 1)
+show_level = false

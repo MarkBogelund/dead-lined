@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BulwarkStats" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/bulwark_stats.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/enemies/bulwark/bulwark_targeting.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+max_health = 300
+damage = 15
+knockback = 200.0
+move_speed = 25.0
+targeting = ExtResource("2")
+orb_drop_amount = 30
+crunch_powerup_drop_chance = 0.1

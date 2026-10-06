@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/spawners/boss_spawner.gd" id="1"]
+
+[node name="BossSpawner" type="Marker2D" groups=["enemy_spawners"]]
+script = ExtResource("1")

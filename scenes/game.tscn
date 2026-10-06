@@ -39,6 +39,9 @@
 [ext_resource type="Resource" uid="uid://d2wslyeclub3r" path="res://resources/turrets/piercer/piercer_shop_details.tres" id="37_piercer_shop"]
 [ext_resource type="Resource" uid="uid://rfk7oh0drurg" path="res://resources/turrets/repulsor/repulsor_shop_details.tres" id="38_repulsor_shop"]
 [ext_resource type="Resource" uid="uid://dvdr6uoptc538" path="res://resources/turrets/linker/linker_shop_details.tres" id="39_linker_shop"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/boss_spawner.tscn" id="40_boss_spawner"]
+[ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="41_boss_entry_type"]
+[ext_resource type="Resource" uid="uid://xeux7dgus2i2" path="res://resources/enemies/bulwark/bulwark_spawn.tres" id="42_bulwark_spawn"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -224,11 +227,15 @@ unique_name_in_owner = true
 script = ExtResource("4_ca42v")
 metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 
-[node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
+[node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 node_paths=PackedStringArray("boss_spawner") groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
 settings = ExtResource("2_wave_settings")
+bosses = Array[ExtResource("41_boss_entry_type")]([ExtResource("42_bulwark_spawn")])
+boss_spawner = NodePath("BossSpawner")
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
+
+[node name="BossSpawner" parent="Systems/WaveManager" unique_id=1803196919 instance=ExtResource("40_boss_spawner")]
 
 [node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]
 unique_name_in_owner = true

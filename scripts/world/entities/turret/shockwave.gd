@@ -202,7 +202,10 @@ func _damage_swept_ring() -> void:
 		if distance >= inner_radius and distance <= outer_radius:
 			_hit_targets[target_id] = true
 			var target_knockback := knockback_force if body.is_in_group("enemies") else 0.0
-			body.was_hit(damage, target_knockback, global_position)
+			if body.has_method("was_hit_bypassing_armor"):
+				body.was_hit_bypassing_armor(damage, target_knockback, global_position)
+			else:
+				body.was_hit(damage, target_knockback, global_position)
 
 func _is_damageable(body: Node2D) -> bool:
 	if not body.has_method("was_hit"):

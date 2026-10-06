@@ -97,6 +97,9 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 	else:
 		_handle_damage(from_position, knockback_force)
 
+func was_hit_bypassing_armor(amount: int, knockback_force: float, from_position: Vector2) -> void:
+	was_hit(amount, knockback_force, from_position)
+
 func _handle_damage(from_position: Vector2, knockback_force: float) -> void:
 	_before_handle_damage()
 	knockback.apply(from_position, knockback_force)

@@ -1,10 +1,14 @@
 extends Node2D
 class_name HealthUIComponent
 
-## Always-visible turret status: level inside the frame's circle, health in its bar.
+## Shared entity status: health plus a caller-controlled secondary progress meter.
 
 @export var health_component: HealthComponent
 @export var offset := Vector2(0, -18)
+## Color of the secondary meter (turret cooldown or boss armor stress).
+@export var cooldown_color := Color(0.85904986, 0.85504586, 0.8550441, 1)
+## Turrets show their level; bosses can hide the label.
+@export var show_level := true
 
 @onready var fill: ColorRect = $HealthFill
 @onready var cooldown_fill: ColorRect = $CooldownFill
@@ -15,6 +19,8 @@ var _full_bar_width := 0.0
 func _ready() -> void:
 	position = offset
 	_full_bar_width = fill.size.x
+	cooldown_fill.color = cooldown_color
+	level_label.visible = show_level
 	set_cooldown_progress(1.0)
 	if health_component:
 		_connect_health_component()

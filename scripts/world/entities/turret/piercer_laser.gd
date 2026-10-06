@@ -79,7 +79,10 @@ func _damage_targets(origin: Vector2, direction: Vector2, beam_length: float, da
 			continue
 		hit_ids[target.get_instance_id()] = true
 		var target_knockback := knockback if target.is_in_group("enemies") or target.is_in_group("player") else 0.0
-		target.was_hit(damage, target_knockback, origin)
+		if target.has_method("was_hit_bypassing_armor"):
+			target.was_hit_bypassing_armor(damage, target_knockback, origin)
+		else:
+			target.was_hit(damage, target_knockback, origin)
 
 func _is_damageable_target(target: Node2D) -> bool:
 	if not target.has_method("was_hit"):

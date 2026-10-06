@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemySpawnEntry" format=3 uid="uid://xeux7dgus2i2"]
+
+[ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bm4t4aeqdrg8b" path="res://scenes/world/enemies/bulwark.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+enemy_scene = ExtResource("2")
+health_multiplier = 1.25
+health_multiplier_every_n_waves = 10

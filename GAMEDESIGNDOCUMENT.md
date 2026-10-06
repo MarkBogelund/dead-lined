@@ -110,12 +110,16 @@ Enemies have a powerup drop chance (2% by default, configurable per enemy type).
 
 - **Ricocheter**: Shoots ricocheting projectiles in a circle pattern at a fixel interval. Drifts randomly around the map.:
 - **Surrounder**: Fast enemy that tries to circle around the player and leaves a deadly trail, that damages the player 
-### Unfinished Boss Enemies
+### Boss Enemies
 Every fifth combat wave selects one boss at random from the unlocked boss pool and adds it to that wave. The boss materializes at a random valid map position after a clear spawn telegraph; the position must be reachable and must not overlap the player, a turret, or blocking geometry.
+
+Temporary implementation for Bulwark testing: one boss spawns immediately at world (0, 0) on combat wave 1. Random placement, the spawn telegraph, and recurring boss scheduling are deferred until the boss behavior is working.
 
 Bosses are tankier than normal enemies and each has one clear mechanic that changes the player's positioning, target priority, or evasion route while turrets remain the main damage source.
 
-- **Bulwark:** A slow, high-health boss with directional frontal armor that turns toward the player and reduces, rather than blocks, incoming frontal damage. The player baits its facing away from the main turret formation so turrets can attack exposed sides; sustained turret fire temporarily breaks the armor, while rings, explosions, piercing shots, and displacement bypass or disrupt it.
+- **Bulwark:** A slow, high-health boss with directional frontal armor that turns toward the player and reduces, rather than blocks, incoming frontal damage. The player baits its facing away from the main turret formation so turrets can attack exposed sides; sustained frontal fire fills its red stress meter and temporarily breaks the armor. Its shared health UI shows health above stress; stress stays full while broken, then resets on reformation. Rings, explosions, and piercing shots bypass armor; displacement and knockback disrupt its positioning. Initial tuning: 300 health, 25 movement speed, 60 degrees/second turning, 120-degree armor arc, 75% frontal reduction, 30 incoming damage to break, 4 seconds broken, and stress decay after a quiet period. All gameplay values are resource-authored.
+
+### Unfinished Boss Enemies
 - **Multiplier:** Stops for an interruptible telegraph before releasing capped groups of simple melee drones. The player survives and kites the adds through turret coverage while deciding when to interrupt the next spawn; Shockwaver, Beamer, and Missiler control the swarm while sustained and priority turrets continue damaging the boss.
 - **Bombarder:** A slow, high-health artillery boss that locks sequences of clearly marked impact circles around the player's current or predicted route, then lands shells that create expanding blast rings. The player plans a path through the fixed markers, leads barrages away from turret formations, and dashes through bad overlaps while turrets damage the boss continuously; each barrage ends with a short recovery before the next telegraph.
 

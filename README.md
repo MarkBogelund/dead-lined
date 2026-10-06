@@ -123,6 +123,16 @@ Turret upgrades and selling use one upgrade panel per turret ([turret_hud.tscn](
 
 Transient turret behavior animations key `Visuals:material:shader_parameter/flash_amount` directly; upgrade, upgrade charge, and Attractor pulse currently use this previewable contract. Death burnout timing is likewise authored in `die` through `death_burnout_progress`, while persistent critical/max-level state and concurrent hit feedback remain code-owned.
 
+### Bulwark
+
+Focused regression checks: run Godot with `--headless --path . --fixed-fps 60 res://tests/bulwark_tests.tscn --quit-after 1200`. The test scene checks armor/UI behavior, real bypass hit detection, immediate wave-one spawning at world zero, and boss death/wave completion.
+
+Temporary Bulwark test setup: `WaveManager` spawns one enabled boss from its `Bosses` array at world `(0, 0)` immediately when combat wave 1 starts. `Bosses` currently contains [bulwark_spawn.tres](resources/enemies/bulwark/bulwark_spawn.tres). There is no interval gate, introduction-wave gate, random location search, spawn telegraph, or materialization delay in this test path. Further waves do not spawn additional bosses. Random placement and production scheduling are deferred until Bulwark gameplay is verified.
+
+[BossSpawner](scripts/world/spawners/boss_spawner.gd) remains an owned child of `WaveManager`, using the existing `EnemySpawner` scaling, death wiring, and score signal. It immediately places the selected boss at world zero; the live boss remains in the enemy group and prevents premature wave completion. This intentionally fixed spawn may overlap existing geometry or actors and is only a temporary gameplay-testing setup.
+
+[bulwark.tscn](scenes/world/enemies/bulwark.tscn) inherits EnemyBase and uses the dedicated Bulwark sprite, player-only targeting, existing navigation/contact damage, and a `DirectionalArmorComponent` that owns facing, frontal reduction, incoming-damage stress, delayed decay, and timed armor breaking. [bulwark_stats.tres](resources/enemies/bulwark/bulwark_stats.tres) owns gameplay tuning. The thin enemy root forwards armor signals to its independent shield visual and reused `HealthUIComponent`: the normal health fill displays HP, the secondary fill is red armor stress (full while broken), and the level label is hidden. Other HealthUI users retain their normal cooldown color and level display. Rings/explosions and Piercer call `was_hit_bypassing_armor()` when available; EnemyBase defaults that method to ordinary hit handling and Bulwark explicitly bypasses its armor, without changing the existing three-argument hit contract.
+
 ### Beamer
 
 `BeamerStats.max_tracking_duration` limits accumulated target-tracking time per firing cycle (default 5 seconds; sweeping does not add heat). `BeamComponent` enters `COOLDOWN` on overheating, releases its lock, stops damage, and fades the beam out. After `attack_cooldown` it resets heat and starts a fresh windup before firing again. Switching or briefly losing targets does not reset heat. The component signals `overheated` upward so Beamer stops the firing animation; its cooldown HUD and cooldown upgrades use the same component-owned timer.
