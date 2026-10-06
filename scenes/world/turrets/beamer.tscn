@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dv38ca2ap3wph" path="res://assets/sprites/turrets/beamer.png" id="7_6gvdm"]
 [ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="7_bwlqj"]
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="8_pixel_rotate"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="10_bwlqj"]
 
 [sub_resource type="Animation" id="Animation_ume4x"]
 resource_name = "RESET"
@@ -134,7 +135,7 @@ _data = {
 &"windup": SubResource("Windup")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ume4x"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cd42n"]
 resource_local_to_scene = true
 shader = ExtResource("4_6gvdm")
 shader_parameter/shockwave_color = Color(1, 1, 1, 1)
@@ -173,7 +174,7 @@ scale_max = 0.29999998
 scale_curve = SubResource("CurveTexture_78ntu")
 color_ramp = SubResource("GradientTexture1D_bwlqj")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bwlqj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_78ntu"]
 resource_local_to_scene = true
 shader = ExtResource("6_736xw")
 shader_parameter/gold_amount = 0.0
@@ -238,6 +239,10 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
+atlas = ExtResource("10_bwlqj")
+region = Rect2(16, 0, 16, 16)
+
 [node name="Beamer" unique_id=493092891 instance=ExtResource("1_base")]
 script = ExtResource("2_beamer")
 stats = ExtResource("3_stats")
@@ -246,7 +251,7 @@ stats = ExtResource("3_stats")
 libraries/beamer = SubResource("BeamerLibrary")
 
 [node name="Flash" parent="." index="11" unique_id=850017021]
-material = SubResource("ShaderMaterial_ume4x")
+material = SubResource("ShaderMaterial_cd42n")
 
 [node name="BeamComponent" type="Node2D" parent="." index="14" unique_id=1684563345]
 z_index = 8
@@ -266,9 +271,15 @@ amount = 20
 process_material = SubResource("ParticleProcessMaterial_gcvlj")
 
 [node name="Visuals" parent="." index="15" unique_id=1113068187]
-material = SubResource("ShaderMaterial_bwlqj")
+material = SubResource("ShaderMaterial_78ntu")
 
 [node name="Body" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=593199491]
 modulate = Color(0.75, 0.95, 1, 1)
+z_index = 1
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_spl43")
+
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=1793926939]
+modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+position = Vector2(0, 11)
+texture = SubResource("AtlasTexture_spl43")

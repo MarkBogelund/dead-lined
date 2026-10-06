@@ -9,6 +9,10 @@
 atlas = ExtResource("3_y67we")
 region = Rect2(0, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_f74yd"]
+atlas = ExtResource("4_s1gev")
+region = Rect2(0, 0, 16, 16)
+
 [sub_resource type="Gradient" id="Gradient_f5wuv"]
 offsets = PackedFloat32Array(0, 0.7161804)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
@@ -97,7 +101,7 @@ texture = SubResource("AtlasTexture_s1gev")
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
 position = Vector2(0, 4)
-texture = ExtResource("4_s1gev")
+texture = SubResource("AtlasTexture_f74yd")
 
 [node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="2" unique_id=751755519]
 scale = Vector2(0.5, 0.5)
