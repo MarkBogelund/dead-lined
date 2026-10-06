@@ -123,13 +123,16 @@ script = ExtResource("6_los")
 ray_offset = 1.0
 
 [node name="LaserGraphics" parent="LinkerComponent" index="1" unique_id=621636904 instance=ExtResource("7_laser")]
+edge_color = Color(0.99215686, 0.9529412, 0.5294118, 0.9019608)
+telegraph_color = Color(0.99999994, 0.8915242, 0.3931329, 1)
+telegraph_alpha = 0.8
+telegraph_fade_duration = 0.5
 fade_out_delay = 0.1
 
 [node name="Visuals" parent="." index="15" unique_id=1113068187]
 material = SubResource("ShaderMaterial_0fjia")
 
 [node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=1304784413]
-modulate = Color(0.75, 1, 1, 1)
 use_parent_material = true
 texture = SubResource("LinkerBody")
 

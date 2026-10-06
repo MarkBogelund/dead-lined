@@ -7,6 +7,7 @@ class_name RangeIndicator
 
 var radius: float = 0.0
 var inner_radius: float = -1.0
+var _fade_tween: Tween
 
 func _ready() -> void:
 	visible = false
@@ -16,10 +17,18 @@ func initialize(p_radius: float, p_inner_radius: float = -1.0) -> void:
 	inner_radius = clampf(p_inner_radius, 0.0, radius) if p_inner_radius >= 0.0 else -1.0
 	queue_redraw()
 
-func show_indicator() -> void:
+func show_indicator(fade_duration := 0.0) -> void:
+	if visible:
+		return
 	visible = true
+	modulate.a = 0.0 if fade_duration > 0.0 else 1.0
+	if fade_duration > 0.0:
+		_fade_tween = create_tween()
+		_fade_tween.tween_property(self, "modulate:a", 1.0, fade_duration)
 
 func hide_indicator() -> void:
+	if _fade_tween:
+		_fade_tween.kill()
 	visible = false
 
 func _draw() -> void:

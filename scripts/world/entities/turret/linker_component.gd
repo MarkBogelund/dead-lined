@@ -107,6 +107,8 @@ func _extend_charging_chain() -> void:
 	for index in range(previous_count, _chain_targets.size()):
 		_chain_positions.append(_chain_targets[index].global_position)
 	_build_link_visuals()
+	if is_instance_valid(_hop_range_indicator):
+		_hop_range_indicator.hide_indicator()
 	_update_chain_visuals()
 
 func _get_candidates() -> Array[Node2D]:
@@ -159,7 +161,7 @@ func _start_chain(chain: Array[Node2D]) -> void:
 	add_child(_hop_range_indicator)
 	_hop_range_indicator.initialize(link_range)
 	_hop_range_indicator.global_position = _chain_targets.back().global_position
-	_hop_range_indicator.show_indicator()
+	_hop_range_indicator.show_indicator(laser_graphics.telegraph_fade_duration)
 	chain_started.emit()
 
 func _fire_chain() -> void:
@@ -206,7 +208,7 @@ func _update_chain_visuals() -> void:
 			_hop_range_indicator.global_position = last_target.global_position
 			if not is_equal_approx(_hop_range_indicator.radius, link_range):
 				_hop_range_indicator.initialize(link_range)
-			_hop_range_indicator.show_indicator()
+			_hop_range_indicator.show_indicator(laser_graphics.telegraph_fade_duration)
 		else:
 			_hop_range_indicator.hide_indicator()
 	for index in _link_visuals.size():

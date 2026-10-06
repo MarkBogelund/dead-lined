@@ -17,7 +17,11 @@ signal fade_finished(target_alpha: float)
 @export var edge_color := Color(1.0, 0.28, 0.08, 0.9)
 ## Fade-out time in seconds. Also used by continuous beams calling fade_to().
 @export_range(0.01, 1.0, 0.01) var fade_duration := 0.12
-## Opacity of the charging beam, from invisible (0) to fully visible (1).
+## Thickness in world pixels of the single-color charging line, independent of laser_width.
+@export_range(1.0, 64.0, 1.0) var telegraph_width := 1.0
+## Color of the charging line; no laser center or edge styling is used before firing.
+@export var telegraph_color := Color(1.0, 0.96, 0.78, 1.0)
+## Opacity of the charging line, from invisible (0) to fully visible (1).
 @export_range(0.0, 1.0, 0.01) var telegraph_alpha := 0.28
 ## Seconds to fade into the charging opacity; does not change gameplay charge time.
 @export_range(0.01, 5.0, 0.01) var telegraph_fade_duration := 1.0
@@ -29,6 +33,7 @@ signal fade_finished(target_alpha: float)
 var _visual: PixelRotatedSprite
 var _beam_length := 1.0
 var _visual_hold_remaining := -1.0
+var _telegraphing := false
 
 func create_instance() -> LaserGraphics:
 	var instance := LaserGraphics.new()
@@ -39,6 +44,8 @@ func create_instance() -> LaserGraphics:
 	instance.center_color = center_color
 	instance.edge_color = edge_color
 	instance.fade_duration = fade_duration
+	instance.telegraph_width = telegraph_width
+	instance.telegraph_color = telegraph_color
 	instance.telegraph_alpha = telegraph_alpha
 	instance.telegraph_fade_duration = telegraph_fade_duration
 	instance.fire_fade_duration = fire_fade_duration
@@ -65,9 +72,13 @@ func _process(delta: float) -> void:
 		fade_to(0.0)
 
 func show_telegraph() -> void:
+	_telegraphing = true
+	_update_texture()
 	fade_to(telegraph_alpha, telegraph_fade_duration)
 
 func show_fire() -> void:
+	_telegraphing = false
+	_update_texture()
 	fade_to(1.0, fire_fade_duration)
 	_visual_hold_remaining = fade_out_delay
 
@@ -97,8 +108,11 @@ func _update_texture() -> void:
 
 func _make_texture() -> Texture2D:
 	var image_width := maxi(1, ceili(_beam_length - start_offset))
-	var image_height := maxi(1, roundi(laser_width))
+	var image_height := maxi(1, roundi(telegraph_width if _telegraphing else laser_width))
 	var image := Image.create(image_width, image_height, false, Image.FORMAT_RGBA8)
+	if _telegraphing:
+		image.fill(telegraph_color)
+		return ImageTexture.create_from_image(image)
 	var center_y := (float(image_height) - 1.0) * 0.5
 	var edge_radius := minf(float(image_height) * 0.5, float(image_width) * 0.5)
 	var center_radius := minf(maxf(0.5, center_line_thickness * 0.5), edge_radius)
