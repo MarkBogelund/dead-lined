@@ -5,15 +5,9 @@ signal visual_finished
 
 @onready var laser_graphics: LaserGraphics = $LaserGraphics
 
-@export_range(0.05, 1.0, 0.01) var fade_out_delay := 0.35
-@export_range(0.05, 0.5, 0.01) var laser_fade_duration := 0.18
-@export_range(0.01, 1.0, 0.01) var telegraph_alpha := 0.28
-
 const WORLD_COLLISION_MASK := 1
 const TARGET_COLLISION_MASK := 42
 const WALL_QUERY_DISTANCE := 10000.0
-
-var _visual_time := -1.0
 
 func _ready() -> void:
 	laser_graphics.fade_finished.connect(_on_visual_fade_finished)
@@ -22,35 +16,23 @@ func _on_visual_fade_finished(target_alpha: float) -> void:
 	if is_zero_approx(target_alpha):
 		visual_finished.emit()
 
-func _process(delta: float) -> void:
-	if _visual_time < 0.0:
-		return
-	_visual_time -= delta
-	if _visual_time <= 0.0:
-		_visual_time = -1.0
-		laser_graphics.fade_to(0.0, laser_fade_duration)
-
-func show_telegraph(origin: Vector2, direction: Vector2, fade_duration: float) -> void:
+func show_telegraph(origin: Vector2, direction: Vector2) -> void:
 	var beam_length := _get_clear_length(origin, direction)
-	_set_visual(origin, direction, beam_length, telegraph_alpha)
-	laser_graphics.fade_to(telegraph_alpha, fade_duration)
-	_visual_time = -1.0
+	_set_visual(origin, direction, beam_length)
+	laser_graphics.show_telegraph()
 
 func cancel_telegraph() -> void:
-	_visual_time = -1.0
-	laser_graphics.fade_to(0.0, laser_fade_duration)
+	laser_graphics.cancel_telegraph()
 
 func fire(origin: Vector2, direction: Vector2, damage: int, knockback: float, shooter: Node2D) -> void:
 	var normalized_direction := direction.normalized()
 	var beam_length := _get_clear_length(origin, normalized_direction)
 	if beam_length <= 0.0:
-		_visual_time = -1.0
 		cancel_telegraph()
 		visual_finished.emit()
 		return
-	_set_visual(origin, normalized_direction, beam_length, 1.0)
-	laser_graphics.fade_to(1.0, laser_fade_duration)
-	_visual_time = fade_out_delay
+	_set_visual(origin, normalized_direction, beam_length)
+	laser_graphics.show_fire()
 	_damage_targets(origin, normalized_direction, beam_length, damage, knockback, shooter)
 
 func _get_clear_length(origin: Vector2, direction: Vector2) -> float:
@@ -71,7 +53,7 @@ func _get_clear_length(origin: Vector2, direction: Vector2) -> float:
 			clear_length = minf(clear_length, maxf(0.0, hit_distance))
 	return clear_length
 
-func _set_visual(origin: Vector2, direction: Vector2, beam_length: float, alpha: float) -> void:
+func _set_visual(origin: Vector2, direction: Vector2, beam_length: float) -> void:
 	if beam_length <= 0.0:
 		cancel_telegraph()
 		return

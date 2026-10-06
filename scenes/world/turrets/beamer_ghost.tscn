@@ -18,6 +18,7 @@ collision_mask = 35
 script = ExtResource("1_ghost")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1094994151]
+modulate = Color(1, 1, 1, 0.78431374)
 z_index = 12
 position = Vector2(0, 3)
 texture = SubResource("AtlasTexture_bwlqj")

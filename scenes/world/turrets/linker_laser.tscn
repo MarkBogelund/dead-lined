@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/entities/shared/laser_graphics.gd" id="1_graphics"]
+[ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="2_pixel_rotate"]
+
+[node name="LaserGraphics" type="Node2D"]
+script = ExtResource("1_graphics")
+pixel_rotate_shader = ExtResource("2_pixel_rotate")
+laser_width = 6.0
+center_line_thickness = 2.0
+center_color = Color(0.995, 1, 0.9, 1)
+edge_color = Color(0.99999946, 0.9889204, 0.5198728, 0.9019608)
+fade_duration = 0.1
+telegraph_alpha = 0.3
+telegraph_fade_duration = 1.0
+fire_fade_duration = 0.05
+fade_out_delay = 0.1

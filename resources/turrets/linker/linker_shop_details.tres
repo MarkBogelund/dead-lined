@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TurretEntry" format=3 uid="uid://dvdr6uoptc538"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/turrets/linker_ghost.tscn" id="1_ghost"]
+[ext_resource type="Texture2D" uid="uid://bvioss540f1wf" path="res://assets/sprites/turrets/linker.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="3_entry"]
+[ext_resource type="PackedScene" path="res://scenes/world/turrets/linker.tscn" id="4_turret"]
+[ext_resource type="Resource" uid="uid://cka62cif20f6e" path="res://resources/turrets/linker/linker_stats.tres" id="5_stats"]
+
+[resource]
+script = ExtResource("3_entry")
+name = "Linker"
+icon = ExtResource("2_icon")
+price = 30
+turret_scene = ExtResource("4_turret")
+ghost_scene = ExtResource("1_ghost")
+stats = ExtResource("5_stats")
+outline_start_color = Color(0.2, 0.75, 0.95, 1)
+outline_end_color = Color(0.6, 0.95, 1, 1)
+exclusion_radius = 55.0

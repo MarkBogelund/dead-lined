@@ -74,7 +74,7 @@ func _begin_charge() -> void:
 	aiming.lock_aim()
 	_locked_origin = aiming.get_muzzle_position()
 	_locked_direction = aiming.get_visual_aim_direction()
-	laser.show_telegraph(_locked_origin, _locked_direction, stats.charge_duration)
+	laser.show_telegraph(_locked_origin, _locked_direction)
 	var charge_length := animation.get_animation_length("charge")
 	animation.play_animation("charge", -1, charge_length / stats.charge_duration)
 

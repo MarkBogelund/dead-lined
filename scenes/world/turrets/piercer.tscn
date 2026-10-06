@@ -168,9 +168,6 @@ ray_offset = 3.0
 [node name="LaserComponent" type="Node2D" parent="." index="17" unique_id=1701361494]
 z_index = 8
 script = ExtResource("10_laser")
-fade_out_delay = 0.15000000000000002
-laser_fade_duration = 0.1
-telegraph_alpha = 0.1
 
 [node name="LaserGraphics" type="Node2D" parent="LaserComponent" index="0" unique_id=213124918]
 script = ExtResource("14_laser_graphics")
@@ -179,7 +176,11 @@ laser_width = 10.0
 center_line_thickness = 3.0
 center_color = Color(0.9999997, 0.97398525, 0.9437064, 1)
 edge_color = Color(1, 0.6975, 0.45, 0.9019608)
-fade_duration = 0.18
+fade_duration = 0.1
+telegraph_alpha = 0.1
+telegraph_fade_duration = 0.5
+fire_fade_duration = 0.1
+fade_out_delay = 0.15
 
 [node name="WindupParticles" parent="." index="18" unique_id=1092367219 instance=ExtResource("12_windup")]
 

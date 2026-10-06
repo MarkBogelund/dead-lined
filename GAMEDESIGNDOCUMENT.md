@@ -129,12 +129,12 @@ Each wave uses a finite enemy roster. Enemy types can enter on different waves, 
 - **Shockwaver:** Triggers when a target enters its radius, telegraphs a pulse, then expands a doughnut-shaped shockwave that damages each reached target once and knocks enemies outward; it trades directional reach for local crowd control.
 - **Attractor:** A high-health control turret that emits readable magnetic pulses, dealing no damage but pulling nearby enemies and the player toward it with distance falloff; dashing ignores the pull.
 - **Repulsor:** Emits an active radial pulse that pushes nearby enemies and the player outward and deflects each player, turret, or enemy projectile once; it deals no damage and acts as a shield.
+- **Linker:** Chains from the closest enemy or player to the nearest unlinked enemy or player within hop range, requiring clear line of sight for each hop. The unlimited chain can add targets from its endpoint throughout its one-second charge, then damages every surviving linked target. Only the last target shows the next-hop range circle; max level stops selecting the player.
 - **Missiler:** Slowly locks a distant impact position, telegraphs its blast radius, then launches a mortar shell that creates an expanding damaging ring; it is strong against stationary groups but weak inside its minimum range and against enemies that leave the marker.
 - **Beamer:** Continuously sweeps a low-damage beam around itself, then slowly locks onto the first target it hits; if the target escapes more than a small distance from the beam, dies, or leaves range, the beam resumes sweeping. Its shortened range and limited tracking speed reward movement and evasive play.
 
 ### Unfinished Turrets
 - **Trapper:** Periodically places visible stationary traps in a fixed pattern within range; traps explode on contact, are capped, and disappear when the round ends.
-- **Linker:** Targets the closest enemy within short range, charges for one second, then instantly chains through nearby enemies with no chain limit and damages every enemy in the chain when it fires.
 
 - **Honer**: Slow version of the seeker that
 shoots honing shots that targets the target and only dissapears after certain time or if the turning angle for the projectile gets too large.
