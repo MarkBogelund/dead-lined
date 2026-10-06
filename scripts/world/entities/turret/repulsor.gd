@@ -1,9 +1,9 @@
 extends TurretBase
-class_name Attractor
+class_name Repulsor
 
 @onready var radial_field: RadialFieldComponent = $RadialFieldComponent
 
-@export var stats: AttractorStats
+@export var stats: RepulsorStats
 
 func _ready() -> void:
 	_initialize()
@@ -13,10 +13,10 @@ func _ready() -> void:
 
 func _initialize() -> void:
 	if not stats:
-		push_error("%s requires an AttractorStats resource" % name)
+		push_error("%s requires a RepulsorStats resource" % name)
 		return
 	initialize_base(stats)
-	radial_field.configure(stats.attack_range, stats.attack_cooldown, stats.windup_duration, stats.pull_duration, stats.pull_speed, stats.enemy_pull_multiplier, stats.player_pull_multiplier, stats.inner_dead_zone, stats.edge_pull_fraction, stats.damage, false, false)
+	radial_field.configure(stats.attack_range, stats.attack_cooldown, stats.windup_duration, stats.push_duration, stats.push_speed, stats.enemy_push_multiplier, stats.player_push_multiplier, stats.inner_dead_zone, stats.edge_push_fraction, stats.damage, true, true)
 	range_indicator.initialize(stats.attack_range, stats.inner_dead_zone)
 
 func _on_combat_started() -> void:
@@ -30,7 +30,7 @@ func _before_death_animation() -> void:
 
 func _stop_targeting_player() -> void:
 	pass
-	
+
 func _on_field_windup_started() -> void:
 	var speed := animation.get_animation_length("pulse") / stats.windup_duration
 	if not animation.play_animation("pulse", -1, speed):

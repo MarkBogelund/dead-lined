@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="TurretEntry" format=3 uid="uid://rfk7oh0drurg"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/turrets/repulsor_ghost.tscn" id="1_ghost"]
+[ext_resource type="Texture2D" uid="uid://c6nneksvj1icb" path="res://assets/sprites/turrets/repulsor.png" id="2_icon"]
+[ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="3_entry"]
+[ext_resource type="PackedScene" uid="uid://72ib1sispqd2" path="res://scenes/world/turrets/repulsor.tscn" id="4_turret"]
+[ext_resource type="Resource" uid="uid://bkudpixa82gkd" path="res://resources/turrets/repulsor/repulsor_stats.tres" id="5_stats"]
+
+[resource]
+script = ExtResource("3_entry")
+name = "Repulsor"
+icon = ExtResource("2_icon")
+price = 25
+turret_scene = ExtResource("4_turret")
+ghost_scene = ExtResource("1_ghost")
+stats = ExtResource("5_stats")
+outline_start_color = Color(0.30581033, 0.59851146, 0.88996404, 1)
+outline_end_color = Color(0.6185153, 0.78493476, 0.96010774, 1)
+exclusion_radius = 50.0

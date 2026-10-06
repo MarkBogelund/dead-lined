@@ -18,6 +18,7 @@ var _is_resolving_hit := false
 var _is_despawning := false
 
 func _ready() -> void:
+	add_to_group("projectiles")
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("despawn", 1, true)
 	animation.configure_animation("hit", 2, true)
@@ -72,6 +73,18 @@ func set_orientation(pos: Vector2, rot: float, dir: Vector2) -> void:
 	global_position = pos
 	rotation = rot
 	direction = dir
+
+func deflect_away_from(origin: Vector2) -> bool:
+	if _is_resolving_hit or _is_despawning:
+		return false
+	var away_direction := global_position - origin
+	if away_direction.is_zero_approx():
+		if direction.is_zero_approx():
+			return false
+		away_direction = - direction
+	direction = away_direction.normalized()
+	rotation = direction.angle()
+	return true
 	
 func set_parameters(speed: float, damage: int, knockback: float, lifetime: float) -> void:
 	projectile_speed = speed

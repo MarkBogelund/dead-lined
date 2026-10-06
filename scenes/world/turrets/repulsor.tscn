@@ -1,13 +1,13 @@
-[gd_scene format=3 uid="uid://dubljk44k0e6a"]
+[gd_scene format=3 uid="uid://72ib1sispqd2"]
 
 [ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://hgsnf28l0iiv" path="res://scripts/world/entities/turret/attractor.gd" id="2_script"]
-[ext_resource type="Resource" uid="uid://gy2f0ousx2x" path="res://resources/turrets/attractor/attractor_stats.tres" id="3_stats"]
-[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_ot8ax"]
-[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="5_hd4u5"]
-[ext_resource type="Texture2D" uid="uid://u1w102wbgrb4" path="res://assets/sprites/turrets/shockwaver-shadow.png" id="5_shadow"]
+[ext_resource type="Script" uid="uid://47dhbp55kuk0" path="res://scripts/world/entities/turret/repulsor.gd" id="2_repulsor"]
+[ext_resource type="Resource" uid="uid://bkudpixa82gkd" path="res://resources/turrets/repulsor/repulsor_stats.tres" id="3_stats"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_mporl"]
+[ext_resource type="Texture2D" uid="uid://c6nneksvj1icb" path="res://assets/sprites/turrets/repulsor.png" id="4_sprite"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_shadow"]
+[ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_aanik"]
 [ext_resource type="Script" uid="uid://cpmtyi8xjm5bd" path="res://scripts/world/entities/turret/radial_field.gd" id="6_field"]
-[ext_resource type="Texture2D" uid="uid://bvbj6yjifao5j" path="res://assets/sprites/turrets/attractor.png" id="6_ot8ax"]
 
 [sub_resource type="Animation" id="Pulse"]
 resource_name = "pulse"
@@ -51,17 +51,17 @@ tracks/2/keys = {
 "values": [0.0, 1.0, 0.0]
 }
 
-[sub_resource type="AnimationLibrary" id="PulseLibrary"]
+[sub_resource type="AnimationLibrary" id="RepulsorLibrary"]
 _data = {
 &"pulse": SubResource("Pulse")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2c5k4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0pvw"]
 resource_local_to_scene = true
-shader = ExtResource("4_ot8ax")
-shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader = ExtResource("4_mporl")
+shader_parameter/shockwave_color = Color(1, 1, 1, 1)
 shader_parameter/current_radius = 16.0
-shader_parameter/ring_thickness = 4.0
+shader_parameter/ring_thickness = 3.0
 shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
@@ -70,9 +70,9 @@ shader_parameter/canvas_size = Vector2(40, 40)
 [sub_resource type="CircleShape2D" id="DetectionShape"]
 radius = 110.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qjmdj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nh4c3"]
 resource_local_to_scene = true
-shader = ExtResource("5_hd4u5")
+shader = ExtResource("6_aanik")
 shader_parameter/gold_amount = 0.0
 shader_parameter/gold_dark = Color(0.42, 0.25, 0.04, 1)
 shader_parameter/gold_light = Color(1, 0.86, 0.36, 1)
@@ -99,56 +99,38 @@ shader_parameter/glitch_duty = 0.35
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hd4u5"]
-atlas = ExtResource("6_ot8ax")
-region = Rect2(0, 0, 24, 24)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_spl43"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hd4u5")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 5.0
-}]
-
-[node name="Attractor" unique_id=600983979 instance=ExtResource("1_base")]
-script = ExtResource("2_script")
+[node name="Repulsor" unique_id=1530580149 instance=ExtResource("1_base")]
+script = ExtResource("2_repulsor")
 stats = ExtResource("3_stats")
-death_burnout_progress = 1.0
-
-[node name="HealthUIComponent" parent="." index="2" unique_id=782964572]
-health_component = NodePath("../HealthComponent")
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
-libraries/attractor = SubResource("PulseLibrary")
+libraries/repulsor = SubResource("RepulsorLibrary")
 
 [node name="Flash" parent="." index="11" unique_id=850017021]
-material = SubResource("ShaderMaterial_2c5k4")
+material = SubResource("ShaderMaterial_x0pvw")
 
-[node name="RadialFieldComponent" type="Node2D" parent="." index="14" unique_id=504814838]
+[node name="RadialFieldComponent" type="Node2D" parent="." index="14" unique_id=1915400174]
 script = ExtResource("6_field")
-windup_color = Color(1, 0.4, 0.21960784, 0.47843137)
-active_color = Color(1, 0.36078432, 0.2, 0.61960787)
+windup_color = Color(0.45882353, 0.9411765, 0.8117647, 0.5882353)
+active_color = Color(0.5647059, 0.99607843, 0.8156863, 0.5882353)
+line_width = 3.0
 
-[node name="DetectionArea" type="Area2D" parent="RadialFieldComponent" index="0" unique_id=1123578361]
+[node name="DetectionArea" type="Area2D" parent="RadialFieldComponent" index="0" unique_id=1045193190]
 collision_layer = 0
-collision_mask = 10
+collision_mask = 30
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RadialFieldComponent/DetectionArea" index="0" unique_id=659442236]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RadialFieldComponent/DetectionArea" index="0" unique_id=1219118270]
 shape = SubResource("DetectionShape")
 
 [node name="Visuals" parent="." index="15" unique_id=1113068187]
-material = SubResource("ShaderMaterial_qjmdj")
+material = SubResource("ShaderMaterial_nh4c3")
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1128852253]
-z_index = 1
+[node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=226118885]
 use_parent_material = true
-sprite_frames = SubResource("SpriteFrames_spl43")
+texture = ExtResource("4_sprite")
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=2077226136]
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=293290236]
 modulate = Color(0, 0, 0, 0.46)
+position = Vector2(0, 11)
 texture = ExtResource("5_shadow")

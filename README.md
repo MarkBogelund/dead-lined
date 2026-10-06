@@ -263,7 +263,11 @@ The shop station's `ToggleMenuComponent` opens [shop_panel.tscn](scenes/ui/shop_
 
 ### Attractor Prototype
 
-[attractor.tscn](scenes/world/turrets/attractor.tscn) inherits TurretBase and is registered through [attractor_shop_details.tres](resources/turrets/attractor/attractor_shop_details.tres). `MagneticFieldComponent` ([magnetic_field.gd](scripts/world/entities/turret/magnetic_field.gd)) owns `READY → WINDUP → PULLING → COOLDOWN`, target overlap, one pulse hit, distance-falloff pull, procedural field drawing, source cleanup, and player inclusion. It communicates only through the external-velocity and `was_hit()` contracts. `Attractor` owns phase enable/disable, pulse-animation admission, upgrade forwarding, and max-level player exclusion; blocked pulse animation cancels windup rather than stranding the component. [attractor_stats.tres](resources/turrets/attractor/attractor_stats.tres) owns windup, pull duration and speed, player/enemy multipliers, inner dead zone, edge falloff, high health, light pulse damage, range, cooldown, repair, and four upgrades. The ghost previews magnetic range and exclusion radius. Body/shop art temporarily reuses a teal-tinted Shockwaver atlas region; replace the body, shadow, ghost texture, and shop icon when final art arrives without changing behavior.
+[attractor.tscn](scenes/world/turrets/attractor.tscn) inherits TurretBase and is registered through [attractor_shop_details.tres](resources/turrets/attractor/attractor_shop_details.tres). The shared `RadialFieldComponent` ([radial_field.gd](scripts/world/entities/turret/radial_field.gd)) owns `READY → WINDUP → ACTIVE → COOLDOWN`, target overlap, radial force falloff, source cleanup, optional projectile deflection, and field drawing. Attractor configures its inward mode without projectile interaction; [attractor_stats.tres](resources/turrets/attractor/attractor_stats.tres) retains its pull tuning.
+
+### Repulsor
+
+[repulsor.tscn](scenes/world/turrets/repulsor.tscn) uses the same `RadialFieldComponent` in outward mode. While active, it pushes enemies and the player through external velocity and deflects each overlapping shared `Projectile` once per pulse, preserving speed and collision behavior. Projectiles expose `deflect_away_from()` and join the `projectiles` group; MortarStrike remains unaffected. [repulsor_stats.tres](resources/turrets/repulsor/repulsor_stats.tres) owns push strength, falloff, active duration, range, cooldown, health, and upgrades. The turret, ghost, and shop use the dedicated Repulsor art.
 
 ---
 
