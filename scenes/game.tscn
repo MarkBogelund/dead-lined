@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c1up8f3hcb17m" path="res://scenes/world/player/player.tscn" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://bmidkhfa5not2" path="res://scripts/systems/wave_manager.gd" id="2_kvuet"]
 [ext_resource type="Resource" uid="uid://bomuvf4stnxjw" path="res://resources/waves/wave_settings.tres" id="2_wave_settings"]
-[ext_resource type="PackedScene" uid="uid://s8g2np38nwj7" path="res://scenes/world/environment/enemy_spawner.tscn" id="3_lnu2h"]
+[ext_resource type="PackedScene" path="res://scenes/world/environment/spawn_point.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bkervm4vmc0wh" path="res://scripts/systems/turret_placer.gd" id="4_ca42v"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/world/environment/shop_station.tscn" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
@@ -39,9 +39,14 @@
 [ext_resource type="Resource" uid="uid://d2wslyeclub3r" path="res://resources/turrets/piercer/piercer_shop_details.tres" id="37_piercer_shop"]
 [ext_resource type="Resource" uid="uid://rfk7oh0drurg" path="res://resources/turrets/repulsor/repulsor_shop_details.tres" id="38_repulsor_shop"]
 [ext_resource type="Resource" uid="uid://dvdr6uoptc538" path="res://resources/turrets/linker/linker_shop_details.tres" id="39_linker_shop"]
-[ext_resource type="PackedScene" path="res://scenes/world/environment/boss_spawner.tscn" id="40_boss_spawner"]
+[ext_resource type="Script" uid="uid://gewjpdkftl88" path="res://scripts/systems/spawn_manager.gd" id="40_spawn_manager"]
 [ext_resource type="Script" uid="uid://du0rvecuvnlry" path="res://scripts/data/enemy_spawn_entry.gd" id="41_boss_entry_type"]
 [ext_resource type="Resource" uid="uid://xeux7dgus2i2" path="res://resources/enemies/bulwark/bulwark_spawn.tres" id="42_bulwark_spawn"]
+[ext_resource type="Resource" uid="uid://bpy3pb1cm1tg1" path="res://resources/enemies/chaser/chaser_spawn_details.tres" id="43_chaser_spawn"]
+[ext_resource type="Resource" uid="uid://cq5r8y2nwx7ih" path="res://resources/enemies/stalker/stalker_spawn_details.tres" id="44_stalker_spawn"]
+[ext_resource type="Resource" uid="uid://cx3hxt45w3uit" path="res://resources/enemies/kamikazer/kamikazer_spawn_details.tres" id="45_kamikazer_spawn"]
+[ext_resource type="Resource" uid="uid://1betm04mhcru" path="res://resources/enemies/shotgunner/shotgunner_spawn_details.tres" id="46_shotgunner_spawn"]
+[ext_resource type="Resource" uid="uid://d20ovxmdp055t" path="res://resources/enemies/emitter/emitter_spawn_details.tres" id="47_emitter_spawn"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -227,15 +232,20 @@ unique_name_in_owner = true
 script = ExtResource("4_ca42v")
 metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 
-[node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 node_paths=PackedStringArray("boss_spawner") groups=["wave_manager"]]
+[node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]
 unique_name_in_owner = true
 script = ExtResource("2_kvuet")
 settings = ExtResource("2_wave_settings")
-bosses = Array[ExtResource("41_boss_entry_type")]([ExtResource("42_bulwark_spawn")])
-boss_spawner = NodePath("BossSpawner")
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
-[node name="BossSpawner" parent="Systems/WaveManager" unique_id=1803196919 instance=ExtResource("40_boss_spawner")]
+[node name="SpawnManager" type="Node" parent="Systems" unique_id=1944150825 node_paths=PackedStringArray("spawn_points", "enemy_container") groups=["spawn_manager"]]
+unique_name_in_owner = true
+script = ExtResource("40_spawn_manager")
+enemy_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("43_chaser_spawn"), ExtResource("44_stalker_spawn"), ExtResource("45_kamikazer_spawn"), ExtResource("46_shotgunner_spawn"), ExtResource("47_emitter_spawn")])
+spawn_points = [NodePath("../../World/SpawnPointNorthwest"), NodePath("../../World/SpawnPointSoutheast")]
+enemy_container = NodePath("../../World")
+boss_every_nth_round = 5
+boss_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("42_bulwark_spawn")])
 
 [node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]
 unique_name_in_owner = true
@@ -562,11 +572,11 @@ limit_smoothed = true
 position_smoothing_enabled = true
 script = ExtResource("30_game_camera")
 
-[node name="EnemySpawnerNorthwest" parent="World" unique_id=1819254735 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
+[node name="SpawnPointNorthwest" parent="World" unique_id=1819254735 instance=ExtResource("3_lnu2h")]
 position = Vector2(-288, -264)
 spawn_intro_distance = 60.0
 
-[node name="EnemySpawnerSoutheast" parent="World" unique_id=113296114 groups=["enemy_spawners"] instance=ExtResource("3_lnu2h")]
+[node name="SpawnPointSoutheast" parent="World" unique_id=113296114 instance=ExtResource("3_lnu2h")]
 position = Vector2(288, 256)
 spawn_intro_direction = Vector2(0, -1)
 
@@ -616,3 +626,8 @@ z_index = 1
 metadata/_edit_lock_ = true
 
 [node name="PauseMenu" parent="UI" unique_id=48360480 instance=ExtResource("27_qnb83")]
+
+[connection signal="build_phase_started" from="Systems/WaveManager" to="Systems/SpawnManager" method="cancel_wave"]
+[connection signal="combat_phase_started" from="Systems/WaveManager" to="Systems/SpawnManager" method="start_wave"]
+[connection signal="enemy_defeated" from="Systems/SpawnManager" to="Systems/ScoreManager" method="_on_drone_destroyed"]
+[connection signal="wave_cleared" from="Systems/SpawnManager" to="Systems/WaveManager" method="_on_wave_cleared"]

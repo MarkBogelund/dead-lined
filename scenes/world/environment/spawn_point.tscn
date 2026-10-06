@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/spawners/spawn_point.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/waves/conveyor_settings.tres" id="2"]
+
+[node name="SpawnPoint" type="Marker2D"]
+script = ExtResource("1")
+conveyor_settings = ExtResource("2")

@@ -22,11 +22,6 @@ var last_wave_survived := 0
 func _ready() -> void:
 	wave_manager.build_phase_started.connect(_on_build_phase_started)
 	call_deferred("_connect_player_signals")
-	# Connect to all enemy spawners for enemy death tracking
-	var enemy_spawners := get_tree().get_nodes_in_group("enemy_spawners")
-	for spawner in enemy_spawners:
-		if spawner.has_signal("enemy_spawned"):
-			spawner.enemy_spawned.connect(_on_enemy_spawned)
 
 func _connect_player_signals() -> void:
 	_player.crunch_time.crunch_time_ended.connect(_on_crunch_time_ended)
@@ -35,11 +30,6 @@ func _on_build_phase_started() -> void:
 	var current_wave := wave_manager.get_current_wave()
 	if current_wave > 0:
 		last_wave_survived = current_wave
-
-func _on_enemy_spawned(enemy: Node) -> void:
-	# Connect to enemy's death signal, capturing the enemy reference for position
-	if enemy.has_signal("died"):
-		enemy.died.connect(func() -> void: _on_drone_destroyed(enemy))
 
 func _on_drone_destroyed(enemy: Node) -> void:
 	drones_destroyed += 1

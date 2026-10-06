@@ -7,11 +7,6 @@ signal build_phase_tick(time_left: float)
 
 @export var settings: WaveSettings
 
-@export_group("Boss Waves")
-## Temporary boss test: one enabled boss is spawned at world (0, 0) on the first wave.
-@export var bosses: Array[EnemySpawnEntry] = []
-@export var boss_spawner: BossSpawner
-
 var _current_phase: Phase = Phase.BUILD
 var _phase_timer := 0.0
 var _wave_index := 0
@@ -43,7 +38,6 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	await get_tree().process_frame
-	_connect_enemy_spawners()
 	_enter_build_phase()
 
 func _process(delta: float) -> void:
@@ -54,46 +48,19 @@ func _process(delta: float) -> void:
 	if _phase_timer <= 0.0:
 		_enter_combat_phase()
 
-func _connect_enemy_spawners() -> void:
-	for spawner: Node in get_tree().get_nodes_in_group("enemy_spawners"):
-		if spawner is EnemySpawner:
-			(spawner as EnemySpawner).wave_spawning_finished.connect(_on_wave_spawning_finished)
-
 func _enter_build_phase() -> void:
 	_current_phase = Phase.BUILD
 	_phase_timer = maxf(0.0, settings.build_phase_duration)
-	if boss_spawner:
-		boss_spawner.cancel_boss_spawn()
 	build_phase_started.emit()
 
 func _enter_combat_phase() -> void:
 	_current_phase = Phase.COMBAT
 	_wave_index += 1
-	var boss_entry := _pick_boss(_wave_index)
-	if boss_entry and boss_spawner:
-		boss_spawner.start_boss_spawn(_wave_index, boss_entry)
 	combat_phase_started.emit(_wave_index)
 
-func _pick_boss(wave_index: int) -> EnemySpawnEntry:
-	if wave_index != 1:
-		return null
-	var unlocked: Array[EnemySpawnEntry] = []
-	for entry: EnemySpawnEntry in bosses:
-		if entry and entry.enabled and entry.enemy_scene:
-			unlocked.append(entry)
-	return unlocked.pick_random() if not unlocked.is_empty() else null
+func _on_wave_cleared(wave_index: int) -> void:
+	call_deferred("_finish_wave", wave_index)
 
-func _on_enemy_died() -> void:
-	call_deferred("_try_finish_combat_phase")
-
-func _on_wave_spawning_finished() -> void:
-	call_deferred("_try_finish_combat_phase")
-
-func _try_finish_combat_phase() -> void:
-	if _current_phase != Phase.COMBAT:
-		return
-	for spawner: Node in get_tree().get_nodes_in_group("enemy_spawners"):
-		if spawner is EnemySpawner and (spawner as EnemySpawner).is_spawning():
-			return
-	if get_tree().get_nodes_in_group("enemies").is_empty():
+func _finish_wave(wave_index: int) -> void:
+	if _current_phase == Phase.COMBAT and _wave_index == wave_index:
 		_enter_build_phase()

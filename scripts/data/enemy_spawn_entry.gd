@@ -5,7 +5,7 @@ class_name EnemySpawnEntry
 @export var enemy_scene: PackedScene
 
 @export_group("Wave Amount")
-## Number spawned on the introduction wave.
+## Total number spawned across all spawn points on the introduction wave.
 @export_range(0, 1000, 1) var base_amount: int = 1
 ## First wave on which this enemy can spawn.
 @export_range(1, 1000, 1) var introduction_wave: int = 1

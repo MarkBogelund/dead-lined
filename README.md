@@ -78,7 +78,7 @@ Four layers, signals flow **outward/upward**, direct calls flow **downward** to 
 
 ```text
 UI          → reacts to signals, never mutates gameplay state directly
-Systems     → WaveManager, ShopManager, ScoreManager, GameOverManager, TimeScaleManager (scene-local); MenuManager, PostProcessingManager, and InputManager (autoloads)
+Systems     → WaveManager, SpawnManager, ShopManager, ScoreManager, GameOverManager, TimeScaleManager (scene-local); MenuManager, PostProcessingManager, and InputManager (autoloads)
 World       → Player / enemies / turrets — orchestrator scripts composing components
 Data        → Resource (.tres) subclasses — stats, never hold logic
 ```
@@ -125,11 +125,9 @@ Transient turret behavior animations key `Visuals:material:shader_parameter/flas
 
 ### Bulwark
 
-Focused regression checks: run Godot with `--headless --path . --fixed-fps 60 res://tests/bulwark_tests.tscn --quit-after 1200`. The test scene checks armor/UI behavior, real bypass hit detection, immediate wave-one spawning at world zero, and boss death/wave completion.
+Focused regression checks: run Godot with `--headless --path . --fixed-fps 60 res://tests/bulwark_tests.tscn --quit-after 1200`. The test scene covers armor/UI behavior, real bypass hit detection, boss intervals, balanced shuffled spawn distribution, entry/scaling, cancellation, scoring, and wave completion.
 
-Temporary Bulwark test setup: `WaveManager` spawns one enabled boss from its `Bosses` array at world `(0, 0)` immediately when combat wave 1 starts. `Bosses` currently contains [bulwark_spawn.tres](resources/enemies/bulwark/bulwark_spawn.tres). There is no interval gate, introduction-wave gate, random location search, spawn telegraph, or materialization delay in this test path. Further waves do not spawn additional bosses. Random placement and production scheduling are deferred until Bulwark gameplay is verified.
-
-[BossSpawner](scripts/world/spawners/boss_spawner.gd) remains an owned child of `WaveManager`, using the existing `EnemySpawner` scaling, death wiring, and score signal. It immediately places the selected boss at world zero; the live boss remains in the enemy group and prevents premature wave completion. This intentionally fixed spawn may overlap existing geometry or actors and is only a temporary gameplay-testing setup.
+`SpawnManager` owns boss scheduling and its separate `Boss Entries` array, currently containing [bulwark_spawn.tres](resources/enemies/bulwark/bulwark_spawn.tres). `Boss Every Nth Round` selects one random enabled, introduced boss on each eligible wave (zero disables it). It is set to 1 for Bulwark testing. Bosses still appear immediately at world `(0, 0)` without location checks or telegraphs; random boss placement is deferred. This fixed testing spawn can overlap actors or geometry.
 
 [bulwark.tscn](scenes/world/enemies/bulwark.tscn) inherits EnemyBase and uses the dedicated Bulwark sprite, player-only targeting, existing navigation/contact damage, and a `DirectionalArmorComponent` that owns facing, frontal reduction, incoming-damage stress, delayed decay, and timed armor breaking. [bulwark_stats.tres](resources/enemies/bulwark/bulwark_stats.tres) owns gameplay tuning. The thin enemy root forwards armor signals to its independent shield visual and reused `HealthUIComponent`: the normal health fill displays HP, the secondary fill is red armor stress (full while broken), and the level label is hidden. Other HealthUI users retain their normal cooldown color and level display. Rings/explosions and Piercer call `was_hit_bypassing_armor()` when available; EnemyBase defaults that method to ordinary hit handling and Bulwark explicitly bypasses its armor, without changing the existing three-argument hit contract.
 
@@ -168,7 +166,7 @@ Use [enemy_base.tscn](scenes/world/entities/enemy_base.tscn) as the starting tem
 5. Add a second library to `AnimationHandler` (e.g. `libraries/chaser`) with the enemy's `idle` and attack clips, plus its own `RESET` for tracks it animates. `AnimationHandler` applies the `RESET` of every library before each animation, so interrupted clips (e.g. windup particles) are restored.
 6. Add a script extending `EnemyBase` with `@export var stats` (an `EnemyStats` subclass). Call `_initialize_base(stats)` (health, drops, and registration of the shared animations at priorities spawn 0, `take_damage` 2, `die` 3), then configure components and register the enemy's own animations (`idle` 0, attacks 1). Override `buff_damage()`, and `_before_handle_damage()` / `_before_handle_death()` to cancel attacks.
 7. Override inherited node properties only where needed (e.g. Stalker sets `NavigationComponent.target_desired_distance`, Kamikazer sets the root `collision_mask`, each enemy sets its `HitParticles.process_material`).
-8. Add a spawn entry resource under `resources/enemies/<enemy>/` and list it in [enemy_spawn_stats.tres](resources/waves/enemy_spawn_stats.tres).
+8. Add an `EnemySpawnEntry` resource under `resources/enemies/<enemy>/` and list it in `Systems > SpawnManager > Enemy Entries` (or `Boss Entries`) in [game.tscn](scenes/game.tscn).
 
 Ranged enemies share `RangedEnemyStats` (preferred distance, aim, shoot range, cooldown, projectile speed). Movement is a goal-provider component per enemy; the enemy script always walks to the returned goal through `NavigationComponent.get_safe_velocity()`:
 
@@ -227,7 +225,7 @@ Targeting uses one generic `TargetingComponent` ([targeting.gd](scripts/world/en
 A few places intentionally cross the strict ownership boundary because the added indirection isn't worth it for a single-scene game:
 
 - Turret repair drains player capacity directly (`repair.capacity_drained.connect(player.capacity.spend)`) rather than going through an event/coordinator layer.
-- Spawners and factories (`ShootComponent`, `EnemySpawner`, `TurretPlacer`) call `get_tree().current_scene.add_child(...)` directly instead of routing through a dedicated spawn coordinator.
+- Factories (`ShootComponent`, `TurretPlacer`) call `get_tree().current_scene.add_child(...)` directly. Enemy spawning is centralized in `SpawnManager` with an injected destination container; another coordinator for the remaining projectile/placement factories adds no value in this single-scene game.
 - `OrbDropComponent.drop()` looks up the player via `get_tree().get_first_node_in_group("player")` and reads `player.crunch_time.is_crunch_time_active()` directly to skip orb and powerup drops during crunch time, instead of the player broadcasting a "no drops" event enemies subscribe to.
 - `PostProcessingManager` is an autoload with a direct global call API because color overlays and full-screen effects are cross-cutting presentation used by unrelated gameplay/UI owners; a scene-local bus plus coordinator would add indirection while still requiring one persistent compositor.
 - `TurretBase` reads the `repair` input directly (`Input.is_action_pressed`) instead of the player routing it to the nearest turret; with at most a handful of turrets, a player-side turret selection layer would add more indirection than value.
@@ -237,7 +235,7 @@ These are acceptable trade-offs, not bugs — revisit only if the game grows mul
 
 ### Enemy spawn intro
 
-`EnemySpawner` instances can sit outside the playable area and expose `spawn_intro_direction` plus `spawn_intro_distance`. A spawned `EnemyBase` is initially non-colliding, invulnerable, AI-disabled, and visually held on the first idle frame while its root is tweened from the spawner position to the release position. Sleep/wake visuals are the `spawn_sleep` and `spawn_wake` animations in `enemy_base.tscn`: sleep tints `Visuals` grey, and wake fades it back to normal. On arrival, `EnemyBase` restores collision, contact damage, animation, and normal physics processing, then plays `spawn_wake`. The tween duration is derived as `spawn_intro_distance / ConveyorSettings.enemy_movement_speed`, so its world-space speed matches enemy conveyor movement exactly. This is presentation owned by the spawner and shared enemy base; individual enemy AI scripts do not contain spawn-entry behavior.
+`SpawnPoint` markers sit outside the playable area and own only `spawn_intro_direction`, `spawn_intro_distance`, and their conveyor settings. `SpawnManager` instantiates and assigns each enemy, then calls the selected point's `send_in(enemy)`. The point asks the assigned `EnemyBase` to perform its existing non-colliding, invulnerable, AI-disabled entrance tween and sleep/wake visuals. Intro duration is distance divided by `ConveyorSettings.enemy_movement_speed`. On arrival, EnemyBase restores collision, contact damage, and AI. Points contain no enemy configuration, queues, scaling, timing, boss selection, or wave subscriptions.
 
 Conveyor belts are inline `Area2D` components in the level scene, not standalone scenes. Each uses [scripts/world/spawners/conveyor_belt.gd](scripts/world/spawners/conveyor_belt.gd), detects PlayerBody and EnemyBody layers, and owns a child `CollisionShape2D` whose dimensions are currently authored in the level scene. Both the belt and spawner reference [resources/waves/conveyor_settings.tres](resources/waves/conveyor_settings.tres), the single source of truth for `enemy_movement_speed` and `player_movement_speed`. The belt talks to bodies only through `set_conveyor_velocity()` / `clear_conveyor_velocity()`; while overlapping, the matching conveyor velocity is added to normal player/enemy movement so they can steer off the belt. The spawn tween remains responsible for crossing the outer wall while collision is disabled.
 
@@ -249,9 +247,11 @@ Build-phase duration is configured in [resources/wave_settings.tres](resources/w
 
 The phase lever ([lever.tscn](scenes/world/environment/lever.tscn), [lever.gd](scripts/world/environment/lever.gd)) listens directly to `WaveManager` phase signals. Build phase sets its editable `build_phase_color` (green) and plays low-priority `swing_left`; combat phase sets `combat_phase_color` (red) and plays locking, higher-priority `swing_right`. During build phase, its Area2D opts into the generic player-projectile `receive_player_projectile_hit()` contract; an accepted hit calls `WaveManager.skip_build_phase()`, resolves that projectile, and ignores duplicate requests until the next build phase. In combat the contract returns false, so player projectiles pass through.
 
-Each `EnemySpawner` builds a finite shuffled queue from [resources/waves/enemy_spawn_stats.tres](resources/waves/enemy_spawn_stats.tres) and spawns it at the configured interval. Each enemy entry owns its enabled state, introduction wave, base amount, multiplicative per-wave amount growth, and cumulative health multiplier interval. Counts are per spawner.
+`WaveManager` and [SpawnManager](scripts/systems/spawn_manager.gd) are siblings under `Game > Systems`. Scene connections forward combat start to `start_wave()`, build start to `cancel_wave()`, and `wave_cleared(wave_index)` back to WaveManager. Neither manager directly controls its sibling. ScoreManager receives the single `enemy_defeated` event instead of subscribing separately to enemy death signals.
 
-Combat ends only after every spawner finishes its queue and all spawned enemies are dead (not on a timer—victory requires clearing enemies). Pickups remain during build phase and are cleared when the next combat phase begins.
+Configure `Systems > SpawnManager` in [game.tscn](scenes/game.tscn): `Enemy Entries`, `Boss Entries`, `Spawn Points`, `Time Between Spawns`, `Damage Growth`, and `Boss Every Nth Round`. Existing `EnemySpawnEntry` resources own enabled state, introduction wave, wave-wide base amount, growth, and health scaling. The manager builds one shuffled queue and shuffles point order every round, assigning queue entries round-robin; point totals differ by at most one while enemy types and the extra-enemy recipient vary randomly. Adding a point redistributes the configured total instead of multiplying it.
+
+Migration from two autonomous spawners sets normal entries' base amounts to 2 and the global interval to 0.75 seconds, preserving initial totals and the previous average rate of two enemies per 1.5 seconds. Later growth rounds once per global total, rather than independently per point. SpawnManager owns instantiation into its injected `World` container, health/damage scaling, live-enemy tracking, pending queue state, and generation-based cancellation. It signals completion only when the queue is exhausted and no tracked enemies remain; stale deaths and cancelled schedules cannot finish another wave. Pickups retain their existing phase lifecycle.
 
 ### Type-safety standard
 
@@ -308,7 +308,7 @@ Linker's last-target range circle fades in using the laser child's `telegraph_fa
 No automated test framework is installed yet. Godot's community standard is **GUT (Godot Unit Test)**, run headlessly.
 
 Worth unit-testing (pure logic, no input/physics/timing dependency):
-`CapacityComponent`, `HealthComponent`, `RepairComponent`, `TargetingComponent`, wave-scaling math in `EnemySpawner`.
+`CapacityComponent`, `HealthComponent`, `RepairComponent`, `TargetingComponent`, queue/distribution/scaling and cancellation in `SpawnManager`.
 
 Not worth automating: movement feel, animation timing, camera shake, turret-placement UX — these need manual play-testing.
 

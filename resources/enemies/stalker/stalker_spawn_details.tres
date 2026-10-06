@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("1_185mx")
 enemy_scene = ExtResource("2_stalker")
+base_amount = 2
 amount_multiplier_per_wave = 1.2
 health_multiplier = 1.2
 health_multiplier_every_n_waves = 3
