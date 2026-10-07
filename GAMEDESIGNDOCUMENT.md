@@ -117,6 +117,8 @@ Bosses are tankier than normal enemies and each has one clear mechanic that chan
 
 Bulwark's intact shield intercepts ordinary shots and prevents knockback from protected hits, including the hit that breaks its armor. Hits to exposed sides or broken armor can knock it back; piercing shots and radial blasts retain their armor-bypassing behavior.
 
+Bulwark can pursue and face turrets like other enemies, but favors the player more strongly: it prioritizes the player within 120 px, switches to a turret only when it is at least 100 px closer, and returns to the player once the player is within 60 px of that turret's distance.
+
 - **Bulwark:** A slow, high-health boss with directional frontal armor that turns toward the player and reduces, rather than blocks, incoming frontal damage. The player baits its facing away from the main turret formation so turrets can attack exposed sides; sustained frontal fire fills its red stress meter and temporarily breaks the armor. Its health display shows health above stress; stress stays full while broken, then resets on reformation. Rings, explosions, and piercing shots bypass armor; displacement and knockback disrupt its positioning. Initial tuning: 300 health, 25 movement speed, 60 degrees/second turning, 120-degree armor arc, 75% frontal reduction, 30 incoming damage to break, 4 seconds broken, and stress decay after a quiet period.
 
 ### Unfinished Boss Enemies

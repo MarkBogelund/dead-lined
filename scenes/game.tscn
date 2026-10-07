@@ -238,11 +238,13 @@ script = ExtResource("2_kvuet")
 settings = ExtResource("2_wave_settings")
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
-[node name="SpawnManager" type="Node" parent="Systems" unique_id=1944150825 node_paths=PackedStringArray("enemy_container") groups=["spawn_manager"]]
+[node name="SpawnManager" type="Node" parent="Systems" unique_id=1944150825 node_paths=PackedStringArray("spawn_points", "enemy_container") groups=["spawn_manager"]]
 unique_name_in_owner = true
 script = ExtResource("40_spawn_manager")
 enemy_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("43_chaser_spawn"), ExtResource("44_stalker_spawn"), ExtResource("45_kamikazer_spawn"), ExtResource("46_shotgunner_spawn"), ExtResource("47_emitter_spawn")])
+spawn_points = [NodePath("../../World/SpawnPointNorthwest"), NodePath("../../World/SpawnPointSoutheast")]
 enemy_container = NodePath("../../World")
+boss_every_nth_round = 2
 boss_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("42_bulwark_spawn")])
 
 [node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]

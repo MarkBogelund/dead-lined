@@ -4,3 +4,8 @@
 
 [resource]
 script = ExtResource("1")
+secondary_group = &"turrets"
+primary_lock_radius = 120.0
+switch_to_secondary_margin = 100.0
+return_to_primary_margin = 60.0
+retarget_margin = 36.0

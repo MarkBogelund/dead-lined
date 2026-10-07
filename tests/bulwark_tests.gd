@@ -28,6 +28,10 @@ func _new_boss(at: Vector2) -> Bulwark:
 	return boss
 
 func _run() -> void:
+	await _test_targeting()
+	if "--targeting-only" in OS.get_cmdline_user_args():
+		get_tree().quit()
+		return
 	var boss := _new_boss(Vector2(1000, 1000))
 	var second := _new_boss(Vector2(2000, 2000))
 	assert(boss.health.max_health == 300)
@@ -130,6 +134,49 @@ func _run() -> void:
 	await _test_distribution()
 	print("PASS: all Bulwark checks")
 	get_tree().quit()
+
+func _test_targeting() -> void:
+	var authored := load("res://resources/enemies/bulwark/bulwark_targeting.tres") as TargetingProfile
+	var standard := load("res://resources/enemies/enemy_targeting.tres") as TargetingProfile
+	assert(authored.primary_group == standard.primary_group)
+	assert(authored.secondary_group == standard.secondary_group)
+	assert(authored.primary_lock_radius > standard.primary_lock_radius)
+	assert(authored.switch_to_secondary_margin > standard.switch_to_secondary_margin)
+	assert(authored.return_to_primary_margin > standard.return_to_primary_margin)
+	assert(authored.retarget_margin == standard.retarget_margin)
+	var profile := authored.duplicate() as TargetingProfile
+	profile.primary_group = &"bulwark_test_player"
+	profile.secondary_group = &"bulwark_test_turret"
+	var targeting := TargetingComponent.new()
+	add_child(targeting)
+	targeting.configure(profile)
+	var player := Node2D.new()
+	var turret := Node2D.new()
+	add_child(player)
+	add_child(turret)
+	player.add_to_group(profile.primary_group)
+	turret.add_to_group(profile.secondary_group)
+	player.position = Vector2(110, 0)
+	turret.position = Vector2(10, 0)
+	assert(targeting.get_best_target(Vector2.ZERO) == player)
+	player.position = Vector2(200, 0)
+	turret.position = Vector2(110, 0)
+	assert(targeting.get_best_target(Vector2.ZERO) == player)
+	player.position = Vector2(260, 0)
+	assert(targeting.get_best_target(Vector2.ZERO) == turret)
+	player.position = Vector2(175, 0)
+	assert(targeting.get_best_target(Vector2.ZERO) == turret)
+	player.position = Vector2(165, 0)
+	assert(targeting.get_best_target(Vector2.ZERO) == player)
+	player.remove_from_group(profile.primary_group)
+	assert(targeting.get_best_target(Vector2.ZERO) == turret)
+	turret.remove_from_group(profile.secondary_group)
+	assert(targeting.get_best_target(Vector2.ZERO) == null)
+	targeting.queue_free()
+	player.queue_free()
+	turret.queue_free()
+	await get_tree().process_frame
+	print("PASS: shared enemy targeting, stronger player lock/preference, turret switching, return hysteresis, and turret fallback without a player.")
 
 func _record_shield_hit(_amount: int, _origin: Vector2) -> void:
 	_shield_impacts += 1
