@@ -1,5 +1,16 @@
 extends Node
 
+class RecordingSafeSpot extends SafeSpotComponent:
+	var clear_points: Array[Vector2] = []
+	var clearance_checks := 0
+
+	func is_point_clear(point: Vector2) -> bool:
+		clearance_checks += 1
+		var clear := super.is_point_clear(point)
+		if clear:
+			clear_points.append(point)
+		return clear
+
 const BULWARK_SCENE: PackedScene = preload("res://scenes/world/enemies/bulwark.tscn")
 const GAME_SCENE: PackedScene = preload("res://scenes/game.tscn")
 const PIERCER_SCENE: PackedScene = preload("res://scenes/world/turrets/piercer.tscn")
@@ -8,9 +19,11 @@ const CHASER_SCENE: PackedScene = preload("res://scenes/world/enemies/chaser.tsc
 const SHOTGUNNER_SCENE: PackedScene = preload("res://scenes/world/enemies/shotgunner.tscn")
 const PLAYER_PROJECTILE_SCENE: PackedScene = preload("res://scenes/world/projectiles/player_projectile.tscn")
 const TURRET_PROJECTILE_SCENE: PackedScene = preload("res://scenes/world/projectiles/turret_projectile.tscn")
+const EMITTER_SCENE: PackedScene = preload("res://scenes/world/enemies/emitter.tscn")
 
 var _spawned_boss: Bulwark
 var _boss_count := 0
+var _boss_spawn_position := Vector2.INF
 var _normal_spawns: Array[EnemyBase] = []
 var _spawn_positions: Array[Vector2] = []
 var _cleared_count := 0
@@ -30,6 +43,12 @@ func _new_boss(at: Vector2) -> Bulwark:
 func _run() -> void:
 	await _test_targeting()
 	if "--targeting-only" in OS.get_cmdline_user_args():
+		get_tree().quit()
+		return
+	if "--spawn-only" in OS.get_cmdline_user_args():
+		await _test_spawning()
+		await _test_distribution()
+		print("PASS: spawn-focused regressions")
 		get_tree().quit()
 		return
 	var boss := _new_boss(Vector2(1000, 1000))
@@ -250,6 +269,7 @@ func _test_shield_collisions() -> void:
 
 func _on_boss_spawned(enemy: EnemyBase) -> void:
 	_spawned_boss = enemy as Bulwark
+	_boss_spawn_position = enemy.global_position
 	_boss_count += 1
 
 func _test_spawning() -> void:
@@ -265,6 +285,17 @@ func _test_spawning() -> void:
 	manager.set_process(false)
 	player.set_process(false)
 	player.set_physics_process(false)
+	var turret := StaticBody2D.new()
+	turret.collision_layer = 32
+	turret.collision_mask = 0
+	var turret_collision := CollisionShape2D.new()
+	var turret_shape := CircleShape2D.new()
+	turret_shape.radius = 16.0
+	turret_collision.shape = turret_shape
+	turret.add_child(turret_collision)
+	turret.position = player.global_position + Vector2(70, 0)
+	add_child(turret)
+	turret.add_to_group("turrets")
 	spawner.enemy_spawned.connect(_on_boss_spawned)
 	assert(manager.get_parent() == spawner.get_parent())
 	assert(spawner.boss_entries.size() == 1)
@@ -280,10 +311,23 @@ func _test_spawning() -> void:
 	await get_tree().physics_frame
 	manager._wave_index = 0
 	manager._enter_combat_phase()
+	assert(spawner.is_spawning() and _boss_count == 0)
+	spawner._check_completion()
+	assert(manager.is_combat_phase())
+	await spawner.enemy_spawned
 	assert(_boss_count == 1 and _spawned_boss != null)
 	assert(manager.current_wave == 1)
-	assert(_spawned_boss.global_position == Vector2.ZERO)
-	assert(_spawned_boss.health.current_health == 300)
+	assert(_boss_spawn_position.is_finite())
+	var picker := spawner.boss_location_picker
+	assert(picker.require_wall_clearance)
+	assert((picker.clearance_collision_mask & 2) == 0)
+	assert(picker.is_wall_clear(_boss_spawn_position))
+	assert(_boss_spawn_position.distance_to(turret.global_position) >= picker.min_threat_distance)
+	assert(not picker.is_point_clear(turret.global_position))
+	var navigation_map := player.get_world_2d().navigation_map
+	var path := NavigationServer2D.map_get_path(navigation_map, player.global_position, _boss_spawn_position, true)
+	assert(not path.is_empty() and path[path.size() - 1].distance_to(_boss_spawn_position) <= 1.0)
+	assert(_spawned_boss.health.current_health == _spawned_boss.stats.max_health)
 	assert(_spawned_boss.health_ui.visible)
 	assert(not _spawned_boss._spawn_intro_active)
 	assert(not spawner.is_spawning())
@@ -300,7 +344,69 @@ func _test_spawning() -> void:
 	assert(manager.current_wave == 2)
 	await get_tree().process_frame
 	assert(_boss_count == 1)
-	print("PASS: sibling managers, configurable boss interval/pool, origin spawn, visible UI, live-boss completion gate, scoring, and boss disable.")
+	var threats := picker.get_threats([&"player", &"turrets", &"turrets"])
+	assert(threats.count(turret) == 1)
+	picker.min_threat_distance = 10000.0
+	assert(picker.pick_spot(navigation_map, 1, threats, player.global_position).is_finite())
+	var origin_fallback := picker.pick_spot(RID(), 1, threats, player.global_position)
+	assert(origin_fallback == player.global_position if picker.is_wall_clear(player.global_position) else not origin_fallback.is_finite())
+	var recorder := RecordingSafeSpot.new()
+	recorder.candidates = picker.candidates
+	recorder.min_threat_distance = 10000.0
+	recorder.clearance_radius = picker.clearance_radius
+	recorder.require_wall_clearance = picker.require_wall_clearance
+	recorder.clearance_collision_mask = picker.clearance_collision_mask
+	add_child(recorder)
+	var fallback := recorder.pick_spot(navigation_map, 1, threats, player.global_position)
+	assert(fallback.is_finite())
+	assert(recorder.clearance_checks <= recorder.candidates)
+	var fallback_distance := recorder.get_nearest_threat_distance(fallback, threats)
+	for point: Vector2 in recorder.clear_points:
+		var candidate_path := NavigationServer2D.map_get_path(navigation_map, player.global_position, point, true)
+		if not candidate_path.is_empty() and candidate_path[candidate_path.size() - 1].distance_to(point) <= 1.0:
+			assert(fallback_distance + 0.001 >= recorder.get_nearest_threat_distance(point, threats))
+	var cached_shape := recorder._clearance_shape
+	var cached_query := recorder._clearance_query
+	recorder.is_point_clear(turret.global_position)
+	assert(recorder._clearance_shape == cached_shape and recorder._clearance_query == cached_query)
+	recorder.queue_free()
+	var emitter := EMITTER_SCENE.instantiate() as Emitter
+	emitter.position = player.global_position
+	add_child(emitter)
+	emitter.set_physics_process(false)
+	emitter.safe_spot.min_threat_distance = 10000.0
+	emitter._pick_spot(emitter._get_threats())
+	assert(emitter._has_spot and emitter._spot.is_finite())
+	emitter.queue_free()
+	spawner.set_physics_process(false)
+	spawner.boss_every_nth_round = 1
+	manager._enter_combat_phase()
+	assert(spawner.is_spawning())
+	manager._enter_build_phase()
+	spawner._physics_process(0.016)
+	assert(not spawner.is_spawning() and _boss_count == 1)
+	manager._enter_combat_phase()
+	spawner._physics_process(0.016)
+	assert(spawner.is_spawning())
+	await spawner.enemy_spawned
+	assert(_boss_count == 2 and not spawner.is_spawning())
+	assert(_boss_spawn_position.is_finite())
+	assert(picker.get_nearest_threat_distance(_boss_spawn_position, threats) < picker.min_threat_distance)
+	_spawned_boss.was_hit_bypassing_armor(10000, 0.0, _spawned_boss.global_position + Vector2.RIGHT)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(manager.is_build_phase())
+	picker.clearance_radius = 10000.0
+	manager._enter_combat_phase()
+	spawner._physics_process(0.016)
+	assert(spawner.is_spawning())
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert(spawner.is_spawning() and _boss_count == 2)
+	manager._enter_build_phase()
+	assert(manager.is_build_phase())
+	turret.queue_free()
+	print("PASS: turret-biased boss spawn with player overlap allowed, wall-safe fallback, bounded queries, Emitter reuse, completion/cancellation, and scoring.")
 
 func _record_normal_spawn(enemy: EnemyBase) -> void:
 	_normal_spawns.append(enemy)

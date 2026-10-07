@@ -75,10 +75,7 @@ func _should_relocate(threats: Array[Node2D]) -> bool:
 
 func _pick_spot(threats: Array[Node2D]) -> void:
 	var navigation_map := navigation.get_navigation_map()
-	# Random-point queries return the origin until the navigation map has synced once.
-	if NavigationServer2D.map_get_iteration_id(navigation_map) == 0:
-		return
-	_spot = safe_spot.pick_spot(navigation_map, navigation.navigation_layers, threats)
+	_spot = safe_spot.pick_spot(navigation_map, navigation.navigation_layers, threats, global_position)
 	_has_spot = true
 	_state = State.RELOCATE
 	_repick_timer = REPICK_INTERVAL
@@ -115,14 +112,7 @@ func _emit_from(muzzle: Node2D) -> void:
 	shoot.try_shoot(muzzle.global_position, emit_pivot.global_position.direction_to(muzzle.global_position))
 
 func _get_threats() -> Array[Node2D]:
-	var threats: Array[Node2D] = []
-	for group: StringName in [stats.targeting.primary_group, stats.targeting.secondary_group]:
-		if group.is_empty():
-			continue
-		for node: Node in get_tree().get_nodes_in_group(group):
-			if node is Node2D and not (node.has_method("is_dead") and node.is_dead()):
-				threats.append(node)
-	return threats
+	return safe_spot.get_threats([stats.targeting.primary_group, stats.targeting.secondary_group])
 
 func is_emitting() -> bool:
 	return _state == State.EMIT and _emit_cooldown <= 0.0

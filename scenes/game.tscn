@@ -47,6 +47,7 @@
 [ext_resource type="Resource" uid="uid://cx3hxt45w3uit" path="res://resources/enemies/kamikazer/kamikazer_spawn_details.tres" id="45_kamikazer_spawn"]
 [ext_resource type="Resource" uid="uid://1betm04mhcru" path="res://resources/enemies/shotgunner/shotgunner_spawn_details.tres" id="46_shotgunner_spawn"]
 [ext_resource type="Resource" uid="uid://d20ovxmdp055t" path="res://resources/enemies/emitter/emitter_spawn_details.tres" id="47_emitter_spawn"]
+[ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/entities/shared/safe_spot.gd" id="48_safe_spot"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -238,7 +239,7 @@ script = ExtResource("2_kvuet")
 settings = ExtResource("2_wave_settings")
 metadata/_custom_type_script = "uid://bmidkhfa5not2"
 
-[node name="SpawnManager" type="Node" parent="Systems" unique_id=1944150825 node_paths=PackedStringArray("spawn_points", "enemy_container") groups=["spawn_manager"]]
+[node name="SpawnManager" type="Node" parent="Systems" unique_id=1944150825 node_paths=PackedStringArray("spawn_points", "enemy_container", "boss_location_picker") groups=["spawn_manager"]]
 unique_name_in_owner = true
 script = ExtResource("40_spawn_manager")
 enemy_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("43_chaser_spawn"), ExtResource("44_stalker_spawn"), ExtResource("45_kamikazer_spawn"), ExtResource("46_shotgunner_spawn"), ExtResource("47_emitter_spawn")])
@@ -246,6 +247,14 @@ spawn_points = [NodePath("../../World/SpawnPointNorthwest"), NodePath("../../Wor
 enemy_container = NodePath("../../World")
 boss_every_nth_round = 2
 boss_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("42_bulwark_spawn")])
+boss_location_picker = NodePath("BossLocationPicker")
+
+[node name="BossLocationPicker" type="Node" parent="Systems/SpawnManager" unique_id=1266410478]
+script = ExtResource("48_safe_spot")
+candidates = 48
+clearance_radius = 32.0
+clearance_collision_mask = 169
+require_wall_clearance = true
 
 [node name="GameOverManager" type="Node" parent="Systems" unique_id=2012350372 node_paths=PackedStringArray("game_over_ui") groups=["game_over_manager"]]
 unique_name_in_owner = true

@@ -18,6 +18,8 @@ signal wave_cleared(wave_index: int)
 ## One unlocked boss every N waves. Zero disables bosses; one enables first-wave testing.
 @export_range(0, 1000, 1) var boss_every_nth_round := 1
 @export var boss_entries: Array[EnemySpawnEntry] = []
+## Shared location picker; bosses ignore the player and never relax wall clearance.
+@export var boss_location_picker: SafeSpotComponent
 
 var _wave_index := 0
 var _generation := 0
@@ -29,6 +31,9 @@ var _queue_index := 0
 var _queue: Array[EnemySpawnEntry] = []
 var _round_points: Array[SpawnPoint] = []
 var _live_enemies: Dictionary[int, EnemyBase] = {}
+var _pending_boss: EnemySpawnEntry
+var _boss_placement_queued := false
+var _boss_retry_time := 0.0
 
 func _ready() -> void:
 	assert(enemy_container != null, "SpawnManager requires an enemy container")
@@ -44,9 +49,7 @@ func start_wave(wave_index: int) -> void:
 		push_warning("SpawnManager has no valid spawn points; skipping normal enemies")
 		_queue.clear()
 	_spawning = true
-	var boss := _pick_boss(wave_index)
-	if boss:
-		_spawn_enemy(boss)
+	_pending_boss = _pick_boss(wave_index)
 	if not _queue.is_empty():
 		_spawn_next()
 	else:
@@ -62,9 +65,42 @@ func cancel_wave() -> void:
 	_queue.clear()
 	_round_points.clear()
 	_live_enemies.clear()
+	_pending_boss = null
+	_boss_placement_queued = false
+	_boss_retry_time = 0.0
 
 func is_spawning() -> bool:
-	return _spawning
+	return _spawning or _pending_boss != null
+
+func _physics_process(delta: float) -> void:
+	if not _active or not _pending_boss or _boss_placement_queued:
+		return
+	_boss_retry_time = maxf(0.0, _boss_retry_time - delta)
+	if _boss_retry_time > 0.0:
+		return
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	var position := player.global_position if player and player.global_position.is_finite() else Vector2.ZERO
+	if boss_location_picker:
+		var threats := boss_location_picker.get_threats([&"turrets"])
+		var navigation_map := get_viewport().find_world_2d().navigation_map
+		position = boss_location_picker.pick_spot(navigation_map, 1, threats, position)
+		if not position.is_finite():
+			_boss_retry_time = 0.25
+			return
+	_boss_placement_queued = true
+	_place_boss.call_deferred(position, _generation)
+
+func _place_boss(position: Vector2, generation: int) -> void:
+	if generation != _generation or not _active or not _pending_boss:
+		return
+	_boss_placement_queued = false
+	if boss_location_picker and boss_location_picker.require_wall_clearance and not boss_location_picker.is_wall_clear(position):
+		_boss_retry_time = 0.25
+		return
+	var entry := _pending_boss
+	_pending_boss = null
+	_spawn_enemy(entry, null, position)
+	_check_completion()
 
 func _process(delta: float) -> void:
 	if not _active or not _spawning:
@@ -120,7 +156,7 @@ func _spawn_next() -> void:
 		_queue.clear()
 		_check_completion()
 
-func _spawn_enemy(entry: EnemySpawnEntry, point: SpawnPoint = null) -> void:
+func _spawn_enemy(entry: EnemySpawnEntry, point: SpawnPoint = null, spawn_position := Vector2.ZERO) -> void:
 	var instance := entry.enemy_scene.instantiate()
 	var enemy := instance as EnemyBase
 	if not enemy:
@@ -128,7 +164,7 @@ func _spawn_enemy(entry: EnemySpawnEntry, point: SpawnPoint = null) -> void:
 		push_error("SpawnManager entries must instantiate EnemyBase scenes")
 		return
 	enemy_container.add_child(enemy)
-	enemy.global_position = point.global_position if point else Vector2.ZERO
+	enemy.global_position = point.global_position if point else spawn_position
 	_apply_wave_scaling(enemy, entry)
 	var enemy_id := enemy.get_instance_id()
 	_live_enemies[enemy_id] = enemy
@@ -157,6 +193,6 @@ func _on_enemy_exiting(enemy_id: int, generation: int) -> void:
 		_check_completion()
 
 func _check_completion() -> void:
-	if _active and not _spawning and _live_enemies.is_empty() and not _completion_emitted:
+	if _active and not is_spawning() and _live_enemies.is_empty() and not _completion_emitted:
 		_completion_emitted = true
 		wave_cleared.emit(_wave_index)
