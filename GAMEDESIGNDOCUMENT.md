@@ -113,6 +113,8 @@ Enemies have a powerup drop chance (2% by default, configurable per enemy type).
 ### Boss Enemies
 Every fifth combat wave selects one boss at random from the unlocked boss pool and adds it to that wave. The boss materializes at a random valid map position after a clear spawn telegraph; the position must be reachable and must not overlap the player, a turret, or blocking geometry.
 
+All bosses share a readable arrival: a ground warning marks their fixed landing point, a growing shadow precedes a quick drop from above, and landing creates a brief squash/rebound, impact flash, expanding ring, dust, sparks, and screen shake. The player can move away during the warning; the boss cannot attack, block movement, or take damage until the landing recovery ends.
+
 Bosses are tankier than normal enemies and each has one clear mechanic that changes the player's positioning, target priority, or evasion route while turrets remain the main damage source.
 
 Bulwark's intact shield intercepts ordinary shots and prevents knockback from protected hits, including the hit that breaks its armor. Hits to exposed sides or broken armor can knock it back; piercing shots and radial blasts retain their armor-bypassing behavior.

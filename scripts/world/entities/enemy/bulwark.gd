@@ -1,4 +1,4 @@
-extends EnemyBase
+extends BossEnemyBase
 class_name Bulwark
 
 const IDLE_ANIMATION: StringName = &"idle"
@@ -82,11 +82,11 @@ func _before_handle_death() -> void:
 	shield.set_enabled(false)
 	health_ui.hide()
 
-func play_spawn_intro(target_position: Vector2, duration: float) -> void:
+func begin_spawn_intro() -> void:
 	health_ui.hide()
 	armor.set_enabled(false)
 	shield.set_enabled(false)
-	super.play_spawn_intro(target_position, duration)
+	super.begin_spawn_intro()
 
 func _finish_spawn_intro() -> void:
 	armor.set_enabled(true)

@@ -4,6 +4,7 @@ class_name SpawnManager
 signal enemy_spawned(enemy: EnemyBase)
 signal enemy_defeated(enemy: EnemyBase)
 signal wave_cleared(wave_index: int)
+signal boss_landing_shake_requested(intensity: float)
 
 @export_group("Normal Enemies")
 ## Wave-wide enemy totals; they are not multiplied by the number of spawn points.
@@ -59,6 +60,9 @@ func start_wave(wave_index: int) -> void:
 func cancel_wave() -> void:
 	_generation += 1
 	_active = false
+	for enemy: EnemyBase in _live_enemies.values():
+		if is_instance_valid(enemy) and enemy is BossEnemyBase and enemy._spawn_intro_active:
+			(enemy as BossEnemyBase).cancel_boss_intro()
 	_spawning = false
 	_spawn_timer = 0.0
 	_queue_index = 0
@@ -172,7 +176,14 @@ func _spawn_enemy(entry: EnemySpawnEntry, point: SpawnPoint = null, spawn_positi
 	enemy.tree_exiting.connect(_on_enemy_exiting.bind(enemy_id, _generation))
 	if point:
 		point.send_in(enemy)
+	elif enemy is BossEnemyBase:
+		(enemy as BossEnemyBase).boss_landed.connect(_on_boss_landed.bind(_generation))
+		(enemy as BossEnemyBase).play_boss_intro()
 	enemy_spawned.emit(enemy)
+
+func _on_boss_landed(intensity: float, generation: int) -> void:
+	if _active and generation == _generation:
+		boss_landing_shake_requested.emit(intensity)
 
 func _apply_wave_scaling(enemy: EnemyBase, entry: EnemySpawnEntry) -> void:
 	if entry.health_multiplier_every_n_waves > 0:

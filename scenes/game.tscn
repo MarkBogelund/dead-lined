@@ -638,5 +638,6 @@ metadata/_edit_lock_ = true
 
 [connection signal="build_phase_started" from="Systems/WaveManager" to="Systems/SpawnManager" method="cancel_wave"]
 [connection signal="combat_phase_started" from="Systems/WaveManager" to="Systems/SpawnManager" method="start_wave"]
+[connection signal="boss_landing_shake_requested" from="Systems/SpawnManager" to="Systems/CameraShakeManager" method="shake_screen"]
 [connection signal="enemy_defeated" from="Systems/SpawnManager" to="Systems/ScoreManager" method="_on_drone_destroyed"]
 [connection signal="wave_cleared" from="Systems/SpawnManager" to="Systems/WaveManager" method="_on_wave_cleared"]

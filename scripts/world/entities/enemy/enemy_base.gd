@@ -55,7 +55,7 @@ func _apply_environment_velocity() -> void:
 		velocity = _conveyor_velocity
 	velocity += external_velocity.get_total_velocity()
 
-func play_spawn_intro(target_position: Vector2, duration: float) -> void:
+func begin_spawn_intro() -> void:
 	_spawn_intro_active = true
 	_collision_layer_before_intro = collision_layer
 	_collision_mask_before_intro = collision_mask
@@ -65,6 +65,9 @@ func play_spawn_intro(target_position: Vector2, duration: float) -> void:
 	contact_hitbox.disable()
 	set_physics_process(false)
 	velocity = Vector2.ZERO
+
+func play_spawn_intro(target_position: Vector2, duration: float) -> void:
+	begin_spawn_intro()
 	animation.play_animation("spawn_sleep")
 
 	var intro_tween := create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
