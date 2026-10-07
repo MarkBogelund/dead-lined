@@ -48,15 +48,24 @@ func get_stress_progress() -> float:
 func is_broken() -> bool:
 	return _broken_remaining > 0.0
 
+func protects_from(from_position: Vector2) -> bool:
+	if not _enabled or is_broken():
+		return false
+	var incoming := from_position - global_position
+	return incoming.is_finite() and not incoming.is_zero_approx() \
+		and absf(angle_difference(facing_angle, incoming.angle())) <= _half_arc
+
 func resolve_damage(amount: int, from_position: Vector2, bypass_armor := false) -> int:
 	if amount <= 0:
 		return 0
-	if not _enabled or bypass_armor or is_broken():
+	if bypass_armor or not protects_from(from_position):
 		return amount
-	var incoming := from_position - global_position
-	if not incoming.is_finite() or incoming.is_zero_approx():
-		return amount
-	if absf(angle_difference(facing_angle, incoming.angle())) > _half_arc:
+	return resolve_shield_damage(amount)
+
+func resolve_shield_damage(amount: int) -> int:
+	if amount <= 0:
+		return 0
+	if not _enabled or is_broken():
 		return amount
 	_stress = minf(_threshold, _stress + float(amount))
 	_quiet_time = 0.0

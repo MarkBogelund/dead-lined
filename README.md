@@ -125,6 +125,12 @@ Transient turret behavior animations key `Visuals:material:shader_parameter/flas
 
 ### Bulwark
 
+Protected hits route health loss through the owned HealthComponent but skip EnemyBase's body hit animation and particles. Only `ArmorVisual` flashes white, using its independent scene-local enemy-surface ShaderMaterial and editable `Hit Flash Duration`; repeated hits restart its fade without sharing state between bosses. Exposed and bypass hits retain normal body hit feedback, and the shared death presentation is unchanged.
+
+`ShieldCollider` is an independent `AnimatableBody2D` on physics layer 8 (`EnemyShield`), with an editable crescent polygon matching the sprite at its current 2-pixel offset. It follows armor facing outside animated `Visuals`, so visual scaling cannot scale physics. Its owned component emits shield impacts upward; Bulwark applies reduced damage/stress with zero knockback, including the armor-breaking hit. Exposed-side, broken-armor, and armor-bypassing hits retain incoming knockback. The collider disables during broken armor, spawn intro, and death. Player/turret projectile masks include EnemyShield; rings, Piercer, navigation, and body-only target acquisition do not. Projectiles immediately disable hit delivery after resolving one impact, preventing double damage from queued shield/body overlaps.
+
+`Visuals > ArmorVisual` in [bulwark.tscn](scenes/world/enemies/bulwark.tscn) is a centered `Sprite2D` using [bulwark-shield.png](assets/sprites/enemies/bulwark-shield.png), replacing the procedural arcs. The art faces right at zero rotation, follows armor facing, tints toward red as stress rises, and dims while broken. Texture, offset, and state colors are scene-editable; the sprite does not control the gameplay armor arc.
+
 Focused regression checks: run Godot with `--headless --path . --fixed-fps 60 res://tests/bulwark_tests.tscn --quit-after 1200`. The test scene covers armor/UI behavior, real bypass hit detection, boss intervals, balanced shuffled spawn distribution, entry/scaling, cancellation, scoring, and wave completion.
 
 `SpawnManager` owns boss scheduling and its separate `Boss Entries` array, currently containing [bulwark_spawn.tres](resources/enemies/bulwark/bulwark_spawn.tres). `Boss Every Nth Round` selects one random enabled, introduced boss on each eligible wave (zero disables it). It is set to 1 for Bulwark testing. Bosses still appear immediately at world `(0, 0)` without location checks or telegraphs; random boss placement is deferred. This fixed testing spawn can overlap actors or geometry.

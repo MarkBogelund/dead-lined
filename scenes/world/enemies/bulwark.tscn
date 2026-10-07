@@ -2,13 +2,15 @@
 
 [ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/enemies/enemy_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://c4e7mc1s0e4vo" path="res://scripts/world/entities/enemy/bulwark.gd" id="2_script"]
-[ext_resource type="Resource" path="res://resources/enemies/bulwark/bulwark_stats.tres" id="3_stats"]
+[ext_resource type="Resource" uid="uid://1p4qib06ut85" path="res://resources/enemies/bulwark/bulwark_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_fqq7r"]
 [ext_resource type="Texture2D" uid="uid://brvere8c7ptay" path="res://assets/sprites/enemies/bulwark.png" id="4_sprite"]
 [ext_resource type="Script" uid="uid://bmcbv1et14jsw" path="res://scripts/world/entities/shared/directional_armor.gd" id="5_armor"]
 [ext_resource type="Script" uid="uid://6csgd8d4wd7j" path="res://scripts/world/entities/shared/directional_armor_visual.gd" id="6_visual"]
+[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="7_hoj0n"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="7_u8e02"]
 [ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="7_ui"]
+[ext_resource type="Script" uid="uid://85qiwjtxm3cb" path="res://scripts/world/entities/shared/armor_shield.gd" id="9_shield_collider"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 14.0
@@ -55,13 +57,31 @@ _data = {
 &"idle": SubResource("Idle")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fqq7r"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hoj0n"]
 resource_local_to_scene = true
 shader = ExtResource("4_fqq7r")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u8e02"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_n2f2h"]
+atlas = ExtResource("4_sprite")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="ShaderMaterial" id="ShieldHitMaterial"]
+resource_local_to_scene = true
+shader = ExtResource("4_fqq7r")
+shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_amount = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hoj0n"]
+atlas = ExtResource("4_sprite")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
+atlas = ExtResource("7_hoj0n")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n2f2h"]
 resource_local_to_scene = true
 shader = ExtResource("7_u8e02")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -72,7 +92,7 @@ shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
 
-[node name="Bulwark" unique_id=1595451548 node_paths=PackedStringArray("armor", "armor_visual", "health_ui", "body_sprite") instance=ExtResource("1_base")]
+[node name="Bulwark" unique_id=1595451548 node_paths=PackedStringArray("armor", "armor_visual", "health_ui", "body_sprite", "shield") instance=ExtResource("1_base")]
 collision_mask = 35
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -80,6 +100,7 @@ armor = NodePath("DirectionalArmorComponent")
 armor_visual = NodePath("Visuals/ArmorVisual")
 health_ui = NodePath("HealthUIComponent")
 body_sprite = NodePath("Visuals/Body")
+shield = NodePath("ShieldCollider")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1100000002]
 shape = SubResource("BodyShape")
@@ -91,25 +112,50 @@ shape = SubResource("ContactShape")
 libraries/bulwark = SubResource("BulwarkLibrary")
 
 [node name="Visuals" parent="." index="9" unique_id=1100000011]
-material = SubResource("ShaderMaterial_fqq7r")
+material = SubResource("ShaderMaterial_hoj0n")
 
 [node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=2058733834]
-use_parent_material = true
-texture = ExtResource("4_sprite")
-
-[node name="ArmorVisual" type="Node2D" parent="Visuals" index="1" unique_id=1515643854]
 z_index = 2
+use_parent_material = true
+texture = SubResource("AtlasTexture_n2f2h")
+
+[node name="ArmorVisual" type="Sprite2D" parent="Visuals" index="1" unique_id=1515643854]
+z_index = 3
+material = SubResource("ShieldHitMaterial")
+scale = Vector2(1.5, 1.5)
+texture = SubResource("AtlasTexture_hoj0n")
+offset = Vector2(2.6666665, 0)
 script = ExtResource("6_visual")
+stress_color = Color(0.67, 0.67, 0.67, 0.78431374)
+broken_color = Color(0.26, 0.26, 0.26, 0.78431374)
+
+[node name="Shadow" type="Sprite2D" parent="Visuals" index="2" unique_id=810483529]
+modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+z_index = 1
+position = Vector2(1, 20)
+scale = Vector2(2.5, 2)
+texture = SubResource("AtlasTexture_spl43")
 
 [node name="Flash" parent="." index="11" unique_id=1756477109]
-material = SubResource("ShaderMaterial_u8e02")
+material = SubResource("ShaderMaterial_n2f2h")
 
 [node name="DirectionalArmorComponent" type="Node2D" parent="." index="12" unique_id=307248675]
 script = ExtResource("5_armor")
 
 [node name="HealthUIComponent" parent="." index="13" unique_id=290090362 node_paths=PackedStringArray("health_component") instance=ExtResource("7_ui")]
-position = Vector2(0, -20)
+position = Vector2(-2, -24)
 health_component = NodePath("../HealthComponent")
 offset = Vector2(0, -26)
-cooldown_color = Color(0.95, 0.12, 0.12, 1)
+cooldown_color = Color(1, 0.3137255, 0.078431375, 1)
 show_level = false
+
+[node name="ShieldCollider" type="AnimatableBody2D" parent="." index="14" unique_id=53016331 node_paths=PackedStringArray("collision_polygon")]
+collision_layer = 128
+collision_mask = 0
+sync_to_physics = false
+script = ExtResource("9_shield_collider")
+collision_polygon = NodePath("CollisionPolygon2D")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ShieldCollider" index="0" unique_id=1637985401]
+position = Vector2(10, 0)
+polygon = PackedVector2Array(12, -24, 23, -12, 27, 0, 24, 12, 12, 27, 6, 22, 16.72, 8.5, 19, 0, 16.72, -8.5, 7, -20)

@@ -66,6 +66,7 @@ func _resolve_hit() -> void:
 		return
 	_is_resolving_hit = true
 	set_physics_process(false)
+	hitbox.enabled = false
 	hitbox.set_deferred("monitoring", false)
 	animation.play_animation("hit")
 

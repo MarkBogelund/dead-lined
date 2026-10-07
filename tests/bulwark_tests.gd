@@ -6,12 +6,15 @@ const PIERCER_SCENE: PackedScene = preload("res://scenes/world/turrets/piercer.t
 const SHOCKWAVER_SCENE: PackedScene = preload("res://scenes/world/turrets/shockwaver.tscn")
 const CHASER_SCENE: PackedScene = preload("res://scenes/world/enemies/chaser.tscn")
 const SHOTGUNNER_SCENE: PackedScene = preload("res://scenes/world/enemies/shotgunner.tscn")
+const PLAYER_PROJECTILE_SCENE: PackedScene = preload("res://scenes/world/projectiles/player_projectile.tscn")
+const TURRET_PROJECTILE_SCENE: PackedScene = preload("res://scenes/world/projectiles/turret_projectile.tscn")
 
 var _spawned_boss: Bulwark
 var _boss_count := 0
 var _normal_spawns: Array[EnemyBase] = []
 var _spawn_positions: Array[Vector2] = []
 var _cleared_count := 0
+var _shield_impacts := 0
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -28,18 +31,34 @@ func _run() -> void:
 	var boss := _new_boss(Vector2(1000, 1000))
 	var second := _new_boss(Vector2(2000, 2000))
 	assert(boss.health.max_health == 300)
+	assert(boss.armor_visual is Sprite2D)
+	assert(boss.armor_visual.texture.resource_path == "res://assets/sprites/enemies/bulwark-shield.png")
+	assert(boss.armor_visual.modulate.is_equal_approx(boss.armor_visual.armored_color))
 	assert(boss.health_ui.cooldown_fill.color.is_equal_approx(Color(0.95, 0.12, 0.12, 1)))
 	assert(not boss.health_ui.level_label.visible)
 	assert(is_zero_approx(boss.health_ui.cooldown_fill.size.x))
 	var front := boss.position + Vector2(100, 0)
-	boss.was_hit(8, 0.0, front)
+	var body_material := boss.get_node("Visuals").get("material") as ShaderMaterial
+	var shield_material := boss.armor_visual.material as ShaderMaterial
+	assert(shield_material != body_material)
+	assert(shield_material != second.armor_visual.material)
+	boss.was_hit(8, 200.0, front)
 	assert(boss.health.current_health == 298)
+	boss.animation.advance(0.01)
+	assert(is_zero_approx(float(body_material.get_shader_parameter("flash_amount"))))
+	assert(is_equal_approx(float(shield_material.get_shader_parameter("flash_amount")), 1.0))
+	assert(is_zero_approx(float((second.armor_visual.material as ShaderMaterial).get_shader_parameter("flash_amount"))))
+	assert(boss.knockback.velocity.is_zero_approx())
 	assert(is_equal_approx(boss.armor.get_stress_progress(), 8.0 / 30.0))
 	assert(is_equal_approx(boss.health_ui.cooldown_fill.size.x, boss.health_ui._full_bar_width * 8.0 / 30.0))
 	assert(is_equal_approx(boss.health_ui.fill.size.x, boss.health_ui._full_bar_width * 298.0 / 300.0))
 	assert(second.health.current_health == 300 and second.armor.get_stress_progress() == 0.0)
-	boss.was_hit(8, 0.0, boss.position + Vector2(-100, 0))
+	boss.was_hit(8, 200.0, boss.position + Vector2(-100, 0))
 	assert(boss.health.current_health == 290)
+	await get_tree().process_frame
+	boss.animation.advance(0.01)
+	assert(float(body_material.get_shader_parameter("flash_amount")) > 0.0)
+	assert(is_equal_approx(boss.knockback.velocity.length(), 200.0))
 	boss.was_hit_bypassing_armor(8, 0.0, front)
 	assert(boss.health.current_health == 282)
 	assert(is_equal_approx(boss.armor.get_stress_progress(), 8.0 / 30.0))
@@ -48,14 +67,20 @@ func _run() -> void:
 	tuning.armor_broken_duration = 0.2
 	boss.armor.configure(tuning)
 	boss.armor.resolve_damage(8, front)
-	assert(boss.armor.resolve_damage(2, front) == 1)
+	boss.knockback.velocity = Vector2.ZERO
+	boss.was_hit(2, 200.0, front)
+	assert(boss.knockback.velocity.is_zero_approx())
 	assert(boss.armor.is_broken())
+	assert(not boss.shield._enabled)
 	assert(boss.armor_visual._broken)
+	assert(boss.armor_visual.modulate.is_equal_approx(boss.armor_visual.broken_color))
 	assert(is_equal_approx(boss.health_ui.cooldown_fill.size.x, boss.health_ui._full_bar_width))
 	assert(boss.armor.resolve_damage(8, front) == 8)
 	boss.armor._physics_process(0.21)
 	assert(not boss.armor.is_broken())
+	assert(boss.shield._enabled)
 	assert(is_zero_approx(boss.armor.get_stress_progress()))
+	assert(boss.armor_visual.modulate.is_equal_approx(boss.armor_visual.armored_color))
 	assert(is_zero_approx(boss.health_ui.cooldown_fill.size.x))
 	assert(boss.armor.resolve_damage(1, front) == 1)
 	boss.armor.configure(tuning)
@@ -66,6 +91,8 @@ func _run() -> void:
 	assert(is_equal_approx(boss.armor.get_stress_progress(), 0.275))
 	boss.armor.turn_toward(boss.position + Vector2.UP * 100.0, 0.5)
 	assert(is_equal_approx(boss.armor.facing_angle, -PI / 6.0))
+	assert(is_equal_approx(boss.armor_visual.global_rotation, boss.armor.facing_angle))
+	assert(is_equal_approx(boss.shield.global_rotation, boss.armor.facing_angle))
 	boss.armor.facing_angle = 0.0
 	var piercer := PIERCER_SCENE.instantiate()
 	var laser := piercer.get_node("LaserComponent") as PiercerLaser
@@ -98,10 +125,81 @@ func _run() -> void:
 		node.queue_free()
 	await get_tree().process_frame
 	print("PASS: directional armor, stress/red UI, independent health, break/recovery/decay, minimum damage, turning, and actual Piercer/ring bypass.")
+	await _test_shield_collisions()
 	await _test_spawning()
 	await _test_distribution()
 	print("PASS: all Bulwark checks")
 	get_tree().quit()
+
+func _record_shield_hit(_amount: int, _origin: Vector2) -> void:
+	_shield_impacts += 1
+
+func _shoot_at_boss(scene: PackedScene, boss: Bulwark, offset: Vector2, direction: Vector2) -> void:
+	var projectile := scene.instantiate() as Node2D
+	projectile.set_orientation(boss.global_position + offset, direction.angle(), direction)
+	projectile.set_parameters(120.0, 8, 200.0, 2.0)
+	add_child(projectile)
+
+func _test_shield_collisions() -> void:
+	var boss := _new_boss(Vector2(4000, 4000))
+	boss.shield.shield_hit.connect(_record_shield_hit)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	var query := PhysicsRayQueryParameters2D.create(boss.global_position + Vector2(40, 0), boss.global_position, 128)
+	var space := boss.get_world_2d().direct_space_state
+	assert(space.intersect_ray(query).get("collider") == boss.shield)
+	_shoot_at_boss(PLAYER_PROJECTILE_SCENE, boss, Vector2(50, 0), Vector2.LEFT)
+	await get_tree().create_timer(0.45).timeout
+	assert(_shield_impacts == 1)
+	assert(boss.health.current_health == 298)
+	assert(boss.knockback.velocity.is_zero_approx())
+	_shoot_at_boss(TURRET_PROJECTILE_SCENE, boss, Vector2(50, 0), Vector2.LEFT)
+	await get_tree().create_timer(0.45).timeout
+	assert(_shield_impacts == 2)
+	assert(boss.health.current_health == 296)
+	assert(boss.knockback.velocity.is_zero_approx())
+	_shoot_at_boss(PLAYER_PROJECTILE_SCENE, boss, Vector2(-50, 0), Vector2.RIGHT)
+	await get_tree().create_timer(0.45).timeout
+	assert(_shield_impacts == 2)
+	assert(boss.health.current_health == 288)
+	assert(is_equal_approx(boss.knockback.velocity.length(), 200.0))
+	assert(boss.knockback.velocity.x > 0.0)
+	var tuning := BulwarkStats.new()
+	tuning.stress_threshold = 10.0
+	tuning.armor_broken_duration = 0.2
+	boss.armor.configure(tuning)
+	boss.shield.was_hit(10, 200.0, boss.position + Vector2.RIGHT * 40.0)
+	assert(boss.armor.is_broken() and not boss.shield._enabled)
+	assert(boss.knockback.velocity.is_zero_approx())
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	assert(boss.shield.collision_polygon.disabled)
+	assert(space.intersect_ray(query).is_empty())
+	var before := boss.health.current_health
+	_shoot_at_boss(PLAYER_PROJECTILE_SCENE, boss, Vector2(50, 0), Vector2.LEFT)
+	await get_tree().create_timer(0.45).timeout
+	assert(boss.health.current_health == before - 8)
+	assert(is_equal_approx(boss.knockback.velocity.length(), 200.0))
+	assert(_shield_impacts == 3)
+	boss.armor._physics_process(0.21)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	assert(not boss.shield.collision_polygon.disabled)
+	boss.armor.facing_angle = PI
+	boss.armor.facing_changed.emit(PI)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	query.from = boss.global_position + Vector2(-40, 0)
+	assert(space.intersect_ray(query).get("collider") == boss.shield)
+	boss.play_spawn_intro(boss.position, 0.05)
+	assert(not boss.shield._enabled)
+	await get_tree().create_timer(0.1).timeout
+	assert(boss.shield._enabled)
+	boss.was_hit_bypassing_armor(10000, 0.0, boss.position + Vector2.RIGHT)
+	assert(not boss.shield._enabled)
+	boss.queue_free()
+	await get_tree().process_frame
+	print("PASS: real player/turret projectile shield interception, single damage, exposed-side knockback, collider break/reform/rotation, broken-front knockback, spawn/death cleanup.")
 
 func _on_boss_spawned(enemy: EnemyBase) -> void:
 	_spawned_boss = enemy as Bulwark
