@@ -28,3 +28,5 @@ crunch_screen_tint_intensity = 0.5
 crunch_chromatic_aberration = 0.25
 crunch_bloom_intensity = 0.2
 crunch_bloom_radius = 1.0
+boss_alert_intensity = 0.7
+boss_alert_flash_duration = 0.6

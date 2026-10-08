@@ -31,6 +31,11 @@ uniform vec4 overlay_color : source_color = vec4(0.4, 0.0, 0.0, 1.0);
 uniform float overlay_intensity : hint_range(0.0, 1.0) = 0.0;
 group_uniforms;
 
+group_uniforms boss_alert;
+uniform float boss_alert_amount : hint_range(0.0, 1.0) = 0.0;
+uniform vec4 boss_alert_color : source_color = vec4(0.95, 0.04, 0.03, 1.0);
+group_uniforms;
+
 float danger_hash(vec3 value) {
 	return fract(sin(dot(value, vec3(127.1, 311.7, 74.7))) * 43758.5453);
 }
@@ -99,5 +104,8 @@ void fragment() {
 	float vignette = smoothstep(0.2, 1.3, length(centered));
 	float overlay_weight = overlay_color.a * vignette * overlay_intensity;
 	color = mix(color, overlay_color.rgb, overlay_weight);
+	float alert_luminance = dot(color, vec3(0.299, 0.587, 0.114));
+	vec3 alert_tinted = boss_alert_color.rgb * max(alert_luminance, 0.08);
+	color = mix(color, alert_tinted, boss_alert_amount * boss_alert_color.a);
 	COLOR = vec4(color, 1.0);
 }

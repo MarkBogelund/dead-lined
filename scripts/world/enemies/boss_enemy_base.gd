@@ -2,6 +2,7 @@ extends EnemyBase
 class_name BossEnemyBase
 
 signal boss_landed(shake_intensity: float)
+signal boss_death_shake_requested(shake_intensity: float)
 signal boss_intro_finished
 signal boss_alert_changed(active: bool)
 
@@ -18,6 +19,9 @@ func buff_damage(multiplier: float) -> void:
 
 func emit_boss_landed(shake_intensity: float) -> void:
 	boss_landed.emit(shake_intensity)
+
+func emit_boss_death_shake(shake_intensity: float) -> void:
+	boss_death_shake_requested.emit(shake_intensity)
 
 func emit_boss_alert(active: bool) -> void:
 	boss_alert_changed.emit(active)

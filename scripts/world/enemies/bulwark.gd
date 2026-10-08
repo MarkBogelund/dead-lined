@@ -93,6 +93,7 @@ func buff_damage(multiplier: float) -> void:
 func _before_handle_death() -> void:
 	_cancel_shield_wave()
 	shield.set_enabled(false)
+	shield.sprite.use_parent_material = true
 	health_ui.hide()
 
 func begin_spawn_intro() -> void:

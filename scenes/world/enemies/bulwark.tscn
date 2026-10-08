@@ -145,13 +145,13 @@ region = Rect2(48, 0, 48, 48)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hoj0n"]
 resource_local_to_scene = true
 shader = ExtResource("7_u8e02")
-shader_parameter/shockwave_color = Color(1, 0.7, 0.25, 0.9)
+shader_parameter/shockwave_color = Color(1, 1, 1, 1)
 shader_parameter/current_radius = 0.0
 shader_parameter/ring_thickness = 18.0
 shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
-shader_parameter/canvas_size = Vector2(40, 40)
+shader_parameter/canvas_size = Vector2(160, 160)
 shader_parameter/arc_direction = 0.0
 shader_parameter/arc_half_angle = 3.1415927
 
@@ -355,7 +355,7 @@ tracks/15/keys = {
 
 [sub_resource type="Animation" id="BulwarkIntro"]
 resource_name = "intro"
-length = 3.5
+length = 3.4
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -364,7 +364,7 @@ tracks/0/path = NodePath("Visuals/DropRoot:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(1.6, 2.1, 2.4),
+"times": PackedFloat32Array(1.6, 2.3, 2.6000001),
 "transitions": PackedFloat32Array(3, 1, 1),
 "update": 0,
 "values": [Vector2(0, -180), Vector2(0, 0), Vector2(0, 0)]
@@ -376,7 +376,7 @@ tracks/1/path = NodePath("Visuals/DropRoot:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(1.6, 2.1, 2.2, 2.3, 2.3600001, 2.4),
+"times": PackedFloat32Array(1.6, 2.3, 2.4, 2.5, 2.5600002, 2.6000001),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(0, 0), Vector2(1, 1), Vector2(1.18, 0.8), Vector2(0.946, 1.06), Vector2(1, 1), Vector2(1, 1)]
@@ -388,7 +388,7 @@ tracks/2/path = NodePath("Visuals/DropRoot:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 1.8),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -400,7 +400,7 @@ tracks/3/path = NodePath("Visuals:material:shader_parameter/flash_amount")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 2.1, 2.27, 2.4),
+"times": PackedFloat32Array(0, 2.3, 2.47, 2.6000001),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [0.0, 1.0, 0.0, 0.0]
@@ -412,7 +412,7 @@ tracks/4/path = NodePath("Visuals/Shadow:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 1.8),
+"times": PackedFloat32Array(0, 2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -439,7 +439,7 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
 "transitions": PackedFloat32Array(2, 1, 2, 1, 2),
 "update": 0,
-"values": [Color(1, 0.25, 0.1, 0), Color(0.94905406, 0.32659614, 0.2457959, 0.78431374), Color(1, 0.25, 0.1, 0), Color(0.94905406, 0.32659614, 0.2457959, 0.78431374), Color(1, 0.25, 0.1, 0)]
+"values": [Color(1, 0.25, 0.1, 0), Color(0.6585001, 0.19983128, 0.1202668, 0.5882353), Color(1, 0.25, 0.1, 0), Color(0.6585001, 0.19983128, 0.1202668, 0.5882353), Color(1, 0.25, 0.1, 0)]
 }
 tracks/7/type = "method"
 tracks/7/imported = false
@@ -448,7 +448,7 @@ tracks/7/path = NodePath("Intro/RadialWaveComponent")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(2.1),
+"times": PackedFloat32Array(2.3),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -462,7 +462,7 @@ tracks/8/path = NodePath("Intro:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 3.5),
+"times": PackedFloat32Array(0, 3.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -474,10 +474,10 @@ tracks/9/path = NodePath(".")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(2.1),
+"times": PackedFloat32Array(2.3),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [0.3],
+"args": [0.4],
 "method": &"emit_boss_landed"
 }]
 }
@@ -488,7 +488,7 @@ tracks/10/path = NodePath("Intro/DustParticles:emitting")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 2.1),
+"times": PackedFloat32Array(0, 2.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -500,7 +500,7 @@ tracks/11/path = NodePath("Intro/SparkParticles:emitting")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 2.1),
+"times": PackedFloat32Array(0, 2.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -512,7 +512,7 @@ tracks/12/path = NodePath(".")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0, 2.1),
+"times": PackedFloat32Array(0, 2.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [true],
@@ -529,7 +529,7 @@ tracks/13/path = NodePath("Visuals/DropRoot:modulate")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0, 3.1, 3.5),
+"times": PackedFloat32Array(0, 3, 3.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(0.43904907, 0.43904915, 0.43904895, 1), Color(0.43904907, 0.43904915, 0.43904895, 1), Color(1, 1, 1, 1)]
@@ -541,8 +541,8 @@ tracks/14/path = NodePath("Visuals/DropRoot/ShieldSprite:scale")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
-"times": PackedFloat32Array(0, 3.1, 3.5),
-"transitions": PackedFloat32Array(1, 0.5, 1),
+"times": PackedFloat32Array(0, 3.1, 3.4),
+"transitions": PackedFloat32Array(1, 0.34151018, 1),
 "update": 0,
 "values": [Vector2(1.5, 1.5), Vector2(0, 0), Vector2(1.5, 1.5)]
 }
@@ -565,7 +565,7 @@ tracks/16/path = NodePath("Visuals/Shadow:scale")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(1.8000001, 2.1, 2.2),
+"times": PackedFloat32Array(2, 2.3, 2.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1e-05, 1e-05), Vector2(3.125, 2.5), Vector2(2.5, 2)]
@@ -613,6 +613,7 @@ texture = SubResource("BulwarkBodyTexture")
 [node name="ShieldSprite" type="Sprite2D" parent="Visuals/DropRoot" parent_id_path=PackedInt32Array(620000001) index="1" unique_id=1515643854]
 z_index = 3
 material = SubResource("ShieldHitMaterial")
+use_parent_material = true
 scale = Vector2(1.5, 1.5)
 texture = SubResource("AtlasTexture_hoj0n")
 offset = Vector2(2.6666665, 0)
@@ -622,13 +623,16 @@ position = Vector2(1, 20)
 
 [node name="Flash" parent="." index="11" unique_id=1756477109]
 material = SubResource("ShaderMaterial_hoj0n")
-offset_left = -46.0
-offset_top = -46.0
-offset_right = 46.0
-offset_bottom = 46.0
+
+[node name="LandingMarker" parent="Intro" parent_id_path=PackedInt32Array(620000003) index="0" unique_id=1620584647]
+size = Vector2i(128, 128)
+pixel_size = 4
 
 [node name="DropShadow" parent="Intro" parent_id_path=PackedInt32Array(620000003) index="1" unique_id=1799544543]
 scale = Vector2(2.5, 1.8)
+
+[node name="RadialWaveComponent" parent="Intro" parent_id_path=PackedInt32Array(620000003) index="4" unique_id=308062587]
+expansion_duration = 0.3
 
 [node name="CollisionShape2D" parent="Intro/RadialWaveComponent/DetectionArea" parent_id_path=PackedInt32Array(1158579410) index="0" unique_id=1112096324]
 debug_color = Color(0, 0.5950001, 0.7, 0)

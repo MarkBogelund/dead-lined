@@ -10,7 +10,7 @@ const LOW_CAPACITY_DANGER := &"low_capacity_danger"
 const CRUNCH_TIME_SCREEN := &"crunch_time_screen"
 const CAPACITY_OVERLAY := &"capacity"
 const CRUNCH_TIME_OVERLAY := &"crunch_time"
-const BOSS_ALERT_OVERLAY := &"boss_spawn_alert"
+const BOSS_ALERT_SCREEN := &"boss_spawn_alert"
 
 var _surface: ColorRect
 var _material: ShaderMaterial
@@ -19,14 +19,18 @@ var _screen_effects: Dictionary[StringName, StringName] = {
 	DASH_DESATURATION: &"desaturation_amount",
 	LOW_CAPACITY_DANGER: &"danger_amount",
 	CRUNCH_TIME_SCREEN: &"crunch_amount",
+	BOSS_ALERT_SCREEN: &"boss_alert_amount",
 }
 var _screen_amounts: Dictionary[StringName, float] = {
 	DASH_DESATURATION: 0.0,
 	LOW_CAPACITY_DANGER: 0.0,
 	CRUNCH_TIME_SCREEN: 0.0,
+	BOSS_ALERT_SCREEN: 0.0,
 }
 var _screen_tweens: Dictionary[StringName, Tween] = {}
 var _overlay_tween: Tween
+var _boss_alert_tween: Tween
+var _boss_alert_active := false
 var _overlay_color := Color.WHITE
 var _overlay_intensity := 0.0
 var _overlay_pulse_speed := 0.0
@@ -99,6 +103,7 @@ func set_effect_parameter(parameter: StringName, value: Variant) -> void:
 	_material.set_shader_parameter(parameter, value)
 
 func reset() -> void:
+	set_boss_alert(false)
 	if _overlay_tween:
 		_overlay_tween.kill()
 	for tween: Tween in _screen_tweens.values():
@@ -149,17 +154,19 @@ func set_crunch_time_overlay(active: bool) -> void:
 		clear_color_overlay(CRUNCH_TIME_OVERLAY, settings.crunch_time_fade_duration)
 
 func set_boss_alert(active: bool) -> void:
-	if active:
-		set_color_overlay(
-			BOSS_ALERT_OVERLAY,
-			settings.boss_alert_color,
-			settings.boss_alert_intensity,
-			settings.boss_alert_priority,
-			settings.boss_alert_fade_in_duration,
-			settings.boss_alert_pulse_speed,
-			settings.boss_alert_pulse_min)
-	else:
-		clear_color_overlay(BOSS_ALERT_OVERLAY, settings.boss_alert_fade_out_duration)
+	if active and _boss_alert_active:
+		return
+	_boss_alert_active = active
+	if _boss_alert_tween:
+		_boss_alert_tween.kill()
+	if not active:
+		set_screen_effect(BOSS_ALERT_SCREEN, 0.0)
+		return
+	set_effect_parameter(&"boss_alert_color", settings.boss_alert_color)
+	set_screen_effect(BOSS_ALERT_SCREEN, settings.boss_alert_intensity)
+	_boss_alert_tween = create_tween().set_ignore_time_scale(true)
+	_boss_alert_tween.tween_interval(settings.boss_alert_flash_duration)
+	_boss_alert_tween.tween_callback(set_screen_effect.bind(BOSS_ALERT_SCREEN, 0.0))
 
 func _set_screen_amount(value: float, effect: StringName) -> void:
 	_screen_amounts[effect] = value
