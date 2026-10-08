@@ -212,13 +212,13 @@ _data = {
 &"boss_die": SubResource("BossDeath")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5tfdp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lxi2c"]
 resource_local_to_scene = true
 shader = ExtResource("3_11csn")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lxi2c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nvycl"]
 resource_local_to_scene = true
 shader = ExtResource("5_k6g42")
 shader_parameter/shockwave_color = Color(1, 1, 1, 1)
@@ -817,7 +817,7 @@ landing_wave = NodePath("Intro/RadialWaveComponent")
 libraries/boss = SubResource("BossDeathLibrary")
 
 [node name="Visuals" parent="." index="9" unique_id=1100000011]
-material = SubResource("ShaderMaterial_5tfdp")
+material = SubResource("ShaderMaterial_lxi2c")
 
 [node name="DropRoot" type="Node2D" parent="Visuals" index="0" unique_id=620000001]
 use_parent_material = true
@@ -832,7 +832,7 @@ size = Vector2i(14, 4)
 pixel_size = 1
 
 [node name="Flash" parent="." index="11" unique_id=1756477109]
-material = SubResource("ShaderMaterial_lxi2c")
+material = SubResource("ShaderMaterial_nvycl")
 offset_left = -80.0
 offset_top = -80.0
 offset_right = 80.0
