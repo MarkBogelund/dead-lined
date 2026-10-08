@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://c03qqxwjb2j1y" path="res://scripts/world/entities/turret/beamer.gd" id="2_beamer"]
 [ext_resource type="Resource" uid="uid://dsrmd4nsu8na1" path="res://resources/turrets/beamer/beamer_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_6gvdm"]
-[ext_resource type="Script" uid="uid://bvshu8nj4mgvv" path="res://scripts/world/entities/turret/beam.gd" id="5_beam"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_736xw"]
 [ext_resource type="Texture2D" uid="uid://dv38ca2ap3wph" path="res://assets/sprites/turrets/beamer.png" id="7_6gvdm"]
 [ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="7_bwlqj"]
@@ -18,7 +17,7 @@ length = 0.23333333
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BeamComponent/SpeedParticles:emitting")
+tracks/0/path = NodePath("Beam/SpeedParticles:emitting")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -72,7 +71,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("BeamComponent/SpeedParticles:emitting")
+tracks/3/path = NodePath("Beam/SpeedParticles:emitting")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -254,22 +253,21 @@ libraries/beamer = SubResource("BeamerLibrary")
 [node name="Flash" parent="." index="11" unique_id=850017021]
 material = SubResource("ShaderMaterial_cd42n")
 
-[node name="BeamComponent" type="Node2D" parent="." index="14" unique_id=1684563345]
+[node name="Beam" type="Node2D" parent="." index="14" unique_id=1684563345]
 z_index = 8
-script = ExtResource("5_beam")
 
-[node name="BeamArea" type="Area2D" parent="BeamComponent" index="0" unique_id=1890326660]
+[node name="BeamArea" type="Area2D" parent="Beam" index="0" unique_id=1890326660]
 collision_layer = 0
 collision_mask = 10
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BeamComponent/BeamArea" index="0" unique_id=1571762856]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Beam/BeamArea" index="0" unique_id=1571762856]
 
-[node name="SpeedParticles" parent="BeamComponent" index="1" unique_id=721926538 instance=ExtResource("7_bwlqj")]
+[node name="SpeedParticles" parent="Beam" index="1" unique_id=721926538 instance=ExtResource("7_bwlqj")]
 amount = 20
 process_material = SubResource("ParticleProcessMaterial_gcvlj")
 
-[node name="LaserGraphics" type="Node2D" parent="BeamComponent" index="2" unique_id=1896236447]
+[node name="LaserGraphics" type="Node2D" parent="Beam" index="2" unique_id=1896236447]
 script = ExtResource("11_laser_graphics")
 pixel_rotate_shader = ExtResource("8_pixel_rotate")
 start_offset = 6.0

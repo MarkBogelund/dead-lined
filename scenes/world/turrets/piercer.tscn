@@ -8,7 +8,6 @@
 [ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/entities/shared/targeting.gd" id="7_targeting"]
 [ext_resource type="Script" uid="uid://cfc3kd2or2gkb" path="res://scripts/world/entities/shared/aiming.gd" id="8_aiming"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="9_los"]
-[ext_resource type="Script" uid="uid://c3nw3v0hjji0r" path="res://scripts/world/entities/turret/piercer_laser.gd" id="10_laser"]
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="11_pixel_rotate"]
 [ext_resource type="Texture2D" uid="uid://d08xahl78n2eb" path="res://assets/sprites/turrets/piercer.png" id="12_l7wt6"]
 [ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="12_windup"]
@@ -165,11 +164,8 @@ muzzle = NodePath("../Visuals/Canon/Muzzle")
 script = ExtResource("9_los")
 ray_offset = 3.0
 
-[node name="LaserComponent" type="Node2D" parent="." index="17" unique_id=1701361494]
+[node name="LaserGraphics" type="Node2D" parent="." index="17" unique_id=213124918]
 z_index = 8
-script = ExtResource("10_laser")
-
-[node name="LaserGraphics" type="Node2D" parent="LaserComponent" index="0" unique_id=213124918]
 script = ExtResource("14_laser_graphics")
 pixel_rotate_shader = ExtResource("11_pixel_rotate")
 laser_width = 10.0

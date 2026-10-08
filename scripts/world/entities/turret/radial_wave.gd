@@ -246,10 +246,7 @@ func _damage_swept_ring() -> void:
 		var distance := global_position.distance_to(body.global_position)
 		if distance >= inner_radius and distance <= outer_radius and _is_in_arc(body.global_position):
 			_hit_targets[target_id] = true
-			if body.has_method("was_hit_bypassing_armor"):
-				body.was_hit_bypassing_armor(damage, knockback_force, global_position)
-			else:
-				body.was_hit(damage, knockback_force, global_position)
+			HitboxComponent.apply_hit(body, damage, knockback_force, global_position, true)
 
 func _is_in_arc(point: Vector2) -> bool:
 	if arc_degrees >= 360.0:
@@ -257,14 +254,7 @@ func _is_in_arc(point: Vector2) -> bool:
 	return absf(angle_difference(arc_direction, global_position.angle_to_point(point))) <= deg_to_rad(arc_degrees) * 0.5
 
 func _is_damageable(body: Node2D) -> bool:
-	if not body.has_method("was_hit"):
-		return false
-	if body.has_method("is_dead") and body.is_dead():
-		return false
-	for group_name: StringName in target_groups:
-		if body.is_in_group(group_name):
-			return true
-	return false
+	return HitboxComponent.can_hit(body, target_groups)
 
 func _reset() -> void:
 	_state = State.READY

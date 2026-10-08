@@ -17,6 +17,23 @@ func initialize(s_damage: int, s_knockback: float) -> void:
 	damage = s_damage
 	knockback = s_knockback
 
+## Shared target rule for every attack: takes hits, is alive, and is in one of the groups.
+static func can_hit(body: Node, groups: Array[StringName]) -> bool:
+	if not is_instance_valid(body) or not body.has_method("was_hit"):
+		return false
+	if body.has_method("is_dead") and body.is_dead():
+		return false
+	for group_name: StringName in groups:
+		if body.is_in_group(group_name):
+			return true
+	return false
+
+static func apply_hit(body: Node, amount: int, knockback_force: float, from_position: Vector2, bypass_armor := false) -> void:
+	if bypass_armor and body.has_method("was_hit_bypassing_armor"):
+		body.was_hit_bypassing_armor(amount, knockback_force, from_position)
+	else:
+		body.was_hit(amount, knockback_force, from_position)
+
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)

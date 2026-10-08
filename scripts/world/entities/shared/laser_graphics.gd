@@ -89,6 +89,10 @@ func set_beam_length(value: float) -> void:
 	_beam_length = maxf(1.0, value)
 	_update_texture()
 
+func show_segment(start: Vector2, end: Vector2) -> void:
+	set_beam_length(start.distance_to(end))
+	aim_from(start, start.direction_to(end))
+
 func aim_from(origin: Vector2, direction: Vector2) -> void:
 	if not is_instance_valid(_visual):
 		return

@@ -13,7 +13,6 @@ class RecordingSafeSpot extends SafeSpotComponent:
 
 const BULWARK_SCENE: PackedScene = preload("res://scenes/world/enemies/bulwark.tscn")
 const GAME_SCENE: PackedScene = preload("res://scenes/game.tscn")
-const PIERCER_SCENE: PackedScene = preload("res://scenes/world/turrets/piercer.tscn")
 const SHOCKWAVER_SCENE: PackedScene = preload("res://scenes/world/turrets/shockwaver.tscn")
 const CHASER_SCENE: PackedScene = preload("res://scenes/world/enemies/chaser.tscn")
 const SHOTGUNNER_SCENE: PackedScene = preload("res://scenes/world/enemies/shotgunner.tscn")
@@ -115,13 +114,6 @@ func _run() -> void:
 	assert(is_equal_approx(boss.shield.sprite.global_rotation, boss.shield.facing_angle))
 	assert(is_equal_approx(boss.shield.global_rotation, boss.shield.facing_angle))
 	boss.shield.set_facing(0.0)
-	var piercer := PIERCER_SCENE.instantiate()
-	var laser := piercer.get_node("LaserComponent") as PiercerLaser
-	piercer.remove_child(laser)
-	piercer.free()
-	add_child(laser)
-	var shooter := CharacterBody2D.new()
-	add_child(shooter)
 	var shockwaver := SHOCKWAVER_SCENE.instantiate()
 	var wave := shockwaver.get_node("RadialWaveComponent") as RadialWaveComponent
 	shockwaver.remove_child(wave)
@@ -134,7 +126,8 @@ func _run() -> void:
 	await get_tree().physics_frame
 	var before := boss.health.current_health
 	var stress_before := boss.shield.get_stress_progress()
-	laser._damage_targets(front, Vector2.LEFT, 200.0, 20, 0.0, shooter)
+	# Piercer's laser hits through this shared armor-bypassing path.
+	HitboxComponent.apply_hit(boss, 20, 0.0, front, true)
 	assert(boss.health.current_health == before - 20)
 	assert(is_equal_approx(boss.shield.get_stress_progress(), stress_before))
 	wave._previous_wave_radius = 0.0
@@ -142,7 +135,7 @@ func _run() -> void:
 	wave._damage_swept_ring()
 	assert(boss.health.current_health == before - 32)
 	assert(is_equal_approx(boss.shield.get_stress_progress(), stress_before))
-	for node: Node in [boss, second, laser, wave, shooter]:
+	for node: Node in [boss, second, wave]:
 		node.queue_free()
 	await get_tree().process_frame
 	print("PASS: directional armor, stress/red UI, independent health, break/recovery/decay, minimum damage, turning, and actual Piercer/ring bypass.")

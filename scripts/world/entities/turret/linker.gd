@@ -1,15 +1,35 @@
 extends TurretBase
 class_name Linker
 
-@onready var linker: LinkerComponent = $LinkerComponent
+enum State {READY, CHARGING, COOLDOWN}
+
+@onready var chain: Node2D = $Chain
+@onready var line_of_sight: LineOfSightComponent = $Chain/LineOfSightComponent
+## Hidden template; each chain link is a create_instance() copy.
+@onready var laser_graphics: LaserGraphics = $Chain/LaserGraphics
 
 @export var stats: LinkerStats
+## Groups the chain can link and damage; the player is removed when the turret maxes out.
+@export var hit_groups: Array[StringName] = [&"enemies", &"player"]
+## Color and opacity of the next-hop range circle around the chain's last target.
+@export var hop_range_color := Color(0.25, 0.9, 1.0, 0.35)
+
+var _damage := 0
+var _link_range := 90.0
+var _attack_cooldown := 0.0
+var _chain_enabled := false
+var _state := State.READY
+var _charge_remaining := 0.0
+var _cooldown_remaining := 0.0
+var _has_fired := false
+var _chain_targets: Array[Node2D] = []
+var _chain_positions: Array[Vector2] = []
+var _link_visuals: Array[LaserGraphics] = []
+var _hop_range_indicator: RangeIndicator
 
 func _ready() -> void:
 	_initialize()
-	linker.chain_started.connect(_on_chain_started)
-	linker.chain_fired.connect(_on_chain_fired)
-	linker.chain_cancelled.connect(_on_chain_cancelled)
+	laser_graphics.hide()
 	animation.configure_animation("charge", 2, true)
 	super._ready()
 
@@ -18,44 +38,254 @@ func _initialize() -> void:
 		push_error("%s requires a LinkerStats resource" % name)
 		return
 	initialize_base(stats)
-	linker.configure(stats.attack_range, stats.charge_duration, stats.attack_cooldown, stats.damage, stats.knockback)
+	_damage = stats.damage
+	_link_range = maxf(1.0, stats.attack_range)
+	_attack_cooldown = stats.attack_cooldown
 
 func _on_combat_started() -> void:
-	linker.set_enabled(true)
+	_chain_enabled = true
 
 func _on_combat_stopped() -> void:
-	linker.set_enabled(false)
+	_chain_enabled = false
+	_reset_chain()
 	animation.stop_animation("charge")
 
 func _before_death_animation() -> void:
 	_on_combat_stopped()
 
 func _stop_targeting_player() -> void:
-	linker.set_player_targeting_enabled(false)
+	hit_groups.erase(&"player")
 
-func _on_chain_started() -> void:
+func _physics_process(delta: float) -> void:
+	super._physics_process(delta)
+	if _state != State.CHARGING:
+		_update_chain_visuals()
+	if not _chain_enabled:
+		return
+	match _state:
+		State.READY:
+			if _cooldown_remaining > 0.0:
+				_cooldown_remaining = maxf(0.0, _cooldown_remaining - delta)
+				return
+			var targets: Array[Node2D] = []
+			_extend_chain(targets)
+			if not targets.is_empty():
+				_start_chain(targets)
+		State.CHARGING:
+			_extend_charging_chain()
+			_charge_remaining -= delta
+			if _charge_remaining <= 0.0:
+				_fire_chain()
+		State.COOLDOWN:
+			_cooldown_remaining = maxf(0.0, _cooldown_remaining - delta)
+			if _cooldown_remaining <= 0.0:
+				_state = State.READY
+
+func _extend_chain(targets: Array[Node2D]) -> void:
+	var candidates := _get_candidates()
+	var visited: Dictionary[int, bool] = {}
+	var previous_position := global_position
+	for target: Node2D in targets:
+		if is_instance_valid(target):
+			visited[target.get_instance_id()] = true
+	if not targets.is_empty():
+		var last_target: Node2D = targets.back()
+		if not _is_eligible_target(last_target):
+			return
+		previous_position = last_target.global_position
+	while true:
+		var next_target := _nearest_visible_candidate(previous_position, candidates, visited)
+		if not next_target:
+			break
+		targets.append(next_target)
+		visited[next_target.get_instance_id()] = true
+		previous_position = next_target.global_position
+
+func _extend_charging_chain() -> void:
+	_trim_broken_links()
+	var previous_count := _chain_targets.size()
+	_extend_chain(_chain_targets)
+	if _chain_targets.size() == previous_count:
+		_update_chain_visuals()
+		return
+	for index in range(previous_count, _chain_targets.size()):
+		_chain_positions.append(_chain_targets[index].global_position)
+	_build_link_visuals()
+	if is_instance_valid(_hop_range_indicator):
+		_hop_range_indicator.hide_indicator()
+	_update_chain_visuals()
+
+func _trim_broken_links() -> void:
+	var previous_position := global_position
+	for index in _chain_targets.size():
+		var target := _chain_targets[index]
+		if _is_eligible_target(target) \
+				and target.global_position.is_finite() \
+				and previous_position.distance_squared_to(target.global_position) <= _link_range * _link_range:
+			previous_position = target.global_position
+			continue
+		_chain_targets.resize(index)
+		_chain_positions.resize(index + 1)
+		while _link_visuals.size() > index:
+			var segment: LaserGraphics = _link_visuals.pop_back()
+			if is_instance_valid(segment):
+				segment.hide()
+				segment.queue_free()
+		if is_instance_valid(_hop_range_indicator):
+			_hop_range_indicator.hide_indicator()
+		return
+
+func _get_candidates() -> Array[Node2D]:
+	var candidates: Array[Node2D] = []
+	for group_name: StringName in hit_groups:
+		for node: Node in get_tree().get_nodes_in_group(group_name):
+			var target := node as Node2D
+			if _is_eligible_target(target):
+				candidates.append(target)
+	return candidates
+
+func _nearest_visible_candidate(from_position: Vector2, candidates: Array[Node2D], visited: Dictionary[int, bool]) -> Node2D:
+	var nearest: Node2D
+	var nearest_distance_sq := _link_range * _link_range
+	for candidate: Node2D in candidates:
+		if not is_instance_valid(candidate) or visited.has(candidate.get_instance_id()):
+			continue
+		var distance_sq := from_position.distance_squared_to(candidate.global_position)
+		if distance_sq > nearest_distance_sq:
+			continue
+		if not line_of_sight.can_see(from_position, candidate.global_position):
+			continue
+		nearest = candidate
+		nearest_distance_sq = distance_sq
+	return nearest
+
+func _is_eligible_target(target: Node2D) -> bool:
+	return is_instance_valid(target) and target.is_inside_tree() and HitboxComponent.can_hit(target, hit_groups)
+
+func _start_chain(targets: Array[Node2D]) -> void:
+	_clear_link_visuals()
+	_chain_targets = targets
+	_chain_positions.clear()
+	_chain_positions.append(global_position)
+	for target: Node2D in _chain_targets:
+		_chain_positions.append(target.global_position)
+	_state = State.CHARGING
+	_charge_remaining = stats.charge_duration
+	_build_link_visuals()
+	_hop_range_indicator = RangeIndicator.new()
+	_hop_range_indicator.color = hop_range_color
+	_hop_range_indicator.z_index = -1
+	chain.add_child(_hop_range_indicator)
+	_hop_range_indicator.initialize(_link_range)
+	_hop_range_indicator.global_position = _chain_targets.back().global_position
+	_hop_range_indicator.show_indicator(laser_graphics.telegraph_fade_duration)
 	var speed := animation.get_animation_length("charge") / stats.charge_duration
 	if not animation.play_animation("charge", -1, speed):
-		linker.cancel_charge()
+		_cancel_charge()
 
-func _on_chain_fired(_target_count: int) -> void:
+func _fire_chain() -> void:
+	_clear_hop_range_indicator()
+	var damaged_count := 0
+	for target: Node2D in _chain_targets:
+		if not _is_eligible_target(target):
+			continue
+		HitboxComponent.apply_hit(target, _damage, stats.knockback, global_position)
+		damaged_count += 1
+	if damaged_count == 0:
+		_cancel_charge()
+		return
+	_state = State.COOLDOWN
+	_cooldown_remaining = _attack_cooldown
+	_has_fired = true
+	for visual: LaserGraphics in _link_visuals:
+		if is_instance_valid(visual):
+			visual.show_fire()
 	animation.stop_animation("charge")
 
-func _on_chain_cancelled() -> void:
+func _build_link_visuals() -> void:
+	for index in range(_link_visuals.size(), _chain_positions.size() - 1):
+		var segment := laser_graphics.create_instance()
+		segment.name = "LinkSegment"
+		chain.add_child(segment)
+		segment.fade_finished.connect(_on_segment_fade_finished.bind(segment))
+		segment.show_segment(_chain_positions[index], _chain_positions[index + 1])
+		segment.show_telegraph()
+		_link_visuals.append(segment)
+
+func _update_chain_visuals() -> void:
+	if _link_visuals.is_empty() or _chain_positions.size() != _chain_targets.size() + 1:
+		return
+	_chain_positions[0] = global_position
+	for index in _chain_targets.size():
+		var target := _chain_targets[index]
+		if is_instance_valid(target):
+			_chain_positions[index + 1] = target.global_position
+	if is_instance_valid(_hop_range_indicator):
+		var last_target: Node2D = _chain_targets.back()
+		if _is_eligible_target(last_target):
+			_hop_range_indicator.global_position = last_target.global_position
+			if not is_equal_approx(_hop_range_indicator.radius, _link_range):
+				_hop_range_indicator.initialize(_link_range)
+			_hop_range_indicator.show_indicator(laser_graphics.telegraph_fade_duration)
+		else:
+			_hop_range_indicator.hide_indicator()
+	for index in _link_visuals.size():
+		var segment := _link_visuals[index]
+		if is_instance_valid(segment):
+			segment.show_segment(_chain_positions[index], _chain_positions[index + 1])
+
+func _on_segment_fade_finished(target_alpha: float, segment: LaserGraphics) -> void:
+	if not is_zero_approx(target_alpha):
+		return
+	_link_visuals.erase(segment)
+	if is_instance_valid(segment):
+		segment.queue_free()
+
+func _cancel_charge() -> void:
+	if _state != State.CHARGING:
+		return
+	_state = State.READY
+	_charge_remaining = 0.0
+	_chain_targets.clear()
+	_chain_positions.clear()
+	_clear_link_visuals()
 	animation.stop_animation("charge")
+
+func _clear_link_visuals() -> void:
+	_clear_hop_range_indicator()
+	for visual: LaserGraphics in _link_visuals:
+		if is_instance_valid(visual):
+			visual.queue_free()
+	_link_visuals.clear()
+
+func _clear_hop_range_indicator() -> void:
+	if is_instance_valid(_hop_range_indicator):
+		_hop_range_indicator.queue_free()
+	_hop_range_indicator = null
+
+func _reset_chain() -> void:
+	_state = State.READY
+	_cooldown_remaining = 0.0
+	_charge_remaining = 0.0
+	_has_fired = false
+	_chain_targets.clear()
+	_chain_positions.clear()
+	_clear_link_visuals()
 
 func get_damage_value() -> int:
-	return linker.damage
+	return _damage
 
 func get_attack_cooldown_progress() -> float:
-	return linker.get_cooldown_progress()
+	if not _has_fired or _attack_cooldown <= 0.0:
+		return 1.0
+	return clampf(1.0 - _cooldown_remaining / _attack_cooldown, 0.0, 1.0)
 
 func set_damage(value: int) -> void:
-	linker.damage = value
+	_damage = value
 
 func set_attack_range(value: float) -> void:
-	linker.link_range = value
+	_link_range = value
 	range_indicator.initialize(value)
 
 func set_attack_cooldown(value: float) -> void:
-	linker.attack_cooldown = value
+	_attack_cooldown = value

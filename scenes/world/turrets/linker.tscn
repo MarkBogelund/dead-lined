@@ -5,7 +5,6 @@
 [ext_resource type="Resource" uid="uid://cka62cif20f6e" path="res://resources/turrets/linker/linker_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_5clo4"]
 [ext_resource type="Texture2D" uid="uid://bvioss540f1wf" path="res://assets/sprites/turrets/linker.png" id="4_sprite"]
-[ext_resource type="Script" uid="uid://cfqy4df0mwyv3" path="res://scripts/world/entities/turret/linker_component.gd" id="5_component"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="6_los"]
 [ext_resource type="PackedScene" path="res://scenes/world/turrets/linker_laser.tscn" id="7_laser"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="8_0fjia"]
@@ -111,6 +110,7 @@ region = Rect2(16, 0, 16, 16)
 [node name="Linker" unique_id=1190115832 instance=ExtResource("1_base")]
 script = ExtResource("2_linker")
 stats = ExtResource("3_stats")
+hop_range_color = Color(1, 0.95000005, 0.25, 0.47058824)
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/linker = SubResource("LinkerLibrary")
@@ -118,16 +118,14 @@ libraries/linker = SubResource("LinkerLibrary")
 [node name="Flash" parent="." index="11" unique_id=850017021]
 material = SubResource("ShaderMaterial_2cymx")
 
-[node name="LinkerComponent" type="Node2D" parent="." index="14" unique_id=1874484008]
+[node name="Chain" type="Node2D" parent="." index="14" unique_id=1874484008]
 z_index = 8
-script = ExtResource("5_component")
-hop_range_color = Color(1, 0.95000005, 0.25, 0.47058824)
 
-[node name="LineOfSightComponent" type="Node2D" parent="LinkerComponent" index="0" unique_id=754523635]
+[node name="LineOfSightComponent" type="Node2D" parent="Chain" index="0" unique_id=754523635]
 script = ExtResource("6_los")
 ray_offset = 1.0
 
-[node name="LaserGraphics" parent="LinkerComponent" index="1" unique_id=621636904 instance=ExtResource("7_laser")]
+[node name="LaserGraphics" parent="Chain" index="1" unique_id=621636904 instance=ExtResource("7_laser")]
 edge_color = Color(0.99215686, 0.9529412, 0.5294118, 0.9019608)
 telegraph_color = Color(0.99999994, 0.8915242, 0.3931329, 1)
 telegraph_alpha = 0.8
