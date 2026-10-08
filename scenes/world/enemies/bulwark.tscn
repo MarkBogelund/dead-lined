@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://bm4t4aeqdrg8b"]
 
 [ext_resource type="PackedScene" uid="uid://cp8scltlxc68k" path="res://scenes/world/enemies/boss_enemy_base.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://c4e7mc1s0e4vo" path="res://scripts/world/entities/enemy/bulwark.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://c4e7mc1s0e4vo" path="res://scripts/world/enemies/bulwark.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://1p4qib06ut85" path="res://resources/enemies/bulwark/bulwark_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_fqq7r"]
 [ext_resource type="Texture2D" uid="uid://brvere8c7ptay" path="res://assets/sprites/enemies/bulwark.png" id="4_sprite"]
-[ext_resource type="Script" uid="uid://cisjxdbl6fddi" path="res://scripts/world/entities/shared/directional_shield.gd" id="5_shield"]
+[ext_resource type="Script" uid="uid://cisjxdbl6fddi" path="res://scripts/world/attacks/directional_shield.gd" id="5_shield"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="7_u8e02"]
 [ext_resource type="PackedScene" uid="uid://dbvhg3xtca5" path="res://scenes/ui/health_ui.tscn" id="7_ui"]
-[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="10_hitbox"]
-[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/radial_wave.gd" id="11_hoj0n"]
+[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/attacks/hitbox.gd" id="10_hitbox"]
+[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/attacks/radial_wave.gd" id="11_hoj0n"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 14.0

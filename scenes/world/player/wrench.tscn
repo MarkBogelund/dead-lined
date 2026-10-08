@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://dpq66p1vi27sr"]
 
-[ext_resource type="Script" uid="uid://da0fvy8p6hv7l" path="res://scripts/world/entities/player/melee_weapon.gd" id="1_a0bpa"]
+[ext_resource type="Script" uid="uid://da0fvy8p6hv7l" path="res://scripts/world/attacks/melee_weapon.gd" id="1_a0bpa"]
 [ext_resource type="Texture2D" uid="uid://bnr14l7147w74" path="res://assets/sprites/player/wrench.png" id="2_aulmq"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/glitter_particles.tscn" id="3_viiqh"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="4_l4qbn"]
 [ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="5_5o0v0"]
-[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="6_cfxmm"]
+[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/attacks/hitbox.gd" id="6_cfxmm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2sq7"]
 atlas = ExtResource("2_aulmq")

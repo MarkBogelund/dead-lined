@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://s0r02kaxei7e" path="res://scripts/world/spawners/shop_station.gd" id="1_noi0g"]
 [ext_resource type="Texture2D" uid="uid://deh7td2wo54yx" path="res://assets/sprites/environment/work-bench-sheet.png" id="2_bxg8e"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="3_e1c5o"]
-[ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/entities/shared/interaction_zone.gd" id="4_zone"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="3_e1c5o"]
+[ext_resource type="Script" uid="uid://shh8mglm3kkg" path="res://scripts/world/shared/interaction_zone.gd" id="4_zone"]
 [ext_resource type="Script" uid="uid://chr2ddbgj1iim" path="res://scripts/ui/toggle_menu_component.gd" id="5_hmxn1"]
-[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="6_excl"]
+[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/turrets/turret_exclusion_zone.gd" id="6_excl"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_e1c5o"]
 radius = 6.5

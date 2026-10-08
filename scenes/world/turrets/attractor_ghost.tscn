@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://cdf2yj51n6fnc"]
 
-[ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/world/entities/turret/ghost_turret.gd" id="1_ghost"]
+[ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/world/turrets/ghost_turret.gd" id="1_ghost"]
 [ext_resource type="Texture2D" uid="uid://bvbj6yjifao5j" path="res://assets/sprites/turrets/attractor.png" id="2_32c85"]
-[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/entities/turret/turret_exclusion_zone.gd" id="3_exclusion"]
-[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/entities/turret/range_indicator.gd" id="4_range"]
+[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/turrets/turret_exclusion_zone.gd" id="3_exclusion"]
+[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/turrets/range_indicator.gd" id="4_range"]
 
 [sub_resource type="CircleShape2D" id="GhostCollisionShape"]
 radius = 16.0

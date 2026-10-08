@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://72ib1sispqd2"]
 
 [ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://47dhbp55kuk0" path="res://scripts/world/entities/turret/repulsor.gd" id="2_repulsor"]
+[ext_resource type="Script" uid="uid://47dhbp55kuk0" path="res://scripts/world/turrets/repulsor.gd" id="2_repulsor"]
 [ext_resource type="Resource" uid="uid://bkudpixa82gkd" path="res://resources/turrets/repulsor/repulsor_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_mporl"]
 [ext_resource type="Texture2D" uid="uid://c6nneksvj1icb" path="res://assets/sprites/turrets/repulsor.png" id="4_sprite"]
 [ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_shadow"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_aanik"]
-[ext_resource type="Script" uid="uid://cpmtyi8xjm5bd" path="res://scripts/world/entities/turret/radial_field.gd" id="6_field"]
+[ext_resource type="Script" uid="uid://cpmtyi8xjm5bd" path="res://scripts/world/attacks/radial_field.gd" id="6_field"]
 
 [sub_resource type="Animation" id="Pulse"]
 resource_name = "pulse"

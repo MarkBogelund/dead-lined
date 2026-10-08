@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://o4crmgh4cvkq"]
 
-[ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/entities/player/dash.gd" id="1_1hc6r"]
+[ext_resource type="Script" uid="uid://bf04a0qkt6m3h" path="res://scripts/world/player/dash.gd" id="1_1hc6r"]
 [ext_resource type="Script" uid="uid://pmwhcd3ivflq" path="res://scripts/world/vfx/trail.gd" id="3_w1v22"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/speed_particles.tscn" id="5_speed_particles"]
 

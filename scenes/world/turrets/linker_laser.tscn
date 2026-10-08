@@ -1,7 +1,8 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/world/entities/shared/laser_graphics.gd" id="1_graphics"]
+[ext_resource type="Script" uid="uid://m2e3t7ghg6ru" path="res://scripts/world/attacks/laser_graphics.gd" id="1_graphics"]
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="2_pixel_rotate"]
+
 
 [node name="LaserGraphics" type="Node2D"]
 script = ExtResource("1_graphics")

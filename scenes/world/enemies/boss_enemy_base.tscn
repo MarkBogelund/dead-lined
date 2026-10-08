@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://cp8scltlxc68k"]
 
 [ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/enemies/enemy_base.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://csayne3psbti0" path="res://scripts/world/entities/enemy/boss_enemy_base.gd" id="2_boss"]
+[ext_resource type="Script" uid="uid://csayne3psbti0" path="res://scripts/world/enemies/boss_enemy_base.gd" id="2_boss"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="3_11csn"]
 [ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="4_shadow"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="5_k6g42"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="6_shapes"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="7_sparks"]
-[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/radial_wave.gd" id="8_wave"]
+[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/attacks/radial_wave.gd" id="8_wave"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5tfdp"]
 resource_local_to_scene = true

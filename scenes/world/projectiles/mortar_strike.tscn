@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c3opx1lx86uvq"]
 
-[ext_resource type="Script" uid="uid://ddcw46m8pk2jd" path="res://scripts/world/entities/turret/mortar_strike.gd" id="1_mortar"]
+[ext_resource type="Script" uid="uid://ddcw46m8pk2jd" path="res://scripts/world/attacks/mortar_strike.gd" id="1_mortar"]
 [ext_resource type="Texture2D" uid="uid://dvpb83qdpks8q" path="res://assets/sprites/shared/mortar.png" id="2_8pcp2"]
-[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/radial_wave.gd" id="2_wave"]
+[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/attacks/radial_wave.gd" id="2_wave"]
 [ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="3_4fu3r"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="3_shader"]
 [ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_shadow"]

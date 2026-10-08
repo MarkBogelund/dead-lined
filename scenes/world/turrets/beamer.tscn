@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bjndpqr77avl0"]
 
 [ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://c03qqxwjb2j1y" path="res://scripts/world/entities/turret/beamer.gd" id="2_beamer"]
+[ext_resource type="Script" uid="uid://c03qqxwjb2j1y" path="res://scripts/world/turrets/beamer.gd" id="2_beamer"]
 [ext_resource type="Resource" uid="uid://dsrmd4nsu8na1" path="res://resources/turrets/beamer/beamer_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_6gvdm"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_736xw"]
@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="7_bwlqj"]
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="8_pixel_rotate"]
 [ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="10_bwlqj"]
-[ext_resource type="Script" uid="uid://m2e3t7ghg6ru" path="res://scripts/world/entities/shared/laser_graphics.gd" id="11_laser_graphics"]
+[ext_resource type="Script" uid="uid://m2e3t7ghg6ru" path="res://scripts/world/attacks/laser_graphics.gd" id="11_laser_graphics"]
 
 [sub_resource type="Animation" id="Animation_ume4x"]
 resource_name = "RESET"

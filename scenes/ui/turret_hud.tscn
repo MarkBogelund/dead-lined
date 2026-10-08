@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ctsmflabw1lo7"]
 
-[ext_resource type="Script" uid="uid://dpi7tvafhwm14" path="res://scripts/world/entities/turret/turret_hud.gd" id="1_jrbl1"]
+[ext_resource type="Script" uid="uid://dpi7tvafhwm14" path="res://scripts/world/turrets/turret_hud.gd" id="1_jrbl1"]
 [ext_resource type="Script" uid="uid://bhyhranqhcdwr" path="res://scripts/ui/turret_panel.gd" id="2_panel"]
 [ext_resource type="Texture2D" uid="uid://bnps2a01crbv8" path="res://assets/sprites/ui/capacity-bar-ui.png" id="3_frame"]
 [ext_resource type="Script" uid="uid://bye2qxrtc558s" path="res://scripts/ui/hold_button.gd" id="4_hold"]
@@ -10,7 +10,7 @@
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="6_font"]
 [ext_resource type="Material" uid="uid://lecq77tvhlrt" path="res://shaders/circulating_gradient_blue.tres" id="7_outline"]
 [ext_resource type="Texture2D" uid="uid://dlvo8nkskiyfi" path="res://assets/sprites/ui/turret-shop-icons.png" id="8_stat_icons"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="9_anim"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="9_anim"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="10_orb_icon"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/turrets/seeker.png" id="11_preview"]
 

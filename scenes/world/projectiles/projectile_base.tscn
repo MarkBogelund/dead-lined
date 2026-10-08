@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://lbntiqfct3r5"]
 
-[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/world/entities/shared/projectile.gd" id="1_script"]
-[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/entities/shared/hitbox.gd" id="2_hitbox"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="3_anim"]
+[ext_resource type="Script" uid="uid://dbjbehqkdnljw" path="res://scripts/world/attacks/projectile.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/attacks/hitbox.gd" id="2_hitbox"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="3_anim"]
 [ext_resource type="PackedScene" uid="uid://nyqmxlfuew7s" path="res://scenes/world/vfx/projectile_impact_vfx.tscn" id="4_vfx"]
 
 [sub_resource type="Animation" id="Animation_reset"]

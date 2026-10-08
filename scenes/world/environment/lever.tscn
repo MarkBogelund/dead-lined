@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cbnqhx552ue1l"]
 
 [ext_resource type="Texture2D" uid="uid://dctueislee8te" path="res://assets/sprites/environment/lever.png" id="1_i1aue"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="2_1dwqt"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="2_1dwqt"]
 [ext_resource type="Script" uid="uid://g2g3dtukumt7" path="res://scripts/world/environment/lever.gd" id="3_lever"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_js0lu"]

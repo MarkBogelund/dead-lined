@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://b5q32ahcm78j2"]
 
 [ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/enemies/enemy_base.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://e7tmr32ly7kc" path="res://scripts/world/entities/enemy/kamikazer.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://e7tmr32ly7kc" path="res://scripts/world/enemies/kamikazer.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://dfmgppjmpi2ej" path="res://resources/enemies/kamikazer/kamikazer_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_alyi3"]
 [ext_resource type="Texture2D" uid="uid://4ls8qibe4vmq" path="res://assets/sprites/enemies/kamikazer.png" id="4_sprite"]
 [ext_resource type="Texture2D" uid="uid://b8l2frb3h6x77" path="res://assets/sprites/enemies/kamikazer-shadow.png" id="5_shadow"]
-[ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="6_los"]
+[ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/shared/line_of_sight.gd" id="6_los"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="7_chargefx"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/mist_particles.tscn" id="9_mist_particles"]
 

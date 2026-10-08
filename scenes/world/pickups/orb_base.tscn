@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dfdoke3xag1rp"]
 
-[ext_resource type="Script" uid="uid://c62ss1mibrylf" path="res://scripts/world/entities/shared/orb.gd" id="1_wad1u"]
+[ext_resource type="Script" uid="uid://c62ss1mibrylf" path="res://scripts/world/pickups/orb.gd" id="1_wad1u"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="2_bq3m4"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="3_veb42"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="3_veb42"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sd2yw"]
 radius = 7.0

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bnps2a01crbv8" path="res://assets/sprites/ui/capacity-bar-ui.png" id="2_tyyj7"]
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="3_font"]
 [ext_resource type="Material" uid="uid://lecq77tvhlrt" path="res://shaders/circulating_gradient_blue.tres" id="3_rktw6"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="4_anim"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="4_anim"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yn6dg"]
 [ext_resource type="Texture2D" uid="uid://dlvo8nkskiyfi" path="res://assets/sprites/ui/turret-shop-icons.png" id="5_stat_icons"]
 

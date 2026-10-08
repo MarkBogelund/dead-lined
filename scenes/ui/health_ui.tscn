@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dbvhg3xtca5"]
 
-[ext_resource type="Script" uid="uid://5wcqudc7efji" path="res://scripts/world/entities/shared/health_ui.gd" id="1_health_ui"]
+[ext_resource type="Script" uid="uid://5wcqudc7efji" path="res://scripts/ui/health_ui.gd" id="1_health_ui"]
 [ext_resource type="Texture2D" uid="uid://ba14cim744kky" path="res://assets/sprites/ui/turret-health-ui.png" id="2_frame"]
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="3_fht25"]
 

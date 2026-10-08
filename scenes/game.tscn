@@ -29,8 +29,8 @@
 [ext_resource type="Resource" uid="uid://dfqqng3tkvdcl" path="res://resources/waves/conveyor_settings.tres" id="28_conveyor_settings"]
 [ext_resource type="Texture2D" uid="uid://dm6l6sh3twh0" path="res://assets/sprites/ui/turret_death_indicator.png" id="29_js0lu"]
 [ext_resource type="Resource" uid="uid://cals7t00fcr3i" path="res://resources/turrets/shockwaver/shockwaver_shop_details.tres" id="29_shockwaver_shop"]
-[ext_resource type="Script" uid="uid://dwuvwmcnb0y5n" path="res://scripts/world/game_camera.gd" id="30_game_camera"]
-[ext_resource type="Script" uid="uid://bt03k72gubhe" path="res://scripts/world/navigation_map_layer.gd" id="32_navmap"]
+[ext_resource type="Script" uid="uid://dwuvwmcnb0y5n" path="res://scripts/systems/game_camera.gd" id="30_game_camera"]
+[ext_resource type="Script" uid="uid://bt03k72gubhe" path="res://scripts/systems/navigation_map_layer.gd" id="32_navmap"]
 [ext_resource type="Script" uid="uid://bwun4kfd5apsa" path="res://scripts/ui/critical_turret_indicators.gd" id="33_offscreen"]
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="33_pixel_shader"]
 [ext_resource type="Resource" uid="uid://ddcryh3afnftq" path="res://resources/turrets/attractor/attractor_shop_details.tres" id="34_attractor_shop"]
@@ -47,7 +47,7 @@
 [ext_resource type="Resource" uid="uid://cx3hxt45w3uit" path="res://resources/enemies/kamikazer/kamikazer_spawn_details.tres" id="45_kamikazer_spawn"]
 [ext_resource type="Resource" uid="uid://1betm04mhcru" path="res://resources/enemies/shotgunner/shotgunner_spawn_details.tres" id="46_shotgunner_spawn"]
 [ext_resource type="Resource" uid="uid://d20ovxmdp055t" path="res://resources/enemies/emitter/emitter_spawn_details.tres" id="47_emitter_spawn"]
-[ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/entities/shared/safe_spot.gd" id="48_safe_spot"]
+[ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/enemies/safe_spot.gd" id="48_safe_spot"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001

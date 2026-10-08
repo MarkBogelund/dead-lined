@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cst4gdx02x1oc"]
 
 [ext_resource type="PackedScene" uid="uid://bwc8e5jf5vyy1" path="res://scenes/world/turrets/turret_base.tscn" id="1_base"]
-[ext_resource type="Script" uid="uid://du5eh3l44wcwu" path="res://scripts/world/entities/turret/linker.gd" id="2_linker"]
+[ext_resource type="Script" uid="uid://du5eh3l44wcwu" path="res://scripts/world/turrets/linker.gd" id="2_linker"]
 [ext_resource type="Resource" uid="uid://cka62cif20f6e" path="res://resources/turrets/linker/linker_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_5clo4"]
 [ext_resource type="Texture2D" uid="uid://bvioss540f1wf" path="res://assets/sprites/turrets/linker.png" id="4_sprite"]
-[ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/entities/shared/line_of_sight.gd" id="6_los"]
+[ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/shared/line_of_sight.gd" id="6_los"]
 [ext_resource type="PackedScene" path="res://scenes/world/turrets/linker_laser.tscn" id="7_laser"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="8_0fjia"]
 [ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="8_windup"]

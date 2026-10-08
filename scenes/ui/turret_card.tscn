@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://ctkogfpu1b3vh" path="res://scripts/ui/turret_card.gd" id="1_card"]
 [ext_resource type="Texture2D" uid="uid://bnps2a01crbv8" path="res://assets/sprites/ui/capacity-bar-ui.png" id="2_4pq58"]
 [ext_resource type="Shader" uid="uid://c3kstokhusotn" path="res://shaders/pixelated_gradient_pulsing.gdshader" id="3_4pq58"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="3_anim"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="3_anim"]
 
 [sub_resource type="Animation" id="Animation_highlight"]
 resource_name = "highlight"

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3]
 
-[ext_resource type="Script" path="res://scripts/world/entities/shared/confused.gd" id="1_confused"]
+[ext_resource type="Script" path="res://scripts/world/shared/confused.gd" id="1_confused"]
 [ext_resource type="Texture2D" uid="uid://kwtjsdcjuhji" path="res://assets/sprites/enemies/stunned.png" id="2_texture"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0"]

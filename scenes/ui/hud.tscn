@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="3_bo48s"]
 [ext_resource type="PackedScene" uid="uid://ppcskmuwki6w" path="res://scenes/ui/floating_score_text.tscn" id="4_8qguk"]
 [ext_resource type="Texture2D" uid="uid://bnps2a01crbv8" path="res://assets/sprites/ui/capacity-bar-ui.png" id="4_oj5la"]
-[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/entities/shared/animation_handler.gd" id="5_136eg"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="5_136eg"]
 [ext_resource type="Material" uid="uid://ddxubrx1shcgk" path="res://shaders/gradient_blue.tres" id="6_4jqwt"]
 [ext_resource type="Material" uid="uid://lecq77tvhlrt" path="res://shaders/circulating_gradient_blue.tres" id="6_h022r"]
 [ext_resource type="Shader" uid="uid://c32ev47kxnpp4" path="res://shaders/pixelated_gradient.gdshader" id="6_pixel_gradient"]
