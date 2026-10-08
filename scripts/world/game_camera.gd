@@ -1,3 +1,4 @@
+@tool
 extends Camera2D
 class_name GameCamera
 
@@ -12,9 +13,20 @@ const CRUNCH_TIME_SOURCE := &"crunch_time"
 var _base_zoom := Vector2.ONE
 var _factors: Dictionary[StringName, float] = {}
 var _tweens: Dictionary[StringName, Tween] = {}
+var _zoom_ready := false
+
+@export_group("Cinematics")
+## Animation-owned multiplier; RESET must set it to 1. Other zoom effects still compose with it.
+@export_range(0.1, 4.0, 0.01) var game_over_zoom_factor := 1.0:
+	set(value):
+		game_over_zoom_factor = value
+		if _zoom_ready:
+			_update_zoom()
 
 func _ready() -> void:
 	_base_zoom = zoom
+	_zoom_ready = true
+	_update_zoom()
 
 ## Tweens this source's factor; 1.0 removes it. ignore_time_scale keeps the fade real-time during slow-motion.
 func set_zoom_factor(source: StringName, factor: float, duration: float, ignore_time_scale := false) -> void:
@@ -29,7 +41,10 @@ func set_crunch_time_active(active: bool) -> void:
 
 func _set_factor(value: float, source: StringName) -> void:
 	_factors[source] = value
-	var total := 1.0
+	_update_zoom()
+
+func _update_zoom() -> void:
+	var total := game_over_zoom_factor
 	for factor: float in _factors.values():
 		total *= factor
 	zoom = _base_zoom * total

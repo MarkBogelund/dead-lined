@@ -2,30 +2,49 @@ extends EnemyBase
 class_name BossEnemyBase
 
 signal boss_landed(shake_intensity: float)
+signal boss_intro_finished
 
-@export var boss_intro: BossIntroComponent
+@export var intro_animation: AnimationPlayer
+@export var landing_vfx: Node2D
+@export var landing_wave: ShockwaveComponent
+
+const DROP_ANIMATION: StringName = &"drop"
+const RESET_ANIMATION: StringName = &"RESET"
+
+func buff_damage(multiplier: float) -> void:
+	contact_hitbox.damage = int(contact_hitbox.damage * multiplier)
 
 func play_boss_intro() -> void:
 	if _spawn_intro_active:
 		return
-	assert(boss_intro, "BossEnemyBase requires its owned BossIntroComponent")
-	if not boss_intro.landed.is_connected(_on_boss_landed):
-		boss_intro.landed.connect(_on_boss_landed)
-		boss_intro.finished.connect(_finish_spawn_intro)
+	assert(intro_animation and landing_vfx and landing_wave, "BossEnemyBase requires its shared intro nodes")
+	if not intro_animation.animation_finished.is_connected(_on_intro_finished):
+		intro_animation.animation_finished.connect(_on_intro_finished)
 	animation.stop_animation("idle")
 	begin_spawn_intro()
 	remove_from_group("enemies")
-	boss_intro.begin()
+	landing_vfx.top_level = false
+	landing_vfx.position = Vector2.ZERO
+	landing_wave.set_enabled(true)
+	intro_animation.play(DROP_ANIMATION)
+	intro_animation.advance(0.0)
 
-func _on_boss_landed(shake_intensity: float) -> void:
-	boss_landed.emit(shake_intensity)
+func _on_intro_finished(animation_name: StringName) -> void:
+	if animation_name == DROP_ANIMATION and _spawn_intro_active:
+		landing_vfx.top_level = true
+		landing_vfx.global_position = global_position
+		_finish_spawn_intro()
+		boss_intro_finished.emit()
 
 func _finish_spawn_intro() -> void:
 	add_to_group("enemies")
 	super._finish_spawn_intro()
 
 func cancel_boss_intro() -> void:
-	if boss_intro:
-		boss_intro.cancel()
+	_spawn_intro_active = false
+	landing_wave.set_enabled(false)
+	intro_animation.play(RESET_ANIMATION)
+	intro_animation.advance(0.0)
+	intro_animation.stop(true)
 	hide()
 	queue_free()

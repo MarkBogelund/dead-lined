@@ -13,12 +13,21 @@ enum State {READY, WINDUP, EXPANDING, COOLDOWN}
 @onready var shockwave_visual: ColorRect = $ShockwaveVisual
 
 ## Trigger distance and blast radius.
+@export_group("Wave")
+@export_range(0.0, 500.0, 1.0)
 var max_range := 120.0
+@export_range(1.0, 64.0, 1.0)
 var ring_thickness := 8.0
+@export_range(0.0, 30.0, 0.01)
 var cooldown := 2.5
+@export_range(0.01, 5.0, 0.01)
 var expansion_duration := 0.6
+@export_range(0, 1000, 1)
 var damage := 20
+@export_range(0.0, 1000.0, 1.0)
 var knockback_force := 180.0
+## Defaults retain turret waves' player/enemy targets; boss landings can select player/turrets instead.
+@export var target_groups: Array[StringName] = [&"player", &"enemies"]
 ## False = the player no longer starts a pulse, but pulses still damage the player.
 var trigger_on_player := true
 ## False lets an external owner call execute_shockwave() at a locked impact point.
@@ -123,7 +132,7 @@ func _ready() -> void:
 	var shader_material := ShaderMaterial.new()
 	shader_material.shader = pixel_art_shader
 	shockwave_visual.material = shader_material
-	_configure_shockwave_visual()
+	_apply_radius()
 	shockwave_visual.hide()
 
 func _configure_shockwave_visual() -> void:
@@ -212,7 +221,10 @@ func _is_damageable(body: Node2D) -> bool:
 		return false
 	if body.has_method("is_dead") and body.is_dead():
 		return false
-	return body.is_in_group("player") or body.is_in_group("enemies")
+	for group_name: StringName in target_groups:
+		if body.is_in_group(group_name):
+			return true
+	return false
 
 func _reset() -> void:
 	_state = State.READY

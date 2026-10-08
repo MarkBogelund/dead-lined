@@ -113,7 +113,7 @@ Enemies have a powerup drop chance (2% by default, configurable per enemy type).
 ### Boss Enemies
 Every fifth combat wave selects one boss at random from the unlocked boss pool and adds it to that wave. The boss materializes at a random valid map position after a clear spawn telegraph; the position must be reachable and must not overlap the player, a turret, or blocking geometry.
 
-All bosses share a readable arrival: a ground warning marks their fixed landing point, a growing shadow precedes a quick drop from above, and landing creates a brief squash/rebound, impact flash, expanding ring, dust, sparks, and screen shake. The player can move away during the warning; the boss cannot attack, block movement, or take damage until the landing recovery ends.
+All bosses share a readable arrival: a ground warning marks their fixed landing point and impact radius, a growing shadow precedes a quick drop from above, and landing creates a brief squash/rebound, impact flash, thick pixelated expanding ring, dust, sparks, and strong screen shake. The landing ring damages the player and turrets once each when it reaches them, but does not hurt enemies. The player can move away during the warning; normal boss AI and contact damage remain disabled until landing recovery ends, and the boss is invulnerable during its arrival.
 
 Bosses are tankier than normal enemies and each has one clear mechanic that changes the player's positioning, target priority, or evasion route while turrets remain the main damage source.
 

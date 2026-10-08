@@ -330,8 +330,8 @@ func _test_spawning() -> void:
 	assert(_spawned_boss.health.current_health == _spawned_boss.stats.max_health)
 	assert(not _spawned_boss.health_ui.visible)
 	assert(_spawned_boss._spawn_intro_active)
-	assert(_spawned_boss.boss_intro.landing_marker.visible)
-	await _spawned_boss.boss_intro.finished
+	assert((_spawned_boss.get_node("ImpactVFX/LandingMarker") as CanvasItem).visible)
+	await _spawned_boss.boss_intro_finished
 	assert(_spawned_boss.health_ui.visible)
 	assert(not _spawned_boss._spawn_intro_active)
 	assert(not spawner.is_spawning())
@@ -396,7 +396,7 @@ func _test_spawning() -> void:
 	assert(_boss_count == 2 and not spawner.is_spawning())
 	assert(_boss_spawn_position.is_finite())
 	assert(picker.get_nearest_threat_distance(_boss_spawn_position, threats) < picker.min_threat_distance)
-	await _spawned_boss.boss_intro.finished
+	await _spawned_boss.boss_intro_finished
 	_spawned_boss.was_hit_bypassing_armor(10000, 0.0, _spawned_boss.global_position + Vector2.RIGHT)
 	await get_tree().process_frame
 	await get_tree().process_frame

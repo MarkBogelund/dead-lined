@@ -125,9 +125,58 @@ Transient turret behavior animations key `Visuals:material:shader_parameter/flas
 
 ### Bulwark
 
-Bosses inherit [boss_enemy_base.tscn](scenes/world/enemies/boss_enemy_base.tscn), which adds the shared [boss_intro.tscn](scenes/world/vfx/boss_intro.tscn) and `BossEnemyBase` lifecycle above EnemyBase. The editor-authored `drop` timeline shows a ground warning for 0.9 seconds, drops only the boss's Visuals over 0.25 seconds, and adds landing squash/rebound, a brief flash, an expanding ground ring, dust, and sparks before recovery ends at 1.45 seconds. The root stays at its landing position, collision/contact damage/AI are disabled, and the boss is excluded from target acquisition until recovery finishes. Bulwark's existing spawn hooks also suspend its shield/armor and hide its health UI during the intro. The shared component restores authored visual transforms and shadow visibility afterward; collision shapes are never animated or scaled.
+All shared arrival nodes and animations live directly in [boss_enemy_base.tscn](scenes/world/enemies/boss_enemy_base.tscn). There is no separate intro scene, intro component, or custom landing-marker script. Each concrete boss adds artwork under the empty `Visuals > DropRoot` and owns its own stats, collider dimensions, shields, UI, and AI. Shared containers keep stable IDs for reliable scene inheritance.
 
-Landing signals travel from BossIntroComponent through BossEnemyBase and SpawnManager to a scene-connected CameraShakeManager; the boss never finds or calls a camera directly. SpawnManager tracks the incoming boss throughout the intro so the wave cannot finish early, and generation-aware cancellation removes an interrupted incoming boss without stale shake events. Tune the shared timeline/particles/marker in the boss intro scene, and `Drop Height` / `Landing Shake Intensity` on its component. New bosses inherit the boss base and supply their own Visuals/art and gameplay components, reusing the same intro without copying animations. Ground impact particles remain world-aligned after landing rather than following the boss's movement. Gameplay verification remains an in-game pass; no new automated test scene is added for presentation feel.
+```text
+BossEnemyBase
+	Visuals
+		DropRoot           <- concrete boss artwork goes here
+		Shadow
+	ImpactVFX
+		LandingMarker      <- ColorRect with pixel_ring shader
+		DropShadow
+		DustParticles
+		SparkParticles
+		RadialWaveComponent
+	BossIntroAnimationPlayer
+```
+
+`BossIntroAnimationPlayer > drop` coordinates the complete presentation: marker fade/visibility, visual fall/squash, shadow changes, flash, shake strength, and particle restart keys. The warning is one pixelated circle fading in through its `material:shader_parameter/shockwave_color` track (alpha 0 to 0.9). The shader owns its output alpha, so the timeline keys that directly rather than relying on node modulation. The default timing remains 0.9 seconds of warning, a 0.25-second fall, and recovery ending at 1.45 seconds. The root and physics shapes do not move or scale during the drop. The landing pulse has a 90-pixel radius, 16-pixel ring thickness, 3-pixel grid, and 15 damage once per player/turret; its 98-pixel warning circle covers the full outer ring. Enemies are excluded.
+
+BossEnemyBase code now only starts/finishes/cancels the intro and enables/resets its damage component. It has no `land()` wrapper, landing flag, or shake-strength property. The animation directly calls `ImpactVFX/RadialWaveComponent.execute_shockwave()` and the root's built-in `emit_signal("boss_landed", 0.75)` at impact. On completion, the lifecycle code pins ImpactVFX to its world position before restoring AI, so lingering particles and the wave cannot follow the moving boss. The animation owns timing and appearance; ShockwaveComponent owns damage detection and one-hit bookkeeping. SpawnManager tracks the incoming boss while gameplay is disabled and cancels stale events through its generation guard. Bulwark's hooks additionally suspend/restore armor, shield, and its health UI.
+
+### Editing Animations
+
+Keep animation ownership local: boss arrival belongs to the boss base, game over to GameOverManager, camera zoom to GameCamera, and shake to CameraShakeManager. There is no global AnimationHandler or cinematic coordinator. Scene-connected signals coordinate separate owners without a second controller writing the same property.
+
+| What to change | Scene / node | Track or property |
+| --- | --- | --- |
+| Shared warning, fall, and recovery timing | [boss_enemy_base.tscn](scenes/world/enemies/boss_enemy_base.tscn), `BossIntroAnimationPlayer`, `drop` | Move the timeline keys and adjust clip length. |
+| Drop height and fall easing | Same shared clip | `Visuals/DropRoot:position`; the first keys currently use Y = -180 and landing uses Y = 0. |
+| Landing squash and rebound | Same shared clip | `Visuals/DropRoot:scale`; resting scale is (1, 1). |
+| Reveal / normal shadow visibility | Same shared clip | `Visuals/DropRoot:visible` and `Visuals/Shadow:visible`. |
+| Ground warning | Same shared clip, `ImpactVFX/LandingMarker` | `visible` and `material:shader_parameter/shockwave_color` alpha fade; circle radius/thickness/pixel size are its material's shader parameters. |
+| Pixelated impact ring and landing damage | Same boss-base scene, `ImpactVFX/RadialWaveComponent` | Radius, thickness, damage, and styling are Inspector properties. Its direct Call Method track calls `execute_shockwave()` at 1.15 s; move that key to change trigger time. |
+| Falling shadow | Same shared clip | `ImpactVFX/DropShadow:scale`, `modulate`, and `visible`. |
+| Impact flash | Same shared clip | `Visuals:material:shader_parameter/flash_amount`. |
+| Exact impact moment | Same shared clip | Keep the direct wave `execute_shockwave()`, root `emit_signal()`, Dust/Spark `restart()`, warning hide, and flash peak aligned (currently 1.15 s), or separate them intentionally. |
+| Particle look and count | Same boss-base scene, `ImpactVFX` children | Particle amount/lifetime/materials/textures; restart keys in `drop` control timing. |
+| Landing shake strength | Same shared `drop` clip, root Call Method track (`.`) | Select its `emit_signal` key, keep the first argument `boss_landed`, and edit the second argument (currently 0.75). Move or add keys for shake timing; no script property or wrapper method is involved. |
+| Game-over zoom and score-panel timing | [game.tscn](scenes/game.tscn), `Systems/GameOverManager/AnimationPlayer`, `play_death_sequence` | Animate `World/Player/Camera2D:game_over_zoom_factor`; move the `show_score_breakdown()` key for UI timing. |
+
+To change every boss, open the boss-base scene, select `BossIntroAnimationPlayer`, choose `drop`, and edit its keys. To preview with actual artwork, open [bulwark.tscn](scenes/world/enemies/bulwark.tscn) and scrub the same inherited timeline. All visual value tracks, including the shader-circle fade, preview normally without a custom marker script. Particle/wave method keys, camera shake, and gameplay activation require playback in-game. Keep `drop` non-looping, align the independent impact method keys as desired, and retain `RESET` tracks to restore the neutral pose on cancellation/editor reset. New bosses inherit the same scene/timeline without copying intro scripts or VFX scenes.
+
+GameCamera is the only writer of actual `Camera2D.zoom`: the game-over animation drives its separate multiplier from 1 to 2, which composes with named dash/Crunch Time factors. The camera supports editor preview for this factor. Never keyframe raw `zoom` from another animation controller. `RESET` restores the game-over factor to 1. Landing shake travels `BossEnemyBase.boss_landed -> SpawnManager.boss_landing_shake_requested -> CameraShakeManager.shake_screen`. GameOverManager's `game_over` signal connects to SpawnManager's `cancel_wave`; no manager directly calls its sibling.
+
+### Adding A Boss
+
+1. Create an inherited scene from [boss_enemy_base.tscn](scenes/world/enemies/boss_enemy_base.tscn), not directly from EnemyBase. Its root script must extend `BossEnemyBase`.
+2. Add the boss's artwork children under the inherited `Visuals > DropRoot`; a Sprite2D named `Body` is a convenient convention, not a base-owned sprite. Assign its texture and enable `Use Parent Material` if it should share body/landing flashes. Scale/offset artwork children to suit the boss; leave DropRoot's resting position at (0, 0) and scale at (1, 1), since the shared timeline owns those properties. Ground shadows, UI, colliders, and gameplay components remain outside DropRoot.
+3. The concrete boss's script extends `BossEnemyBase` and calls `_initialize_base(your_stats)` in `_ready()`, then configures contact damage, targeting, and its own gameplay components, just as Bulwark does. Assign body/contact shapes on the inherited CollisionShape2D slots; dimensions and stats belong to the concrete boss, not the generic base. Keep the inherited `Visuals` enemy-surface shader contract if replacing its material, so shared landing and hit flashes work. Idle/attack animations animate artwork children, not the intro-owned holder. No custom drop animation or spawn branch is needed.
+4. If the boss has extra attack/shield/UI components, override `begin_spawn_intro()` / `_finish_spawn_intro()` to suspend and restore them, calling `super` just as Bulwark does. No override is needed for bosses with only the standard EnemyBase components.
+5. Create an `EnemySpawnEntry` pointing at the new scene and add it to `Systems > SpawnManager > Boss Entries` in [game.tscn](scenes/game.tscn). Set its introduction wave, enabled state, and scaling. The manager already selects entries and calls the inherited intro automatically: no new drop script, animation copy, spawn branch, or camera reference is needed.
+
+Gameplay/visual feel is verified in-game; automated presentation tests are not required for routine timeline edits.
 
 Targeting-only regression check: append `-- --targeting-only` to the Bulwark test command to verify player/turret preference without depending on sprite or balance tuning assertions.
 
@@ -137,7 +186,7 @@ Protected hits route health loss through the owned HealthComponent but skip Enem
 
 `ShieldCollider` is an independent `AnimatableBody2D` on physics layer 8 (`EnemyShield`), with an editable crescent polygon matching the sprite at its current 2-pixel offset. It follows armor facing outside animated `Visuals`, so visual scaling cannot scale physics. Its owned component emits shield impacts upward; Bulwark applies reduced damage/stress with zero knockback, including the armor-breaking hit. Exposed-side, broken-armor, and armor-bypassing hits retain incoming knockback. The collider disables during broken armor, spawn intro, and death. Player/turret projectile masks include EnemyShield; rings, Piercer, navigation, and body-only target acquisition do not. Projectiles immediately disable hit delivery after resolving one impact, preventing double damage from queued shield/body overlaps.
 
-`Visuals > ArmorVisual` in [bulwark.tscn](scenes/world/enemies/bulwark.tscn) is a centered `Sprite2D` using [bulwark-shield.png](assets/sprites/enemies/bulwark-shield.png), replacing the procedural arcs. The art faces right at zero rotation, follows armor facing, tints toward red as stress rises, and dims while broken. Texture, offset, and state colors are scene-editable; the sprite does not control the gameplay armor arc.
+`Visuals > DropRoot > ArmorVisual` in [bulwark.tscn](scenes/world/enemies/bulwark.tscn) is the boss's shield `Sprite2D`, replacing the procedural arcs. Its scene-authored texture/atlas, offset, scale, and state colors remain editable independently of the shared drop holder. It faces right at zero rotation, follows armor facing, changes tint as stress rises, and dims while broken; it does not control the gameplay armor arc.
 
 Focused regression checks: run Godot with `--headless --path . --fixed-fps 60 res://tests/bulwark_tests.tscn --quit-after 1200`. The test scene covers armor/UI behavior, real bypass hit detection, boss intervals, balanced shuffled spawn distribution, entry/scaling, cancellation, scoring, and wave completion.
 
