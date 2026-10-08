@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/projectiles/stalker_projectile.tscn" id="6_projectile"]
 [ext_resource type="Texture2D" uid="uid://ciiaetgaecjx1" path="res://assets/sprites/enemies/shotgunner-shadow.png" id="7_aq71u"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/shared/line_of_sight.gd" id="7_los"]
-[ext_resource type="Script" uid="uid://kxqm1yu6myfa" path="res://scripts/world/enemies/keep_distance.gd" id="8_keep_distance"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/confused_component.tscn" id="9_confused"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="9_l6coj"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="9_particles"]
@@ -397,9 +396,6 @@ projectile_scene = ExtResource("6_projectile")
 
 [node name="LineOfSightComponent" type="Node2D" parent="." index="13" unique_id=1200000008]
 script = ExtResource("7_los")
-
-[node name="KeepDistanceComponent" type="Node" parent="." index="14" unique_id=1200000009]
-script = ExtResource("8_keep_distance")
 
 [node name="WindupParticles" parent="." index="15" unique_id=1200000010 instance=ExtResource("11_windup")]
 texture = SubResource("AtlasTexture_windup")

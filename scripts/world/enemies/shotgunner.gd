@@ -9,7 +9,6 @@ const RELOCATION_CANDIDATES := 16
 @onready var line_of_sight: LineOfSightComponent = $LineOfSightComponent
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var aiming: AimingComponent = $AimingComponent
-@onready var keep_distance: KeepDistanceComponent = $KeepDistanceComponent
 @onready var body_sprite: AnimatedSprite2D = $Visuals/Body
 @onready var confused: ConfusedComponent = $Visuals/ConfusedSprite
 
@@ -38,7 +37,6 @@ func _initialize() -> void:
 	targeting.configure(stats.targeting)
 	shoot.initialize(stats.attack_cooldown, stats.damage, stats.knockback, stats.projectile_speed, stats.projectile_lifetime)
 	shoot.set_spread(stats.projectile_count, stats.spread_angle)
-	keep_distance.initialize(stats.preferred_distance, stats.preferred_distance_tolerance)
 	_speed = stats.move_speed
 	_max_shoot_distance = stats.shoot_range
 	_shoot_delay = stats.first_shot_delay
@@ -71,7 +69,10 @@ func _process_movement(delta: float) -> void:
 		return
 
 	var has_line_of_sight := line_of_sight.can_see(global_position, target.global_position)
-	var goal := keep_distance.get_move_goal(global_position, target.global_position, has_line_of_sight)
+	var to_target := target.global_position - global_position
+	var goal := target.global_position
+	if has_line_of_sight and to_target.length() <= stats.preferred_distance + stats.preferred_distance_tolerance:
+		goal -= to_target.normalized() * stats.preferred_distance
 	velocity = navigation.get_safe_velocity(goal, _speed)
 	_face_target(body_sprite, target.global_position)
 

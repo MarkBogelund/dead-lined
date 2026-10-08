@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://nyqmxlfuew7s"]
 
-[ext_resource type="Script" uid="uid://cd56nfpfhpe8y" path="res://scripts/world/vfx/vfx.gd" id="1_nqov7"]
 [ext_resource type="Texture2D" uid="uid://dqb2ogvxbqcu0" path="res://assets/sprites/shared/explosion-vfx-turret.png" id="2_1tkw0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rsxgi"]
@@ -102,7 +101,6 @@ _data = {
 }
 
 [node name="ExplosionVFX" type="Node2D" unique_id=1846526661]
-script = ExtResource("1_nqov7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1169125295]
 visible = false
