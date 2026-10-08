@@ -21,7 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://bldg33eco6nyp" path="res://assets/sprites/environment/conveyor-belt.png" id="16_sww3w"]
 [ext_resource type="PackedScene" uid="uid://bgw388qgo3ujn" path="res://scenes/world/environment/conveyor_belt_visual.tscn" id="17_sgl2t"]
 [ext_resource type="Texture2D" uid="uid://dchdr15xarbu2" path="res://assets/sprites/environment/conveyor-cover.png" id="19_wljb1"]
-[ext_resource type="Texture2D" uid="uid://deyg0p6ycgkoa" path="res://assets/sprites/environment/conveyor-cover-shadow.png" id="20_v2yb1"]
 [ext_resource type="Script" uid="uid://q2sxkhmik7ny" path="res://scripts/data/turret_entry.gd" id="25_tentry"]
 [ext_resource type="PackedScene" uid="uid://cbnqhx552ue1l" path="res://scenes/world/environment/lever.tscn" id="26_v2yb1"]
 [ext_resource type="Script" uid="uid://blje0nqklvqls" path="res://scripts/world/spawners/conveyor_belt.gd" id="27_conveyor_script"]
@@ -48,6 +47,7 @@
 [ext_resource type="Resource" uid="uid://1betm04mhcru" path="res://resources/enemies/shotgunner/shotgunner_spawn_details.tres" id="46_shotgunner_spawn"]
 [ext_resource type="Resource" uid="uid://d20ovxmdp055t" path="res://resources/enemies/emitter/emitter_spawn_details.tres" id="47_emitter_spawn"]
 [ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/enemies/safe_spot.gd" id="48_safe_spot"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="pixel_circle"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
 length = 0.001
@@ -225,8 +225,6 @@ size = Vector2(32, 128)
 [sub_resource type="AtlasTexture" id="AtlasTexture_sgl2t"]
 atlas = ExtResource("16_sww3w")
 region = Rect2(32, 32, 32, 32)
-
-[sub_resource type="DrawableTexture2D" id="DrawableTexture2D_spl43"]
 
 [node name="Game" type="Node" unique_id=1881782800]
 
@@ -479,10 +477,12 @@ z_index = 20
 position = Vector2(-8.447985e-06, -64)
 texture = ExtResource("19_wljb1")
 
-[node name="ConveyorCoverShadow" type="Sprite2D" parent="World/Environment/ConveyorBeltRight/ConveyorCover" unique_id=390641156]
+[node name="ConveyorCoverShadow" parent="World/Environment/ConveyorBeltRight/ConveyorCover" unique_id=390641156 instance=ExtResource("pixel_circle")]
 modulate = Color(0, 0, 0, 0.39215687)
 z_index = -20
-texture = ExtResource("20_v2yb1")
+shape = 1
+size = Vector2i(30, 7)
+pixel_size = 1
 
 [node name="ConveyorEntranceLight" type="PointLight2D" parent="World/Environment/ConveyorBeltRight/ConveyorCover" unique_id=913014218]
 position = Vector2(0, 32)
@@ -492,11 +492,13 @@ color = Color(0.67, 0.08933333, 0, 1)
 energy = 0.5
 texture = SubResource("GradientTexture2D_vtaks")
 
-[node name="ConveyorShadow" type="Sprite2D" parent="World/Environment/ConveyorBeltRight" unique_id=2125923225]
+[node name="ConveyorShadow" parent="World/Environment/ConveyorBeltRight" unique_id=2125923225 instance=ExtResource("pixel_circle")]
 modulate = Color(0, 0, 0, 0.19607843)
 z_index = -1
 scale = Vector2(0.6, 2)
-texture = SubResource("DrawableTexture2D_spl43")
+shape = 1
+size = Vector2i(32, 16)
+pixel_size = 1
 
 [node name="ConveyorBeltLeft" type="Area2D" parent="World/Environment" unique_id=137809754]
 z_index = 1
@@ -524,10 +526,12 @@ z_index = 20
 position = Vector2(-8.447985e-06, -72)
 texture = ExtResource("19_wljb1")
 
-[node name="ConveyorCoverShadow" type="Sprite2D" parent="World/Environment/ConveyorBeltLeft/ConveyorCover" unique_id=140162662]
+[node name="ConveyorCoverShadow" parent="World/Environment/ConveyorBeltLeft/ConveyorCover" unique_id=140162662 instance=ExtResource("pixel_circle")]
 modulate = Color(0, 0, 0, 0.39215687)
 z_index = -20
-texture = ExtResource("20_v2yb1")
+shape = 1
+size = Vector2i(30, 7)
+pixel_size = 1
 
 [node name="ConveyorEntranceLight" type="PointLight2D" parent="World/Environment/ConveyorBeltLeft/ConveyorCover" unique_id=271815017]
 position = Vector2(0, 32)
@@ -537,11 +541,13 @@ color = Color(0.67, 0.08933333, 0, 1)
 energy = 0.5
 texture = SubResource("GradientTexture2D_vtaks")
 
-[node name="ConveyorShadow" type="Sprite2D" parent="World/Environment/ConveyorBeltLeft" unique_id=1286734904]
+[node name="ConveyorShadow" parent="World/Environment/ConveyorBeltLeft" unique_id=1286734904 instance=ExtResource("pixel_circle")]
 modulate = Color(0, 0, 0, 0.19607843)
 z_index = -1
 scale = Vector2(0.6, 2)
-texture = SubResource("DrawableTexture2D_spl43")
+shape = 1
+size = Vector2i(32, 16)
+pixel_size = 1
 
 [node name="OutsideMapOverlays" type="Node" parent="World/Environment" unique_id=1459954076]
 

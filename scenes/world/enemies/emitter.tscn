@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://cbs13wtkxreni" path="res://resources/enemies/emitter/emitter_stats.tres" id="3_5gw3d"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_1imx6"]
 [ext_resource type="Texture2D" uid="uid://m6gx8nblgfu6" path="res://assets/sprites/enemies/emitter.png" id="5_5dm6q"]
-[ext_resource type="Texture2D" uid="uid://c15fsu7l4duyw" path="res://assets/sprites/enemies/emittershadow.png" id="6_pxiuf"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="6_pixel_circle"]
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/attacks/shoot.gd" id="7_mki7b"]
 [ext_resource type="PackedScene" uid="uid://b7guvgjnl7dj3" path="res://scenes/world/projectiles/emitter_projectile.tscn" id="8_cuuje"]
 [ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/enemies/safe_spot.gd" id="9_nv6my"]
@@ -347,10 +347,12 @@ position = Vector2(-10, 0)
 [node name="RightMuzzle" type="Marker2D" parent="Visuals/EmitPivot" index="1" unique_id=1300000005]
 position = Vector2(10, 0)
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="2" unique_id=296194169]
+[node name="Shadow" parent="Visuals" index="2" unique_id=296194169 instance=ExtResource("6_pixel_circle")]
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
-texture = ExtResource("6_pxiuf")
+shape = 1
+size = Vector2i(14, 6)
+pixel_size = 1
 
 [node name="ConfusedSprite" parent="Visuals" index="3" instance=ExtResource("12_confused")]
 position = Vector2(0, -2)

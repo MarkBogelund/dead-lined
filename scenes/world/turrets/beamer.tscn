@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dv38ca2ap3wph" path="res://assets/sprites/turrets/beamer.png" id="7_6gvdm"]
 [ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="7_bwlqj"]
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="8_pixel_rotate"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="10_bwlqj"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="10_pixel_circle"]
 [ext_resource type="Script" uid="uid://m2e3t7ghg6ru" path="res://scripts/world/attacks/laser_graphics.gd" id="11_laser_graphics"]
 
 [sub_resource type="Animation" id="Animation_ume4x"]
@@ -135,7 +135,7 @@ _data = {
 &"windup": SubResource("Windup")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cd42n"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bwlqj"]
 resource_local_to_scene = true
 shader = ExtResource("4_6gvdm")
 shader_parameter/shockwave_color = Color(1, 1, 1, 1)
@@ -145,6 +145,8 @@ shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
+shader_parameter/arc_direction = 0.0
+shader_parameter/arc_half_angle = 3.1415927
 
 [sub_resource type="Gradient" id="Gradient_ume4x"]
 offsets = PackedFloat32Array(0.39473686, 1)
@@ -174,7 +176,7 @@ scale_max = 0.29999998
 scale_curve = SubResource("CurveTexture_78ntu")
 color_ramp = SubResource("GradientTexture1D_bwlqj")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_78ntu"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cd42n"]
 resource_local_to_scene = true
 shader = ExtResource("6_736xw")
 shader_parameter/gold_amount = 0.0
@@ -203,55 +205,16 @@ shader_parameter/glitch_duty = 0.35
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bwlqj"]
-atlas = ExtResource("7_6gvdm")
-region = Rect2(0, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cd42n"]
-atlas = ExtResource("7_6gvdm")
-region = Rect2(24, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_78ntu"]
-atlas = ExtResource("7_6gvdm")
-region = Rect2(48, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gcvlj"]
-atlas = ExtResource("7_6gvdm")
-region = Rect2(72, 0, 24, 24)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_spl43"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bwlqj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cd42n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_78ntu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gcvlj")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 10.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
-atlas = ExtResource("10_bwlqj")
-region = Rect2(16, 0, 16, 16)
-
 [node name="Beamer" unique_id=493092891 instance=ExtResource("1_base")]
 script = ExtResource("2_beamer")
 stats = ExtResource("3_stats")
+hit_groups = Array[StringName]([&"player", &"enemies"])
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/beamer = SubResource("BeamerLibrary")
 
 [node name="Flash" parent="." index="11" unique_id=850017021]
-material = SubResource("ShaderMaterial_cd42n")
+material = SubResource("ShaderMaterial_bwlqj")
 
 [node name="Beam" type="Node2D" parent="." index="14" unique_id=1684563345]
 z_index = 8
@@ -278,15 +241,17 @@ edge_color = Color(0.19999999, 0.8533333, 1, 0.7058824)
 telegraph_color = Color(0.8233163, 0.99999994, 0.97183174, 1)
 
 [node name="Visuals" parent="." index="15" unique_id=1113068187]
-material = SubResource("ShaderMaterial_78ntu")
+material = SubResource("ShaderMaterial_cd42n")
 
-[node name="Body" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=593199491]
+[node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=368811656]
 modulate = Color(0.75, 0.95, 1, 1)
 z_index = 1
 use_parent_material = true
-sprite_frames = SubResource("SpriteFrames_spl43")
+texture = ExtResource("7_6gvdm")
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=1793926939]
-modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+[node name="Shadow" parent="Visuals" index="1" unique_id=1793926939 instance=ExtResource("10_pixel_circle")]
+modulate = Color(0.16, 0.16, 0.16, 0.3137255)
 position = Vector2(0, 11)
-texture = SubResource("AtlasTexture_spl43")
+shape = 1
+size = Vector2i(24, 6)
+pixel_size = 1

@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/projectiles/stalker_projectile.tscn" id="6_projectile"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/shared/line_of_sight.gd" id="7_los"]
 [ext_resource type="Script" uid="uid://qvvfgcvg6et7" path="res://scripts/world/enemies/orbit.gd" id="8_orbit"]
-[ext_resource type="Texture2D" uid="uid://d4bm6n0cjpvo2" path="res://assets/sprites/enemies/stalker-shadow.png" id="9_shadow"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="9_pixel_circle"]
 [ext_resource type="Texture2D" uid="uid://bioitf2isi5uq" path="res://assets/sprites/enemies/stalker.png" id="10_sprite"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="11_particles"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="12_vfx"]
@@ -38,14 +38,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals/Shadow:frame")
+tracks/1/path = NodePath("Visuals/Shadow:size")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0]
+"values": [Vector2i(14, 4)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -193,42 +193,6 @@ resource_local_to_scene = true
 shader = ExtResource("4_ihk34")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rqd04"]
-atlas = ExtResource("9_shadow")
-region = Rect2(0, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_26iul"]
-atlas = ExtResource("9_shadow")
-region = Rect2(24, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j6h5e"]
-atlas = ExtResource("9_shadow")
-region = Rect2(48, 0, 24, 24)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0juef"]
-atlas = ExtResource("9_shadow")
-region = Rect2(72, 0, 24, 24)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_uhdj6"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rqd04")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_26iul")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j6h5e")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0juef")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gbqtd"]
 atlas = ExtResource("12_vfx")
@@ -421,10 +385,13 @@ libraries/stalker = SubResource("StalkerLibrary")
 [node name="Visuals" parent="." index="8" unique_id=1100000011]
 material = SubResource("ShaderMaterial_ihk34")
 
-[node name="Shadow" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1725397380]
+[node name="Shadow" parent="Visuals" index="0" unique_id=1725397380 instance=ExtResource("9_pixel_circle")]
 modulate = Color(0, 0, 0, 0.19607843)
 z_index = 1
-sprite_frames = SubResource("SpriteFrames_uhdj6")
+position = Vector2(0, 10)
+shape = 1
+size = Vector2i(14, 4)
+pixel_size = 1
 
 [node name="AimCenter" type="Node2D" parent="Visuals" index="1" unique_id=1830255728]
 

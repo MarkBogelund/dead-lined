@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/attacks/radial_wave.gd" id="2_wave"]
 [ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="3_4fu3r"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="3_shader"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_shadow"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="5_pixel_circle"]
 
 [sub_resource type="Gradient" id="Gradient_f5wuv"]
 offsets = PackedFloat32Array(0.24668436, 0.7161804)
@@ -15,10 +15,6 @@ colors = PackedColorArray(0.55100006, 0.8436, 0.95, 1, 0, 0, 0, 1)
 gradient = SubResource("Gradient_f5wuv")
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nf1vj"]
-atlas = ExtResource("5_shadow")
-region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="CircleShape2D" id="ImpactShape"]
 radius = 1.0
@@ -45,10 +41,12 @@ color = Color(0.9733675, 0.33196202, 0, 1)
 energy = 0.6
 texture = SubResource("GradientTexture2D_4fu3r")
 
-[node name="Shadow" type="Sprite2D" parent="." unique_id=505213411]
+[node name="Shadow" parent="." unique_id=505213411 instance=ExtResource("5_pixel_circle")]
 modulate = Color(0, 0, 0, 0.45)
 z_index = 3
-texture = SubResource("AtlasTexture_nf1vj")
+shape = 1
+size = Vector2i(14, 4)
+pixel_size = 1
 
 [node name="RadialWaveComponent" type="Node2D" parent="." unique_id=189277128]
 script = ExtResource("2_wave")

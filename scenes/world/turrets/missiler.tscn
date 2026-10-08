@@ -10,7 +10,7 @@
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_vboif"]
 [ext_resource type="Texture2D" uid="uid://dq55pmiufvrpi" path="res://assets/sprites/turrets/missiler.png" id="7_40blp"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="8_r3erc"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="11_b3vq3"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="11_pixel_circle"]
 [ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="11_r3erc"]
 
 [sub_resource type="Animation" id="MissilerReset"]
@@ -100,7 +100,7 @@ _data = {
 &"launch": SubResource("Launch")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ljie7"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3vq3"]
 resource_local_to_scene = true
 shader = ExtResource("5_40blp")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -110,8 +110,10 @@ shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
+shader_parameter/arc_direction = 0.0
+shader_parameter/arc_half_angle = 3.1415927
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0wecj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ljie7"]
 resource_local_to_scene = true
 shader = ExtResource("6_vboif")
 shader_parameter/gold_amount = 0.0
@@ -148,10 +150,6 @@ region = Rect2(0, 0, 24, 24)
 atlas = ExtResource("7_40blp")
 region = Rect2(24, 0, 24, 19)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_00di2"]
-atlas = ExtResource("11_b3vq3")
-region = Rect2(16, 0, 16, 16)
-
 [node name="Missiler" unique_id=900000001 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -162,7 +160,7 @@ death_burnout_progress = 1.0
 libraries/missiler = SubResource("MissilerLibrary")
 
 [node name="Flash" parent="." index="11" unique_id=850017021]
-material = SubResource("ShaderMaterial_ljie7")
+material = SubResource("ShaderMaterial_b3vq3")
 
 [node name="TargetingComponent" type="Node" parent="." index="14" unique_id=900000002]
 script = ExtResource("5_targeting")
@@ -177,7 +175,7 @@ visual_turn_freedom_degrees = 60.0
 muzzle = NodePath("../Visuals/Canon/Muzzle")
 
 [node name="Visuals" parent="." index="16" unique_id=1113068187]
-material = SubResource("ShaderMaterial_0wecj")
+material = SubResource("ShaderMaterial_ljie7")
 
 [node name="Feet" type="Sprite2D" parent="Visuals" index="0" unique_id=1356975428]
 z_index = 1
@@ -199,9 +197,11 @@ position = Vector2(16, 0)
 [node name="ShootParticles" parent="Visuals/Canon/Muzzle" index="0" unique_id=1586402119 instance=ExtResource("8_r3erc")]
 amount = 20
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="2" unique_id=905399534]
-modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+[node name="Shadow" parent="Visuals" index="2" unique_id=905399534 instance=ExtResource("11_pixel_circle")]
+modulate = Color(0.16, 0.16, 0.16, 0.3137255)
 position = Vector2(0, 10)
-texture = SubResource("AtlasTexture_00di2")
+shape = 1
+size = Vector2i(24, 6)
+pixel_size = 1
 
 [node name="WindupParticles" parent="." index="18" unique_id=2054959803 instance=ExtResource("11_r3erc")]

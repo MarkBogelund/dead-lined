@@ -4,16 +4,12 @@
 [ext_resource type="Script" uid="uid://dkh6t1minj7ss" path="res://scripts/world/pickups/crunch_powerup.gd" id="2_powerup"]
 [ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="3_settings"]
 [ext_resource type="Texture2D" uid="uid://dluetcret0711" path="res://assets/sprites/environment/pickups.png" id="4_yxwvc"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_p65r1"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="5_pixel_circle"]
 [ext_resource type="PackedScene" uid="uid://d05xdag214d7a" path="res://scenes/world/vfx/glitter_particles.tscn" id="8_glitter_particles"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yxwvc"]
 atlas = ExtResource("4_yxwvc")
 region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_481bo"]
-atlas = ExtResource("5_p65r1")
-region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="Gradient" id="Gradient_p65r1"]
 offsets = PackedFloat32Array(0, 0.7161804)
@@ -57,10 +53,12 @@ settings = ExtResource("3_settings")
 z_index = 2
 texture = SubResource("AtlasTexture_yxwvc")
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="1" unique_id=2047766133]
+[node name="Shadow" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="1" unique_id=2047766133 instance=ExtResource("5_pixel_circle")]
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 position = Vector2(0, 8)
-texture = SubResource("AtlasTexture_481bo")
+shape = 1
+size = Vector2i(14, 4)
+pixel_size = 1
 
 [node name="PointLight2D" type="PointLight2D" parent="Visuals" parent_id_path=PackedInt32Array(544235218) index="2" unique_id=343020866]
 scale = Vector2(0.5, 0.5)

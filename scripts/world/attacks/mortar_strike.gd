@@ -5,7 +5,7 @@ enum State {TELEGRAPH, FLIGHT, IMPACT}
 
 @onready var radial_wave: RadialWaveComponent = $RadialWaveComponent
 @onready var shell: Sprite2D = $Shell
-@onready var shadow: Sprite2D = $Shadow
+@onready var shadow: Node2D = $Shadow
 
 @export var marker_color := Color(1.0, 0.35, 0.15, 0.32)
 var _state := State.TELEGRAPH

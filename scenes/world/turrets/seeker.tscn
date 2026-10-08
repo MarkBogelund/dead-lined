@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/shared/line_of_sight.gd" id="9_los"]
 [ext_resource type="Texture2D" uid="uid://dvuptj2c0iiqk" path="res://assets/sprites/turrets/seeker.png" id="10_sprite"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="12_shoot_particles"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="13_ggryl"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="13_pixel_circle"]
 [ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="13_windup"]
 
 [sub_resource type="Animation" id="SeekerReset"]
@@ -79,7 +79,7 @@ _data = {
 &"shoot": SubResource("Shoot")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_f74yd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ggryl"]
 resource_local_to_scene = true
 shader = ExtResource("4_ks0gs")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -89,8 +89,10 @@ shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
+shader_parameter/arc_direction = 0.0
+shader_parameter/arc_half_angle = 3.1415927
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ggryl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cc4ml"]
 resource_local_to_scene = true
 shader = ExtResource("5_e5ss5")
 shader_parameter/gold_amount = 0.0
@@ -127,10 +129,6 @@ region = Rect2(0, 0, 24, 24)
 atlas = ExtResource("10_sprite")
 region = Rect2(24, 0, 24, 18)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0t3f5"]
-atlas = ExtResource("13_ggryl")
-region = Rect2(16, 0, 16, 16)
-
 [node name="Seeker" unique_id=2138402404 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -147,7 +145,7 @@ z_index = -1
 libraries/seeker = SubResource("SeekerLibrary")
 
 [node name="Flash" parent="." index="11" unique_id=850017021]
-material = SubResource("ShaderMaterial_f74yd")
+material = SubResource("ShaderMaterial_ggryl")
 
 [node name="ShootComponent" type="Node" parent="." index="14" unique_id=877670392]
 script = ExtResource("4_shoot")
@@ -169,7 +167,7 @@ script = ExtResource("9_los")
 ray_offset = 3.0
 
 [node name="Visuals" parent="." index="18" unique_id=1113068187]
-material = SubResource("ShaderMaterial_ggryl")
+material = SubResource("ShaderMaterial_cc4ml")
 
 [node name="Feet" type="Sprite2D" parent="Visuals" index="0" unique_id=938117547]
 z_index = 1
@@ -192,9 +190,11 @@ position = Vector2(18, 0)
 [node name="ShootParticles" parent="Visuals/Canon/Muzzle" index="0" unique_id=1906397844 instance=ExtResource("12_shoot_particles")]
 amount = 20
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="2" unique_id=1575265602]
-modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+[node name="Shadow" parent="Visuals" index="2" unique_id=1575265602 instance=ExtResource("13_pixel_circle")]
+modulate = Color(0.16, 0.16, 0.16, 0.3137255)
 position = Vector2(0, 10)
-texture = SubResource("AtlasTexture_0t3f5")
+shape = 1
+size = Vector2i(24, 6)
+pixel_size = 1
 
 [node name="WindupParticles" parent="." index="21" unique_id=1717503861 instance=ExtResource("13_windup")]

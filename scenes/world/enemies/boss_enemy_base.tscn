@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/enemies/enemy_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://csayne3psbti0" path="res://scripts/world/enemies/boss_enemy_base.gd" id="2_boss"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="3_11csn"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="4_shadow"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="4_pixel_circle"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="5_k6g42"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="6_shapes"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="7_sparks"]
@@ -14,10 +14,6 @@ resource_local_to_scene = true
 shader = ExtResource("3_11csn")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
-
-[sub_resource type="AtlasTexture" id="GroundShadowTexture"]
-atlas = ExtResource("4_shadow")
-region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lxi2c"]
 resource_local_to_scene = true
@@ -491,12 +487,14 @@ material = SubResource("ShaderMaterial_5tfdp")
 [node name="DropRoot" type="Node2D" parent="Visuals" index="0" unique_id=620000001]
 use_parent_material = true
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=620000002]
+[node name="Shadow" parent="Visuals" index="1" unique_id=620000002 instance=ExtResource("4_pixel_circle")]
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
 position = Vector2(0, 20)
 scale = Vector2(2.5, 2)
-texture = SubResource("GroundShadowTexture")
+shape = 1
+size = Vector2i(14, 4)
+pixel_size = 1
 
 [node name="Flash" parent="." index="11" unique_id=1756477109]
 material = SubResource("ShaderMaterial_lxi2c")
@@ -514,10 +512,12 @@ offset_right = 104.0
 offset_bottom = 104.0
 mouse_filter = 2
 
-[node name="DropShadow" type="Sprite2D" parent="Intro" index="1" unique_id=1799544543]
+[node name="DropShadow" parent="Intro" index="1" unique_id=1799544543 instance=ExtResource("4_pixel_circle")]
 visible = false
 modulate = Color(0.1, 0.1, 0.1, 0)
-texture = SubResource("GroundShadowTexture")
+shape = 1
+size = Vector2i(14, 4)
+pixel_size = 1
 
 [node name="DustParticles" type="GPUParticles2D" parent="Intro" index="2" unique_id=1290101280]
 z_index = 4

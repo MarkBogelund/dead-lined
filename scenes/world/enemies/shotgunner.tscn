@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/attacks/shoot.gd" id="5_shoot"]
 [ext_resource type="Texture2D" uid="uid://db14q0g7xhxtm" path="res://assets/sprites/enemies/shotgunner.png" id="6_aq71u"]
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/projectiles/stalker_projectile.tscn" id="6_projectile"]
-[ext_resource type="Texture2D" uid="uid://ciiaetgaecjx1" path="res://assets/sprites/enemies/shotgunner-shadow.png" id="7_aq71u"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="7_pixel_circle"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/shared/line_of_sight.gd" id="7_los"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/confused_component.tscn" id="9_confused"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="9_l6coj"]
@@ -377,10 +377,12 @@ use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_15kce")
 animation = &"idle"
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="2" unique_id=753566437]
+[node name="Shadow" parent="Visuals" index="2" unique_id=753566437 instance=ExtResource("7_pixel_circle")]
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
-texture = ExtResource("7_aq71u")
+shape = 1
+size = Vector2i(11, 4)
+pixel_size = 1
 
 [node name="ConfusedSprite" parent="Visuals" index="3" unique_id=682626751 instance=ExtResource("9_confused")]
 position = Vector2(0, -2)

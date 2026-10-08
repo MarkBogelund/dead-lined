@@ -11,7 +11,7 @@
 [ext_resource type="Shader" uid="uid://or20pguhuo61" path="res://shaders/pixel_rotate.gdshader" id="11_pixel_rotate"]
 [ext_resource type="Texture2D" uid="uid://d08xahl78n2eb" path="res://assets/sprites/turrets/piercer.png" id="12_l7wt6"]
 [ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="12_windup"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="13_558d3"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="13_pixel_circle"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="13_tg0dl"]
 [ext_resource type="Script" uid="uid://m2e3t7ghg6ru" path="res://scripts/world/attacks/laser_graphics.gd" id="14_laser_graphics"]
 
@@ -88,7 +88,7 @@ _data = {
 &"charge": SubResource("Charge")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ee2k1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tg0dl"]
 resource_local_to_scene = true
 shader = ExtResource("6_flash")
 shader_parameter/shockwave_color = Color(1, 1, 1, 0)
@@ -98,8 +98,10 @@ shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
+shader_parameter/arc_direction = 0.0
+shader_parameter/arc_half_angle = 3.1415927
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jay3e"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ee2k1"]
 resource_local_to_scene = true
 shader = ExtResource("5_surface")
 shader_parameter/gold_amount = 0.0
@@ -136,19 +138,16 @@ region = Rect2(0, 0, 24, 24)
 atlas = ExtResource("12_l7wt6")
 region = Rect2(24, 0, 24, 18)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_spl43"]
-atlas = ExtResource("13_558d3")
-region = Rect2(16, 0, 16, 16)
-
 [node name="Piercer" unique_id=429404891 instance=ExtResource("1_base")]
 script = ExtResource("2_piercer")
 stats = ExtResource("3_stats")
+hit_groups = Array[StringName]([&"enemies", &"player"])
 
 [node name="AnimationHandler" parent="." index="9" unique_id=1391262364]
 libraries/piercer = SubResource("PiercerLibrary")
 
 [node name="Flash" parent="." index="11" unique_id=850017021]
-material = SubResource("ShaderMaterial_ee2k1")
+material = SubResource("ShaderMaterial_tg0dl")
 
 [node name="TargetingComponent" type="Node" parent="." index="14" unique_id=696958485]
 script = ExtResource("7_targeting")
@@ -183,7 +182,7 @@ fade_out_delay = 0.15
 [node name="WindupParticles" parent="." index="18" unique_id=1092367219 instance=ExtResource("12_windup")]
 
 [node name="Visuals" parent="." index="19" unique_id=1113068187]
-material = SubResource("ShaderMaterial_jay3e")
+material = SubResource("ShaderMaterial_ee2k1")
 
 [node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=45399720]
 z_index = 1
@@ -205,7 +204,9 @@ position = Vector2(9, 0)
 [node name="ShootParticles" parent="Visuals/Canon/Muzzle" index="0" unique_id=1586402119 instance=ExtResource("13_tg0dl")]
 amount = 20
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="2" unique_id=523892853]
-modulate = Color(0.16, 0.16, 0.16, 0.39215687)
+[node name="Shadow" parent="Visuals" index="2" unique_id=523892853 instance=ExtResource("13_pixel_circle")]
+modulate = Color(0.16, 0.16, 0.16, 0.3137255)
 position = Vector2(0, 12)
-texture = SubResource("AtlasTexture_spl43")
+shape = 1
+size = Vector2i(24, 6)
+pixel_size = 1

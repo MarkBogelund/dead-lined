@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://bkudpixa82gkd" path="res://resources/turrets/repulsor/repulsor_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="4_mporl"]
 [ext_resource type="Texture2D" uid="uid://c6nneksvj1icb" path="res://assets/sprites/turrets/repulsor.png" id="4_sprite"]
-[ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_shadow"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="5_pixel_circle"]
 [ext_resource type="Shader" uid="uid://c8raxrbyhc4wo" path="res://shaders/turret_surface.gdshader" id="6_aanik"]
 [ext_resource type="Script" uid="uid://cpmtyi8xjm5bd" path="res://scripts/world/attacks/radial_field.gd" id="6_field"]
 
@@ -56,7 +56,7 @@ _data = {
 &"pulse": SubResource("Pulse")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0pvw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mporl"]
 resource_local_to_scene = true
 shader = ExtResource("4_mporl")
 shader_parameter/shockwave_color = Color(1, 1, 1, 1)
@@ -66,11 +66,13 @@ shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
+shader_parameter/arc_direction = 0.0
+shader_parameter/arc_half_angle = 3.1415927
 
 [sub_resource type="CircleShape2D" id="DetectionShape"]
 radius = 110.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nh4c3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aanik"]
 resource_local_to_scene = true
 shader = ExtResource("6_aanik")
 shader_parameter/gold_amount = 0.0
@@ -107,7 +109,7 @@ stats = ExtResource("3_stats")
 libraries/repulsor = SubResource("RepulsorLibrary")
 
 [node name="Flash" parent="." index="11" unique_id=850017021]
-material = SubResource("ShaderMaterial_x0pvw")
+material = SubResource("ShaderMaterial_mporl")
 
 [node name="RadialFieldComponent" type="Node2D" parent="." index="14" unique_id=1915400174]
 script = ExtResource("6_field")
@@ -124,13 +126,16 @@ monitorable = false
 shape = SubResource("DetectionShape")
 
 [node name="Visuals" parent="." index="15" unique_id=1113068187]
-material = SubResource("ShaderMaterial_nh4c3")
+material = SubResource("ShaderMaterial_aanik")
 
 [node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=226118885]
+z_index = 1
 use_parent_material = true
 texture = ExtResource("4_sprite")
 
-[node name="Shadow" type="Sprite2D" parent="Visuals" index="1" unique_id=293290236]
-modulate = Color(0, 0, 0, 0.46)
+[node name="Shadow" parent="Visuals" index="1" unique_id=293290236 instance=ExtResource("5_pixel_circle")]
+modulate = Color(0, 0, 0, 0.3137255)
 position = Vector2(0, 11)
-texture = ExtResource("5_shadow")
+shape = 1
+size = Vector2i(24, 6)
+pixel_size = 1
