@@ -142,8 +142,8 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 func _validate_property(property: Dictionary) -> void:
-	var hidden: bool = (stats_driven & STATS_DRIVEN_FLAGS.get(property.name, 0)) != 0
-	if hidden or (not auto_trigger and str(property.name).begins_with("windup_")):
+	var should_hide: bool = (stats_driven & STATS_DRIVEN_FLAGS.get(property.name, 0)) != 0
+	if should_hide or (not auto_trigger and str(property.name).begins_with("windup_")):
 		property.usage &= ~PROPERTY_USAGE_EDITOR
 
 func _ready() -> void:

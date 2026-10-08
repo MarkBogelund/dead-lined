@@ -7,11 +7,9 @@ class_name TurretEntry
 @export var icon: Texture2D
 @export_group("Icon Generator")
 @export var icon_source: TurretIconTexture
-@export_tool_button("Bake icon from turret sprites") var bake_icon_action: Callable = _bake_icon_from_sprites
 
-func _bake_icon_from_sprites() -> void:
+func generate_icon() -> void:
 	if not icon_source:
-		push_error("TurretEntry '%s' needs an Icon Source before baking" % name)
 		return
 	var image := icon_source.bake_image()
 	if not image:
@@ -22,7 +20,6 @@ func _bake_icon_from_sprites() -> void:
 @export_group("Shop")
 @export var price: int
 @export var turret_scene: PackedScene
-@export var ghost_scene: PackedScene
 ## The placed turret's stats; the placement preview shows its attack_range.
 @export var stats: TurretStats
 

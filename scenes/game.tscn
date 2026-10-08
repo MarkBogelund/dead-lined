@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://bomuvf4stnxjw" path="res://resources/waves/wave_settings.tres" id="2_wave_settings"]
 [ext_resource type="PackedScene" path="res://scenes/world/environment/spawn_point.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bkervm4vmc0wh" path="res://scripts/systems/turret_placer.gd" id="4_ca42v"]
+[ext_resource type="PackedScene" path="res://scenes/world/turrets/ghost_turret.tscn" id="4_generic_ghost"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/world/environment/shop_station.tscn" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
 [ext_resource type="Script" uid="uid://b2gaurk2muptq" path="res://scripts/systems/score_manager.gd" id="8_score"]
@@ -241,6 +242,7 @@ metadata/_custom_type_script = "uid://k5bmk2isolyq"
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]
 unique_name_in_owner = true
 script = ExtResource("4_ca42v")
+ghost_scene = ExtResource("4_generic_ghost")
 metadata/_custom_type_script = "uid://bkervm4vmc0wh"
 
 [node name="WaveManager" type="Node" parent="Systems" unique_id=2042714425 groups=["wave_manager"]]

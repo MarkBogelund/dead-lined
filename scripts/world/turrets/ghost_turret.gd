@@ -18,12 +18,15 @@ var exclusion_radius: float = -1.0
 var is_valid := true
 var overlapping_count := 0
 var _in_exclusion_zone := false
+var _icon: Texture2D
 
-func initialize(p_range_radius: float, p_exclusion_radius: float) -> void:
+func initialize(p_range_radius: float, p_exclusion_radius: float, p_icon: Texture2D) -> void:
 	range_radius = p_range_radius
 	exclusion_radius = p_exclusion_radius
+	_icon = p_icon
 
 func _ready() -> void:
+	sprite.texture = _icon
 	# Connect signals directly to self
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)

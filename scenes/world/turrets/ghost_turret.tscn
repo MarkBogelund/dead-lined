@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c4hnjkgs5dqd2"]
+
+[ext_resource type="Script" uid="uid://ce2ok1lya40il" path="res://scripts/world/turrets/ghost_turret.gd" id="1_ghost"]
+[ext_resource type="Script" uid="uid://cexclusion001" path="res://scripts/world/turrets/turret_exclusion_zone.gd" id="2_exclusion"]
+[ext_resource type="Script" uid="uid://1mnnabq5lck3" path="res://scripts/world/turrets/range_indicator.gd" id="3_range"]
+
+[sub_resource type="CircleShape2D" id="GhostCollisionShape"]
+radius = 16.0
+
+[node name="GhostTurret" type="Area2D" unique_id=1922313744]
+collision_layer = 0
+collision_mask = 35
+script = ExtResource("1_ghost")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1664349522]
+modulate = Color(1, 1, 1, 0.78431374)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1001207828]
+shape = SubResource("GhostCollisionShape")
+
+[node name="TurretExclusionZone" type="Node2D" parent="." unique_id=1680000766]
+script = ExtResource("2_exclusion")
+exclusion_color = Color(0.099999905, 0.75, 0, 0.39215687)
+invalid_color = Color(1, 0.100000024, 0.100000024, 0.39215687)
+
+[node name="RangeIndicator" type="Node2D" parent="." unique_id=1230058431]
+script = ExtResource("3_range")
+color = Color(1, 1, 1, 0.78431374)

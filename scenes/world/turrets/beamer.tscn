@@ -47,56 +47,38 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals/Body:frame")
+tracks/1/path = NodePath("Visuals:material:shader_parameter/flash_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.099999994, 0.19999999, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3]
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.68600476, 0.99999994, 0.3206246, 1)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Visuals:material:shader_parameter/flash_color")
+tracks/2/path = NodePath("Beam/SpeedParticles:emitting")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(5.968213e-06, 0.66591686, 0.88343793, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Beam/SpeedParticles:emitting")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
 }
-
-[sub_resource type="Animation" id="Animation_6gvdm"]
-resource_name = "idle"
-length = 0.4
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals/Body:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3]
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals/Body:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 1), Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Windup"]
@@ -131,7 +113,6 @@ tracks/1/keys = {
 _data = {
 &"RESET": SubResource("Animation_ume4x"),
 &"fire": SubResource("Fire"),
-&"idle": SubResource("Animation_6gvdm"),
 &"windup": SubResource("Windup")
 }
 
@@ -150,7 +131,7 @@ shader_parameter/arc_half_angle = 3.1415927
 
 [sub_resource type="Gradient" id="Gradient_ume4x"]
 offsets = PackedFloat32Array(0.39473686, 1)
-colors = PackedColorArray(1, 1, 1, 1, 0.2, 0.8509804, 1, 1)
+colors = PackedColorArray(1, 1, 1, 1, 2.9841065e-06, 0.91024864, 0.5754945, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_bwlqj"]
 gradient = SubResource("Gradient_ume4x")
@@ -202,7 +183,7 @@ shader_parameter/crack_density = 0.12
 shader_parameter/crack_size = 2.0
 shader_parameter/glitch_interval = 0.3
 shader_parameter/glitch_duty = 0.35
-shader_parameter/flash_color = Color(1, 1, 1, 1)
+shader_parameter/flash_color = Color(0.68600476, 0.99999994, 0.3206246, 1)
 shader_parameter/flash_amount = 0.0
 
 [node name="Beamer" unique_id=493092891 instance=ExtResource("1_base")]
@@ -237,13 +218,13 @@ start_offset = 6.0
 laser_width = 12.0
 center_line_thickness = 4.0
 center_color = Color(0.85, 1, 1, 0.95)
-edge_color = Color(0.19999999, 0.8533333, 1, 0.7058824)
+edge_color = Color(1.3861656e-05, 0.901418, 0.7129072, 0.7058824)
 telegraph_color = Color(0.8233163, 0.99999994, 0.97183174, 1)
 
 [node name="Visuals" parent="." index="15" unique_id=1113068187]
 material = SubResource("ShaderMaterial_cd42n")
 
-[node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=368811656]
+[node name="Body" type="Sprite2D" parent="Visuals" index="0" unique_id=1695417033]
 modulate = Color(0.75, 0.95, 1, 1)
 z_index = 1
 use_parent_material = true

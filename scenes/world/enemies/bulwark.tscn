@@ -225,7 +225,7 @@ offset_bottom = 76.0
 position = Vector2(-2, -24)
 health_component = NodePath("../HealthComponent")
 offset = Vector2(0, -26)
-cooldown_color = Color(1, 0.3137255, 0.078431375, 1)
+cooldown_color = Color(0.92869115, 0.40817255, 7.70092e-07, 1)
 show_level = false
 
 [node name="Shield" type="AnimatableBody2D" parent="." index="14" unique_id=53016331 node_paths=PackedStringArray("sprite", "collision_polygon", "contact_hitbox", "wave")]

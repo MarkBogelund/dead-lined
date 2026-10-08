@@ -7,6 +7,7 @@ signal placement_started
 signal placement_ended
 
 @export var max_place_distance := 50
+@export var ghost_scene: PackedScene
 @onready var player: CharacterBody2D = %Player
 
 var current_turret_entry: TurretEntry
@@ -37,10 +38,12 @@ func start_placement(turret_entry: TurretEntry) -> void:
 	_cleanup()
 	
 	current_turret_entry = turret_entry
-	ghost_turret = current_turret_entry.ghost_scene.instantiate()
+	assert(ghost_scene, "TurretPlacer requires the generic ghost scene")
+	ghost_turret = ghost_scene.instantiate()
 	ghost_turret.initialize(
 		current_turret_entry.stats.attack_range,
-		current_turret_entry.exclusion_radius)
+		current_turret_entry.exclusion_radius,
+		current_turret_entry.icon)
 	get_tree().current_scene.add_child(ghost_turret)
 	
 	get_tree().call_group("turret_exclusion_zones", "show")

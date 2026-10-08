@@ -14,6 +14,9 @@ const RESET_ANIMATION: StringName = &"RESET"
 func buff_damage(multiplier: float) -> void:
 	contact_hitbox.damage = int(contact_hitbox.damage * multiplier)
 
+func emit_boss_landed(shake_intensity: float) -> void:
+	boss_landed.emit(shake_intensity)
+
 func play_boss_intro() -> void:
 	if _spawn_intro_active:
 		return

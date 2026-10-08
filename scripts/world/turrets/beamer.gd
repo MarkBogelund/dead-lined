@@ -25,12 +25,9 @@ var _target_cooldowns: Dictionary[int, float] = {}
 
 func _ready() -> void:
 	_initialize()
-	animation.configure_animation("idle", 1, true)
 	animation.configure_animation("windup", 2, false)
 	animation.configure_animation("fire", 3, false)
 	super._ready()
-	if not is_turret_active():
-		animation.play_animation("idle")
 
 func _initialize() -> void:
 	if not stats:
@@ -49,7 +46,6 @@ func _on_combat_stopped() -> void:
 	_set_beam_enabled(false)
 	animation.stop_animation("fire")
 	animation.stop_animation("windup")
-	animation.play_animation("idle")
 
 func _before_death_animation() -> void:
 	_on_combat_stopped()
@@ -108,7 +104,6 @@ func _overheat() -> void:
 	laser_graphics.fade_to(0.0)
 	speed_particles.emitting = false
 	animation.stop_animation("fire")
-	animation.play_animation("idle")
 
 func _set_beam_length(value: float) -> void:
 	_beam_length = maxf(1.0, value)

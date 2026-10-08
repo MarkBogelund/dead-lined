@@ -20,6 +20,9 @@ signal turret_sold(refund: float)
 var turrets_placed := 0
 
 func _ready() -> void:
+	for turret_entry: TurretEntry in turret_entries:
+		turret_entry.generate_icon()
+
 	turret_placer.turret_placed.connect(_on_turret_placed)
 	turret_placer.placement_started.connect(_on_placement_started)
 	turret_placer.placement_ended.connect(_on_placement_ended)

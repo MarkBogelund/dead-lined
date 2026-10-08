@@ -440,8 +440,8 @@ tracks/12/keys = {
 "times": PackedFloat32Array(1.1333333),
 "transitions": PackedFloat32Array(1),
 "values": [{
-"args": [&"boss_landed", 0.3],
-"method": &"emit_signal"
+"args": [0.3],
+"method": &"emit_boss_landed"
 }]
 }
 tracks/13/type = "value"
