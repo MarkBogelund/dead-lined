@@ -3,7 +3,7 @@ class_name MortarStrike
 
 enum State {TELEGRAPH, FLIGHT, IMPACT}
 
-@onready var radial_wave: ShockwaveComponent = $RadialWaveComponent
+@onready var radial_wave: RadialWaveComponent = $RadialWaveComponent
 @onready var shell: Sprite2D = $Shell
 @onready var shadow: Sprite2D = $Shadow
 
@@ -16,7 +16,7 @@ var _elapsed := 0.0
 var _shell_scale := Vector2.ONE
 
 func _ready() -> void:
-	radial_wave.shockwave_fade_finished.connect(queue_free)
+	radial_wave.shockwave_finished.connect(queue_free)
 	_shell_scale = shell.scale
 
 func setup(

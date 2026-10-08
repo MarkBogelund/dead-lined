@@ -1,55 +1,78 @@
+@tool
 extends Node2D
-class_name ShockwaveComponent
+class_name RadialWaveComponent
 
 signal windup_started
 signal shockwave_started
 signal shockwave_finished
-signal shockwave_fade_finished
 
 enum State {READY, WINDUP, EXPANDING, COOLDOWN}
+
+const STATS_DRIVEN_FLAGS := {
+	&"max_range": 1, &"ring_thickness": 2, &"cooldown": 4,
+	&"expansion_duration": 8, &"damage": 16, &"knockback_force": 32, &"arc_degrees": 64,
+}
 
 @onready var detection_area: Area2D = $DetectionArea
 @onready var detection_shape: CollisionShape2D = $DetectionArea/CollisionShape2D
 @onready var shockwave_visual: ColorRect = $ShockwaveVisual
 
+## Properties the owner overwrites from its stats at runtime; they are hidden below.
+@export_flags("Range", "Thickness", "Cooldown", "Duration", "Damage", "Knockback", "Arc")
+var stats_driven := 0:
+	set(value):
+		stats_driven = value
+		notify_property_list_changed()
+
+@export_group("Shape")
 ## Trigger distance and blast radius.
-@export_group("Wave")
-@export_range(0.0, 500.0, 1.0)
-var max_range := 120.0
-@export_range(1.0, 64.0, 1.0)
-var ring_thickness := 8.0
-@export_range(0.0, 30.0, 0.01)
-var cooldown := 2.5
-@export_range(0.01, 5.0, 0.01)
-var expansion_duration := 0.6
-@export_range(0, 1000, 1)
-var damage := 20
-@export_range(0.0, 1000.0, 1.0)
-var knockback_force := 180.0
+@export_range(0.0, 500.0, 1.0) var max_range := 120.0
+@export_range(1.0, 64.0, 1.0) var ring_thickness := 8.0
+## Total angle of the wave, centered on arc_direction; 360 is a full ring.
+@export_range(1.0, 360.0, 1.0) var arc_degrees := 360.0
+
+@export_group("Timing")
+@export_range(0.01, 5.0, 0.01) var expansion_duration := 0.6
+@export_range(0.0, 30.0, 0.01) var cooldown := 2.5
+
+@export_group("Hit")
+@export_range(0, 1000, 1) var damage := 20
+@export_range(0.0, 1000.0, 1.0) var knockback_force := 180.0
 ## Defaults retain turret waves' player/enemy targets; boss landings can select player/turrets instead.
 @export var target_groups: Array[StringName] = [&"player", &"enemies"]
-## False = the player no longer starts a pulse, but pulses still damage the player.
-var trigger_on_player := true
-## False lets an external owner call execute_shockwave() at a locked impact point.
-@export var auto_trigger := true
 
-@export_group("Presentation")
-@export var pixel_art_shader: Shader
+@export_group("Trigger")
+## False lets an external owner call execute_shockwave() at a locked impact point; hides the windup group.
+@export var auto_trigger := true:
+	set(value):
+		auto_trigger = value
+		notify_property_list_changed()
+
+@export_group("Windup Indicator")
 @export var windup_indicator_color := Color(0.55, 0.25, 0.9, 0.28)
 @export_range(1.0, 8.0, 1.0) var windup_indicator_width := 2.0
 @export_range(0.01, 2.0, 0.01) var windup_indicator_fade_duration := 0.45
-@export_range(0.01, 2.0, 0.01) var shockwave_fade_duration := 0.12
+
+@export_group("Look")
+@export var pixel_art_shader: Shader
 @export var shockwave_color := Color(0.3, 0.9, 1.0, 0.9)
-@export_range(1.0, 16.0, 1.0) var pixel_size := 2.0
-@export_range(1, 8, 1) var center_line_thickness := 1
+## Alpha multiplier over time in units of Expansion Duration: x 0-1 is the growth, x > 1 holds the ring at full size.
+## The visual lasts until the curve's Max Domain (at least 1); empty = opaque.
+@export var opacity_curve: Curve
 @export var center_line_color := Color.WHITE
+@export_range(1, 8, 1) var center_line_thickness := 1
+@export_range(1.0, 16.0, 1.0) var pixel_size := 2.0
+
+## False = the player no longer starts a pulse, but pulses still damage the player.
+var trigger_on_player := true
+var arc_direction := 0.0
 
 var _enabled := false
 var _state := State.READY
 var _state_time := 0.0
 var _wave_radius := 0.0
 var _previous_wave_radius := 0.0
-var _shockwave_fade_time := 0.0
+var _visual_time := -1.0
 var _hit_targets: Dictionary[int, bool] = {}
 
 func configure(p_max_range: float, p_ring_thickness: float, p_cooldown: float, p_expansion_duration: float, p_damage: int, p_knockback_force: float) -> void:
@@ -66,7 +89,7 @@ func configure_manual(p_max_range: float, p_expansion_duration: float, p_damage:
 	expansion_duration = maxf(0.01, p_expansion_duration)
 	damage = maxi(0, p_damage)
 	knockback_force = maxf(0.0, p_knockback_force)
-	cooldown = shockwave_fade_duration
+	cooldown = 0.0
 	_apply_radius()
 
 func set_max_range(value: float) -> void:
@@ -98,7 +121,7 @@ func set_enabled(value: bool) -> void:
 		_reset()
 
 func _physics_process(delta: float) -> void:
-	if not _enabled:
+	if not _enabled or Engine.is_editor_hint():
 		return
 	match _state:
 		State.READY:
@@ -111,21 +134,23 @@ func _physics_process(delta: float) -> void:
 			_update_expansion(delta)
 		State.COOLDOWN:
 			_state_time += delta
-			if _shockwave_fade_time > 0.0:
-				_shockwave_fade_time = maxf(0.0, _shockwave_fade_time - delta)
-				_update_shockwave_visual(max_range, shockwave_color.a * _shockwave_fade_time / shockwave_fade_duration)
-				queue_redraw()
 			if _state_time >= cooldown:
 				_state = State.READY
 				_state_time = 0.0
-				shockwave_visual.hide()
-				shockwave_fade_finished.emit()
+	_update_visual(delta)
 	if _state == State.WINDUP or _state == State.EXPANDING:
 		queue_redraw()
 
+func _validate_property(property: Dictionary) -> void:
+	var hidden: bool = (stats_driven & STATS_DRIVEN_FLAGS.get(property.name, 0)) != 0
+	if hidden or (not auto_trigger and str(property.name).begins_with("windup_")):
+		property.usage &= ~PROPERTY_USAGE_EDITOR
+
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	if not pixel_art_shader:
-		push_error("ShockwaveComponent requires pixel_art_shader")
+		push_error("RadialWaveComponent requires pixel_art_shader")
 		return
 	# The scene's shape is shared by every Shockwaver; per-turret range upgrades need their own.
 	detection_shape.shape = detection_shape.shape.duplicate()
@@ -179,8 +204,9 @@ func execute_shockwave() -> void:
 	_wave_radius = 0.0
 	_previous_wave_radius = 0.0
 	_hit_targets.clear()
+	_visual_time = 0.0
 	shockwave_visual.show()
-	_update_shockwave_visual(0.0, shockwave_color.a)
+	_update_shockwave_visual(0.0, 0.0)
 	queue_redraw()
 	shockwave_started.emit()
 
@@ -188,15 +214,25 @@ func _update_expansion(delta: float) -> void:
 	_state_time += delta
 	_previous_wave_radius = _wave_radius
 	_wave_radius = max_range * minf(_state_time / expansion_duration, 1.0)
-	_update_shockwave_visual(_wave_radius, shockwave_color.a)
 	_damage_swept_ring()
 	if _state_time >= expansion_duration:
 		_state = State.COOLDOWN
 		_state_time = 0.0
-		_shockwave_fade_time = shockwave_fade_duration
-		_update_shockwave_visual(max_range, shockwave_color.a)
 		queue_redraw()
+
+## Runs independently of the gameplay state so the settled ring can linger into cooldown.
+func _update_visual(delta: float) -> void:
+	if _visual_time < 0.0:
+		return
+	_visual_time += delta
+	var progress := _visual_time / expansion_duration
+	var lifetime := maxf(opacity_curve.max_domain, 1.0) if opacity_curve else 1.0
+	if progress >= lifetime:
+		_visual_time = -1.0
+		shockwave_visual.hide()
 		shockwave_finished.emit()
+		return
+	_update_shockwave_visual(max_range * minf(progress, 1.0), progress)
 
 func _damage_swept_ring() -> void:
 	var inner_radius := maxf(0.0, _previous_wave_radius - ring_thickness * 0.5)
@@ -208,13 +244,17 @@ func _damage_swept_ring() -> void:
 		if _hit_targets.has(target_id):
 			continue
 		var distance := global_position.distance_to(body.global_position)
-		if distance >= inner_radius and distance <= outer_radius:
+		if distance >= inner_radius and distance <= outer_radius and _is_in_arc(body.global_position):
 			_hit_targets[target_id] = true
-			var target_knockback := knockback_force if body.is_in_group("enemies") else 0.0
 			if body.has_method("was_hit_bypassing_armor"):
-				body.was_hit_bypassing_armor(damage, target_knockback, global_position)
+				body.was_hit_bypassing_armor(damage, knockback_force, global_position)
 			else:
-				body.was_hit(damage, target_knockback, global_position)
+				body.was_hit(damage, knockback_force, global_position)
+
+func _is_in_arc(point: Vector2) -> bool:
+	if arc_degrees >= 360.0:
+		return true
+	return absf(angle_difference(arc_direction, global_position.angle_to_point(point))) <= deg_to_rad(arc_degrees) * 0.5
 
 func _is_damageable(body: Node2D) -> bool:
 	if not body.has_method("was_hit"):
@@ -231,16 +271,19 @@ func _reset() -> void:
 	_state_time = 0.0
 	_wave_radius = 0.0
 	_previous_wave_radius = 0.0
-	_shockwave_fade_time = 0.0
+	_visual_time = -1.0
 	_hit_targets.clear()
 	shockwave_visual.hide()
 	queue_redraw()
 
-func _update_shockwave_visual(radius: float, alpha: float) -> void:
+func _update_shockwave_visual(radius: float, progress: float) -> void:
 	var shader_material := shockwave_visual.material as ShaderMaterial
 	shader_material.set_shader_parameter("current_radius", radius)
+	shader_material.set_shader_parameter("arc_direction", arc_direction)
+	shader_material.set_shader_parameter("arc_half_angle", deg_to_rad(arc_degrees) * 0.5)
 	var visual_color := shockwave_color
-	visual_color.a = alpha
+	if opacity_curve:
+		visual_color.a *= clampf(opacity_curve.sample_baked(progress), 0.0, 1.0)
 	shader_material.set_shader_parameter("shockwave_color", visual_color)
 
 func _draw() -> void:

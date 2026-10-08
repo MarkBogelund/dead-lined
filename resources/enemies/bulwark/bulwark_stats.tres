@@ -6,8 +6,17 @@
 [resource]
 script = ExtResource("1")
 turn_speed_degrees = 90.0
+stress_threshold = 20.0
+armor_broken_duration = 5.0
+shield_damage = 20
+shield_wave_damage = 20
+shield_wave_knockback = 200.0
+shield_wave_cooldown = 3.0
+shield_wave_trigger_range = 250.0
+shield_wave_width = 20.0
 max_health = 300
-damage = 20
+damage = 5
+move_speed = 50.0
 targeting = ExtResource("2")
 orb_drop_amount = 30
 crunch_powerup_drop_chance = 0.1

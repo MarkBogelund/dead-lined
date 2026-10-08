@@ -2,29 +2,30 @@ extends BossEnemyBase
 class_name Bulwark
 
 const IDLE_ANIMATION: StringName = &"idle"
+const SHIELD_CHARGE_ANIMATION: StringName = &"shield_charge"
 
 @export var stats: BulwarkStats
-@export var armor: DirectionalArmorComponent
-@export var armor_visual: DirectionalArmorVisual
+@export var shield: DirectionalShieldComponent
 @export var health_ui: HealthUIComponent
 @export var body_sprite: Sprite2D
-@export var shield: ArmorShieldComponent
+
+var _shield_wave_timer := 0.0
+var _charging_shield_wave := false
 
 func _ready() -> void:
-	assert(stats and armor and armor_visual and health_ui and body_sprite and shield, "Bulwark requires its stats and owned components")
+	assert(stats and shield and health_ui and body_sprite, "Bulwark requires its stats and owned components")
 	_initialize_base(stats)
 	contact_hitbox.initialize(stats.damage, stats.knockback)
 	targeting.configure(stats.targeting)
 	animation.configure_animation(IDLE_ANIMATION, 0, false)
+	animation.configure_animation(SHIELD_CHARGE_ANIMATION, 10, true)
+	_shield_wave_timer = stats.shield_wave_cooldown
 	health_ui.setup(health)
-	armor.stress_changed.connect(_on_stress_changed)
-	armor.armor_changed.connect(_on_armor_changed)
-	armor.facing_changed.connect(armor_visual.set_facing)
-	armor.facing_changed.connect(shield.set_facing)
-	shield.shield_hit.connect(_on_shield_hit)
-	armor.configure(stats)
-	armor_visual.set_facing(armor.facing_angle)
-	shield.set_facing(armor.facing_angle)
+	shield.stress_changed.connect(health_ui.set_cooldown_progress)
+	shield.broken_changed.connect(_on_shield_broken_changed)
+	shield.shield_hit.connect(_apply_shield_damage)
+	shield.configure(stats)
+	shield.set_facing(shield.facing_angle)
 
 func _physics_process(delta: float) -> void:
 	if is_dead():
@@ -33,20 +34,39 @@ func _physics_process(delta: float) -> void:
 		velocity = knockback.velocity
 	else:
 		var target := targeting.get_best_target(global_position)
-		velocity = navigation.get_safe_velocity(target.global_position, stats.move_speed) if target else Vector2.ZERO
+		velocity = navigation.get_safe_velocity(target.global_position, stats.move_speed) if target and not _charging_shield_wave else Vector2.ZERO
 		if target:
-			armor.turn_toward(target.global_position, delta)
+			shield.turn_toward(target.global_position, delta)
 			body_sprite.flip_h = target.global_position.x < global_position.x
+			_update_shield_wave(target, delta)
 		animation.play_animation(IDLE_ANIMATION)
 	knockback.process(delta)
 	_apply_environment_velocity()
 	move_and_slide()
 
+func _update_shield_wave(target: Node2D, delta: float) -> void:
+	if _charging_shield_wave or not shield.is_active():
+		return
+	_shield_wave_timer -= delta
+	if _shield_wave_timer <= 0.0 and global_position.distance_to(target.global_position) <= stats.shield_wave_trigger_range:
+		_charging_shield_wave = animation.play_animation(SHIELD_CHARGE_ANIMATION)
+
+## Called by the shield_charge animation at its release frame.
+func launch_shield_wave() -> void:
+	_charging_shield_wave = false
+	_shield_wave_timer = stats.shield_wave_cooldown
+	shield.launch_wave()
+
+func _cancel_shield_wave() -> void:
+	if _charging_shield_wave:
+		_charging_shield_wave = false
+		_shield_wave_timer = stats.shield_wave_cooldown
+		animation.stop_animation(SHIELD_CHARGE_ANIMATION)
+
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead() or _spawn_intro_active:
 		return
-	var protected := armor.protects_from(from_position)
-	if protected:
+	if shield.protects_from(from_position):
 		_apply_shield_damage(amount, from_position)
 	else:
 		super.was_hit(amount, knockback_force, from_position)
@@ -54,42 +74,33 @@ func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> voi
 func was_hit_bypassing_armor(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	super.was_hit(amount, knockback_force, from_position)
 
-func _on_shield_hit(amount: int, from_position: Vector2) -> void:
-	if is_dead() or _spawn_intro_active or armor.is_broken():
-		return
-	_apply_shield_damage(amount, from_position)
-
 func _apply_shield_damage(amount: int, from_position: Vector2) -> void:
-	var was_fatal := health.take_damage(armor.resolve_shield_damage(amount))
+	var was_fatal := health.take_damage(shield.resolve_shield_damage(amount))
 	knockback.apply(from_position, 0.0)
-	armor_visual.flash_hit()
+	shield.flash_hit()
 	if was_fatal:
 		_handle_death(from_position, 0.0)
 
-func _on_armor_changed(broken: bool) -> void:
-	armor_visual.set_broken(broken)
-	shield.set_enabled(not broken and not is_dead() and not _spawn_intro_active)
+func _on_shield_broken_changed(broken: bool) -> void:
+	if broken:
+		_cancel_shield_wave()
 
 func buff_damage(multiplier: float) -> void:
-	contact_hitbox.damage = int(contact_hitbox.damage * multiplier)
-
-func _on_stress_changed(progress: float) -> void:
-	health_ui.set_cooldown_progress(progress)
-	armor_visual.set_stress(progress)
+	super.buff_damage(multiplier)
+	shield.contact_hitbox.damage = int(shield.contact_hitbox.damage * multiplier)
+	shield.wave.damage = int(shield.wave.damage * multiplier)
 
 func _before_handle_death() -> void:
-	armor.set_enabled(false)
+	_cancel_shield_wave()
 	shield.set_enabled(false)
 	health_ui.hide()
 
 func begin_spawn_intro() -> void:
 	health_ui.hide()
-	armor.set_enabled(false)
 	shield.set_enabled(false)
 	super.begin_spawn_intro()
 
 func _finish_spawn_intro() -> void:
-	armor.set_enabled(true)
-	shield.set_enabled(not armor.is_broken())
+	shield.set_enabled(true)
 	health_ui.show()
 	super._finish_spawn_intro()

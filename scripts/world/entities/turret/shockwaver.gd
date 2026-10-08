@@ -1,7 +1,7 @@
 extends TurretBase
 class_name Shockwaver
 
-@onready var shockwave: ShockwaveComponent = $ShockwaveComponent
+@onready var shockwave: RadialWaveComponent = $RadialWaveComponent
 
 @export var stats: ShockwaverStats
 

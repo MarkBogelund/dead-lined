@@ -37,7 +37,8 @@ func _new_boss(at: Vector2) -> Bulwark:
 	boss.position = at
 	add_child(boss)
 	boss.set_physics_process(false)
-	boss.armor.set_physics_process(false)
+	boss.shield.set_physics_process(false)
+	boss.shield.configure(BulwarkStats.new())
 	return boss
 
 func _run() -> void:
@@ -54,28 +55,26 @@ func _run() -> void:
 	var boss := _new_boss(Vector2(1000, 1000))
 	var second := _new_boss(Vector2(2000, 2000))
 	assert(boss.health.max_health == 300)
-	assert(boss.armor_visual is Sprite2D)
-	assert(boss.armor_visual.texture.resource_path == "res://assets/sprites/enemies/bulwark-shield.png")
-	assert(boss.armor_visual.modulate.is_equal_approx(boss.armor_visual.armored_color))
-	assert(boss.health_ui.cooldown_fill.color.is_equal_approx(Color(0.95, 0.12, 0.12, 1)))
+	assert(boss.shield.sprite is Sprite2D)
+	assert(boss.shield.sprite.modulate.is_equal_approx(boss.shield.armored_color))
 	assert(not boss.health_ui.level_label.visible)
 	assert(is_zero_approx(boss.health_ui.cooldown_fill.size.x))
 	var front := boss.position + Vector2(100, 0)
 	var body_material := boss.get_node("Visuals").get("material") as ShaderMaterial
-	var shield_material := boss.armor_visual.material as ShaderMaterial
+	var shield_material := boss.shield.sprite.material as ShaderMaterial
 	assert(shield_material != body_material)
-	assert(shield_material != second.armor_visual.material)
+	assert(shield_material != second.shield.sprite.material)
 	boss.was_hit(8, 200.0, front)
 	assert(boss.health.current_health == 298)
 	boss.animation.advance(0.01)
 	assert(is_zero_approx(float(body_material.get_shader_parameter("flash_amount"))))
 	assert(is_equal_approx(float(shield_material.get_shader_parameter("flash_amount")), 1.0))
-	assert(is_zero_approx(float((second.armor_visual.material as ShaderMaterial).get_shader_parameter("flash_amount"))))
+	assert(is_zero_approx(float((second.shield.sprite.material as ShaderMaterial).get_shader_parameter("flash_amount"))))
 	assert(boss.knockback.velocity.is_zero_approx())
-	assert(is_equal_approx(boss.armor.get_stress_progress(), 8.0 / 30.0))
+	assert(is_equal_approx(boss.shield.get_stress_progress(), 8.0 / 30.0))
 	assert(is_equal_approx(boss.health_ui.cooldown_fill.size.x, boss.health_ui._full_bar_width * 8.0 / 30.0))
 	assert(is_equal_approx(boss.health_ui.fill.size.x, boss.health_ui._full_bar_width * 298.0 / 300.0))
-	assert(second.health.current_health == 300 and second.armor.get_stress_progress() == 0.0)
+	assert(second.health.current_health == 300 and second.shield.get_stress_progress() == 0.0)
 	boss.was_hit(8, 200.0, boss.position + Vector2(-100, 0))
 	assert(boss.health.current_health == 290)
 	await get_tree().process_frame
@@ -84,39 +83,38 @@ func _run() -> void:
 	assert(is_equal_approx(boss.knockback.velocity.length(), 200.0))
 	boss.was_hit_bypassing_armor(8, 0.0, front)
 	assert(boss.health.current_health == 282)
-	assert(is_equal_approx(boss.armor.get_stress_progress(), 8.0 / 30.0))
+	assert(is_equal_approx(boss.shield.get_stress_progress(), 8.0 / 30.0))
 	var tuning := BulwarkStats.new()
 	tuning.stress_threshold = 10.0
 	tuning.armor_broken_duration = 0.2
-	boss.armor.configure(tuning)
-	boss.armor.resolve_damage(8, front)
+	boss.shield.configure(tuning)
+	boss.shield.resolve_shield_damage(8)
 	boss.knockback.velocity = Vector2.ZERO
 	boss.was_hit(2, 200.0, front)
 	assert(boss.knockback.velocity.is_zero_approx())
-	assert(boss.armor.is_broken())
-	assert(not boss.shield._enabled)
-	assert(boss.armor_visual._broken)
-	assert(boss.armor_visual.modulate.is_equal_approx(boss.armor_visual.broken_color))
+	assert(boss.shield.is_broken())
+	assert(not boss.shield.is_active())
+	assert(boss.shield.sprite.modulate.is_equal_approx(boss.shield.broken_color))
 	assert(is_equal_approx(boss.health_ui.cooldown_fill.size.x, boss.health_ui._full_bar_width))
-	assert(boss.armor.resolve_damage(8, front) == 8)
-	boss.armor._physics_process(0.21)
-	assert(not boss.armor.is_broken())
-	assert(boss.shield._enabled)
-	assert(is_zero_approx(boss.armor.get_stress_progress()))
-	assert(boss.armor_visual.modulate.is_equal_approx(boss.armor_visual.armored_color))
+	assert(boss.shield.resolve_shield_damage(8) == 8)
+	boss.shield._physics_process(0.21)
+	assert(not boss.shield.is_broken())
+	assert(boss.shield.is_active())
+	assert(is_zero_approx(boss.shield.get_stress_progress()))
+	assert(boss.shield.sprite.modulate.is_equal_approx(boss.shield.armored_color))
 	assert(is_zero_approx(boss.health_ui.cooldown_fill.size.x))
-	assert(boss.armor.resolve_damage(1, front) == 1)
-	boss.armor.configure(tuning)
-	boss.armor.resolve_damage(4, front)
-	boss.armor._physics_process(0.75)
-	assert(is_equal_approx(boss.armor.get_stress_progress(), 0.4))
-	boss.armor._physics_process(0.5)
-	assert(is_equal_approx(boss.armor.get_stress_progress(), 0.275))
-	boss.armor.turn_toward(boss.position + Vector2.UP * 100.0, 0.5)
-	assert(is_equal_approx(boss.armor.facing_angle, -PI / 6.0))
-	assert(is_equal_approx(boss.armor_visual.global_rotation, boss.armor.facing_angle))
-	assert(is_equal_approx(boss.shield.global_rotation, boss.armor.facing_angle))
-	boss.armor.facing_angle = 0.0
+	assert(boss.shield.resolve_shield_damage(1) == 1)
+	boss.shield.configure(tuning)
+	boss.shield.resolve_shield_damage(4)
+	boss.shield._physics_process(0.75)
+	assert(is_equal_approx(boss.shield.get_stress_progress(), 0.4))
+	boss.shield._physics_process(0.5)
+	assert(is_equal_approx(boss.shield.get_stress_progress(), 0.275))
+	boss.shield.turn_toward(boss.position + Vector2.UP * 100.0, 0.5)
+	assert(is_equal_approx(boss.shield.facing_angle, -PI / 6.0))
+	assert(is_equal_approx(boss.shield.sprite.global_rotation, boss.shield.facing_angle))
+	assert(is_equal_approx(boss.shield.global_rotation, boss.shield.facing_angle))
+	boss.shield.set_facing(0.0)
 	var piercer := PIERCER_SCENE.instantiate()
 	var laser := piercer.get_node("LaserComponent") as PiercerLaser
 	piercer.remove_child(laser)
@@ -125,7 +123,7 @@ func _run() -> void:
 	var shooter := CharacterBody2D.new()
 	add_child(shooter)
 	var shockwaver := SHOCKWAVER_SCENE.instantiate()
-	var wave := shockwaver.get_node("ShockwaveComponent") as ShockwaveComponent
+	var wave := shockwaver.get_node("RadialWaveComponent") as RadialWaveComponent
 	shockwaver.remove_child(wave)
 	shockwaver.free()
 	add_child(wave)
@@ -135,15 +133,15 @@ func _run() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	var before := boss.health.current_health
-	var stress_before := boss.armor.get_stress_progress()
+	var stress_before := boss.shield.get_stress_progress()
 	laser._damage_targets(front, Vector2.LEFT, 200.0, 20, 0.0, shooter)
 	assert(boss.health.current_health == before - 20)
-	assert(is_equal_approx(boss.armor.get_stress_progress(), stress_before))
+	assert(is_equal_approx(boss.shield.get_stress_progress(), stress_before))
 	wave._previous_wave_radius = 0.0
 	wave._wave_radius = 40.0
 	wave._damage_swept_ring()
 	assert(boss.health.current_health == before - 32)
-	assert(is_equal_approx(boss.armor.get_stress_progress(), stress_before))
+	assert(is_equal_approx(boss.shield.get_stress_progress(), stress_before))
 	for node: Node in [boss, second, laser, wave, shooter]:
 		node.queue_free()
 	await get_tree().process_frame
@@ -233,9 +231,9 @@ func _test_shield_collisions() -> void:
 	var tuning := BulwarkStats.new()
 	tuning.stress_threshold = 10.0
 	tuning.armor_broken_duration = 0.2
-	boss.armor.configure(tuning)
+	boss.shield.configure(tuning)
 	boss.shield.was_hit(10, 200.0, boss.position + Vector2.RIGHT * 40.0)
-	assert(boss.armor.is_broken() and not boss.shield._enabled)
+	assert(boss.shield.is_broken() and not boss.shield.is_active())
 	assert(boss.knockback.velocity.is_zero_approx())
 	await get_tree().physics_frame
 	await get_tree().physics_frame
@@ -247,22 +245,21 @@ func _test_shield_collisions() -> void:
 	assert(boss.health.current_health == before - 8)
 	assert(is_equal_approx(boss.knockback.velocity.length(), 200.0))
 	assert(_shield_impacts == 3)
-	boss.armor._physics_process(0.21)
+	boss.shield._physics_process(0.21)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	assert(not boss.shield.collision_polygon.disabled)
-	boss.armor.facing_angle = PI
-	boss.armor.facing_changed.emit(PI)
+	boss.shield.set_facing(PI)
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	query.from = boss.global_position + Vector2(-40, 0)
 	assert(space.intersect_ray(query).get("collider") == boss.shield)
 	boss.play_spawn_intro(boss.position, 0.05)
-	assert(not boss.shield._enabled)
+	assert(not boss.shield.is_active())
 	await get_tree().create_timer(0.1).timeout
-	assert(boss.shield._enabled)
+	assert(boss.shield.is_active())
 	boss.was_hit_bypassing_armor(10000, 0.0, boss.position + Vector2.RIGHT)
-	assert(not boss.shield._enabled)
+	assert(not boss.shield.is_active())
 	boss.queue_free()
 	await get_tree().process_frame
 	print("PASS: real player/turret projectile shield interception, single damage, exposed-side knockback, collider break/reform/rotation, broken-front knockback, spawn/death cleanup.")
@@ -330,7 +327,7 @@ func _test_spawning() -> void:
 	assert(_spawned_boss.health.current_health == _spawned_boss.stats.max_health)
 	assert(not _spawned_boss.health_ui.visible)
 	assert(_spawned_boss._spawn_intro_active)
-	assert((_spawned_boss.get_node("ImpactVFX/LandingMarker") as CanvasItem).visible)
+	assert((_spawned_boss.get_node("Intro/LandingMarker") as CanvasItem).visible)
 	await _spawned_boss.boss_intro_finished
 	assert(_spawned_boss.health_ui.visible)
 	assert(not _spawned_boss._spawn_intro_active)

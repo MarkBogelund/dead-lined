@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ddcw46m8pk2jd" path="res://scripts/world/entities/turret/mortar_strike.gd" id="1_mortar"]
 [ext_resource type="Texture2D" uid="uid://dvpb83qdpks8q" path="res://assets/sprites/shared/mortar.png" id="2_8pcp2"]
-[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/shockwave.gd" id="2_wave"]
+[ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/entities/turret/radial_wave.gd" id="2_wave"]
 [ext_resource type="PackedScene" uid="uid://b0eux5l7kvgkc" path="res://scenes/world/vfx/speed_particles.tscn" id="3_4fu3r"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="3_shader"]
 [ext_resource type="Texture2D" uid="uid://bcfnxifebswso" path="res://assets/sprites/shared/shadow.png" id="5_shadow"]
@@ -22,6 +22,10 @@ region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="CircleShape2D" id="ImpactShape"]
 radius = 1.0
+
+[sub_resource type="Curve" id="ShockwaveOpacity"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [node name="MortarStrike" type="Node2D" unique_id=505213409]
 script = ExtResource("1_mortar")
@@ -48,9 +52,10 @@ texture = SubResource("AtlasTexture_nf1vj")
 
 [node name="RadialWaveComponent" type="Node2D" parent="." unique_id=189277128]
 script = ExtResource("2_wave")
+stats_driven = 61
 auto_trigger = false
 pixel_art_shader = ExtResource("3_shader")
-shockwave_fade_duration = 0.25
+opacity_curve = SubResource("ShockwaveOpacity")
 shockwave_color = Color(1, 0.72, 0.52, 0.9019608)
 pixel_size = 1.0
 center_line_thickness = 3
