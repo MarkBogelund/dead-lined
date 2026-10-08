@@ -99,6 +99,7 @@ func _before_handle_death() -> void:
 func begin_spawn_intro() -> void:
 	health_ui.hide()
 	shield.set_enabled(false)
+	shield.sprite.hide()
 	super.begin_spawn_intro()
 
 func _finish_spawn_intro() -> void:

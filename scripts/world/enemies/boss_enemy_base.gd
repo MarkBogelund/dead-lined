@@ -35,6 +35,10 @@ func play_boss_intro() -> void:
 	assert(intro_animation and intro and landing_wave, "BossEnemyBase requires its shared intro nodes")
 	if not intro_animation.animation_finished.is_connected(_on_intro_finished):
 		intro_animation.animation_finished.connect(_on_intro_finished)
+	if not animation.animation_finished.is_connected(_on_boss_specific_intro_finished):
+		animation.animation_finished.connect(_on_boss_specific_intro_finished)
+	if animation.has_configured_animation(INTRO_ANIMATION):
+		animation.configure_animation(INTRO_ANIMATION, 1, true)
 	animation.stop_animation("idle")
 	begin_spawn_intro()
 	remove_from_group("enemies")
@@ -48,8 +52,17 @@ func _on_intro_finished(animation_name: StringName) -> void:
 	if animation_name == INTRO_ANIMATION and _spawn_intro_active:
 		intro.top_level = true
 		intro.global_position = global_position
-		_finish_spawn_intro()
-		boss_intro_finished.emit()
+		if animation.has_configured_animation(INTRO_ANIMATION) and animation.play_animation(INTRO_ANIMATION):
+			return
+		_complete_boss_intro()
+
+func _on_boss_specific_intro_finished(animation_name: StringName) -> void:
+	if String(animation_name).get_file() == String(INTRO_ANIMATION) and _spawn_intro_active:
+		_complete_boss_intro()
+
+func _complete_boss_intro() -> void:
+	_finish_spawn_intro()
+	boss_intro_finished.emit()
 
 func _finish_spawn_intro() -> void:
 	add_to_group("enemies")
@@ -57,6 +70,7 @@ func _finish_spawn_intro() -> void:
 
 func cancel_boss_intro() -> void:
 	_spawn_intro_active = false
+	animation.stop_animation(INTRO_ANIMATION)
 	boss_alert_changed.emit(false)
 	landing_wave.set_enabled(false)
 	intro_animation.play(RESET_ANIMATION)
