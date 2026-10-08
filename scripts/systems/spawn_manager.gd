@@ -177,8 +177,10 @@ func _spawn_enemy(entry: EnemySpawnEntry, point: SpawnPoint = null, spawn_positi
 	if point:
 		point.send_in(enemy)
 	elif enemy is BossEnemyBase:
-		(enemy as BossEnemyBase).boss_landed.connect(_on_boss_landed.bind(_generation))
-		(enemy as BossEnemyBase).play_boss_intro()
+		var boss := enemy as BossEnemyBase
+		boss.boss_landed.connect(_on_boss_landed.bind(_generation))
+		boss.boss_alert_changed.connect(PostProcessingManager.set_boss_alert)
+		boss.play_boss_intro()
 	enemy_spawned.emit(enemy)
 
 func _on_boss_landed(intensity: float, generation: int) -> void:

@@ -36,6 +36,7 @@ targeting = ExtResource("3_targeting")
 aim_speed = 3.0
 aim_tolerance = 0.2
 charge_duration = 0.5
+first_shot_delay = 1.0
 max_health = 150
 damage = 40
 knockback = 180.0

@@ -39,3 +39,12 @@ class_name PostProcessingSettings
 @export_range(0.0, 1.0, 0.01) var crunch_chromatic_aberration := 0.5
 @export_range(0.0, 1.0, 0.01) var crunch_bloom_intensity := 0.45
 @export_range(0.5, 8.0, 0.25) var crunch_bloom_radius := 2.5
+
+@export_group("Boss Spawn Alert")
+@export var boss_alert_color := Color(0.95, 0.04, 0.03, 1.0)
+@export_range(0.0, 1.0, 0.01) var boss_alert_intensity := 0.55
+@export var boss_alert_priority := 200
+@export_range(0.0, 2.0, 0.01) var boss_alert_fade_in_duration := 0.08
+@export_range(0.0, 2.0, 0.01) var boss_alert_fade_out_duration := 0.2
+@export_range(0.0, 20.0, 0.1) var boss_alert_pulse_speed := 8.0
+@export_range(0.0, 1.0, 0.01) var boss_alert_pulse_min := 0.4

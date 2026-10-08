@@ -23,7 +23,10 @@ func _initialize_base(stats: EnemyStats) -> void:
 	animation.configure_animation("spawn_sleep", 0, false)
 	animation.configure_animation("spawn_wake", 0, true)
 	animation.configure_animation("take_damage", 2, true)
-	animation.configure_animation("die", 3, true)
+	animation.configure_animation(_get_death_animation_name(), 3, true)
+
+func _get_death_animation_name() -> StringName:
+	return &"die"
 
 var _spawn_intro_active := false
 var _collision_layer_before_intro := 0
@@ -114,7 +117,7 @@ func _handle_death(from_position: Vector2, knockback_force: float) -> void:
 	knockback.apply(from_position, knockback_force)
 	remove_from_group("enemies")
 	died.emit()
-	animation.play_animation("die")
+	animation.play_animation(_get_death_animation_name())
 
 func _before_handle_damage() -> void:
 	pass

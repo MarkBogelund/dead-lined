@@ -10,6 +10,7 @@ const LOW_CAPACITY_DANGER := &"low_capacity_danger"
 const CRUNCH_TIME_SCREEN := &"crunch_time_screen"
 const CAPACITY_OVERLAY := &"capacity"
 const CRUNCH_TIME_OVERLAY := &"crunch_time"
+const BOSS_ALERT_OVERLAY := &"boss_spawn_alert"
 
 var _surface: ColorRect
 var _material: ShaderMaterial
@@ -146,6 +147,19 @@ func set_crunch_time_overlay(active: bool) -> void:
 	else:
 		set_screen_effect(CRUNCH_TIME_SCREEN, 0.0, settings.crunch_time_fade_duration)
 		clear_color_overlay(CRUNCH_TIME_OVERLAY, settings.crunch_time_fade_duration)
+
+func set_boss_alert(active: bool) -> void:
+	if active:
+		set_color_overlay(
+			BOSS_ALERT_OVERLAY,
+			settings.boss_alert_color,
+			settings.boss_alert_intensity,
+			settings.boss_alert_priority,
+			settings.boss_alert_fade_in_duration,
+			settings.boss_alert_pulse_speed,
+			settings.boss_alert_pulse_min)
+	else:
+		clear_color_overlay(BOSS_ALERT_OVERLAY, settings.boss_alert_fade_out_duration)
 
 func _set_screen_amount(value: float, effect: StringName) -> void:
 	_screen_amounts[effect] = value

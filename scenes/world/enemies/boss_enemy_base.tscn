@@ -9,6 +9,165 @@
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="7_sparks"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/attacks/radial_wave.gd" id="8_wave"]
 
+[sub_resource type="Animation" id="BossDeath"]
+resource_name = "boss_die"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("HitboxComponent:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.42, 0.72, 1),
+"transitions": PackedFloat32Array(1, 0.5, 1, 0.5, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.24, 0.8), Vector2(0.92, 1.12), Vector2(1.32, 1.32), Vector2(0.4, 0.4)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visuals:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visuals:material:shader_parameter/flash_amount")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.48, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.35, 1.0, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Flash:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.28, 0.95),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Flash:material:shader_parameter/current_radius")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.28, 0.95),
+"transitions": PackedFloat32Array(0.7, 1),
+"update": 0,
+"values": [0.0, 60.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Flash:material:shader_parameter/ring_thickness")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.28, 0.95),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [18.0, 2.0]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Flash:material:shader_parameter/shockwave_color")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0.28, 0.68, 0.95),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 0.7, 0.25, 0.9), Color(1, 0.4, 0.15, 0.65), Color(1, 0.25, 0.1, 0)]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("HitParticles")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.48),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("OrbDropComponent")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0.48),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"drop"
+}]
+}
+tracks/11/type = "method"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath(".")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(1.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="BossDeathLibrary"]
+_data = {
+&"boss_die": SubResource("BossDeath")
+}
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5tfdp"]
 resource_local_to_scene = true
 shader = ExtResource("3_11csn")
@@ -25,17 +184,8 @@ shader_parameter/pixel_size = 2.0
 shader_parameter/center_line_thickness = 1.0
 shader_parameter/center_line_color = Color(1, 1, 1, 1)
 shader_parameter/canvas_size = Vector2(40, 40)
-
-[sub_resource type="ShaderMaterial" id="LandingMarkerMaterial"]
-resource_local_to_scene = true
-shader = ExtResource("5_k6g42")
-shader_parameter/shockwave_color = Color(1, 0.25, 0.1, 0)
-shader_parameter/current_radius = 98.0
-shader_parameter/ring_thickness = 3.0
-shader_parameter/pixel_size = 3.0
-shader_parameter/center_line_thickness = 1.0
-shader_parameter/center_line_color = Color(1, 0.25, 0.1, 1)
-shader_parameter/canvas_size = Vector2(208, 208)
+shader_parameter/arc_direction = 0.0
+shader_parameter/arc_half_angle = 3.1415927
 
 [sub_resource type="AtlasTexture" id="DustTexture"]
 atlas = ExtResource("6_shapes")
@@ -102,12 +252,12 @@ scale_max = 0.79999995
 scale_curve = SubResource("CurveTexture_bvvym")
 color_ramp = SubResource("GradientTexture1D_hpb62")
 
-[sub_resource type="CircleShape2D" id="LandingWaveShape"]
-radius = 98.0
-
 [sub_resource type="Curve" id="ShockwaveOpacity"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.7, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="CircleShape2D" id="LandingWaveShape"]
+radius = 98.0
 
 [sub_resource type="Animation" id="Reset"]
 resource_name = "RESET"
@@ -187,7 +337,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Intro/LandingMarker:material:shader_parameter/shockwave_color")
+tracks/6/path = NodePath("Intro/LandingMarker:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -280,10 +430,37 @@ tracks/13/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/14/type = "method"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath(".")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [false],
+"method": &"emit_boss_alert"
+}]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Visuals/DropRoot:modulate")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Drop"]
-resource_name = "drop"
-length = 1.45
+resource_name = "intro"
+length = 1.6
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -291,7 +468,7 @@ tracks/0/path = NodePath("Visuals/DropRoot:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.9, 1.1333333, 1.45),
+"times": PackedFloat32Array(0, 0.9, 1.1, 1.4),
 "transitions": PackedFloat32Array(1, 3, 1, 1),
 "update": 0,
 "values": [Vector2(0, -180), Vector2(0, -180), Vector2(0, 0), Vector2(0, 0)]
@@ -303,7 +480,7 @@ tracks/1/path = NodePath("Visuals/DropRoot:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 1.1323334, 1.1333333, 1.22, 1.36, 1.45),
+"times": PackedFloat32Array(0, 1.1, 1.2, 1.3, 1.36, 1.4),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.18, 0.8), Vector2(0.946, 1.06), Vector2(1, 1), Vector2(1, 1)]
@@ -315,7 +492,7 @@ tracks/2/path = NodePath("Visuals/DropRoot:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.9),
+"times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -327,10 +504,10 @@ tracks/3/path = NodePath("Visuals:material:shader_parameter/flash_amount")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 1.1323334, 1.1333333, 1.27, 1.45),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 1.1, 1.27, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [0.0, 0.0, 1.0, 0.0, 0.0]
+"values": [0.0, 1.0, 0.0, 0.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -339,7 +516,7 @@ tracks/4/path = NodePath("Visuals/Shadow:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 1.45),
+"times": PackedFloat32Array(0, 1.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -351,7 +528,7 @@ tracks/5/path = NodePath("Intro/LandingMarker:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 1.1333333),
+"times": PackedFloat32Array(0, 1.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -359,11 +536,11 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Intro/LandingMarker:material:shader_parameter/shockwave_color")
+tracks/6/path = NodePath("Intro/LandingMarker:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.5, 1.1333333),
+"times": PackedFloat32Array(0, 0.5, 1.1),
 "transitions": PackedFloat32Array(2, 1, 1),
 "update": 0,
 "values": [Color(1, 0.25, 0.1, 0), Color(1, 0.25000006, 0.100000024, 0.4862745), Color(1, 0.25, 0.1, 0.9)]
@@ -375,7 +552,7 @@ tracks/7/path = NodePath("Intro/RadialWaveComponent")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(1.1333333),
+"times": PackedFloat32Array(1.1),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -389,7 +566,7 @@ tracks/8/path = NodePath("Intro/DropShadow:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 1.45),
+"times": PackedFloat32Array(0, 1.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -401,7 +578,7 @@ tracks/9/path = NodePath("Intro/DropShadow:scale")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.9, 1.1333333, 1.45),
+"times": PackedFloat32Array(0, 0.9, 1.1, 1.4),
 "transitions": PackedFloat32Array(1, 2, 1, 1),
 "update": 0,
 "values": [Vector2(0.4, 0.25), Vector2(0.5, 0.3), Vector2(2.5, 1.8), Vector2(2.5, 1.8)]
@@ -413,7 +590,7 @@ tracks/10/path = NodePath("Intro/DropShadow:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 0.9, 1.1333333, 1.45),
+"times": PackedFloat32Array(0, 0.9, 1.1, 1.4),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Color(0.1, 0.1, 0.1, 0.05), Color(0.1, 0.1, 0.1, 0.2), Color(0.1, 0.1, 0.1, 0.5), Color(0.1, 0.1, 0.1, 0)]
@@ -425,7 +602,7 @@ tracks/11/path = NodePath("Intro:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 1.1333333),
+"times": PackedFloat32Array(0, 1.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, true]
@@ -437,7 +614,7 @@ tracks/12/path = NodePath(".")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(1.1333333),
+"times": PackedFloat32Array(1.1),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [0.3],
@@ -451,7 +628,7 @@ tracks/13/path = NodePath("Intro/DustParticles:emitting")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0, 1.1333334),
+"times": PackedFloat32Array(0, 1.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -463,16 +640,45 @@ tracks/14/path = NodePath("Intro/SparkParticles:emitting")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
-"times": PackedFloat32Array(0, 1.1333334),
+"times": PackedFloat32Array(0, 1.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/15/type = "method"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath(".")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0.55, 1.12),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [true],
+"method": &"emit_boss_alert"
+}, {
+"args": [false],
+"method": &"emit_boss_alert"
+}]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Visuals/DropRoot:modulate")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 1.1, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.68, 0.68, 0.68, 1), Color(0.68, 0.68, 0.68, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="IntroLibrary"]
 _data = {
 &"RESET": SubResource("Reset"),
-&"drop": SubResource("Drop")
+&"intro": SubResource("Drop")
 }
 
 [node name="BossEnemyBase" unique_id=487594744 node_paths=PackedStringArray("intro_animation", "intro", "landing_wave") instance=ExtResource("1_base")]
@@ -480,6 +686,9 @@ script = ExtResource("2_boss")
 intro_animation = NodePath("Intro/AnimationPlayer")
 intro = NodePath("Intro")
 landing_wave = NodePath("Intro/RadialWaveComponent")
+
+[node name="AnimationHandler" parent="." index="8" unique_id=1100000010]
+libraries/boss = SubResource("BossDeathLibrary")
 
 [node name="Visuals" parent="." index="9" unique_id=1100000011]
 material = SubResource("ShaderMaterial_5tfdp")
@@ -502,15 +711,12 @@ material = SubResource("ShaderMaterial_lxi2c")
 [node name="Intro" type="Node2D" parent="." index="12" unique_id=620000003]
 visible = false
 
-[node name="LandingMarker" type="ColorRect" parent="Intro" index="0" unique_id=1620584647]
+[node name="LandingMarker" parent="Intro" index="0" unique_id=1620584647 instance=ExtResource("4_pixel_circle")]
 visible = false
+modulate = Color(1, 0.25, 0.1, 0)
 z_index = 1
-material = SubResource("LandingMarkerMaterial")
-offset_left = -104.0
-offset_top = -104.0
-offset_right = 104.0
-offset_bottom = 104.0
-mouse_filter = 2
+size = Vector2i(196, 196)
+pixel_size = 3
 
 [node name="DropShadow" parent="Intro" index="1" unique_id=1799544543 instance=ExtResource("4_pixel_circle")]
 visible = false
@@ -540,17 +746,17 @@ z_index = 5
 script = ExtResource("8_wave")
 max_range = 60.0
 ring_thickness = 10.0
-cooldown = 0.1
 expansion_duration = 0.4
+cooldown = 0.1
 damage = 10
 knockback_force = 0.0
 target_groups = Array[StringName]([&"player", &"turrets"])
 auto_trigger = false
 pixel_art_shader = ExtResource("5_k6g42")
-opacity_curve = SubResource("ShockwaveOpacity")
 shockwave_color = Color(1, 0.55, 0.2, 0.95)
-pixel_size = 3.0
+opacity_curve = SubResource("ShockwaveOpacity")
 center_line_color = Color(1, 0.95, 0.8, 1)
+pixel_size = 3.0
 
 [node name="DetectionArea" type="Area2D" parent="Intro/RadialWaveComponent" index="0" unique_id=1158579410]
 collision_layer = 0
