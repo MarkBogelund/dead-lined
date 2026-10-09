@@ -3,6 +3,8 @@ class_name BossEnemyBase
 
 signal boss_landed(shake_intensity: float)
 signal boss_death_shake_requested(shake_intensity: float)
+## Keyed in boss_die; the shop decides whether a blueprint actually drops.
+signal blueprint_drop_requested(world_position: Vector2)
 signal boss_intro_finished
 signal boss_alert_changed(active: bool)
 
@@ -29,6 +31,9 @@ func emit_boss_landed(shake_intensity: float) -> void:
 
 func emit_boss_death_shake(shake_intensity: float) -> void:
 	boss_death_shake_requested.emit(shake_intensity)
+
+func emit_blueprint_drop() -> void:
+	blueprint_drop_requested.emit(global_position)
 
 func emit_boss_alert(active: bool) -> void:
 	boss_alert_changed.emit(active)

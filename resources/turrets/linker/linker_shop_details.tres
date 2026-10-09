@@ -28,6 +28,7 @@ offsets = Array[Vector2i]([Vector2i(0, 0)])
 [resource]
 script = ExtResource("3_entry")
 name = "Linker"
+category = 1
 icon = SubResource("ImageTexture_rcdo7")
 icon_source = SubResource("LinkerIcon")
 price = 30

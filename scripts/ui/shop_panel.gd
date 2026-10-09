@@ -54,6 +54,9 @@ func close() -> void:
 	set_process(false)
 	animation_handler.play_animation("disappear")
 
+func is_open() -> bool:
+	return _is_open
+
 func _process(_delta: float) -> void:
 	var sector := _sector_under_input()
 	if sector >= 0:

@@ -2,8 +2,12 @@
 extends Resource
 class_name TurretEntry
 
+enum Category {AREA_DENIAL, RANGED}
+
 @export_group("Shop")
 @export var name: String
+## Run setup draws starting turrets per category (see ShopRosterSettings).
+@export var category := Category.AREA_DENIAL
 @export var icon: Texture2D
 @export_group("Icon Generator")
 @export var icon_source: TurretIconTexture

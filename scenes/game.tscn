@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://bomuvf4stnxjw" path="res://resources/waves/wave_settings.tres" id="2_wave_settings"]
 [ext_resource type="PackedScene" path="res://scenes/world/environment/spawn_point.tscn" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bkervm4vmc0wh" path="res://scripts/systems/turret_placer.gd" id="4_ca42v"]
-[ext_resource type="PackedScene" path="res://scenes/world/turrets/ghost_turret.tscn" id="4_generic_ghost"]
+[ext_resource type="PackedScene" uid="uid://c4hnjkgs5dqd2" path="res://scenes/world/turrets/ghost_turret.tscn" id="4_generic_ghost"]
 [ext_resource type="PackedScene" uid="uid://bcryhnwbbjcle" path="res://scenes/world/environment/shop_station.tscn" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://oouh8yqjltum" path="res://scripts/systems/game_over_manager.gd" id="6_ssvqc"]
 [ext_resource type="Script" uid="uid://b2gaurk2muptq" path="res://scripts/systems/score_manager.gd" id="8_score"]
@@ -48,6 +48,8 @@
 [ext_resource type="Resource" uid="uid://1betm04mhcru" path="res://resources/enemies/shotgunner/shotgunner_spawn_details.tres" id="46_shotgunner_spawn"]
 [ext_resource type="Resource" uid="uid://d20ovxmdp055t" path="res://resources/enemies/emitter/emitter_spawn_details.tres" id="47_emitter_spawn"]
 [ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/enemies/safe_spot.gd" id="48_safe_spot"]
+[ext_resource type="Resource" uid="uid://d3ykl4vsykuwn" path="res://resources/turrets/shop_roster_settings.tres" id="49_roster_settings"]
+[ext_resource type="PackedScene" path="res://scenes/ui/blueprint_unlocked_notification.tscn" id="50_unlock_notification"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="pixel_circle"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
@@ -231,12 +233,14 @@ region = Rect2(32, 32, 32, 32)
 
 [node name="Systems" type="Node" parent="." unique_id=618035649]
 
-[node name="ShopManager" type="Node" parent="Systems" unique_id=1221676986 node_paths=PackedStringArray("shop_panel", "shop_station") groups=["shop_manager"]]
+[node name="ShopManager" type="Node" parent="Systems" unique_id=1221676986 node_paths=PackedStringArray("shop_panel", "shop_station", "pickup_container") groups=["shop_manager"]]
 unique_name_in_owner = true
 script = ExtResource("1_ir15t")
 shop_panel = NodePath("../../UI/ShopPanel")
 shop_station = NodePath("../../World/ShopStation")
 turret_entries = Array[ExtResource("25_tentry")]([ExtResource("14_trtic"), ExtResource("37_piercer_shop"), ExtResource("29_shockwaver_shop"), ExtResource("34_attractor_shop"), ExtResource("38_repulsor_shop"), ExtResource("39_linker_shop"), ExtResource("35_missiler_shop"), ExtResource("36_beamer_shop")])
+roster_settings = ExtResource("49_roster_settings")
+pickup_container = NodePath("../../World")
 metadata/_custom_type_script = "uid://k5bmk2isolyq"
 
 [node name="TurretPlacer" type="Node2D" parent="Systems/ShopManager" unique_id=1768255298 groups=["turret_placer"]]
@@ -655,10 +659,15 @@ metadata/_edit_lock_ = true
 
 [node name="PauseMenu" parent="UI" unique_id=48360480 instance=ExtResource("27_qnb83")]
 
+[node name="BlueprintUnlockedNotification" parent="UI" unique_id=1904417210 instance=ExtResource("50_unlock_notification")]
+visible = false
+
+[connection signal="turret_unlocked" from="Systems/ShopManager" to="UI/BlueprintUnlockedNotification" method="show_unlock"]
 [connection signal="build_phase_started" from="Systems/WaveManager" to="Systems/SpawnManager" method="cancel_wave"]
 [connection signal="combat_phase_started" from="Systems/WaveManager" to="Systems/SpawnManager" method="start_wave"]
-[connection signal="boss_landing_shake_requested" from="Systems/SpawnManager" to="Systems/CameraShakeManager" method="shake_screen"]
+[connection signal="blueprint_drop_requested" from="Systems/SpawnManager" to="Systems/ShopManager" method="spawn_blueprint"]
 [connection signal="boss_death_shake_requested" from="Systems/SpawnManager" to="Systems/CameraShakeManager" method="shake_screen"]
+[connection signal="boss_landing_shake_requested" from="Systems/SpawnManager" to="Systems/CameraShakeManager" method="shake_screen"]
 [connection signal="enemy_defeated" from="Systems/SpawnManager" to="Systems/ScoreManager" method="_on_drone_destroyed"]
 [connection signal="wave_cleared" from="Systems/SpawnManager" to="Systems/WaveManager" method="_on_wave_cleared"]
 [connection signal="game_over" from="Systems/GameOverManager" to="Systems/SpawnManager" method="cancel_wave"]

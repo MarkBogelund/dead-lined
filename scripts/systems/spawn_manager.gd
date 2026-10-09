@@ -6,6 +6,7 @@ signal enemy_defeated(enemy: EnemyBase)
 signal wave_cleared(wave_index: int)
 signal boss_landing_shake_requested(intensity: float)
 signal boss_death_shake_requested(intensity: float)
+signal blueprint_drop_requested(world_position: Vector2)
 
 @export_group("Normal Enemies")
 ## Wave-wide enemy totals; they are not multiplied by the number of spawn points.
@@ -181,6 +182,7 @@ func _spawn_enemy(entry: EnemySpawnEntry, point: SpawnPoint = null, spawn_positi
 		var boss := enemy as BossEnemyBase
 		boss.boss_landed.connect(_on_boss_landed.bind(_generation))
 		boss.boss_death_shake_requested.connect(boss_death_shake_requested.emit)
+		boss.blueprint_drop_requested.connect(blueprint_drop_requested.emit)
 		boss.boss_alert_changed.connect(PostProcessingManager.set_boss_alert)
 		boss.play_boss_intro()
 	enemy_spawned.emit(enemy)

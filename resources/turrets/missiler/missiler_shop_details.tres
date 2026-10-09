@@ -36,6 +36,7 @@ offsets = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 0)])
 [resource]
 script = ExtResource("3_entry")
 name = "Missiler"
+category = 1
 icon = SubResource("ImageTexture_e2rqp")
 icon_source = SubResource("MissilerIcon")
 price = 25

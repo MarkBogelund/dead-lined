@@ -36,6 +36,7 @@ offsets = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 0)])
 [resource]
 script = ExtResource("3_entry")
 name = "Piercer"
+category = 1
 icon = SubResource("ImageTexture_qawgi")
 icon_source = SubResource("PiercerIcon")
 price = 35

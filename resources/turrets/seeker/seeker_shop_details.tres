@@ -36,6 +36,7 @@ offsets = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, -1)])
 [resource]
 script = ExtResource("3_sfh23")
 name = "Seeker"
+category = 1
 icon = SubResource("ImageTexture_lgs51")
 icon_source = SubResource("SeekerIcon")
 price = 20

@@ -3,6 +3,7 @@ class_name Orb
 
 ## Pickup dropped by enemies. Owns its launch, lifetime and despawn; subclasses decide what collecting does.
 
+## Seconds before an uncollected pickup despawns; 0 or less never expires.
 @export var lifetime := 15.0
 ## Seconds after launch before the orb stops sliding.
 @export var freeze_delay := 0.3
@@ -65,7 +66,8 @@ func launch(impulse: Vector2) -> void:
 		_despawn()
 		return
 	get_tree().create_timer(freeze_delay).timeout.connect(_on_freeze_timer)
-	get_tree().create_timer(lifetime).timeout.connect(_on_lifetime_timer)
+	if lifetime > 0.0:
+		get_tree().create_timer(lifetime).timeout.connect(_on_lifetime_timer)
 
 ## Override to clear uncollected orbs on a different phase change.
 func _connect_phase_signals(wave_manager: WaveManager) -> void:
