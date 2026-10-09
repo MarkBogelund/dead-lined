@@ -73,10 +73,11 @@ max_length = 15
 
 [node name="HitboxComponent" type="Area2D" parent="." unique_id=454126189]
 collision_layer = 4
-collision_mask = 25
+collision_mask = 153
 script = ExtResource("6_cfxmm")
 damage = 20
 no_damage_group = &"turrets"
+one_hit_per_receiver = true
 metadata/_custom_type_script = "uid://de8v0knxsnhob"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1953014388]

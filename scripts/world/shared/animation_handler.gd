@@ -65,13 +65,16 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	return true
 
 ## Stops a (typically looping) animation if it is the current one and restores RESET values.
+## Deferred like play_animation(): RESETs toggle collision state, which physics callbacks forbid.
 func stop_animation(anim_name: String) -> void:
 	if _current_animation != anim_name:
 		return
 	_release_current()
-	super.stop()
-	if apply_resets():
-		super.stop(true)
+	(func() -> void:
+		super.stop()
+		if apply_resets():
+			super.stop(true)
+	).call_deferred()
 
 ## Plays the animation from the start even if it is already current (e.g. repeated hits).
 ## Safe inside physics callbacks: the RESET and replay are deferred by play_animation().

@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/attacks/hitbox.gd" id="10_hitbox"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/attacks/radial_wave.gd" id="11_hoj0n"]
 [ext_resource type="PackedScene" uid="uid://dpjxjmy7j1nxw" path="res://scenes/ui/boss_health_ui.tscn" id="12_boss_ui"]
+[ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="13_hit"]
+[ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="14_windup"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 14.0
@@ -79,6 +81,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Shield/ShieldRegenParticles:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Idle"]
@@ -151,6 +165,60 @@ tracks/3/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="ShieldBreak"]
+resource_name = "shield_break"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals/DropRoot/ShieldSprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.12),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(1.5, 1.5), Vector2(1.3, 1.3)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/DropRoot/ShieldSprite:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/DropRoot/ShieldSprite:material:shader_parameter/flash_amount")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Shield/ShieldBreakParticles")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
 [sub_resource type="Animation" id="ShieldCharge"]
 resource_name = "shield_charge"
 tracks/0/type = "value"
@@ -192,15 +260,57 @@ tracks/2/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="ShieldRegenerate"]
+resource_name = "shield_regenerate"
+length = 0.45
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shield/ShieldRegenParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals/DropRoot/ShieldSprite:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals/DropRoot/ShieldSprite:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1.5, 1.5)]
+}
+
 [sub_resource type="AnimationLibrary" id="BulwarkLibrary"]
 _data = {
 &"RESET": SubResource("Reset"),
 &"idle": SubResource("Idle"),
 &"intro": SubResource("Animation_u8e02"),
-&"shield_charge": SubResource("ShieldCharge")
+&"shield_break": SubResource("ShieldBreak"),
+&"shield_charge": SubResource("ShieldCharge"),
+&"shield_regenerate": SubResource("ShieldRegenerate")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u8e02"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n2f2h"]
 resource_local_to_scene = true
 shader = ExtResource("4_fqq7r")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
@@ -220,7 +330,7 @@ shader_parameter/flash_amount = 0.0
 atlas = ExtResource("4_sprite")
 region = Rect2(48, 0, 48, 48)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hoj0n"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eqg6o"]
 resource_local_to_scene = true
 shader = ExtResource("7_u8e02")
 shader_parameter/shockwave_color = Color(1, 1, 1, 1)
@@ -241,6 +351,86 @@ point_count = 3
 [sub_resource type="CircleShape2D" id="ShieldWaveShape"]
 radius = 140.0
 
+[sub_resource type="Curve" id="Curve_n2f2h"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_eqg6o"]
+curve = SubResource("Curve_n2f2h")
+
+[sub_resource type="Gradient" id="Gradient_pyx8i"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1.6845763e-07, 0.4536066, 0.31442878, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4srig"]
+gradient = SubResource("Gradient_pyx8i")
+
+[sub_resource type="Curve" id="Curve_hpxts"]
+_data = [Vector2(0.61678004, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xq7ro"]
+curve = SubResource("Curve_hpxts")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_v2prk"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(0, 0, 0)
+emission_shape = 1
+emission_sphere_radius = 12.15
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_eqg6o")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.19999999
+scale_max = 0.79999995
+scale_curve = SubResource("CurveTexture_xq7ro")
+color_ramp = SubResource("GradientTexture1D_4srig")
+
+[sub_resource type="Curve" id="Curve_eqg6o"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_pyx8i"]
+curve = SubResource("Curve_eqg6o")
+
+[sub_resource type="Gradient" id="Gradient_4srig"]
+offsets = PackedFloat32Array(0.31566265, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.5996433, 0.27610233, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_hpxts"]
+gradient = SubResource("Gradient_4srig")
+
+[sub_resource type="Curve" id="Curve_xq7ro"]
+_data = [Vector2(0, 0.1), 0.0, 0.0, 0, 0, Vector2(0.4, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_v2prk"]
+curve = SubResource("Curve_xq7ro")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g1i00"]
+particle_flag_disable_z = true
+emission_shape_scale = Vector3(10, 10, 10)
+emission_shape = 2
+emission_sphere_radius = 6.37
+angle_min = 1.0728835e-05
+angle_max = 20.000011
+angle_curve = SubResource("CurveTexture_pyx8i")
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -300.0
+radial_accel_max = -200.0
+scale_min = 0.19999999
+scale_max = 0.79999995
+scale_curve = SubResource("CurveTexture_v2prk")
+color_ramp = SubResource("GradientTexture1D_hpxts")
+
 [node name="Bulwark" unique_id=1595451548 node_paths=PackedStringArray("shield", "body_sprite", "health_ui") instance=ExtResource("1_base")]
 collision_mask = 35
 script = ExtResource("2_script")
@@ -259,7 +449,7 @@ shape = SubResource("ContactShape")
 libraries/bulwark = SubResource("BulwarkLibrary")
 
 [node name="Visuals" parent="." index="9" unique_id=1100000011]
-material = SubResource("ShaderMaterial_u8e02")
+material = SubResource("ShaderMaterial_n2f2h")
 
 [node name="Body" type="Sprite2D" parent="Visuals/DropRoot" parent_id_path=PackedInt32Array(620000001) index="0" unique_id=2058733834]
 z_index = 2
@@ -277,7 +467,7 @@ offset = Vector2(2.6666665, 0)
 position = Vector2(1, 20)
 
 [node name="Flash" parent="." index="11" unique_id=1756477109]
-material = SubResource("ShaderMaterial_hoj0n")
+material = SubResource("ShaderMaterial_eqg6o")
 
 [node name="LandingMarker" parent="Intro" parent_id_path=PackedInt32Array(620000003) index="0" unique_id=1620584647]
 size = Vector2i(128, 128)
@@ -301,8 +491,8 @@ sprite = NodePath("../Visuals/DropRoot/ShieldSprite")
 collision_polygon = NodePath("CollisionPolygon2D")
 contact_hitbox = NodePath("ShieldHitbox")
 wave = NodePath("ShieldWave")
-stress_color = Color(0.67, 0.67, 0.67, 0.78431374)
-broken_color = Color(0.26, 0.26, 0.26, 0.78431374)
+stress_color = Color(0.67, 0.67, 0.67, 1)
+broken_color = Color(0.456343, 0.24974507, 0.19915518, 1)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Shield" index="0" unique_id=1637985401]
 position = Vector2(10, 0)
@@ -311,7 +501,6 @@ polygon = PackedVector2Array(12, -24, 23, -12, 27, 0, 24, 12, 12, 27, 6, 22, 16.
 [node name="ShieldHitbox" type="Area2D" parent="Shield" index="1" unique_id=1873402215]
 collision_layer = 16
 collision_mask = 34
-monitorable = false
 script = ExtResource("10_hitbox")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Shield/ShieldHitbox" index="0" unique_id=1873402216]
@@ -343,6 +532,21 @@ debug_color = Color(0, 0.5950001, 0.7, 0)
 [node name="ShockwaveVisual" type="ColorRect" parent="Shield/ShieldWave" index="1" unique_id=1873402220]
 visible = false
 mouse_filter = 2
+
+[node name="ShieldBreakParticles" parent="Shield" index="3" unique_id=1873402221 instance=ExtResource("13_hit")]
+z_index = 4
+position = Vector2(32, 0)
+amount = 16
+lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_v2prk")
+
+[node name="ShieldRegenParticles" parent="Shield" index="4" unique_id=1873402222 instance=ExtResource("14_windup")]
+z_index = 4
+position = Vector2(26, 0)
+scale = Vector2(0.6, 0.6)
+amount = 12
+speed_scale = 3.0
+process_material = SubResource("ParticleProcessMaterial_g1i00")
 
 [node name="HealthUIComponent" parent="." index="16" unique_id=290090362 node_paths=PackedStringArray("health_component") instance=ExtResource("12_boss_ui")]
 position = Vector2(0, -26)

@@ -112,6 +112,10 @@ func was_hit(amount: int, _knockback_force: float, from_position: Vector2) -> vo
 	if is_active():
 		shield_hit.emit(amount, from_position)
 
+## The shield and its owner's body count as one target for one-hit-per-swing attacks.
+func get_hit_receiver() -> Node:
+	return get_parent()
+
 func flash_hit() -> void:
 	if _hit_flash_tween:
 		_hit_flash_tween.kill()

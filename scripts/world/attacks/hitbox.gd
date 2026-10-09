@@ -7,8 +7,13 @@ class_name HitboxComponent
 @export var knockback := 100.0
 @export var enabled := true
 @export var no_damage_group: StringName = &""
+## Hits report this node's position (e.g. the wielder) so directional armor and knockback see the attacker.
+@export var origin_node: Node2D
+## Each receiver takes at most one hit per enable(); a body may name its receiver via get_hit_receiver().
+@export var one_hit_per_receiver := false
 
 var knockback_direction := Vector2.ZERO
+var _hit_receivers: Array[Node] = []
 
 signal hit_target(target: Node)
 signal hit_area_target(target: Node)
@@ -43,7 +48,12 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	var should_damage := no_damage_group.is_empty() or not body.is_in_group(no_damage_group)
 	if should_damage and body.has_method("was_hit"):
-		var hit_origin := global_position
+		if one_hit_per_receiver:
+			var receiver: Node = body.call(&"get_hit_receiver") if body.has_method("get_hit_receiver") else body
+			if _hit_receivers.has(receiver):
+				return
+			_hit_receivers.append(receiver)
+		var hit_origin := origin_node.global_position if origin_node else global_position
 		if knockback_direction.is_finite() and not knockback_direction.is_zero_approx():
 			hit_origin = body.global_position - knockback_direction
 		body.was_hit(damage, knockback, hit_origin)
@@ -62,6 +72,7 @@ func get_knockback() -> float:
 
 func enable() -> void:
 	enabled = true
+	_hit_receivers.clear()
 	monitoring = true
 
 func disable() -> void:

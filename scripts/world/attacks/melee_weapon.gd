@@ -38,6 +38,7 @@ var _base_slash_cooldown := slash_cooldown
 func _ready() -> void:
 	hitbox.damage = damage
 	hitbox.knockback = knockback
+	hitbox.origin_node = get_parent() as Node2D
 	_reset()
 	hitbox.hit_target.connect(_on_hit_target)
 	hitbox.hit_area_target.connect(_on_hit_area_target)

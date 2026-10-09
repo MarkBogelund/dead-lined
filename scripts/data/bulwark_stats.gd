@@ -22,6 +22,14 @@ class_name BulwarkStats
 ## Damage when the intact shield rams a player or turret; should outhit body contact.
 @export_range(0, 200, 1) var shield_damage := 15
 @export_range(0.0, 1000.0, 1.0) var shield_knockback := 350.0
+## Self knockback when the shield rams a target, so Bulwark bounces off instead of pushing into it.
+@export_range(0.0, 1000.0, 1.0) var shield_ram_recoil := 150.0
+## Seconds after a ram before Bulwark advances to ram again.
+@export_range(0.0, 10.0, 0.05) var shield_ram_cooldown := 1.0
+## Center distance to the target where Bulwark holds while the ram cools down; just outside shield reach.
+@export_range(0.0, 200.0, 1.0) var shield_ram_hold_distance := 52.0
+## Closer than this (target inside the shield), Bulwark backs away until it reaches the hold distance; keep it below ram contact range.
+@export_range(0.0, 200.0, 1.0) var shield_ram_min_distance := 36.0
 @export_subgroup("Wave")
 @export_range(0, 200, 1) var shield_wave_damage := 12
 @export_range(0.0, 1000.0, 1.0) var shield_wave_knockback := 300.0
