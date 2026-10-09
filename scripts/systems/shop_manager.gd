@@ -84,7 +84,10 @@ func _on_blueprint_collected() -> void:
 	var entry := _roster.unlock_random()
 	if not entry:
 		return
-	_pending_unlock_notifications.append(entry)
+	if wave_manager.is_build_phase():
+		turret_unlocked.emit(entry)
+	else:
+		_pending_unlock_notifications.append(entry)
 	if shop_panel.is_open():
 		_open_shop_panel()
 

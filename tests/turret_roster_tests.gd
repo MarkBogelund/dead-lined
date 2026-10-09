@@ -70,6 +70,7 @@ func _test_blueprint_in_game() -> void:
 	var world := game.get_node("World")
 	var player := game.get_node("%Player") as Player
 	var notification := game.get_node("UI/BlueprintUnlockedNotification") as BlueprintUnlockedNotification
+	var wave_manager := game.get_node("Systems/WaveManager") as WaveManager
 	assert(shop.get_unlocked_entries().size() == 4)
 	var unlocked_signals: Array[TurretEntry] = []
 	shop.turret_unlocked.connect(func(entry: TurretEntry) -> void: unlocked_signals.append(entry))
@@ -81,7 +82,7 @@ func _test_blueprint_in_game() -> void:
 	assert(blueprints.size() == 1, "only one blueprint per wave")
 	var blueprint := blueprints[0] as Blueprint
 	assert(blueprint.lifetime <= 0.0)
-	game.get_node("Systems/WaveManager").combat_phase_started.emit(2)
+	wave_manager._enter_combat_phase()
 	await get_tree().create_timer(1.2).timeout
 	assert(is_instance_valid(blueprint) and blueprint.can_collect, "blueprint survives phase changes")
 	blueprint._on_body_entered(player)
@@ -92,7 +93,7 @@ func _test_blueprint_in_game() -> void:
 	await get_tree().create_timer(0.08).timeout
 	assert(player.animated_sprite.self_modulate.b > player.animated_sprite.self_modulate.r)
 	assert(not notification.visible)
-	game.get_node("Systems/WaveManager").build_phase_started.emit()
+	wave_manager._enter_build_phase()
 	assert(unlocked_signals.size() == 1)
 	assert(unlocked_signals[0] == unlocked_entry)
 	await get_tree().create_timer(0.1).timeout
@@ -101,7 +102,14 @@ func _test_blueprint_in_game() -> void:
 	assert(not is_instance_valid(blueprint))
 	# combat_phase_started above reset the wave limit, so the next boss may drop again.
 	spawn_manager.blueprint_drop_requested.emit(drop_position)
-	assert(world.get_children().filter(func(n: Node) -> bool: return n is Blueprint).size() == 1)
+	blueprints = world.get_children().filter(func(n: Node) -> bool: return n is Blueprint)
+	assert(blueprints.size() == 1)
+	var build_phase_blueprint := blueprints[0] as Blueprint
+	build_phase_blueprint._on_body_entered(player)
+	assert(unlocked_signals.size() == 2 and shop.get_unlocked_entries().size() == 6)
+	assert(unlocked_signals[1] == shop.get_unlocked_entries().back())
+	assert(notification.animation_player.current_animation == "show")
+	assert(unlocked_signals[1].name.to_upper() in notification.label.text)
 	game.queue_free()
 	await get_tree().process_frame
 	assert(not MenuManager._entries.has(&"game_over"))
