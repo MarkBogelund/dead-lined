@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bm4t4aeqdrg8b"]
 
 [ext_resource type="PackedScene" uid="uid://cp8scltlxc68k" path="res://scenes/world/enemies/boss_enemy_base.tscn" id="1_base"]
-[ext_resource type="PackedScene" path="res://scenes/ui/boss_health_ui.tscn" id="12_boss_ui"]
 [ext_resource type="Script" uid="uid://c4e7mc1s0e4vo" path="res://scripts/world/enemies/bulwark.gd" id="2_script"]
 [ext_resource type="Resource" uid="uid://1p4qib06ut85" path="res://resources/enemies/bulwark/bulwark_stats.tres" id="3_stats"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="4_fqq7r"]
@@ -10,6 +9,7 @@
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="7_u8e02"]
 [ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/attacks/hitbox.gd" id="10_hitbox"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/attacks/radial_wave.gd" id="11_hoj0n"]
+[ext_resource type="PackedScene" uid="uid://dpjxjmy7j1nxw" path="res://scenes/ui/boss_health_ui.tscn" id="12_boss_ui"]
 
 [sub_resource type="CircleShape2D" id="BodyShape"]
 radius = 14.0
@@ -200,7 +200,7 @@ _data = {
 &"shield_charge": SubResource("ShieldCharge")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fqq7r"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u8e02"]
 resource_local_to_scene = true
 shader = ExtResource("4_fqq7r")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
@@ -220,7 +220,7 @@ shader_parameter/flash_amount = 0.0
 atlas = ExtResource("4_sprite")
 region = Rect2(48, 0, 48, 48)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u8e02"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hoj0n"]
 resource_local_to_scene = true
 shader = ExtResource("7_u8e02")
 shader_parameter/shockwave_color = Color(1, 1, 1, 1)
@@ -241,13 +241,13 @@ point_count = 3
 [sub_resource type="CircleShape2D" id="ShieldWaveShape"]
 radius = 140.0
 
-[node name="Bulwark" unique_id=1595451548 node_paths=PackedStringArray("health_ui", "shield", "body_sprite") instance=ExtResource("1_base")]
+[node name="Bulwark" unique_id=1595451548 node_paths=PackedStringArray("shield", "body_sprite", "health_ui") instance=ExtResource("1_base")]
 collision_mask = 35
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
-health_ui = NodePath("HealthUIComponent")
 shield = NodePath("Shield")
 body_sprite = NodePath("Visuals/DropRoot/Body")
+health_ui = NodePath("HealthUIComponent")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=1100000002]
 shape = SubResource("BodyShape")
@@ -259,7 +259,7 @@ shape = SubResource("ContactShape")
 libraries/bulwark = SubResource("BulwarkLibrary")
 
 [node name="Visuals" parent="." index="9" unique_id=1100000011]
-material = SubResource("ShaderMaterial_fqq7r")
+material = SubResource("ShaderMaterial_u8e02")
 
 [node name="Body" type="Sprite2D" parent="Visuals/DropRoot" parent_id_path=PackedInt32Array(620000001) index="0" unique_id=2058733834]
 z_index = 2
@@ -277,7 +277,7 @@ offset = Vector2(2.6666665, 0)
 position = Vector2(1, 20)
 
 [node name="Flash" parent="." index="11" unique_id=1756477109]
-material = SubResource("ShaderMaterial_u8e02")
+material = SubResource("ShaderMaterial_hoj0n")
 
 [node name="LandingMarker" parent="Intro" parent_id_path=PackedInt32Array(620000003) index="0" unique_id=1620584647]
 size = Vector2i(128, 128)
@@ -344,7 +344,8 @@ debug_color = Color(0, 0.5950001, 0.7, 0)
 visible = false
 mouse_filter = 2
 
-[node name="HealthUIComponent" parent="." unique_id=290090362 node_paths=PackedStringArray("health_component") instance=ExtResource("12_boss_ui")]
+[node name="HealthUIComponent" parent="." index="16" unique_id=290090362 node_paths=PackedStringArray("health_component") instance=ExtResource("12_boss_ui")]
 position = Vector2(0, -26)
 health_component = NodePath("../HealthComponent")
+secondary_color = Color(1, 0.46847445, 0.3209719, 1)
 secondary_fill_mode = 1

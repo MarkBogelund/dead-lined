@@ -1,22 +1,15 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dpjxjmy7j1nxw"]
 
 [ext_resource type="Script" uid="uid://5wcqudc7efji" path="res://scripts/ui/health_ui.gd" id="1_health_ui"]
+[ext_resource type="Texture2D" uid="uid://ba14cim744kky" path="res://assets/sprites/ui/turret-health-ui.png" id="2_t3ecx"]
 
 [node name="BossHealthUI" type="Node2D" unique_id=1462051301 node_paths=PackedStringArray("primary_bar", "secondary_bar")]
 z_index = 20
 script = ExtResource("1_health_ui")
 primary_bar = NodePath("HealthFill")
 secondary_bar = NodePath("StressFill")
+secondary_color = Color(0.14629999, 0.5205199, 0.77, 1)
 secondary_initial_progress = 0.0
-
-[node name="Frame" type="ColorRect" parent="." unique_id=1462051302]
-z_index = 9
-offset_left = -17.0
-offset_top = -3.0
-offset_right = 17.0
-offset_bottom = 3.0
-mouse_filter = 2
-color = Color(0.07, 0.07, 0.09, 0.88235295)
 
 [node name="HealthFill" type="ColorRect" parent="." unique_id=1462051303]
 z_index = 10
@@ -34,4 +27,24 @@ offset_top = 1.0
 offset_right = 16.0
 offset_bottom = 2.0
 mouse_filter = 2
-color = Color(0.92869115, 0.40817255, 7.70092e-07, 1)
+color = Color(0.14629999, 0.5205199, 0.77, 1)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=448683351]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -17.0
+offset_right = 20.0
+offset_bottom = 16.25
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_t3ecx")
+patch_margin_left = 3
+patch_margin_top = 15
+patch_margin_right = 3
+patch_margin_bottom = 14
