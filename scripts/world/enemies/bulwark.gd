@@ -11,7 +11,7 @@ const BACK_OFF_ANGLES: Array[float] = [0.0, PI / 4.0, -PI / 4.0, PI / 2.0, -PI /
 
 @export var stats: BulwarkStats
 @export var shield: DirectionalShieldComponent
-@export var body_sprite: Sprite2D
+@export var body_sprite: AnimatedSprite2D
 
 var _shield_wave_timer := 0.0
 var _charging_shield_wave := false

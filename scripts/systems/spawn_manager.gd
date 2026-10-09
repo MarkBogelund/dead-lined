@@ -15,7 +15,6 @@ signal blueprint_drop_requested(world_position: Vector2)
 @export_range(0.05, 30.0, 0.05) var time_between_spawns := 0.75
 @export var spawn_points: Array[SpawnPoint] = []
 @export var enemy_container: Node
-@export var damage_growth := 0.1
 
 @export_group("Bosses")
 ## One unlocked boss every N waves. Zero disables bosses; one enables first-wave testing.
@@ -195,7 +194,7 @@ func _apply_wave_scaling(enemy: EnemyBase, entry: EnemySpawnEntry) -> void:
 	if entry.health_multiplier_every_n_waves > 0:
 		var health_steps := floori(float(_wave_index) / float(entry.health_multiplier_every_n_waves))
 		enemy.buff_health(pow(entry.health_multiplier, health_steps))
-	enemy.buff_damage(1.0 + float(_wave_index) * damage_growth)
+	enemy.buff_damage(entry.get_damage_multiplier(_wave_index))
 
 func _on_enemy_died(enemy_id: int, generation: int) -> void:
 	if generation != _generation or not _live_enemies.has(enemy_id):

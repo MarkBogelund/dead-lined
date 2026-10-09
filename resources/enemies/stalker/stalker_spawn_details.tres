@@ -7,6 +7,8 @@
 script = ExtResource("1_185mx")
 enemy_scene = ExtResource("2_stalker")
 amount_multiplier_per_wave = 1.2
+damage_multiplier = 1.1
+damage_multiplier_every_n_waves = 3
 health_multiplier = 1.5
 health_multiplier_every_n_waves = 3
 metadata/_custom_type_script = "uid://du0rvecuvnlry"

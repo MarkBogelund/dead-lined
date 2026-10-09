@@ -20,6 +20,7 @@ func _ready() -> void:
 	assert(boss_reset != bulwark_reset)
 	assert(boss_reset.find_track(NodePath("WindupParticles:emitting"), Animation.TYPE_VALUE) >= 0)
 	assert(boss.health_ui == boss.get_node("HealthUIComponent"))
+	assert(boss.body_sprite == boss.get_node("Visuals/DropRoot/Body"))
 	assert(boss.health_ui.scene_file_path == "res://scenes/ui/boss_health_ui.tscn")
 	assert(boss.health_ui.secondary_fill_mode == HealthUIComponent.FillMode.DRAIN)
 	var windup := boss.get_node("WindupParticles") as GPUParticles2D

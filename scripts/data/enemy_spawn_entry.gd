@@ -12,8 +12,20 @@ class_name EnemySpawnEntry
 ## Multiplies the amount once per wave after introduction.
 @export_range(0.0, 10.0, 0.05) var amount_multiplier_per_wave: float = 1.0
 
+@export_group("Wave Damage")
+## Cumulative damage multiplier applied at each configured interval.
+@export_range(1.0, 10.0, 0.05) var damage_multiplier: float = 1.0
+## Apply the damage multiplier every N global waves. Zero disables interval scaling.
+@export_range(0, 1000, 1) var damage_multiplier_every_n_waves: int = 0
+
 @export_group("Wave Health")
 ## Cumulative health multiplier applied at each configured interval.
 @export_range(0.0, 10.0, 0.05) var health_multiplier: float = 1.0
 ## Apply the health multiplier every N global waves. Zero disables it.
 @export_range(0, 1000, 1) var health_multiplier_every_n_waves: int = 0
+
+func get_damage_multiplier(wave_index: int) -> float:
+	if damage_multiplier_every_n_waves <= 0:
+		return 1.0
+	var steps := floori(float(wave_index) / float(damage_multiplier_every_n_waves))
+	return pow(damage_multiplier, steps)

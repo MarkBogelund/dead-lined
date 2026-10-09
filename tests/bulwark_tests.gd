@@ -41,6 +41,11 @@ func _new_boss(at: Vector2) -> Bulwark:
 	return boss
 
 func _run() -> void:
+	if "--damage-scaling-only" in OS.get_cmdline_user_args():
+		_test_damage_scaling()
+		print("PASS: per-entry interval damage scaling")
+		get_tree().quit()
+		return
 	await _test_targeting()
 	if "--targeting-only" in OS.get_cmdline_user_args():
 		get_tree().quit()
@@ -429,6 +434,17 @@ func _record_normal_spawn(enemy: EnemyBase) -> void:
 
 func _record_cleared(_wave_index: int) -> void:
 	_cleared_count += 1
+
+func _test_damage_scaling() -> void:
+	var interval_entry := EnemySpawnEntry.new()
+	interval_entry.damage_multiplier = 1.5
+	interval_entry.damage_multiplier_every_n_waves = 2
+	assert(is_equal_approx(interval_entry.get_damage_multiplier(0), 1.0))
+	assert(is_equal_approx(interval_entry.get_damage_multiplier(1), 1.0))
+	assert(is_equal_approx(interval_entry.get_damage_multiplier(2), 1.5))
+	assert(is_equal_approx(interval_entry.get_damage_multiplier(4), 2.25))
+	var disabled_entry := EnemySpawnEntry.new()
+	assert(is_equal_approx(disabled_entry.get_damage_multiplier(10), 1.0))
 
 func _test_distribution() -> void:
 	var spawner := SpawnManager.new()
