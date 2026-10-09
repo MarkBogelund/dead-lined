@@ -261,7 +261,7 @@ script = ExtResource("40_spawn_manager")
 enemy_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("43_chaser_spawn"), ExtResource("44_stalker_spawn"), ExtResource("45_kamikazer_spawn"), ExtResource("46_shotgunner_spawn"), ExtResource("47_emitter_spawn")])
 spawn_points = [NodePath("../../World/SpawnPointNorthwest"), NodePath("../../World/SpawnPointSoutheast")]
 enemy_container = NodePath("../../World")
-boss_every_nth_round = 3
+boss_every_nth_round = 5
 boss_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("42_bulwark_spawn")])
 boss_location_picker = NodePath("BossLocationPicker")
 

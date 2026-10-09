@@ -1020,7 +1020,7 @@ z_index = 1
 position = Vector2(0, 20)
 scale = Vector2(2.5, 2)
 shape = 1
-size = Vector2i(14, 4)
+size = Vector2i(24, 6)
 pixel_size = 1
 
 [node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("7_sparks")]
@@ -1050,7 +1050,7 @@ pixel_size = 3
 visible = false
 modulate = Color(0.1, 0.1, 0.1, 0)
 shape = 1
-size = Vector2i(14, 4)
+size = Vector2i(24, 6)
 pixel_size = 1
 
 [node name="DustParticles" type="GPUParticles2D" parent="Intro" unique_id=1290101280]

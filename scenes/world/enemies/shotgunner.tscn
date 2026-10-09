@@ -8,8 +8,8 @@
 [ext_resource type="Script" uid="uid://blmoutagnygip" path="res://scripts/world/attacks/shoot.gd" id="5_shoot"]
 [ext_resource type="Texture2D" uid="uid://db14q0g7xhxtm" path="res://assets/sprites/enemies/shotgunner.png" id="6_aq71u"]
 [ext_resource type="PackedScene" uid="uid://c8hk7vr2ps4qi" path="res://scenes/world/projectiles/stalker_projectile.tscn" id="6_projectile"]
-[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="7_pixel_circle"]
 [ext_resource type="Script" uid="uid://dduqtrq3c2qol" path="res://scripts/world/shared/line_of_sight.gd" id="7_los"]
+[ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="7_pixel_circle"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/confused_component.tscn" id="9_confused"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="9_l6coj"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="9_particles"]
@@ -206,7 +206,7 @@ _data = {
 &"windup": SubResource("Animation_windup")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rv2tf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m32o5"]
 resource_local_to_scene = true
 shader = ExtResource("4_2stc0")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
@@ -288,6 +288,19 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rv2tf"]
+resource_local_to_scene = true
+shader = ExtResource("9_l6coj")
+shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/current_radius = 15.0
+shader_parameter/ring_thickness = 2.0
+shader_parameter/pixel_size = 2.0
+shader_parameter/center_line_thickness = 1.0
+shader_parameter/center_line_color = Color(1, 1, 1, 1)
+shader_parameter/canvas_size = Vector2(40, 40)
+shader_parameter/arc_direction = 0.0
+shader_parameter/arc_half_angle = 3.1415927
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_windup"]
 atlas = ExtResource("10_vfx")
 region = Rect2(16, 0, 16, 16)
@@ -332,17 +345,6 @@ scale_max = 0.5
 scale_curve = SubResource("CurveTexture_gyylo")
 color_ramp = SubResource("GradientTexture1D_h57d3")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_q41ym"]
-resource_local_to_scene = true
-shader = ExtResource("9_l6coj")
-shader_parameter/shockwave_color = Color(1, 1, 1, 0)
-shader_parameter/current_radius = 15.0
-shader_parameter/ring_thickness = 2.0
-shader_parameter/pixel_size = 2.0
-shader_parameter/center_line_thickness = 1.0
-shader_parameter/center_line_color = Color(1, 1, 1, 1)
-shader_parameter/canvas_size = Vector2(40, 40)
-
 [node name="Shotgunner" unique_id=1200000001 instance=ExtResource("1_base")]
 script = ExtResource("2_script")
 stats = ExtResource("3_stats")
@@ -360,7 +362,7 @@ target_desired_distance = 12.0
 libraries/shotgunner = SubResource("ShotgunnerLibrary")
 
 [node name="Visuals" parent="." index="9" unique_id=1100000011]
-material = SubResource("ShaderMaterial_rv2tf")
+material = SubResource("ShaderMaterial_m32o5")
 
 [node name="AimCenter" type="Node2D" parent="Visuals" index="0" unique_id=1200000002]
 
@@ -380,8 +382,9 @@ animation = &"idle"
 [node name="Shadow" parent="Visuals" index="2" unique_id=753566437 instance=ExtResource("7_pixel_circle")]
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
+position = Vector2(0, 10)
 shape = 1
-size = Vector2i(11, 4)
+size = Vector2i(24, 6)
 pixel_size = 1
 
 [node name="ConfusedSprite" parent="Visuals" index="3" unique_id=682626751 instance=ExtResource("9_confused")]
@@ -399,9 +402,9 @@ projectile_scene = ExtResource("6_projectile")
 [node name="LineOfSightComponent" type="Node2D" parent="." index="13" unique_id=1200000008]
 script = ExtResource("7_los")
 
+[node name="Flash" parent="." index="14" unique_id=1756477109]
+material = SubResource("ShaderMaterial_rv2tf")
+
 [node name="WindupParticles" parent="." index="15" unique_id=1200000010 instance=ExtResource("11_windup")]
 texture = SubResource("AtlasTexture_windup")
 process_material = SubResource("ParticleProcessMaterial_windup")
-
-[node name="Flash" parent="." index="16" unique_id=1756477109]
-material = SubResource("ShaderMaterial_q41ym")

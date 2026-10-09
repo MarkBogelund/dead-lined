@@ -33,10 +33,11 @@ attack_cooldown = 0.68
 [resource]
 script = ExtResource("1_stats")
 targeting = ExtResource("2_targeting")
-minimum_range = 50.0
 charge_duration = 0.8
 flight_duration = 1.0
 arc_height = 40.0
+blast_radius = 80.0
+expansion_duration = 0.5
 max_health = 80
 damage = 15
 knockback = 160.0

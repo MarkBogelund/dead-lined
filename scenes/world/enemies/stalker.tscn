@@ -45,7 +45,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [Vector2i(14, 4)]
+	"values": [Vector2i(24, 6)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -390,7 +390,7 @@ modulate = Color(0, 0, 0, 0.19607843)
 z_index = 1
 position = Vector2(0, 10)
 shape = 1
-size = Vector2i(14, 4)
+size = Vector2i(24, 6)
 pixel_size = 1
 
 [node name="AimCenter" type="Node2D" parent="Visuals" index="1" unique_id=1830255728]

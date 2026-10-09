@@ -9,4 +9,5 @@ enemy_scene = ExtResource("1_t316x")
 base_amount = 2
 amount_multiplier_per_wave = 1.2
 health_multiplier = 1.2
+health_multiplier_every_n_waves = 2
 metadata/_custom_type_script = "uid://du0rvecuvnlry"

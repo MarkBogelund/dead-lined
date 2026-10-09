@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="10_q8s65"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="11_glhh8"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/confused_component.tscn" id="12_confused"]
+[ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="13_5gw3d"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 9.0
@@ -179,7 +180,7 @@ _data = {
 &"run": SubResource("Animation_run")
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kfjm6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1imx6"]
 resource_local_to_scene = true
 shader = ExtResource("4_1imx6")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
@@ -317,6 +318,19 @@ scale_max = 0.5
 scale_curve = SubResource("CurveTexture_j4bvi")
 color_ramp = SubResource("GradientTexture1D_t5mt7")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5dm6q"]
+resource_local_to_scene = true
+shader = ExtResource("13_5gw3d")
+shader_parameter/shockwave_color = Color(1, 1, 1, 0)
+shader_parameter/current_radius = 15.0
+shader_parameter/ring_thickness = 2.0
+shader_parameter/pixel_size = 2.0
+shader_parameter/center_line_thickness = 1.0
+shader_parameter/center_line_color = Color(1, 1, 1, 1)
+shader_parameter/canvas_size = Vector2(40, 40)
+shader_parameter/arc_direction = 0.0
+shader_parameter/arc_half_angle = 3.1415927
+
 [node name="Emitter" unique_id=1300000001 instance=ExtResource("1_fmjq0")]
 script = ExtResource("2_sb07v")
 stats = ExtResource("3_5gw3d")
@@ -327,11 +341,11 @@ shape = SubResource("CircleShape2D_body")
 [node name="CollisionShape2D" parent="HitboxComponent" parent_id_path=PackedInt32Array(1100000003) index="0" unique_id=1100000004]
 shape = SubResource("CircleShape2D_hitbox")
 
-[node name="AnimationHandler" parent="." index="7" unique_id=1100000010]
+[node name="AnimationHandler" parent="." index="8" unique_id=1100000010]
 libraries/emitter = SubResource("EmitterLibrary")
 
-[node name="Visuals" parent="." index="8" unique_id=1100000011]
-material = SubResource("ShaderMaterial_kfjm6")
+[node name="Visuals" parent="." index="9" unique_id=1100000011]
+material = SubResource("ShaderMaterial_1imx6")
 
 [node name="Body" type="AnimatedSprite2D" parent="Visuals" index="0" unique_id=1300000002]
 z_index = 5
@@ -350,14 +364,15 @@ position = Vector2(10, 0)
 [node name="Shadow" parent="Visuals" index="2" unique_id=296194169 instance=ExtResource("6_pixel_circle")]
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
+position = Vector2(0, 8)
 shape = 1
-size = Vector2i(14, 6)
+size = Vector2i(24, 6)
 pixel_size = 1
 
-[node name="ConfusedSprite" parent="Visuals" index="3" instance=ExtResource("12_confused")]
+[node name="ConfusedSprite" parent="Visuals" index="3" unique_id=68251506 instance=ExtResource("12_confused")]
 position = Vector2(0, -2)
 
-[node name="HitParticles" parent="." index="9" unique_id=1586402119]
+[node name="HitParticles" parent="." index="10" unique_id=1586402119]
 process_material = SubResource("ParticleProcessMaterial_1esm0")
 
 [node name="ShootComponent" type="Node" parent="." index="11" unique_id=1300000006]
@@ -370,3 +385,6 @@ script = ExtResource("9_nv6my")
 [node name="WindupParticles" parent="." index="13" unique_id=1915869553 instance=ExtResource("10_q8s65")]
 texture = SubResource("AtlasTexture_xxxjd")
 process_material = SubResource("ParticleProcessMaterial_e7p31")
+
+[node name="Flash" parent="." index="14" unique_id=1756477109]
+material = SubResource("ShaderMaterial_5dm6q")
