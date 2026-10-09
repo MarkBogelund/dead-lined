@@ -127,6 +127,6 @@ libraries/blueprint = SubResource("BlueprintLibrary")
 [node name="GlitterParticles" parent="." index="5" unique_id=1904417205 instance=ExtResource("5_glitter")]
 
 [node name="CollectParticles" parent="." index="6" unique_id=1904417206 instance=ExtResource("6_hit")]
-scale = Vector2(3, 3)
-amount = 48
+scale = Vector2(5, 5)
+amount = 64
 lifetime = 0.8

@@ -112,7 +112,7 @@ func _cancel_shield_wave() -> void:
 	if _charging_shield_wave:
 		_charging_shield_wave = false
 		_shield_wave_timer = stats.shield_wave_cooldown
-		animation.stop_animation(SHIELD_CHARGE_ANIMATION)
+	animation.stop_animation(SHIELD_CHARGE_ANIMATION)
 
 func was_hit(amount: int, knockback_force: float, from_position: Vector2) -> void:
 	if is_dead() or _spawn_intro_active:

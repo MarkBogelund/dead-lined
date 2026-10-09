@@ -29,6 +29,7 @@ var _rng := RandomNumberGenerator.new()
 var _blueprints_dropped_this_wave := 0
 ## Dropped but uncollected; each reserves one locked turret so no blueprint is ever empty.
 var _pending_blueprints := 0
+var _pending_unlock_notifications: Array[TurretEntry] = []
 
 func _ready() -> void:
 	assert(roster_settings and roster_settings.blueprint_scene and pickup_container, "ShopManager requires roster settings with a blueprint scene, and a pickup container")
@@ -83,7 +84,7 @@ func _on_blueprint_collected() -> void:
 	var entry := _roster.unlock_random()
 	if not entry:
 		return
-	turret_unlocked.emit(entry)
+	_pending_unlock_notifications.append(entry)
 	if shop_panel.is_open():
 		_open_shop_panel()
 
@@ -124,6 +125,9 @@ func _on_placement_ended() -> void:
 
 func _on_build_phase_started() -> void:
 	shop_system_enabled.emit()
+	for entry: TurretEntry in _pending_unlock_notifications:
+		turret_unlocked.emit(entry)
+	_pending_unlock_notifications.clear()
 
 func _on_combat_phase_started(_wave: int) -> void:
 	_blueprints_dropped_this_wave = 0

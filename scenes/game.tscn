@@ -49,7 +49,7 @@
 [ext_resource type="Resource" uid="uid://d20ovxmdp055t" path="res://resources/enemies/emitter/emitter_spawn_details.tres" id="47_emitter_spawn"]
 [ext_resource type="Script" uid="uid://erpe3cnt1hdr" path="res://scripts/world/enemies/safe_spot.gd" id="48_safe_spot"]
 [ext_resource type="Resource" uid="uid://d3ykl4vsykuwn" path="res://resources/turrets/shop_roster_settings.tres" id="49_roster_settings"]
-[ext_resource type="PackedScene" path="res://scenes/ui/blueprint_unlocked_notification.tscn" id="50_unlock_notification"]
+[ext_resource type="PackedScene" uid="uid://bsddr0xol6b13" path="res://scenes/ui/blueprint_unlocked_notification.tscn" id="50_unlock_notification"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="pixel_circle"]
 
 [sub_resource type="Animation" id="Animation_37s47"]
@@ -261,6 +261,7 @@ script = ExtResource("40_spawn_manager")
 enemy_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("43_chaser_spawn"), ExtResource("44_stalker_spawn"), ExtResource("45_kamikazer_spawn"), ExtResource("46_shotgunner_spawn"), ExtResource("47_emitter_spawn")])
 spawn_points = [NodePath("../../World/SpawnPointNorthwest"), NodePath("../../World/SpawnPointSoutheast")]
 enemy_container = NodePath("../../World")
+boss_every_nth_round = 3
 boss_entries = Array[ExtResource("41_boss_entry_type")]([ExtResource("42_bulwark_spawn")])
 boss_location_picker = NodePath("BossLocationPicker")
 
@@ -660,7 +661,6 @@ metadata/_edit_lock_ = true
 [node name="PauseMenu" parent="UI" unique_id=48360480 instance=ExtResource("27_qnb83")]
 
 [node name="BlueprintUnlockedNotification" parent="UI" unique_id=1904417210 instance=ExtResource("50_unlock_notification")]
-visible = false
 
 [connection signal="turret_unlocked" from="Systems/ShopManager" to="UI/BlueprintUnlockedNotification" method="show_unlock"]
 [connection signal="build_phase_started" from="Systems/WaveManager" to="Systems/SpawnManager" method="cancel_wave"]

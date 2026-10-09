@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bsddr0xol6b13"]
 
-[ext_resource type="Script" path="res://scripts/ui/blueprint_unlocked_notification.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://feud2t3uvoi3" path="res://scripts/ui/blueprint_unlocked_notification.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://dva2r75vlr166" path="res://assets/fonts/Satoshi-Variable.ttf" id="2_font"]
 
 [sub_resource type="LabelSettings" id="LabelSettings"]
@@ -96,7 +96,8 @@ _data = {
 &"show": SubResource("Show")
 }
 
-[node name="BlueprintUnlockedNotification" type="Control"]
+[node name="BlueprintUnlockedNotification" type="Control" unique_id=1817551126]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -106,18 +107,25 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_script")
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=379804667]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 70.0
-offset_bottom = 110.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.5
+offset_top = -31.5
+offset_right = 100.5
+offset_bottom = 31.5
 grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
 text = "NEW BLUEPRINT UNLOCKED
 TURRET"
 label_settings = SubResource("LabelSettings")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=7450947]
 libraries/ = SubResource("Library")

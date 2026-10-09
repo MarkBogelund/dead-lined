@@ -14,6 +14,9 @@ func _ready() -> void:
 	hide()
 	MenuManager.register(&"game_over", MenuManager.Layer.GAME_OVER, Callable(), Callable())
 
+func _exit_tree() -> void:
+	MenuManager.unregister(&"game_over")
+
 func show_stats_with_fade(breakdown: Dictionary) -> void:
 	# Set breakdown stats with scores
 	var drones: int = breakdown.get("drones_destroyed", 0)

@@ -551,6 +551,44 @@ _data = {
 &"take_damage": SubResource("Animation_tuyoq")
 }
 
+[sub_resource type="Animation" id="PlayerEffectsReset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="PlayerBlueprintFlash"]
+resource_name = "blueprint_flash"
+length = 0.38
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.18, 0.38),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.25, 0.72, 1, 1), Color(0.35, 0.82, 1, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="PlayerEffectsLibrary"]
+_data = {
+&"RESET": SubResource("PlayerEffectsReset"),
+&"blueprint_flash": SubResource("PlayerBlueprintFlash")
+}
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_4wj7o"]
 atlas = ExtResource("2_tuyoq")
 region = Rect2(456, 0, 24, 24)
@@ -861,6 +899,10 @@ camera_shake_duration = 0.2
 
 [node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1310737725]
 libraries/ = SubResource("AnimationLibrary_fjrip")
+script = ExtResource("14_yfgcb")
+
+[node name="EffectsAnimationHandler" type="AnimationPlayer" parent="."]
+libraries/ = SubResource("PlayerEffectsLibrary")
 script = ExtResource("14_yfgcb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1780142022]

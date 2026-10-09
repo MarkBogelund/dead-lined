@@ -54,6 +54,9 @@ func register(
 	e.closes_groups = closes_groups
 	_entries[id] = e
 
+func unregister(id: StringName) -> void:
+	_entries.erase(id)
+
 
 ## Open a menu via its registered open_fn.
 ## Blocked silently if a higher-layer menu is open.

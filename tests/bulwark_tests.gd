@@ -256,7 +256,15 @@ func _test_shield_collisions() -> void:
 	assert(not boss.shield.is_active())
 	await get_tree().create_timer(0.1).timeout
 	assert(boss.shield.is_active())
+	var previous_animation := boss.animation.get_current_anim_name()
+	boss.animation.stop_animation(previous_animation)
+	await get_tree().process_frame
+	boss.animation.play_animation("shield_charge")
+	await get_tree().process_frame
+	assert(boss.animation.get_current_anim_name() == "shield_charge" and boss.animation.is_locked())
+	boss._charging_shield_wave = false
 	boss.was_hit_bypassing_armor(10000, 0.0, boss.position + Vector2.RIGHT)
+	assert(boss.animation.get_current_anim_name() == "boss_die")
 	assert(not boss.shield.is_active())
 	boss.queue_free()
 	await get_tree().process_frame

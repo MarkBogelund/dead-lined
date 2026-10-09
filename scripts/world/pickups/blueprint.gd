@@ -11,7 +11,7 @@ func _ready() -> void:
 	super()
 	animation_handler.configure_animation(COLLECT_ANIMATION, 3, true)
 
-func _connect_phase_signals(_wave_manager: WaveManager) -> void:
+func _connect_phase_signals(_phase_manager: WaveManager) -> void:
 	pass
 
 func _try_collect(_player: Player) -> bool:
@@ -20,6 +20,7 @@ func _try_collect(_player: Player) -> bool:
 func _can_attract(_player: Player) -> bool:
 	return true
 
-func _on_collected(_player: Player) -> void:
+func _on_collected(player: Player) -> void:
 	collected.emit()
+	player.play_effect_animation("blueprint_flash")
 	animation_handler.play_animation(COLLECT_ANIMATION)

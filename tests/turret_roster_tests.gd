@@ -85,8 +85,16 @@ func _test_blueprint_in_game() -> void:
 	await get_tree().create_timer(1.2).timeout
 	assert(is_instance_valid(blueprint) and blueprint.can_collect, "blueprint survives phase changes")
 	blueprint._on_body_entered(player)
-	assert(unlocked_signals.size() == 1 and shop.get_unlocked_entries().size() == 5)
-	assert(shop.get_unlocked_entries().back() == unlocked_signals[0])
+	assert(unlocked_signals.is_empty() and shop.get_unlocked_entries().size() == 5)
+	var unlocked_entry: TurretEntry = shop.get_unlocked_entries().back()
+	assert(player.effects_animation.get_current_anim_name() == "blueprint_flash")
+	assert(player.effects_animation.get_animation("blueprint_flash").find_track(NodePath("AnimatedSprite2D:self_modulate"), Animation.TYPE_VALUE) >= 0)
+	await get_tree().create_timer(0.08).timeout
+	assert(player.animated_sprite.self_modulate.b > player.animated_sprite.self_modulate.r)
+	assert(not notification.visible)
+	game.get_node("Systems/WaveManager").build_phase_started.emit()
+	assert(unlocked_signals.size() == 1)
+	assert(unlocked_signals[0] == unlocked_entry)
 	await get_tree().create_timer(0.1).timeout
 	assert(notification.visible and unlocked_signals[0].name.to_upper() in notification.label.text)
 	await get_tree().create_timer(1.2).timeout
@@ -96,3 +104,4 @@ func _test_blueprint_in_game() -> void:
 	assert(world.get_children().filter(func(n: Node) -> bool: return n is Blueprint).size() == 1)
 	game.queue_free()
 	await get_tree().process_frame
+	assert(not MenuManager._entries.has(&"game_over"))

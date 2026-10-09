@@ -16,6 +16,7 @@ signal died
 @onready var shoot: ShootComponent = $ShootComponent
 @onready var movement: MovementComponent = $MovementComponent
 @onready var animation: AnimationHandler = $AnimationHandler
+@onready var effects_animation: AnimationHandler = $EffectsAnimationHandler
 @onready var melee_weapon: MeleeWeapon = $MeleeWeapon
 @onready var dash: DashComponent = $DashComponent
 @onready var aiming: AimingComponent = $AimingComponent
@@ -75,6 +76,9 @@ func set_external_velocity(source_id: int, value: Vector2) -> void:
 func clear_external_velocity(source_id: int) -> void:
 	external_velocity.clear_velocity(source_id)
 
+func play_effect_animation(animation_name: String) -> void:
+	effects_animation.restart_animation(animation_name)
+
 func _ready() -> void:
 	_initialize()
 	_setup_animations()
@@ -106,6 +110,7 @@ func _initialize() -> void:
 	death_screen_shake_intensity = stats.death_screen_shake_intensity
 
 func _setup_animations() -> void:
+	effects_animation.configure_animation("blueprint_flash", 1, false)
 	animation.configure_animation("idle", 0, false)
 	animation.configure_animation("move", 1, false)
 	animation.configure_animation("slash", 2, true)
