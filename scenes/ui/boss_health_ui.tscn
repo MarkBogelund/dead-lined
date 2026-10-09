@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://5wcqudc7efji" path="res://scripts/ui/health_ui.gd" id="1_health_ui"]
+
+[node name="BossHealthUI" type="Node2D" unique_id=1462051301 node_paths=PackedStringArray("primary_bar", "secondary_bar")]
+z_index = 20
+script = ExtResource("1_health_ui")
+primary_bar = NodePath("HealthFill")
+secondary_bar = NodePath("StressFill")
+secondary_initial_progress = 0.0
+
+[node name="Frame" type="ColorRect" parent="." unique_id=1462051302]
+z_index = 9
+offset_left = -17.0
+offset_top = -3.0
+offset_right = 17.0
+offset_bottom = 3.0
+mouse_filter = 2
+color = Color(0.07, 0.07, 0.09, 0.88235295)
+
+[node name="HealthFill" type="ColorRect" parent="." unique_id=1462051303]
+z_index = 10
+offset_left = -16.0
+offset_top = -2.0
+offset_right = 16.0
+offset_bottom = 1.0
+mouse_filter = 2
+color = Color(0.45490196, 0.79607844, 0.49019608, 1)
+
+[node name="StressFill" type="ColorRect" parent="." unique_id=1462051304]
+z_index = 10
+offset_left = -16.0
+offset_top = 1.0
+offset_right = 16.0
+offset_bottom = 2.0
+mouse_filter = 2
+color = Color(0.92869115, 0.40817255, 7.70092e-07, 1)

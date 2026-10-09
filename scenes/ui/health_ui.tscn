@@ -9,9 +9,12 @@ line_spacing = 0.0
 font = ExtResource("3_fht25")
 font_size = 5
 
-[node name="HealthUIComponent" type="Node2D" unique_id=324297092]
+[node name="HealthUIComponent" type="Node2D" unique_id=324297092 node_paths=PackedStringArray("primary_bar", "secondary_bar", "level_label")]
 z_index = 20
 script = ExtResource("1_health_ui")
+primary_bar = NodePath("HealthFill")
+secondary_bar = NodePath("CooldownFill")
+level_label = NodePath("LevelLabel")
 
 [node name="Frame" type="Sprite2D" parent="." unique_id=324297093]
 modulate = Color(1, 1, 1, 0.88235295)

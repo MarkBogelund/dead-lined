@@ -1,35 +1,47 @@
 extends Node2D
 class_name HealthUIComponent
 
-## Shared entity status: health plus a caller-controlled secondary progress meter.
+## Two-bar status display: the primary bar follows a HealthComponent, the secondary bar shows any
+## 0-1 progress signal. Bar position, size, scale and color are authored on the bar nodes.
+
+enum FillMode {FILL, DRAIN}
+enum FillDirection {LEFT_TO_RIGHT, RIGHT_TO_LEFT}
 
 @export var health_component: HealthComponent
-@export var offset := Vector2(0, -18)
-## Color of the secondary meter (turret cooldown or boss armor stress).
-@export var cooldown_color := Color(0.85904986, 0.85504586, 0.8550441, 1)
-## Turrets show their level; bosses can hide the label.
-@export var show_level := true
+@export var primary_bar: ColorRect
+@export var secondary_bar: ColorRect
+## Optional level readout.
+@export var level_label: Label
 
-@onready var fill: ColorRect = $HealthFill
-@onready var cooldown_fill: ColorRect = $CooldownFill
-@onready var level_label: Label = $LevelLabel
+@export_group("Secondary Bar")
+## Fill: the bar grows as progress rises. Drain: it empties as progress rises.
+@export var secondary_fill_mode := FillMode.FILL
+@export var secondary_fill_direction := FillDirection.LEFT_TO_RIGHT
+@export_range(0.0, 1.0, 0.01) var secondary_initial_progress := 1.0
 
-var _full_bar_width := 0.0
+## Authored (left edge, full width) per bar, captured before any fill is applied.
+var _layouts: Dictionary[ColorRect, Vector2] = {}
 
 func _ready() -> void:
-	position = offset
-	_full_bar_width = fill.size.x
-	cooldown_fill.color = cooldown_color
-	level_label.visible = show_level
-	set_cooldown_progress(1.0)
+	for bar: ColorRect in [primary_bar, secondary_bar]:
+		if bar:
+			_layouts[bar] = Vector2(bar.position.x, bar.size.x)
+	set_secondary_progress(secondary_initial_progress)
 	if health_component:
 		_connect_health_component()
 
-func set_cooldown_progress(progress: float) -> void:
-	cooldown_fill.size.x = _full_bar_width * clampf(progress, 0.0, 1.0)
+func set_secondary_progress(progress: float) -> void:
+	var value := clampf(progress, 0.0, 1.0)
+	if secondary_fill_mode == FillMode.DRAIN:
+		value = 1.0 - value
+	_set_bar_ratio(secondary_bar, value, secondary_fill_direction)
+
+func get_full_width(bar: ColorRect) -> float:
+	return _layouts[bar].y if _layouts.has(bar) else 0.0
 
 func set_level(level: int) -> void:
-	level_label.text = "%d" % level
+	if level_label:
+		level_label.text = "%d" % level
 
 func setup(component: HealthComponent) -> void:
 	if health_component == component:
@@ -54,4 +66,13 @@ func _on_health_changed(current: int, maximum: int) -> void:
 
 func _update_health_bar(current: int, maximum: int) -> void:
 	var ratio := float(current) / float(maximum) if maximum > 0 else 0.0
-	fill.size.x = _full_bar_width * clampf(ratio, 0.0, 1.0)
+	_set_bar_ratio(primary_bar, ratio, FillDirection.LEFT_TO_RIGHT)
+
+func _set_bar_ratio(bar: ColorRect, ratio: float, direction: FillDirection) -> void:
+	if not bar or not _layouts.has(bar):
+		return
+	var layout := _layouts[bar]
+	var width := layout.y * clampf(ratio, 0.0, 1.0)
+	bar.size.x = width
+	# Right-to-left pins the right edge; the shift is in parent space, so it includes the bar's scale.
+	bar.position.x = layout.x + (layout.y - width) * bar.scale.x if direction == FillDirection.RIGHT_TO_LEFT else layout.x

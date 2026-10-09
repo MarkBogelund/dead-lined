@@ -59,7 +59,7 @@ func play_animation(anim_name: String, custom_blend: float = -1, custom_speed: f
 	var custom_speed_captured := custom_speed
 	var from_end_captured := from_end
 	(func() -> void:
-		_apply_resets()
+		apply_resets()
 		super.play(animation_path, custom_blend_captured, custom_speed_captured, from_end_captured)
 	).call_deferred()
 	return true
@@ -70,7 +70,7 @@ func stop_animation(anim_name: String) -> void:
 		return
 	_release_current()
 	super.stop()
-	if _apply_resets():
+	if apply_resets():
 		super.stop(true)
 
 ## Plays the animation from the start even if it is already current (e.g. repeated hits).
@@ -88,7 +88,7 @@ func _release_current() -> void:
 		animation_unlocked.emit()
 
 ## Applies the RESET of every library, so inherited scenes can reset their own tracks in an extra library.
-func _apply_resets() -> bool:
+func apply_resets() -> bool:
 	var applied := false
 	for library_name: StringName in get_animation_library_list():
 		if not get_animation_library(library_name).has_animation(&"RESET"):

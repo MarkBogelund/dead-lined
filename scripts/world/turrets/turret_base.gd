@@ -4,6 +4,7 @@ class_name TurretBase
 signal died
 signal upgrade_purchased(cost: float)
 signal sold(refund: float)
+signal attack_cooldown_progress_changed(progress: float)
 
 @onready var animation: AnimationHandler = $AnimationHandler
 @onready var health: HealthComponent = $HealthComponent
@@ -37,6 +38,7 @@ var _stops_targeting_player_when_maxed := false
 var _hit_flash_tween: Tween
 var _is_critical := false
 var _death_burnout_active := false
+var _last_cooldown_progress := -1.0
 
 @export_group("Presentation")
 @export_range(0.01, 2.0, 0.01) var hit_flash_duration := 0.12
@@ -53,6 +55,7 @@ func _ready() -> void:
 	add_to_group("turrets")
 	_configure_surface_materials()
 	health_ui.setup(health)
+	attack_cooldown_progress_changed.connect(health_ui.set_secondary_progress)
 	_configure_base_animations()
 	if wave_manager:
 		wave_manager.combat_phase_started.connect(_on_combat_phase_started)
@@ -250,7 +253,10 @@ func _on_game_over() -> void:
 ## Subclasses overriding _physics_process must call super._physics_process(delta).
 func _physics_process(delta: float) -> void:
 	_update_repair(delta)
-	health_ui.set_cooldown_progress(get_attack_cooldown_progress() if is_turret_active() else 1.0)
+	var cooldown_progress := get_attack_cooldown_progress() if is_turret_active() else 1.0
+	if not is_equal_approx(cooldown_progress, _last_cooldown_progress):
+		_last_cooldown_progress = cooldown_progress
+		attack_cooldown_progress_changed.emit(cooldown_progress)
 
 func _update_repair(delta: float) -> void:
 	if _can_hold_repair(delta):

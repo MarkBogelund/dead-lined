@@ -461,7 +461,7 @@ shape = SubResource("BodyShape")
 script = ExtResource("3_alai4")
 
 [node name="HealthUIComponent" parent="." unique_id=782964572 instance=ExtResource("4_w0nmw")]
-position = Vector2(0, -24)
+position = Vector2(0, -18)
 
 [node name="InteractionZone" type="Area2D" parent="." unique_id=1944962393]
 collision_layer = 0

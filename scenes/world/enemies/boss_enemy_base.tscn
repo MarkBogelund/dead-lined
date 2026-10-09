@@ -1,16 +1,149 @@
 [gd_scene format=3 uid="uid://cp8scltlxc68k"]
 
-[ext_resource type="PackedScene" uid="uid://c55joxeqcp5h0" path="res://scenes/world/enemies/enemy_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://csayne3psbti0" path="res://scripts/world/enemies/boss_enemy_base.gd" id="2_boss"]
+[ext_resource type="Script" uid="uid://de8v0knxsnhob" path="res://scripts/world/attacks/hitbox.gd" id="2_tsadt"]
 [ext_resource type="Shader" uid="uid://de4peve8dth23" path="res://shaders/enemy_surface.gdshader" id="3_11csn"]
+[ext_resource type="Script" uid="uid://b21esqh8u7q8e" path="res://scripts/world/shared/health.gd" id="3_bogn7"]
+[ext_resource type="Script" uid="uid://cpb5ljtmgjbw8" path="res://scripts/world/shared/knockback.gd" id="4_3v1xw"]
 [ext_resource type="PackedScene" path="res://scenes/world/vfx/pixel_circle.tscn" id="4_pixel_circle"]
+[ext_resource type="Script" uid="uid://vnxu7aeydrpf" path="res://scripts/world/shared/external_velocity.gd" id="5_b4gps"]
 [ext_resource type="Shader" uid="uid://ck5wi3ofcviw0" path="res://shaders/pixel_ring.gdshader" id="5_k6g42"]
+[ext_resource type="Script" uid="uid://bfdfe71wkym8b" path="res://scripts/world/shared/navigation.gd" id="6_np4rq"]
 [ext_resource type="Texture2D" uid="uid://hjlmtphi6g0p" path="res://assets/sprites/shared/vfx-shapes.png" id="6_shapes"]
+[ext_resource type="Script" uid="uid://dule5ocnt8lxx" path="res://scripts/world/shared/targeting.gd" id="7_kahmv"]
 [ext_resource type="PackedScene" uid="uid://dejjdoy158x2x" path="res://scenes/world/vfx/hit_particles.tscn" id="7_sparks"]
+[ext_resource type="Script" uid="uid://hn6iph5ra71u" path="res://scripts/world/enemies/orb_drop.gd" id="8_r85ny"]
 [ext_resource type="Script" uid="uid://dbb4tev0o7iy" path="res://scripts/world/attacks/radial_wave.gd" id="8_wave"]
+[ext_resource type="PackedScene" uid="uid://ba7ofk84pf82" path="res://scenes/world/pickups/capacity_orb.tscn" id="9_ba4ms"]
 [ext_resource type="PackedScene" uid="uid://bpi06o7gy1vi4" path="res://scenes/world/vfx/windup_particles.tscn" id="9_lxi2c"]
+[ext_resource type="PackedScene" uid="uid://cu481a52yhdms" path="res://scenes/world/pickups/crunch_powerup.tscn" id="10_hsdjm"]
+[ext_resource type="Resource" uid="uid://du4ieurqmx0qj" path="res://resources/player/crunch_powerup_settings.tres" id="11_hb82g"]
+[ext_resource type="Script" uid="uid://cq7h5m3f8n2jk" path="res://scripts/world/shared/animation_handler.gd" id="12_brhqo"]
 
-[sub_resource type="Animation" id="BossDeath"]
+[sub_resource type="Animation" id="Animation_35tsb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visuals:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visuals:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("HitboxComponent:monitoring")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("CollisionShape2D:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visuals:material:shader_parameter/flash_amount")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Flash:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("HitParticles:emitting")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("WindupParticles:emitting")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("BossDieHitParticles:emitting")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_l760p"]
 resource_name = "boss_die"
 length = 3.0
 step = 0.1
@@ -57,7 +190,7 @@ tracks/3/path = NodePath("Visuals:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 1.9),
+"times": PackedFloat32Array(0, 1.7),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -81,7 +214,7 @@ tracks/5/path = NodePath("Flash:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 1.9, 3),
+"times": PackedFloat32Array(0, 1.7, 2.8000002),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [false, true, false]
@@ -93,7 +226,7 @@ tracks/6/path = NodePath("Flash:material:shader_parameter/current_radius")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(1.9, 3),
+"times": PackedFloat32Array(1.7, 2.8000002),
 "transitions": PackedFloat32Array(0.12745619, 1),
 "update": 0,
 "values": [0.0, 60.0]
@@ -105,7 +238,7 @@ tracks/7/path = NodePath("Flash:material:shader_parameter/ring_thickness")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(1.9, 3),
+"times": PackedFloat32Array(1.7, 2.8000002),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [18.0, 2.0]
@@ -117,7 +250,7 @@ tracks/8/path = NodePath("Flash:material:shader_parameter/shockwave_color")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(1.9, 2.05, 3),
+"times": PackedFloat32Array(1.7, 1.85, 2.8000002),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -129,7 +262,7 @@ tracks/9/path = NodePath("HitParticles")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(1.9),
+"times": PackedFloat32Array(1.7),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -143,7 +276,7 @@ tracks/10/path = NodePath("OrbDropComponent")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(1.9),
+"times": PackedFloat32Array(1.7),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -157,7 +290,7 @@ tracks/11/path = NodePath(".")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0, 1.9, 3),
+"times": PackedFloat32Array(0, 1.7, 2.8000002),
 "transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [0.3],
@@ -189,7 +322,7 @@ tracks/13/path = NodePath("BossDieHitParticles:emitting")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
-"times": PackedFloat32Array(0, 1.3, 1.9, 2),
+"times": PackedFloat32Array(0, 1.3, 1.7, 1.8000001),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [true, false, true, false]
@@ -207,18 +340,75 @@ tracks/14/keys = {
 "values": [Vector2(0, 0), Vector2(0, -4)]
 }
 
-[sub_resource type="AnimationLibrary" id="BossDeathLibrary"]
-_data = {
-&"boss_die": SubResource("BossDeath")
+[sub_resource type="Animation" id="Animation_7313b"]
+resource_name = "spawn_sleep"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Color(0.45, 0.45, 0.45, 1)]
 }
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lxi2c"]
+[sub_resource type="Animation" id="Animation_3aj2j"]
+resource_name = "spawn_wake"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.45, 0.45, 0.45, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6017q"]
+resource_name = "take_damage"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visuals:material:shader_parameter/flash_amount")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.19999999),
+"transitions": PackedFloat32Array(1.624506, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_x5sye"]
+_data = {
+&"RESET": SubResource("Animation_35tsb"),
+&"boss_die": SubResource("Animation_l760p"),
+&"spawn_sleep": SubResource("Animation_7313b"),
+&"spawn_wake": SubResource("Animation_3aj2j"),
+&"take_damage": SubResource("Animation_6017q")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bavpv"]
 resource_local_to_scene = true
 shader = ExtResource("3_11csn")
 shader_parameter/flash_color = Color(1, 1, 1, 1)
 shader_parameter/flash_amount = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nvycl"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_iye1l"]
+atlas = ExtResource("6_shapes")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_04m5a"]
 resource_local_to_scene = true
 shader = ExtResource("5_k6g42")
 shader_parameter/shockwave_color = Color(1, 1, 1, 1)
@@ -304,7 +494,7 @@ point_count = 3
 [sub_resource type="CircleShape2D" id="LandingWaveShape"]
 radius = 98.0
 
-[sub_resource type="Animation" id="Animation_lxi2c"]
+[sub_resource type="Animation" id="Animation_vxo34"]
 resource_name = "RESET"
 length = 0.001
 tracks/0/type = "value"
@@ -478,7 +668,7 @@ tracks/13/keys = {
 "values": [Vector2(2.5, 2)]
 }
 
-[sub_resource type="Animation" id="Animation_nvycl"]
+[sub_resource type="Animation" id="Animation_p8ajy"]
 resource_name = "intro"
 length = 3.4
 step = 0.1
@@ -672,11 +862,15 @@ tracks/14/keys = {
 "values": [Vector2(1e-05, 1e-05), Vector2(3.125, 2.5), Vector2(2.5, 2)]
 }
 
-[sub_resource type="AnimationLibrary" id="IntroLibrary"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_plp0f"]
 _data = {
-&"RESET": SubResource("Animation_lxi2c"),
-&"intro": SubResource("Animation_nvycl")
+&"RESET": SubResource("Animation_vxo34"),
+&"intro": SubResource("Animation_p8ajy")
 }
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_particle"]
+atlas = ExtResource("6_shapes")
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="Curve" id="Curve_nvycl"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
@@ -759,22 +953,65 @@ scale_curve = SubResource("CurveTexture_wf1bf")
 scale_over_velocity_max = 65.99
 color_ramp = SubResource("GradientTexture1D_1cncs")
 
-[node name="BossEnemyBase" unique_id=487594744 node_paths=PackedStringArray("intro_animation", "intro", "landing_wave") instance=ExtResource("1_base")]
+[node name="BossEnemyBase" type="CharacterBody2D" unique_id=487594744 node_paths=PackedStringArray("intro_animation", "intro", "landing_wave") groups=["enemies"]]
+collision_layer = 8
+motion_mode = 1
+wall_min_slide_angle = 0.0
+floor_block_on_wall = false
 script = ExtResource("2_boss")
 intro_animation = NodePath("Intro/AnimationPlayer")
 intro = NodePath("Intro")
 landing_wave = NodePath("Intro/RadialWaveComponent")
 
-[node name="AnimationHandler" parent="." index="8" unique_id=1100000010]
-libraries/boss = SubResource("BossDeathLibrary")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1100000002]
 
-[node name="Visuals" parent="." index="9" unique_id=1100000011]
-material = SubResource("ShaderMaterial_lxi2c")
+[node name="HitboxComponent" type="Area2D" parent="." unique_id=1100000003]
+collision_layer = 16
+collision_mask = 34
+script = ExtResource("2_tsadt")
 
-[node name="DropRoot" type="Node2D" parent="Visuals" index="0" unique_id=620000001]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1100000004]
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1100000005]
+script = ExtResource("3_bogn7")
+
+[node name="KnockbackComponent" type="Node" parent="." unique_id=1100000006]
+script = ExtResource("4_3v1xw")
+
+[node name="ExternalVelocityComponent" type="Node" parent="." unique_id=1822105193]
+script = ExtResource("5_b4gps")
+
+[node name="NavigationComponent" type="NavigationAgent2D" parent="." unique_id=1100000007]
+path_desired_distance = 4.0
+target_desired_distance = 2.0
+avoidance_enabled = true
+radius = 14.0
+neighbor_distance = 80.0
+time_horizon_agents = 1.5
+script = ExtResource("6_np4rq")
+
+[node name="TargetingComponent" type="Node" parent="." unique_id=1100000008]
+script = ExtResource("7_kahmv")
+
+[node name="OrbDropComponent" type="Node" parent="." unique_id=1100000009]
+script = ExtResource("8_r85ny")
+orb_scene = ExtResource("9_ba4ms")
+crunch_powerup_scene = ExtResource("10_hsdjm")
+impulse_max = 250.0
+linear_damp = 5.0
+crunch_settings = ExtResource("11_hb82g")
+
+[node name="AnimationHandler" type="AnimationPlayer" parent="." unique_id=1100000010]
+libraries/ = SubResource("AnimationLibrary_x5sye")
+script = ExtResource("12_brhqo")
+
+[node name="Visuals" type="Node2D" parent="." unique_id=1100000011]
+material = SubResource("ShaderMaterial_bavpv")
+
+[node name="DropRoot" type="Node2D" parent="Visuals" unique_id=620000001]
 use_parent_material = true
 
-[node name="Shadow" parent="Visuals" index="1" unique_id=620000002 instance=ExtResource("4_pixel_circle")]
+[node name="Shadow" parent="Visuals" unique_id=620000002 instance=ExtResource("4_pixel_circle")]
 modulate = Color(0.16, 0.16, 0.16, 0.39215687)
 z_index = 1
 position = Vector2(0, 20)
@@ -783,31 +1020,37 @@ shape = 1
 size = Vector2i(14, 4)
 pixel_size = 1
 
-[node name="Flash" parent="." index="11" unique_id=1756477109]
-material = SubResource("ShaderMaterial_nvycl")
+[node name="HitParticles" parent="." unique_id=1586402119 instance=ExtResource("7_sparks")]
+texture = SubResource("AtlasTexture_iye1l")
+
+[node name="Flash" type="ColorRect" parent="." unique_id=1756477109]
+visible = false
+z_index = 10
+material = SubResource("ShaderMaterial_04m5a")
 offset_left = -80.0
 offset_top = -80.0
 offset_right = 80.0
 offset_bottom = 80.0
+mouse_filter = 2
 
-[node name="Intro" type="Node2D" parent="." index="12" unique_id=620000003]
+[node name="Intro" type="Node2D" parent="." unique_id=620000003]
 visible = false
 
-[node name="LandingMarker" parent="Intro" index="0" unique_id=1620584647 instance=ExtResource("4_pixel_circle")]
+[node name="LandingMarker" parent="Intro" unique_id=1620584647 instance=ExtResource("4_pixel_circle")]
 visible = false
 modulate = Color(1, 0.25, 0.1, 0)
 z_index = 1
 size = Vector2i(196, 196)
 pixel_size = 3
 
-[node name="DropShadow" parent="Intro" index="1" unique_id=1799544543 instance=ExtResource("4_pixel_circle")]
+[node name="DropShadow" parent="Intro" unique_id=1799544543 instance=ExtResource("4_pixel_circle")]
 visible = false
 modulate = Color(0.1, 0.1, 0.1, 0)
 shape = 1
 size = Vector2i(14, 4)
 pixel_size = 1
 
-[node name="DustParticles" type="GPUParticles2D" parent="Intro" index="2" unique_id=1290101280]
+[node name="DustParticles" type="GPUParticles2D" parent="Intro" unique_id=1290101280]
 z_index = 4
 emitting = false
 amount = 26
@@ -817,13 +1060,14 @@ explosiveness = 1.0
 visibility_rect = Rect2(-120, -120, 240, 240)
 process_material = SubResource("DustMaterial")
 
-[node name="SparkParticles" parent="Intro" index="3" unique_id=2125176241 instance=ExtResource("7_sparks")]
+[node name="SparkParticles" parent="Intro" unique_id=2125176241 instance=ExtResource("7_sparks")]
 scale = Vector2(1.8, 1.8)
 amount = 25
+texture = SubResource("AtlasTexture_iye1l")
 lifetime = 0.6
 process_material = SubResource("ParticleProcessMaterial_wf1bf")
 
-[node name="RadialWaveComponent" type="Node2D" parent="Intro" index="4" unique_id=308062587]
+[node name="RadialWaveComponent" type="Node2D" parent="Intro" unique_id=308062587]
 z_index = 5
 script = ExtResource("8_wave")
 max_range = 60.0
@@ -840,30 +1084,31 @@ opacity_curve = SubResource("ShockwaveOpacity")
 center_line_color = Color(1, 0.95, 0.8, 1)
 pixel_size = 3.0
 
-[node name="DetectionArea" type="Area2D" parent="Intro/RadialWaveComponent" index="0" unique_id=1158579410]
+[node name="DetectionArea" type="Area2D" parent="Intro/RadialWaveComponent" unique_id=1158579410]
 collision_layer = 0
 collision_mask = 34
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Intro/RadialWaveComponent/DetectionArea" index="0" unique_id=1112096324]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Intro/RadialWaveComponent/DetectionArea" unique_id=1112096324]
 shape = SubResource("LandingWaveShape")
 
-[node name="ShockwaveVisual" type="ColorRect" parent="Intro/RadialWaveComponent" index="1" unique_id=591827065]
+[node name="ShockwaveVisual" type="ColorRect" parent="Intro/RadialWaveComponent" unique_id=591827065]
 visible = false
 mouse_filter = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Intro" index="5" unique_id=620000004]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Intro" unique_id=620000004]
 root_node = NodePath("../..")
 callback_mode_process = 0
-libraries/ = SubResource("IntroLibrary")
+libraries/ = SubResource("AnimationLibrary_plp0f")
 
-[node name="WindupParticles" parent="." index="13" unique_id=2054959803 instance=ExtResource("9_lxi2c")]
+[node name="WindupParticles" parent="." unique_id=2054959803 instance=ExtResource("9_lxi2c")]
 amount = 60
+texture = SubResource("AtlasTexture_particle")
 process_material = SubResource("ParticleProcessMaterial_8ekt4")
 
-[node name="BossDieHitParticles" parent="." index="14" unique_id=1586402119 instance=ExtResource("7_sparks")]
+[node name="BossDieHitParticles" parent="." unique_id=1525275755 instance=ExtResource("7_sparks")]
 amount = 50
+texture = SubResource("AtlasTexture_iye1l")
 lifetime = 0.5
-one_shot = false
 speed_scale = 1.7
 process_material = SubResource("ParticleProcessMaterial_vx7r2")

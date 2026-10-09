@@ -9,10 +9,17 @@ signal boss_alert_changed(active: bool)
 @export var intro_animation: AnimationPlayer
 @export var intro: Node2D
 @export var landing_wave: RadialWaveComponent
+## Assigned per boss; hidden during arrival, revealed by the boss's own intro clip.
+@export var health_ui: HealthUIComponent
 
 const INTRO_ANIMATION: StringName = &"intro"
 const RESET_ANIMATION: StringName = &"RESET"
 const BOSS_DEATH_ANIMATION: StringName = &"boss_die"
+
+func _initialize_base(stats: EnemyStats) -> void:
+	super._initialize_base(stats)
+	if health_ui:
+		health_ui.setup(health)
 
 func buff_damage(multiplier: float) -> void:
 	contact_hitbox.damage = int(contact_hitbox.damage * multiplier)
@@ -40,6 +47,11 @@ func play_boss_intro() -> void:
 	if animation.has_configured_animation(INTRO_ANIMATION):
 		animation.configure_animation(INTRO_ANIMATION, 1, true)
 	animation.stop_animation("idle")
+	# Start from every library's rest pose (base RESET plus boss-specific RESETs).
+	if animation.apply_resets():
+		animation.stop(true)
+	if health_ui:
+		health_ui.hide()
 	begin_spawn_intro()
 	remove_from_group("enemies")
 	intro.top_level = false
@@ -62,7 +74,13 @@ func _on_boss_specific_intro_finished(animation_name: StringName) -> void:
 
 func _complete_boss_intro() -> void:
 	_finish_spawn_intro()
+	if health_ui:
+		health_ui.show()
 	boss_intro_finished.emit()
+
+func _before_handle_death() -> void:
+	if health_ui:
+		health_ui.hide()
 
 func _finish_spawn_intro() -> void:
 	add_to_group("enemies")

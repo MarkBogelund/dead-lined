@@ -6,22 +6,20 @@ const SHIELD_CHARGE_ANIMATION: StringName = &"shield_charge"
 
 @export var stats: BulwarkStats
 @export var shield: DirectionalShieldComponent
-@export var health_ui: HealthUIComponent
 @export var body_sprite: Sprite2D
 
 var _shield_wave_timer := 0.0
 var _charging_shield_wave := false
 
 func _ready() -> void:
-	assert(stats and shield and health_ui and body_sprite, "Bulwark requires its stats and owned components")
+	assert(stats and shield and body_sprite and health_ui, "Bulwark requires its stats, health UI and owned components")
 	_initialize_base(stats)
 	contact_hitbox.initialize(stats.damage, stats.knockback)
 	targeting.configure(stats.targeting)
 	animation.configure_animation(IDLE_ANIMATION, 0, false)
 	animation.configure_animation(SHIELD_CHARGE_ANIMATION, 10, true)
 	_shield_wave_timer = stats.shield_wave_cooldown
-	health_ui.setup(health)
-	shield.stress_changed.connect(health_ui.set_cooldown_progress)
+	shield.stress_changed.connect(health_ui.set_secondary_progress)
 	shield.broken_changed.connect(_on_shield_broken_changed)
 	shield.shield_hit.connect(_apply_shield_damage)
 	shield.configure(stats)
@@ -94,15 +92,13 @@ func _before_handle_death() -> void:
 	_cancel_shield_wave()
 	shield.set_enabled(false)
 	shield.sprite.use_parent_material = true
-	health_ui.hide()
+	super._before_handle_death()
 
 func begin_spawn_intro() -> void:
-	health_ui.hide()
 	shield.set_enabled(false)
 	shield.sprite.hide()
 	super.begin_spawn_intro()
 
 func _finish_spawn_intro() -> void:
 	shield.set_enabled(true)
-	health_ui.show()
 	super._finish_spawn_intro()

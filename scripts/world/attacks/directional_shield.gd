@@ -3,6 +3,7 @@ class_name DirectionalShieldComponent
 
 ## Frontal shield: facing, damage reduction, stress/break timer, sprite tint, projectile collider, ram hitbox, and flung wave.
 
+## Stress 0-1; while broken it counts the remaining break time down from 1 so meters refill smoothly.
 signal stress_changed(progress: float)
 signal broken_changed(broken: bool)
 signal shield_hit(amount: int, from_position: Vector2)
@@ -36,6 +37,8 @@ var _hit_flash_tween: Tween
 
 func _ready() -> void:
 	assert(sprite and sprite.material is ShaderMaterial and collision_polygon and contact_hitbox and wave, "DirectionalShieldComponent requires its sprite (with hit-flash material), collider, hitbox, and wave")
+	# The hit flash writes the sprite's own material; the owner may switch to the body material on death.
+	sprite.use_parent_material = false
 	wave.set_enabled(true)
 	_update_color()
 
@@ -143,7 +146,7 @@ func _physics_process(delta: float) -> void:
 			_update_color()
 			_update_collision()
 			broken_changed.emit(false)
-			stress_changed.emit(0.0)
+		stress_changed.emit(_broken_remaining / _broken_duration)
 		return
 	var previous_quiet_time := _quiet_time
 	_quiet_time += delta
